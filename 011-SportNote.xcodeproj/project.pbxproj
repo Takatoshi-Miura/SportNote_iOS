@@ -3,12 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		3DEAE45CE9BB67CBC455FA77 /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
+		8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AFD724A47F7E007450BF /* SVProgressHUD.m */; };
+		8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */; };
+		8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57AFDC24A47FAB007450BF /* QuartzCore.framework */; };
 		8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2624A17CD300441B32 /* AppDelegate.swift */; };
 		8D665D2924A17CD300441B32 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2824A17CD300441B32 /* SceneDelegate.swift */; };
 		8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2C24A17CD300441B32 /* Main.storyboard */; };
@@ -20,6 +23,11 @@
 /* Begin PBXFileReference section */
 		54F93BC31ED4497F68396349 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8D57AFD624A47F7D007450BF /* 011-SportNote-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "011-SportNote-Bridging-Header.h"; sourceTree = "<group>"; };
+		8D57AFD724A47F7E007450BF /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		8D57AFD824A47F7E007450BF /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		8D57AFDC24A47FAB007450BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D665D2324A17CD300441B32 /* 011-SportNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "011-SportNote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D665D2624A17CD300441B32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D665D2824A17CD300441B32 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */,
 				3DEAE45CE9BB67CBC455FA77 /* Pods_011_SportNote.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,7 +59,6 @@
 				D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */,
 				54F93BC31ED4497F68396349 /* Pods-011-SportNote.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -83,6 +91,10 @@
 				8D665D3124A17CD400441B32 /* LaunchScreen.storyboard */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
 				8D665D3424A17CD400441B32 /* Info.plist */,
+				8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */,
+				8D57AFD824A47F7E007450BF /* SVProgressHUD.h */,
+				8D57AFD724A47F7E007450BF /* SVProgressHUD.m */,
+				8D57AFD624A47F7D007450BF /* 011-SportNote-Bridging-Header.h */,
 			);
 			path = "011-SportNote";
 			sourceTree = "<group>";
@@ -90,6 +102,7 @@
 		C286C2B0EED91BEBB760A936 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8D57AFDC24A47FAB007450BF /* QuartzCore.framework */,
 				C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */,
 			);
 			name = Frameworks;
@@ -129,6 +142,7 @@
 				TargetAttributes = {
 					8D665D2224A17CD300441B32 = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
 					};
 				};
 			};
@@ -155,6 +169,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */,
 				8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */,
 				8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */,
 				8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */,
@@ -212,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
+				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */,
 				8D665D2924A17CD300441B32 /* SceneDelegate.swift in Sources */,
 			);
@@ -358,6 +374,7 @@
 			baseConfigurationReference = D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 97L47TQF5Z;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
@@ -367,6 +384,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Takatoshi-Miura.-11-SportNote";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -377,6 +396,7 @@
 			baseConfigurationReference = 54F93BC31ED4497F68396349 /* Pods-011-SportNote.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 97L47TQF5Z;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
@@ -386,6 +406,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Takatoshi-Miura.-11-SportNote";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
