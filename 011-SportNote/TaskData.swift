@@ -28,7 +28,7 @@ class TaskData {
         // Firebaseにアクセス
         let db = Firestore.firestore()
         db.collection("TaskData").document("\(self.taskID)").setData([
-            "taskID"      : self.taskID,
+            "taskID"    : self.taskID,
             "taskTitle" : self.taskTitle,
             "taskCause" : self.taskCause
         ]) { err in
