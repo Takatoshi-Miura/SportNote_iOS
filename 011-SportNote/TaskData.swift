@@ -25,10 +25,14 @@ class TaskData {
         self.taskCause = taskCause
     }
     
-    
     // 課題IDをセットするメソッド(データベースの課題用)
     func setTaskID(_ taskID:Int) {
         self.taskID = taskID
+    }
+    
+    // ゲッター
+    func getTaskTitle() -> String {
+        return self.taskTitle
     }
     
     

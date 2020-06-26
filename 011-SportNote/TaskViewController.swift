@@ -13,16 +13,20 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
     }
+    
     
     // TaskDataを格納した配列
     var taskDataArray = [TaskData]()
     
     // テーブルビュー
-    @IBOutlet weak var taskTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     
     
-    // HomeViewControllerが呼ばれたときの処理
+    // TaskViewControllerが呼ばれたときの処理
     override func viewWillAppear(_ animated: Bool) {
         // HUDで処理中を表示
         SVProgressHUD.show()
@@ -31,12 +35,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         let databaseTaskData = TaskData()
         databaseTaskData.loadDatabase()
         
-        // 課題データの受け取り
-        self.taskDataArray = []
-        self.taskDataArray = databaseTaskData.taskDataArray
+        // データの取得が終わるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+            // 課題データの受け取り
+            self.taskDataArray = []
+            self.taskDataArray = databaseTaskData.taskDataArray
         
-        // HUDを非表示
-        SVProgressHUD.dismiss()
+            // テーブルビューの更新
+            self.tableView?.reloadData()
+        
+            // HUDを非表示
+            SVProgressHUD.dismiss()
+        }
     }
     
     
@@ -47,6 +57,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
+    // 編集ボタンの処理
+    @IBAction func editButton(_ sender: Any) {
+        
+    }
+    
+    
+    
     // TaskDataArray配列の長さ(項目の数)を返却する
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskDataArray.count
@@ -54,10 +71,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // テーブルの行ごとのセルを返却する
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //Storyboardで指定したtodoCell識別子を利用して再利用可能なセルを取得する
-        let cell = tableView.dequeueReusableCell(withIdentifier: "taskViewCell", for: indexPath)
-        //行番号に合ったToDoの情報を取得
+        //Storyboardで指定したセルを取得する
+        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
         
+        //行番号に合った課題データを取得
+        let taskData = taskDataArray[indexPath.row]
+        cell.textLabel!.text = taskData.getTaskTitle()
         
         return cell
     }
