@@ -30,9 +30,14 @@ class TaskData {
         self.taskID = taskID
     }
     
-    // ゲッター
+    // taskTitleのゲッター
     func getTaskTitle() -> String {
         return self.taskTitle
+    }
+    
+    // taskCauseのゲッター
+    func getTaskCouse() -> String {
+        return self.taskCause
     }
     
     

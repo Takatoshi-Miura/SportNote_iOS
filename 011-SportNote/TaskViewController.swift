@@ -36,7 +36,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         databaseTaskData.loadDatabase()
         
         // データの取得が終わるまで時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
             // 課題データの受け取り
             self.taskDataArray = []
             self.taskDataArray = databaseTaskData.taskDataArray
@@ -74,9 +74,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         //Storyboardで指定したセルを取得する
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
         
-        //行番号に合った課題データを取得
+        //行番号に合った課題データをラベルに表示する
         let taskData = taskDataArray[indexPath.row]
         cell.textLabel!.text = taskData.getTaskTitle()
+        cell.detailTextLabel!.text = taskData.getTaskCouse()
         
         return cell
     }
