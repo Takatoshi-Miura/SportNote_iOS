@@ -18,6 +18,9 @@
 		8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2F24A17CD400441B32 /* Assets.xcassets */; };
 		8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D3124A17CD400441B32 /* LaunchScreen.storyboard */; };
 		8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D3A24A17D9A00441B32 /* LoginViewController.swift */; };
+		8D7BAB4B24A5AE9100BE196B /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4A24A5AE9100BE196B /* TaskViewController.swift */; };
+		8D7BAB4D24A5AF5300BE196B /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4C24A5AF5300BE196B /* TaskData.swift */; };
+		8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +39,9 @@
 		8D665D3224A17CD400441B32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D665D3424A17CD400441B32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D665D3A24A17D9A00441B32 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		8D7BAB4A24A5AE9100BE196B /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
+		8D7BAB4C24A5AF5300BE196B /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
+		8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 		C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,6 +93,9 @@
 				8D665D2824A17CD300441B32 /* SceneDelegate.swift */,
 				8D665D2C24A17CD300441B32 /* Main.storyboard */,
 				8D665D3A24A17D9A00441B32 /* LoginViewController.swift */,
+				8D7BAB4A24A5AE9100BE196B /* TaskViewController.swift */,
+				8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */,
+				8D7BAB4C24A5AF5300BE196B /* TaskData.swift */,
 				8D665D2F24A17CD400441B32 /* Assets.xcassets */,
 				8D665D3124A17CD400441B32 /* LaunchScreen.storyboard */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
@@ -228,8 +237,11 @@
 			files = (
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
+				8D7BAB4D24A5AF5300BE196B /* TaskData.swift in Sources */,
+				8D7BAB4B24A5AE9100BE196B /* TaskViewController.swift in Sources */,
 				8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */,
 				8D665D2924A17CD300441B32 /* SceneDelegate.swift in Sources */,
+				8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
