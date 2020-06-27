@@ -328,7 +328,6 @@
                         <barButtonItem key="leftBarButtonItem" title="戻る" id="Ryw-Tl-M8m">
                             <connections>
                                 <action selector="backButton:" destination="zUd-kp-r5X" id="K73-Nm-Vf4"/>
-                                <segue destination="vNv-uy-c0y" kind="unwind" unwindAction="goToTaskViewControllerWith_segue:" id="8Tl-cv-dqh"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -338,7 +337,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ddG-nM-WUl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="vNv-uy-c0y" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1774" y="1503"/>
         </scene>
@@ -391,6 +389,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="MDh-Pq-d7O" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="課題" image="list.bullet" catalog="system" id="wx5-H6-RuS"/>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="p8h-6Q-qNb"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Uld-mJ-aM3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>

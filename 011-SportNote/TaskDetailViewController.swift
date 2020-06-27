@@ -17,9 +17,6 @@ class TaskDetailViewController: UIViewController {
         printTaskData(taskData)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-    }
-    
     // テキスト
     @IBOutlet weak var taskTitleTextField: UITextField!
     @IBOutlet weak var taskCauseTextView: UITextView!
@@ -30,9 +27,16 @@ class TaskDetailViewController: UIViewController {
     // 表示する課題データの格納用
     var taskData = TaskData()
     
+    
     // 戻るボタンの処理
     @IBAction func backButton(_ sender: Any) {
-        // goToTaskViewControllerを実行
+        // 課題データを更新
+        taskData.setTaskData(taskTitleTextField.text!, taskCauseTextView.text!)
+        taskData.updateTaskData()
+        print(taskData.getTaskTitle())
+        
+        // 課題画面に遷移
+        self.navigationController?.popViewController(animated: true)
     }
     
     

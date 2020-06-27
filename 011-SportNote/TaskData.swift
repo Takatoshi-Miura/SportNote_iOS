@@ -79,9 +79,9 @@ class TaskData {
                     // 取得データ(画像以外)をコレクションに格納
                     // 画像はPostTableViewCellにて取得するため、ここでは取得しない。
                     let taskDataCollection = document.data()
-                    print("\(document.documentID) => \(taskDataCollection)")
+                    //print("\(document.documentID) => \(taskDataCollection)")
                 
-                    // 取得データを基に、投稿データを作成
+                    // 取得データを基に、課題データを作成
                     let databaseTaskData = TaskData()
                     databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
                     databaseTaskData.setTaskData(taskDataCollection["taskTitle"] as! String, taskDataCollection["taskCause"] as! String)
@@ -95,6 +95,26 @@ class TaskData {
                         TaskData.taskCount = databaseTaskData.taskID
                     }
                 }
+            }
+        }
+    }
+    
+    
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData() {
+        // 課題データにアクセス
+        let db = Firestore.firestore()
+        let taskData = db.collection("TaskData").document("\(self.taskID)")
+
+        // データを更新
+        taskData.updateData([
+            "taskTitle" : self.taskTitle,
+            "taskCause" : self.taskCause
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
             }
         }
     }
