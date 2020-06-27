@@ -31,7 +31,7 @@ class AddTaskViewController: UIViewController {
         let taskData = TaskData()
         
         // 入力されたテキストをTaskDataにセット
-        taskData.setTaskData(taskTitleTextField.text!, causeTextView.text!)
+        taskData.setTaskData(taskTitleTextField.text!,causeTextView.text!,false)
         
         // データベースに保存
         taskData.saveTaskData()

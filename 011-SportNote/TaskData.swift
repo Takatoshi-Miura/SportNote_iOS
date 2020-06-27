@@ -10,19 +10,21 @@ import Firebase
 class TaskData {
     
     // 保持するデータ
-    static var taskCount:Int = 0        // 課題の数
-    private var taskID:Int = 0          // 課題ID
-    private var taskTitle:String = ""   // タイトル
-    private var taskCause:String = ""   // 原因
+    static var taskCount:Int = 0                // 課題の数
+    private var taskID:Int = 0                  // 課題ID
+    private var taskTitle:String = ""           // タイトル
+    private var taskCause:String = ""           // 原因
+    private var taskAchievement:Bool = false    // 解決済み:true,未解決：false
     
     // 課題データを格納する配列
     var taskDataArray = [TaskData]()
     
     
     // 課題データをセットするメソッド
-    func setTaskData(_ taskTitle:String,_ taskCause:String) {
+    func setTaskData(_ taskTitle:String,_ taskCause:String,_ taskAchievement:Bool) {
         self.taskTitle = taskTitle
         self.taskCause = taskCause
+        self.taskAchievement = taskAchievement
     }
     
     // 課題IDをセットするメソッド(データベースの課題用)
@@ -50,9 +52,10 @@ class TaskData {
         // Firebaseにアクセス
         let db = Firestore.firestore()
         db.collection("TaskData").document("\(self.taskID)").setData([
-            "taskID"    : self.taskID,
-            "taskTitle" : self.taskTitle,
-            "taskCause" : self.taskCause
+            "taskID"         : self.taskID,
+            "taskTitle"      : self.taskTitle,
+            "taskCause"      : self.taskCause,
+            "taskAchievement": self.taskAchievement
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -84,7 +87,9 @@ class TaskData {
                     // 取得データを基に、課題データを作成
                     let databaseTaskData = TaskData()
                     databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskData(taskDataCollection["taskTitle"] as! String, taskDataCollection["taskCause"] as! String)
+                    databaseTaskData.setTaskData(taskDataCollection["taskTitle"] as! String,
+                                                 taskDataCollection["taskCause"] as! String,
+                                                 taskDataCollection["taskAchievement"] as! Bool)
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
@@ -108,8 +113,9 @@ class TaskData {
 
         // データを更新
         taskData.updateData([
-            "taskTitle" : self.taskTitle,
-            "taskCause" : self.taskCause
+            "taskTitle"      : self.taskTitle,
+            "taskCause"      : self.taskCause,
+            "taskAchievement": self.taskAchievement
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
