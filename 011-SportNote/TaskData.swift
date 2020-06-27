@@ -14,7 +14,7 @@ class TaskData {
     private var taskID:Int = 0                  // 課題ID
     private var taskTitle:String = ""           // タイトル
     private var taskCause:String = ""           // 原因
-    private var taskAchievement:Bool = false    // 解決済み:true,未解決：false
+    private var taskAchievement:Bool = false    // 解決済み：true, 未解決：false
     
     // 課題データを格納する配列
     var taskDataArray = [TaskData]()
@@ -49,9 +49,12 @@ class TaskData {
         TaskData.taskCount += 1
         self.taskID = TaskData.taskCount
         
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
+        
         // Firebaseにアクセス
         let db = Firestore.firestore()
-        db.collection("TaskData").document("\(self.taskID)").setData([
+        db.collection("TaskData_\(userID)").document("\(self.taskID)").setData([
             "taskID"         : self.taskID,
             "taskTitle"      : self.taskTitle,
             "taskCause"      : self.taskCause,
@@ -71,10 +74,13 @@ class TaskData {
         // 配列の初期化
         taskDataArray = []
         
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
+        
         // データ取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
-        db.collection("TaskData").order(by: "taskID", descending: true).getDocuments() { (querySnapshot, err) in
+        db.collection("TaskData_\(userID)").order(by: "taskID", descending: true).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {
@@ -107,9 +113,12 @@ class TaskData {
     
     // Firebaseの課題データを更新するメソッド
     func updateTaskData() {
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
+        
         // 課題データにアクセス
         let db = Firestore.firestore()
-        let taskData = db.collection("TaskData").document("\(self.taskID)")
+        let taskData = db.collection("TaskData_\(userID)").document("\(self.taskID)")
 
         // データを更新
         taskData.updateData([
