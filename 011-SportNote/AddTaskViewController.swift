@@ -28,9 +28,8 @@ class AddTaskViewController: UIViewController {
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
-        let taskData = TaskData()
-        
         // 入力されたテキストをTaskDataにセット
+        let taskData = TaskData()
         taskData.setTaskData(taskTitleTextField.text!,causeTextView.text!,false)
         
         // データベースに保存

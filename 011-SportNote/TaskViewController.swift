@@ -16,6 +16,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        // リフレッシュ機能の設定
+        tableView.refreshControl = refreshCtl
+        refreshCtl.addTarget(self, action: #selector(TaskViewController.refresh(sender:)), for: .valueChanged)
     }
     
     
@@ -25,11 +29,44 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
+    // リフレッシュ機能用
+    fileprivate let refreshCtl = UIRefreshControl()
+    
     
     // TaskViewControllerが呼ばれたときの処理
     override func viewWillAppear(_ animated: Bool) {
+        // テーブルビューを更新
+        reloadTableView()
+    }
+    
+    
+    // テーブルビューを下に下げたときの処理(リフレッシュ機能)
+    @objc func refresh(sender: UIRefreshControl) {
+        // ここが引っ張られるたびに呼び出される
+        reloadTableView()
+        
+        // 通信終了後、endRefreshingを実行することでロードインジケーター（くるくる）が終了
+        self.tableView.refreshControl?.endRefreshing()
+    }
+    
+    
+    // ＋ボタンの処理
+    @IBAction func addButton(_ sender: Any) {
+        // 課題追加画面に遷移
+        self.performSegue(withIdentifier: "goAddTaskViewController", sender: nil)
+    }
+    
+    
+    // 編集ボタンの処理
+    @IBAction func editButton(_ sender: Any) {
+        
+    }
+    
+    
+    // テーブルビューを更新するメソッド
+    func reloadTableView() {
         // HUDで処理中を表示
-        SVProgressHUD.show()
+        //SVProgressHUD.show()
         
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
@@ -45,21 +82,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.tableView?.reloadData()
         
             // HUDを非表示
-            SVProgressHUD.dismiss()
+            //SVProgressHUD.dismiss()
         }
-    }
-    
-    
-    // ＋ボタンの処理
-    @IBAction func addButton(_ sender: Any) {
-        // 課題追加画面に遷移
-        self.performSegue(withIdentifier: "goAddTaskViewController", sender: nil)
-    }
-    
-    
-    // 編集ボタンの処理
-    @IBAction func editButton(_ sender: Any) {
-        
     }
     
     
