@@ -63,6 +63,27 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
+    // セルをタップした時の処理
+    var indexPath:Int = 0   // 行番号格納用
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // タップしたセルの行番号を取得
+        self.indexPath = indexPath.row
+        
+        // 課題詳細確認画面へ遷移
+        performSegue(withIdentifier: "goTaskDetailViewController", sender: nil)
+    }
+    
+    
+    // 画面遷移時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goTaskDetailViewController" {
+            // 表示する課題データを課題詳細確認画面へ渡す
+            let taskDetailViewController = segue.destination as! TaskDetailViewController
+            taskDetailViewController.taskData = taskDataArray[indexPath]
+        }
+    }
+
     
     // TaskDataArray配列の長さ(項目の数)を返却する
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -80,6 +101,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.detailTextLabel!.text = taskData.getTaskCouse()
         
         return cell
+    }
+    
+    // TaskViewControllerに戻ったときの処理
+    @IBAction func goToTaskViewController(_segue:UIStoryboardSegue) {
+        
     }
 
 
