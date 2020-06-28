@@ -15,16 +15,18 @@ class TaskData {
     private var taskTitle:String = ""           // タイトル
     private var taskCause:String = ""           // 原因
     private var taskAchievement:Bool = false    // 解決済み：true, 未解決：false
+    private var deleteFlag:Bool = false         // 削除：true, 削除しない：false
     
     // 課題データを格納する配列
     var taskDataArray = [TaskData]()
     
     
     // 課題データをセットするメソッド
-    func setTaskData(_ taskTitle:String,_ taskCause:String,_ taskAchievement:Bool) {
+    func setTaskData(_ taskTitle:String,_ taskCause:String,_ taskAchievement:Bool,_ deleteFlag:Bool) {
         self.taskTitle = taskTitle
         self.taskCause = taskCause
         self.taskAchievement = taskAchievement
+        self.deleteFlag = deleteFlag
     }
     
     // 課題IDをセットするメソッド(データベースの課題用)
@@ -58,7 +60,8 @@ class TaskData {
             "taskID"         : self.taskID,
             "taskTitle"      : self.taskTitle,
             "taskCause"      : self.taskCause,
-            "taskAchievement": self.taskAchievement
+            "taskAchievement": self.taskAchievement,
+            "deleteFlag"     : self.deleteFlag
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -95,7 +98,8 @@ class TaskData {
                     databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
                     databaseTaskData.setTaskData(taskDataCollection["taskTitle"] as! String,
                                                  taskDataCollection["taskCause"] as! String,
-                                                 taskDataCollection["taskAchievement"] as! Bool)
+                                                 taskDataCollection["taskAchievement"] as! Bool,
+                                                 taskDataCollection["deleteFlag"] as! Bool)
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
@@ -124,7 +128,8 @@ class TaskData {
         taskData.updateData([
             "taskTitle"      : self.taskTitle,
             "taskCause"      : self.taskCause,
-            "taskAchievement": self.taskAchievement
+            "taskAchievement": self.taskAchievement,
+            "deleteFlag"     : self.deleteFlag
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")

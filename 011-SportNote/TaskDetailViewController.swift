@@ -31,7 +31,7 @@ class TaskDetailViewController: UIViewController {
     // 戻るボタンの処理
     @IBAction func backButton(_ sender: Any) {
         // 課題データを更新
-        taskData.setTaskData(taskTitleTextField.text!, taskCauseTextView.text!,false)
+        taskData.setTaskData(taskTitleTextField.text!, taskCauseTextView.text!,false,false)
         taskData.updateTaskData()
         print(taskData.getTaskTitle())
         
