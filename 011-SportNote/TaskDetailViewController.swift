@@ -31,9 +31,8 @@ class TaskDetailViewController: UIViewController {
     // 戻るボタンの処理
     @IBAction func backButton(_ sender: Any) {
         // 課題データを更新
-        taskData.setTaskData(taskTitleTextField.text!, taskCauseTextView.text!,false,false)
+        taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: taskCauseTextView.text!)
         taskData.updateTaskData()
-        print(taskData.getTaskTitle())
         
         // 課題画面に遷移
         self.navigationController?.popViewController(animated: true)

@@ -23,7 +23,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    // TaskDataを格納した配列
+    // TaskDataを格納する配列
     var taskDataArray = [TaskData]()
     
     // テーブルビュー
@@ -45,7 +45,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         // ここが引っ張られるたびに呼び出される
         reloadTableView()
         
-        // 通信終了後、endRefreshingを実行することでロードインジケーター（くるくる）が終了
+        // 通信終了後、ロードインジケーター終了
         self.tableView.refreshControl?.endRefreshing()
     }
     
@@ -70,7 +70,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
-        databaseTaskData.loadDatabase()
+        databaseTaskData.loadTaskData()
         
         // データの取得が終わるまで時間待ち
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {

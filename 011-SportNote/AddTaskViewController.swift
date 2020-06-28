@@ -30,7 +30,7 @@ class AddTaskViewController: UIViewController {
     @IBAction func saveButton(_ sender: Any) {
         // 入力されたテキストをTaskDataにセット
         let taskData = TaskData()
-        taskData.setTaskData(taskTitleTextField.text!,causeTextView.text!,false,false)
+        taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: causeTextView.text!)
         
         // データベースに保存
         taskData.saveTaskData()
