@@ -343,7 +343,7 @@
         <!--設定-->
         <scene sceneID="dDU-p3-Ad6">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="O30-iJ-LFF" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="O30-iJ-LFF" customClass="SettingViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jTy-d3-8sn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -352,16 +352,92 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingCell" textLabel="mx0-6T-iaJ" style="IBUITableViewCellStyleDefault" id="94r-G6-gWd">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="94r-G6-gWd" id="1tA-dm-bB2">
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mx0-6T-iaJ">
+                                                    <rect key="frame" x="20" y="0.0" width="355" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="O30-iJ-LFF" id="hpt-wd-4Fo"/>
+                                    <outlet property="delegate" destination="O30-iJ-LFF" id="rMD-Zf-RJO"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="kvZ-JU-yLQ"/>
                     </view>
                     <navigationItem key="navigationItem" title="設定" id="1g3-if-Vzu"/>
+                    <connections>
+                        <outlet property="tableView" destination="dZI-0F-8v5" id="3r4-e7-Xpp"/>
+                        <segue destination="LRO-rx-LAj" kind="show" identifier="goSettingAccountViewController" id="kkU-75-gaj"/>
+                        <segue destination="vcd-az-PRV" kind="show" identifier="goSettingNotificationViewController" id="L6c-RY-KeN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="7000" y="792"/>
+        </scene>
+        <!--アカウント-->
+        <scene sceneID="obn-lU-ZMC">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="LRO-rx-LAj" customClass="SettingAccountViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ceu-2d-PIR">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="89V-xj-nc5">
+                                <rect key="frame" x="57" y="396" width="300" height="50"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="ログアウト">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="07r-Ac-amh"/>
+                                    <action selector="logoutButton:" destination="LRO-rx-LAj" eventType="touchUpInside" id="RI3-DT-w1d"/>
+                                    <segue destination="Xyz-8C-kZw" kind="unwind" unwindAction="goToLoginWith_segue:" id="zr9-7W-30N"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="8qz-Nt-hDL"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="アカウント" id="GYE-O5-k77"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LRQ-nF-RHo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="Xyz-8C-kZw" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="7000" y="1503"/>
+        </scene>
+        <!--通知-->
+        <scene sceneID="wIC-22-pEa">
+            <objects>
+                <viewController id="vcd-az-PRV" customClass="SettingNotificationViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5Ie-eG-mPb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="l9j-U4-1FX"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="通知" id="tq1-MP-ova"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QvU-Zb-Mre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7832" y="1503"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">

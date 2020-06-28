@@ -91,6 +91,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     var indexPath:Int = 0   // 行番号格納用
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // タップしたときの選択色を消去
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        
         // タップしたセルの行番号を取得
         self.indexPath = indexPath.row
         
