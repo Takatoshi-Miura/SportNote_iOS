@@ -312,11 +312,28 @@
                                 <state key="normal" title="追加">
                                     <color key="titleColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="addMeasuresButton:" destination="zUd-kp-r5X" eventType="touchUpInside" id="vwo-s0-fVW"/>
+                                </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8Qg-Jd-Hny">
-                                <rect key="frame" x="0.0" y="426" width="414" height="208"/>
+                                <rect key="frame" x="0.0" y="419" width="414" height="215"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="measuresCell" id="L19-Q7-1Ur">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="L19-Q7-1Ur" id="hEp-gb-RGd">
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="zUd-kp-r5X" id="bAA-Nt-hzP"/>
+                                    <outlet property="delegate" destination="zUd-kp-r5X" id="nqi-nh-SNS"/>
+                                </connections>
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="opI-eD-Aj8">
                                 <rect key="frame" x="20" y="135" width="374" height="34"/>
@@ -371,6 +388,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="tableView" destination="8Qg-Jd-Hny" id="4gH-DX-TFG"/>
                         <outlet property="taskCauseTextView" destination="J6R-nO-w0C" id="AIg-rN-FC0"/>
                         <outlet property="taskTitleTextField" destination="opI-eD-Aj8" id="J05-bl-1cN"/>
                     </connections>

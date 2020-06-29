@@ -20,12 +20,18 @@ class TaskData {
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
     
+    private var measuresTitle:[String] = []             // 対策タイトル
+    private var measuresEffectiveness:[String] = []     // 対策の有効性
+    private var measuresPriorityIndex:Int = 0           // 最優先の対策が格納されているIndex
+    
     // 課題データを格納する配列
     var taskDataArray = [TaskData]()
     
     
     // 課題データをセットするメソッド(データベースの課題用)
-    func setDatabaseTaskData(_ taskID:Int,_ taskTitle:String,_ taskCause:String,_ taskAchievement:Bool,_ isDeleted:Bool,_ userID:String,_ created_at:String,_ updated_at:String) {
+    func setDatabaseTaskData(_ taskID:Int,_ taskTitle:String,_ taskCause:String,_ taskAchievement:Bool,
+                             _ isDeleted:Bool,_ userID:String,_ created_at:String,_ updated_at:String,
+                             _ measuresTitle:[String],_ measuresEffectiveness:[String],_ measuresPriorityIndex:Int) {
         self.taskID = taskID
         self.taskTitle = taskTitle
         self.taskCause = taskCause
@@ -34,12 +40,47 @@ class TaskData {
         self.userID = userID
         self.created_at = created_at
         self.updated_at = updated_at
+        self.measuresTitle = measuresTitle
+        self.measuresEffectiveness = measuresEffectiveness
+        self.measuresPriorityIndex = measuresPriorityIndex
     }
     
     // テキストデータをセットするメソッド
     func setTextData(taskTitle:String,taskCause:String) {
         self.taskTitle = taskTitle
         self.taskCause = taskCause
+    }
+    
+    // 対策を追加するメソッド
+    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
+        self.measuresTitle.append(measuresTitle)
+        self.measuresEffectiveness.append(measuresEffectiveness)
+    }
+    
+    // 対策を削除するメソッド
+    func deleteMeasures(_ index:Int) {
+        self.measuresTitle.remove(at: index)
+        self.measuresEffectiveness.remove(at: index)
+    }
+    
+    // 対策タイトルを取得するメソッド
+    func getMeasuresTitle(_ index:Int) -> String {
+        return self.measuresTitle[index]
+    }
+    
+    // 対策タイトルを全取得するメソッド
+    func getAllMeasuresTitle() -> [String] {
+        return self.measuresTitle
+    }
+    
+    // 対策の有効性コメントを取得するメソッド
+    func getMeasuresEffectiveness(_ index:Int) -> String {
+        return self.measuresEffectiveness[index]
+    }
+    
+    // 対策数を取得するメソッド
+    func getMeasuresCount() -> Int {
+        return self.measuresTitle.count
     }
     
     // 非表示対象の課題にするメソッド
@@ -91,7 +132,10 @@ class TaskData {
             "isDeleted"      : self.isDeleted,
             "userID"         : self.userID,
             "created_at"     : self.created_at,
-            "updated_at"     : self.updated_at
+            "updated_at"     : self.updated_at,
+            "measuresTitle"         : self.measuresTitle,
+            "measuresEffectiveness" : self.measuresEffectiveness,
+            "measuresPriorityIndex" : self.measuresPriorityIndex
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -134,7 +178,10 @@ class TaskData {
                                                          taskDataCollection["isDeleted"] as! Bool,
                                                          taskDataCollection["userID"] as! String,
                                                          taskDataCollection["created_at"] as! String,
-                                                         taskDataCollection["updated_at"] as! String)
+                                                         taskDataCollection["updated_at"] as! String,
+                                                         taskDataCollection["measuresTitle"] as! [String],
+                                                         taskDataCollection["measuresEffectiveness"] as! [String],
+                                                         taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
@@ -168,7 +215,10 @@ class TaskData {
             "taskCause"      : self.taskCause,
             "taskAchievement": self.taskAchievement,
             "isDeleted"      : self.isDeleted,
-            "updated_at"     : self.updated_at
+            "updated_at"     : self.updated_at,
+            "measuresTitle"         : self.measuresTitle,
+            "measuresEffectiveness" : self.measuresEffectiveness,
+            "measuresPriorityIndex" : self.measuresPriorityIndex
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")

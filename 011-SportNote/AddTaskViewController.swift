@@ -74,6 +74,11 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         let taskData = TaskData()
         taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: causeTextView.text!)
         
+        // 対策の追加
+        for measuresTitle in measuresTitleArray {
+            taskData.addMeasures(measuresTitle, "")
+        }
+        
         // データベースに保存
         taskData.saveTaskData()
         
