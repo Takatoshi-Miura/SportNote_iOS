@@ -102,6 +102,23 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
+    // セルを削除したときの処理
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // 削除処理かどうかの判定
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            // 次回以降、この課題データを取得しないようにする
+            taskDataArray[indexPath.row].deleteTask()
+            taskDataArray[indexPath.row].updateTaskData()
+            
+            // taskDataArrayから削除
+            taskDataArray.remove(at:indexPath.row)
+            
+            // セルを削除
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+        }
+    }
+    
+    
     // 画面遷移時に呼ばれる処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goTaskDetailViewController" {

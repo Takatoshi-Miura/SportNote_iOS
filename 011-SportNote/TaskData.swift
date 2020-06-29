@@ -42,6 +42,11 @@ class TaskData {
         self.taskCause = taskCause
     }
     
+    // 非表示対象の課題にするメソッド
+    func deleteTask() {
+        self.isDeleted = true
+    }
+    
     // taskTitleのゲッター
     func getTaskTitle() -> String {
         return self.taskTitle
@@ -110,6 +115,7 @@ class TaskData {
         let db = Firestore.firestore()
         db.collection("TaskData")
             .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
             .order(by: "taskID", descending: true)
             .getDocuments() { (querySnapshot, err) in
             if let err = err {
