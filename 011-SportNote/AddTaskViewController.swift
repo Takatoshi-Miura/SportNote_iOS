@@ -8,15 +8,57 @@
 
 import UIKit
 
-class AddTaskViewController: UIViewController {
-
+class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // デリゲートとデータソースの指定
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
     // テキスト
     @IBOutlet weak var taskTitleTextField: UITextField!
     @IBOutlet weak var causeTextView: UITextView!
+    
+    // テーブルビュー
+    @IBOutlet weak var tableView: UITableView!
+    
+    // 対策タイトルを格納する配列
+    var measuresTitleArray:[String] = []
+    
+    // 追加ボタンの処理
+    @IBAction func addMeasuresButton(_ sender: Any) {
+        // アラートダイアログを生成
+        let alertController = UIAlertController(title:"対策を追加",message:"対策を入力してください",preferredStyle:UIAlertController.Style.alert)
+        
+        // テキストエリアを追加
+        alertController.addTextField(configurationHandler:nil)
+        
+        // OKボタンを宣言
+        let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
+            // OKボタンがタップされたときの処理
+            if let textField = alertController.textFields?.first {
+                // 対策タイトルの配列に入力値を挿入。先頭に挿入する
+                self.measuresTitleArray.insert(textField.text!,at:0)
+                
+                //テーブルに行が追加されたことをテーブルに通知
+                self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
+            }
+        }
+        //OKボタンを追加
+        alertController.addAction(okAction)
+        
+        //CANCELボタンを宣言
+        let cancelButton = UIAlertAction(title:"CANCEL",style:UIAlertAction.Style.cancel,handler:nil)
+        //CANCELボタンを追加
+        alertController.addAction(cancelButton)
+        
+        //アラートダイアログを表示
+        present(alertController,animated:true,completion:nil)
+    }
+    
     
     
     // 戻るボタンの処理
@@ -39,5 +81,21 @@ class AddTaskViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    
+    // 対策の項目数を返却
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return measuresTitleArray.count
+    }
+    
+    // テーブルの行ごとのセルを返却する
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // Storyboardで指定したtodoCell識別子を利用して再利用可能なセルを取得する
+        let cell = tableView.dequeueReusableCell(withIdentifier: "measuresCell", for: indexPath)
+        
+        // 行番号に合った対策タイトルを表示
+        cell.textLabel?.text = measuresTitleArray[indexPath.row]
+        
+        return cell
+    }
 
 }

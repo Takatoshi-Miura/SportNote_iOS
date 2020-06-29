@@ -111,6 +111,7 @@ class TaskData {
         let userID = Auth.auth().currentUser!.uid
         
         // ユーザーの課題データ取得
+        // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
         db.collection("TaskData")

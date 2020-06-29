@@ -208,6 +208,20 @@
                                 <rect key="frame" x="0.0" y="380" width="414" height="386"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="measuresCell" id="cBR-nF-Wm0">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cBR-nF-Wm0" id="TiM-Cn-eZ2">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="wUj-cO-jPj" id="FD3-FK-541"/>
+                                    <outlet property="delegate" destination="wUj-cO-jPj" id="axd-ay-N66"/>
+                                </connections>
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-JU-aBw">
                                 <rect key="frame" x="20" y="106" width="374" height="34"/>
@@ -242,9 +256,12 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yU0-iC-0C4">
                                 <rect key="frame" x="305" y="343" width="94" height="34"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <state key="normal" title="＋">
+                                <state key="normal" title="追加">
                                     <color key="titleColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="addMeasuresButton:" destination="wUj-cO-jPj" eventType="touchUpInside" id="Lu0-Lu-j8S"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -261,6 +278,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="causeTextView" destination="h9u-U4-kY8" id="FL5-eu-vWh"/>
+                        <outlet property="tableView" destination="UKq-ML-p2X" id="KB8-Gh-r9V"/>
                         <outlet property="taskTitleTextField" destination="BUa-JU-aBw" id="Y30-nL-ckQ"/>
                     </connections>
                 </viewController>
@@ -291,7 +309,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1cW-fz-mNm">
                                 <rect key="frame" x="300" y="386" width="94" height="34"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <state key="normal" title="＋">
+                                <state key="normal" title="追加">
                                     <color key="titleColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>

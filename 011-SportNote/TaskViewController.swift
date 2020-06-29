@@ -14,6 +14,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // デリゲートとデータソースの指定
         tableView.delegate = self
         tableView.dataSource = self
         
