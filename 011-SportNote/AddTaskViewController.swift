@@ -75,6 +75,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: causeTextView.text!)
         
         // 対策の追加
+        measuresTitleArray.reverse()
         for measuresTitle in measuresTitleArray {
             taskData.addMeasures(measuresTitle, "")
         }

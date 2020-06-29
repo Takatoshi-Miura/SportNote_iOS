@@ -53,8 +53,8 @@ class TaskData {
     
     // 対策を追加するメソッド
     func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
-        self.measuresTitle.append(measuresTitle)
-        self.measuresEffectiveness.append(measuresEffectiveness)
+        self.measuresTitle.insert(measuresTitle, at: 0)
+        self.measuresEffectiveness.insert(measuresEffectiveness, at: 0)
     }
     
     // 対策を削除するメソッド
