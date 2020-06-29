@@ -25,6 +25,7 @@
 		8D7BAB4B24A5AE9100BE196B /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4A24A5AE9100BE196B /* TaskViewController.swift */; };
 		8D7BAB4D24A5AF5300BE196B /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4C24A5AF5300BE196B /* TaskData.swift */; };
 		8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */; };
+		8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		8D7BAB4A24A5AE9100BE196B /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		8D7BAB4C24A5AF5300BE196B /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
 		8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
+		8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresDetailViewController.swift; sourceTree = "<group>"; };
 		C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +105,7 @@
 				8D665D3A24A17D9A00441B32 /* LoginViewController.swift */,
 				8D7BAB4A24A5AE9100BE196B /* TaskViewController.swift */,
 				8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */,
+				8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */,
 				8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */,
 				8D7BAB4C24A5AF5300BE196B /* TaskData.swift */,
 				8D06D5DC24A834A4004D5307 /* SettingViewController.swift */,
@@ -247,6 +250,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */,
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8D7BAB4D24A5AF5300BE196B /* TaskData.swift in Sources */,

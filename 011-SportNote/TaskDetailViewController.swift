@@ -109,5 +109,30 @@ class TaskDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
+    
+    // セルをタップした時の処理
+    var indexPath:Int = 0   // 行番号格納用
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // タップしたときの選択色を消去
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        
+        // タップしたセルの行番号を取得
+        self.indexPath = indexPath.row
+        
+        // 課題詳細確認画面へ遷移
+        performSegue(withIdentifier: "goMeasuresDetailViewController", sender: nil)
+    }
+    
+    // 画面遷移時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goMeasuresDetailViewController" {
+            // 課題データを対策詳細確認画面へ渡す
+            let measuresDetailViewController = segue.destination as! MeasuresDetailViewController
+            measuresDetailViewController.taskData = taskData
+            measuresDetailViewController.indexPath = indexPath
+        }
+    }
+    
 
 }
