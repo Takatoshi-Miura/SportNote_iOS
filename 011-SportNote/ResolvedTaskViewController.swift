@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -33,11 +32,32 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     var resolvedTaskDataArray = [TaskData]()
     
     
+    // セルをタップした時の処理
+    var indexPath:Int = 0   // 行番号格納用
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // タップしたときの選択色を消去
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        
+        // タップしたセルの行番号を取得
+        self.indexPath = indexPath.row
+        
+        // 詳細確認画面へ遷移
+        performSegue(withIdentifier: "goResolvedTaskDetailViewController", sender: nil)
+    }
+    
+    // 画面遷移時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goResolvedTaskDetailViewController" {
+            // 表示する課題データを課題詳細確認画面へ渡す
+            let resolvedTaskDetailViewController = segue.destination as! ResolvedTaskDetailViewController
+            resolvedTaskDetailViewController.taskData = resolvedTaskDataArray[indexPath]
+        }
+    }
+    
+    
     // テーブルビューを更新するメソッド
     func reloadTableView() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
         databaseTaskData.loadResolvedTaskData()
@@ -50,9 +70,6 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         
             // テーブルビューの更新
             self.tableView?.reloadData()
-            
-            // HUDを非表示
-            SVProgressHUD.dismiss()
         }
     }
     
@@ -74,6 +91,12 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         cell.detailTextLabel!.text = resolvedTaskData.getTaskCouse()
         
         return cell
+    }
+    
+    
+    // ResolvedTaskViewControllerに戻ったときの処理
+    @IBAction func goToResolvedTaskViewController(_segue:UIStoryboardSegue) {
+        
     }
 
 }
