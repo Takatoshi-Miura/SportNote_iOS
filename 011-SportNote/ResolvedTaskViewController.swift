@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -34,6 +35,9 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     
     // テーブルビューを更新するメソッド
     func reloadTableView() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
         databaseTaskData.loadResolvedTaskData()
@@ -46,6 +50,9 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         
             // テーブルビューの更新
             self.tableView?.reloadData()
+            
+            // HUDを非表示
+            SVProgressHUD.dismiss()
         }
     }
     

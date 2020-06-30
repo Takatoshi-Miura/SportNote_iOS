@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource {
 
@@ -50,6 +51,16 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: taskCauseTextView.text!)
             taskData.updateTaskData()
         }
+    }
+    
+    
+    // 解決済みにするボタンの処理
+    @IBAction func resolvedButton(_ sender: Any) {
+        // 解決済みにする
+        taskData.changeAchievement()
+        
+        // 通知
+        SVProgressHUD.showSuccess(withStatus: "解決済みにしました")
     }
     
     

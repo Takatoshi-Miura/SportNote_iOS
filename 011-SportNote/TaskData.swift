@@ -69,6 +69,11 @@ class TaskData {
         self.measuresEffectiveness.remove(at: index)
     }
     
+    // 解決、未解決を反転するメソッド
+    func changeAchievement() {
+        self.taskAchievement.toggle()
+    }
+    
     // 対策タイトルを取得するメソッド
     func getMeasuresTitle(_ index:Int) -> String {
         return self.measuresTitle[index]

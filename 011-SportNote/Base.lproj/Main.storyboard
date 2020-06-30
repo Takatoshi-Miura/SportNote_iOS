@@ -402,6 +402,8 @@
                                 </state>
                                 <connections>
                                     <action selector="loginButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="cIr-Mb-zAB"/>
+                                    <action selector="resolvedButton:" destination="zUd-kp-r5X" eventType="touchUpInside" id="Pt2-MG-EQd"/>
+                                    <segue destination="zbE-5F-qgg" kind="unwind" unwindAction="goToTaskViewControllerWith_segue:" id="z5l-uW-rW6"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="opI-eD-Aj8">
@@ -423,6 +425,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ddG-nM-WUl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="zbE-5F-qgg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1773.913043478261" y="1502.6785714285713"/>
         </scene>
