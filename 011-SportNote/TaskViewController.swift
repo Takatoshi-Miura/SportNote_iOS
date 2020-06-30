@@ -127,20 +127,28 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // TaskDataArray配列の長さ(項目の数)を返却する
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskDataArray.count
+        return taskDataArray.count + 1
     }
     
     // テーブルの行ごとのセルを返却する
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //Storyboardで指定したセルを取得する
-        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
-        
-        //行番号に合った課題データをラベルに表示する
-        let taskData = taskDataArray[indexPath.row]
-        cell.textLabel!.text = taskData.getTaskTitle()
-        cell.detailTextLabel!.text = taskData.getTaskCouse()
-        
-        return cell
+        // 最下位は解決済みの課題セル、それ以外は未解決の課題セル
+        switch indexPath.row {
+            case taskDataArray.count:
+                // 解決済みの課題セルを取得
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "resolvedTaskCell", for: indexPath)
+                cell.textLabel!.text = "解決済みの課題一覧"
+                cell.textLabel!.textColor = UIColor.systemBlue
+                return cell
+            default:
+                // 未解決の課題セルを取得する
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
+                // 行番号に合った課題データをラベルに表示する
+                let taskData = taskDataArray[indexPath.row]
+                cell.textLabel!.text = taskData.getTaskTitle()
+                cell.detailTextLabel!.text = taskData.getTaskCouse()
+                return cell
+        }
     }
     
     // TaskViewControllerに戻ったときの処理
