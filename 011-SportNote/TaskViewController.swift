@@ -69,7 +69,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func reloadTableView() {
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
-        databaseTaskData.loadTaskData()
+        databaseTaskData.loadUnsolvedTaskData()
         
         // データの取得が終わるまで時間待ち
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
@@ -94,7 +94,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.indexPath = indexPath.row
         
         // 課題詳細確認画面へ遷移
-        performSegue(withIdentifier: "goTaskDetailViewController", sender: nil)
+        if self.indexPath == taskDataArray.count {
+            // 解決済みの課題セルがタップされたとき
+            performSegue(withIdentifier: "goResolvedTaskViewController", sender: nil)
+        } else {
+            // 未解決の課題セルがタップされたとき
+            performSegue(withIdentifier: "goTaskDetailViewController", sender: nil)
+        }
     }
     
     
@@ -121,11 +127,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 表示する課題データを課題詳細確認画面へ渡す
             let taskDetailViewController = segue.destination as! TaskDetailViewController
             taskDetailViewController.taskData = taskDataArray[indexPath]
+        } else if segue.identifier == "goResolvedTaskViewController" {
+            // 解決済みの課題一覧画面へ遷移
         }
     }
 
     
-    // TaskDataArray配列の長さ(項目の数)を返却する
+    // TaskDataArrayの項目の数 + 1(解決済みの課題一覧用セル)を返却する
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskDataArray.count + 1
     }

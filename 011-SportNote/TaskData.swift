@@ -152,8 +152,8 @@ class TaskData {
     }
     
     
-    // Firebaseの課題データを取得するメソッド
-    func loadTaskData() {
+    // Firebaseの未解決課題データを取得するメソッド
+    func loadUnsolvedTaskData() {
         // 配列の初期化
         taskDataArray = []
         
@@ -167,6 +167,7 @@ class TaskData {
         db.collection("TaskData")
             .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
+            .whereField("taskAchievement", isEqualTo: false)
             .order(by: "taskID", descending: true)
             .getDocuments() { (querySnapshot, err) in
             if let err = err {
@@ -201,6 +202,58 @@ class TaskData {
             }
         }
     }
+    
+    // Firebaseの解決済み課題データを取得するメソッド
+    func loadResolvedTaskData() {
+        // 配列の初期化
+        taskDataArray = []
+        
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
+        
+        // ユーザーの課題データ取得
+        // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
+        // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
+        let db = Firestore.firestore()
+        db.collection("TaskData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .whereField("taskAchievement", isEqualTo: true)
+            .order(by: "taskID", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let taskDataCollection = document.data()
+                
+                    // 取得データを基に、課題データを作成
+                    let databaseTaskData = TaskData()
+                    databaseTaskData.setDatabaseTaskData(taskDataCollection["taskID"] as! Int,
+                                                         taskDataCollection["taskTitle"] as! String,
+                                                         taskDataCollection["taskCause"] as! String,
+                                                         taskDataCollection["taskAchievement"] as! Bool,
+                                                         taskDataCollection["isDeleted"] as! Bool,
+                                                         taskDataCollection["userID"] as! String,
+                                                         taskDataCollection["created_at"] as! String,
+                                                         taskDataCollection["updated_at"] as! String,
+                                                         taskDataCollection["measuresTitle"] as! [String],
+                                                         taskDataCollection["measuresEffectiveness"] as! [String],
+                                                         taskDataCollection["measuresPriorityIndex"] as! Int)
+                    
+                    // 課題データを格納
+                    self.taskDataArray.append(databaseTaskData)
+                    
+                    // 課題IDの重複対策
+                    // データベースの課題IDの最大値を取得し、新規投稿時のIDは最大値＋１で設定
+                    if databaseTaskData.taskID > TaskData.taskCount {
+                        TaskData.taskCount = databaseTaskData.taskID
+                    }
+                }
+            }
+        }
+    }
+    
     
     
     // Firebaseの課題データを更新するメソッド
