@@ -88,6 +88,12 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     }
     
     
+    // テキストフィールド以外をタップでキーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    
     // 対策の項目数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return measuresTitleArray.count

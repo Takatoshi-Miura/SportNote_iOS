@@ -57,6 +57,12 @@ class TaskData {
         self.measuresEffectiveness.insert(measuresEffectiveness, at: 0)
     }
     
+    // 対策を更新するメソッド
+    func updateMeasures(_ measuresTitle:String,_ measuresEffectiveness:String,_ index:Int) {
+        self.measuresTitle[index] = measuresTitle
+        self.measuresEffectiveness[index] = measuresEffectiveness
+    }
+    
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
         self.measuresTitle.remove(at: index)

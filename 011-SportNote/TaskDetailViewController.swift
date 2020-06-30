@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TaskDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,12 +16,17 @@ class TaskDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         // デリゲートとデータソースの指定
         tableView.delegate = self
         tableView.dataSource = self
-        
-        // TaskViewControllerから受け取った課題データを表示する
+        navigationController?.delegate = self
+
+        // 受け取った課題データを表示する
         printTaskData(taskData)
         
         // TaskViewControllerから受け取った課題データの対策を取得
         measuresTitleArray = taskData.getAllMeasuresTitle()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView?.reloadData()
     }
     
     // テキスト
@@ -36,16 +41,15 @@ class TaskDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // 対策タイトルの格納用
     var measuresTitleArray:[String] = []
+
     
-    
-    // 戻るボタンの処理
-    @IBAction func backButton(_ sender: Any) {
-        // 課題データを更新
-        taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: taskCauseTextView.text!)
-        taskData.updateTaskData()
-        
-        // 課題画面に遷移
-        self.navigationController?.popViewController(animated: true)
+    // 前画面に戻るときに呼ばれる処理
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        if viewController is TaskViewController {
+            // 課題データを更新
+            taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: taskCauseTextView.text!)
+            taskData.updateTaskData()
+        }
     }
     
     
@@ -62,7 +66,7 @@ class TaskDetailViewController: UIViewController, UITableViewDelegate, UITableVi
             // OKボタンがタップされたときの処理
             if let textField = alertController.textFields?.first {
                 // データベースの対策データを追加
-                self.taskData.addMeasures(textField.text!, "")
+                self.taskData.addMeasures(textField.text!, "練習後に対策の有効性を記入しましょう。")
                 
                 // 対策タイトルの配列に入力値を挿入。先頭に挿入する
                 self.measuresTitleArray.insert(textField.text!,at:0)
@@ -91,6 +95,11 @@ class TaskDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         taskCauseTextView.text  = taskData.getTaskCouse()
     }
     
+    // テキストフィールド以外をタップでキーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     
     // 対策の数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -104,7 +113,7 @@ class TaskDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         
         //行番号に合った対策データをラベルに表示する
         cell.textLabel!.text = taskData.getMeasuresTitle(indexPath.row)
-        //cell.detailTextLabel!.text = taskData.getMeasuresEffectiveness(indexPath.row)
+        cell.detailTextLabel?.text = taskData.getMeasuresEffectiveness(indexPath.row)
         
         return cell
     }

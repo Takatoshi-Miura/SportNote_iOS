@@ -36,6 +36,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // TaskViewControllerが呼ばれたときの処理
     override func viewWillAppear(_ animated: Bool) {
+        self.tableView?.reloadData()
         // テーブルビューを更新
         reloadTableView()
     }
@@ -66,9 +67,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // テーブルビューを更新するメソッド
     func reloadTableView() {
-        // HUDで処理中を表示
-        //SVProgressHUD.show()
-        
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
         databaseTaskData.loadTaskData()
@@ -81,9 +79,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
             // テーブルビューの更新
             self.tableView?.reloadData()
-        
-            // HUDを非表示
-            //SVProgressHUD.dismiss()
         }
     }
     
