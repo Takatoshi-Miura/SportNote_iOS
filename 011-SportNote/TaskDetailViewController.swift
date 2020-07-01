@@ -24,6 +24,9 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         // TaskViewControllerから受け取った課題データの対策を取得
         measuresTitleArray = taskData.getAllMeasuresTitle()
+        
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {

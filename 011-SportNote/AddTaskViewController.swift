@@ -16,6 +16,9 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         // デリゲートとデータソースの指定
         tableView.delegate = self
         tableView.dataSource = self
+        
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
     }
     
     // テキスト

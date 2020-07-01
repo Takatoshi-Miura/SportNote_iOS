@@ -25,6 +25,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
         navigationItem.leftBarButtonItem = editButtonItem
+        
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
     }
     
     
@@ -64,34 +67,57 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     // 編集ボタンの処理
-    @IBAction func editButton(_ sender: Any) {
-        
-    }
-    
-    // 編集機能
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
+        //tableViewの編集モードを切り替える
         tableView.isEditing = editing
     }
     
+    // 解決済みの課題セルを編集不可能にする
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.row == taskDataArray.count { return false }
+        return true
+    }
+    
     // セルをタップした時の処理
-    var indexPath:Int = 0   // 行番号格納用
+    // 行番号格納用
+    var indexPath:Int = 0
+    var indexPathList:[Int] = []
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // タップしたときの選択色を消去
-        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        
-        // タップしたセルの行番号を取得
-        self.indexPath = indexPath.row
-        
-        // 課題詳細確認画面へ遷移
-        if self.indexPath == taskDataArray.count {
-            // 解決済みの課題セルがタップされたとき
-            performSegue(withIdentifier: "goResolvedTaskViewController", sender: nil)
+        // 編集時の処理
+        if tableView.isEditing {
+            // 選択されたセルの行番号を格納
+            //indexPathList.append(indexPath.row)
+            //print("選択index:\(indexPathList)")
         } else {
-            // 未解決の課題セルがタップされたとき
-            performSegue(withIdentifier: "goTaskDetailViewController", sender: nil)
+            // 通常時の処理
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+            
+            // タップしたセルの行番号を取得
+            self.indexPath = indexPath.row
+            
+            // 課題詳細確認画面へ遷移
+            if self.indexPath == taskDataArray.count {
+                // 解決済みの課題セルがタップされたとき
+                performSegue(withIdentifier: "goResolvedTaskViewController", sender: nil)
+            } else {
+                // 未解決の課題セルがタップされたとき
+                performSegue(withIdentifier: "goTaskDetailViewController", sender: nil)
+            }
         }
+    }
+    
+    // 編集モード完了直後の処理(無効)
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        print("実行されました")
+        // 選択されたセルを削除する
+        indexPathList.sort { $1 < $0 }
+        for indexPath in indexPathList {
+            taskDataArray.remove(at: indexPath)
+        }
+        indexPathList = []
     }
     
     

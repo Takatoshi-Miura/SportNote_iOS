@@ -16,6 +16,9 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         // デリゲートとデータソースの指定
         tableView.delegate = self
         tableView.dataSource = self
+        
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
     }
     
     // ResolvedTaskViewControllerが呼ばれたときの処理

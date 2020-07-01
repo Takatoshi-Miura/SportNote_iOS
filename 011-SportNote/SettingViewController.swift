@@ -13,7 +13,8 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
     }
     
     // テーブルビュー
