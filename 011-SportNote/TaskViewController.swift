@@ -178,7 +178,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func reloadTableView() {
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
-        databaseTaskData.loadUnsolvedTaskData()
+        databaseTaskData.loadUnresolvedTaskData()
         
         // データの取得が終わるまで時間待ち
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
@@ -232,7 +232,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // TaskViewControllerに戻ったときの処理
     @IBAction func goToTaskViewController(_segue:UIStoryboardSegue) {
-        
+        // データの更新
+        reloadTableView()
     }
 
 

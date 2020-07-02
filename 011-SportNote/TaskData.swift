@@ -132,43 +132,75 @@ class TaskData {
     
     // Firebaseにデータを保存するメソッド
     func saveTaskData() {
-        // 課題IDは課題IDの最大値＋１で設定
-        TaskData.taskCount += 1
-        self.taskID = TaskData.taskCount
+        // taskIDの設定
+        setTaskID()
         
-        // 現在時刻を取得
-        self.created_at = getCurrentTime()
-        self.updated_at = self.created_at
+        // データの取得が終わるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
         
+            // 現在時刻を取得
+            self.created_at = self.getCurrentTime()
+            self.updated_at = self.created_at
+        
+            // ユーザーUIDを取得
+            self.userID = Auth.auth().currentUser!.uid
+        
+            // Firebaseにアクセス
+            let db = Firestore.firestore()
+            db.collection("TaskData").document("\(self.userID)_\(self.taskID)").setData([
+                "taskID"         : self.taskID,
+                "taskTitle"      : self.taskTitle,
+                "taskCause"      : self.taskCause,
+                "taskAchievement": self.taskAchievement,
+                "isDeleted"      : self.isDeleted,
+                "userID"         : self.userID,
+                "created_at"     : self.created_at,
+                "updated_at"     : self.updated_at,
+                "measuresTitle"         : self.measuresTitle,
+                "measuresEffectiveness" : self.measuresEffectiveness,
+                "measuresPriorityIndex" : self.measuresPriorityIndex
+            ]) { err in
+                if let err = err {
+                    print("Error writing document: \(err)")
+                } else {
+                    print("Document successfully written!")
+                }
+            }
+        }
+    }
+    
+    
+    // 新規課題用の課題IDを設定するメソッド
+    func setTaskID() {
         // ユーザーUIDを取得
-        self.userID = Auth.auth().currentUser!.uid
+        let userID = Auth.auth().currentUser!.uid
         
-        // Firebaseにアクセス
+        // ユーザーの課題データを取得
         let db = Firestore.firestore()
-        db.collection("TaskData").document("\(self.userID)_\(self.taskID)").setData([
-            "taskID"         : self.taskID,
-            "taskTitle"      : self.taskTitle,
-            "taskCause"      : self.taskCause,
-            "taskAchievement": self.taskAchievement,
-            "isDeleted"      : self.isDeleted,
-            "userID"         : self.userID,
-            "created_at"     : self.created_at,
-            "updated_at"     : self.updated_at,
-            "measuresTitle"         : self.measuresTitle,
-            "measuresEffectiveness" : self.measuresEffectiveness,
-            "measuresPriorityIndex" : self.measuresPriorityIndex
-        ]) { err in
+        db.collection("TaskData")
+            .whereField("userID", isEqualTo: userID)
+            .getDocuments() { (querySnapshot, err) in
             if let err = err {
-                print("Error writing document: \(err)")
+                print("Error getting documents: \(err)")
             } else {
-                print("Document successfully written!")
+                for document in querySnapshot!.documents {
+                    let taskDataCollection = document.data()
+                    // 課題IDの重複対策
+                    // データベースの課題IDの最大値を取得
+                    if taskDataCollection["taskID"] as! Int  > TaskData.taskCount {
+                        TaskData.taskCount = taskDataCollection["taskID"] as! Int
+                    }
+                }
+                // 課題IDは課題IDの最大値＋１で設定
+                TaskData.taskCount += 1
+                self.taskID = TaskData.taskCount
             }
         }
     }
     
     
     // Firebaseの未解決課題データを取得するメソッド
-    func loadUnsolvedTaskData() {
+    func loadUnresolvedTaskData() {
         // 配列の初期化
         taskDataArray = []
         
@@ -258,12 +290,6 @@ class TaskData {
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
-                    
-                    // 課題IDの重複対策
-                    // データベースの課題IDの最大値を取得し、新規投稿時のIDは最大値＋１で設定
-                    if databaseTaskData.taskID > TaskData.taskCount {
-                        TaskData.taskCount = databaseTaskData.taskID
-                    }
                 }
             }
         }
