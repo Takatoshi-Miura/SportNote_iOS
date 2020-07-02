@@ -15,6 +15,10 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // デリゲートの指定
         navigationController?.delegate = self
+        
+        // チェックボックスの設定
+        self.checkButton.setImage(uncheckedImage, for: .normal)
+        self.checkButton.setImage(checkedImage, for: .selected)
 
         // 受け取った対策データを表示
         printMeasuresData(taskData)
@@ -23,6 +27,18 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     // テキスト
     @IBOutlet weak var measuresTitleTextField: UITextField!
     @IBOutlet weak var measuresEffectivenessTextView: UITextView!
+    
+    // チェックボックス
+    @IBOutlet weak var checkButton: UIButton!
+    private let checkedImage = UIImage(named: "check_on")
+    private let uncheckedImage = UIImage(named: "check_off")
+    
+    // チェックボックスがタップされた時の処理
+    @IBAction func checkButtonTap(_ sender: Any) {
+        //選択状態を反転させる
+        self.checkButton.isSelected = !self.checkButton.isSelected
+    }
+    
     
     // 課題データ格納用
     var taskData = TaskData()
