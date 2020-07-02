@@ -32,8 +32,7 @@ class ResolvedMeasuresDetailViewController: UIViewController {
     
     // チェックボックスがタップされた時の処理
     @IBAction func checkButtonTap(_ sender: Any) {
-        //選択状態を反転させる
-        self.checkButton.isSelected = !self.checkButton.isSelected
+        // 編集不可
     }
     
     
@@ -44,8 +43,14 @@ class ResolvedMeasuresDetailViewController: UIViewController {
     
     // データを表示するメソッド
     func printMeasuresData(_ taskData:TaskData) {
+        // テキストの表示
         measuresTitleTextField.text        = taskData.getMeasuresTitle(indexPath)
         measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
+        
+        // 最有力の対策ならチェックボックスを選択済みにする
+        if taskData.getPriorityIndex() == indexPath {
+            self.checkButton.isSelected = !self.checkButton.isSelected
+        }
     }
     
     

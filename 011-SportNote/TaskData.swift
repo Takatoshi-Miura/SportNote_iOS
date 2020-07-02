@@ -63,6 +63,16 @@ class TaskData {
         self.measuresEffectiveness[index] = measuresEffectiveness
     }
     
+    // 最有力の対策を更新するメソッド
+    func updatePriorityIndex(_ index:Int) {
+        self.measuresPriorityIndex = index
+    }
+    
+    // 最有力の対策を取得するメソッド
+    func getPriorityIndex() -> Int {
+        return self.measuresPriorityIndex
+    }
+    
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
         self.measuresTitle.remove(at: index)
