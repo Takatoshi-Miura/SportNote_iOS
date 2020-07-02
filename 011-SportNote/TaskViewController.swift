@@ -43,6 +43,15 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // TaskViewControllerが呼ばれたときの処理
     override func viewWillAppear(_ animated: Bool) {
+        
+        if let presented = self.presentedViewController {
+            if type(of: presented) == AddTaskViewController.self {
+                // AddTaskViewControllerから戻ってきたときもテーブルを更新
+                self.tableView?.reloadData()
+                reloadTableView()
+            }
+        }
+        
         self.tableView?.reloadData()
         // テーブルビューを更新
         reloadTableView()
