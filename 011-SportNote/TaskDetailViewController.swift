@@ -93,7 +93,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         alertController.addAction(okAction)
         
         //CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"CANCEL",style:UIAlertAction.Style.cancel,handler:nil)
+        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
         //CANCELボタンを追加
         alertController.addAction(cancelButton)
         

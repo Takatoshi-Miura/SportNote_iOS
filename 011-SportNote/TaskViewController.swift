@@ -118,15 +118,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    // 編集モード完了直後の処理(無効)
+    // 編集モード完了直後の処理
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        print("実行されました")
-        // 選択されたセルを削除する
-        indexPathList.sort { $1 < $0 }
-        for indexPath in indexPathList {
-            taskDataArray.remove(at: indexPath)
-        }
-        indexPathList = []
+
     }
     
     
@@ -134,15 +128,32 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // 次回以降、この課題データを取得しないようにする
-            taskDataArray[indexPath.row].deleteTask()
-            taskDataArray[indexPath.row].updateTaskData()
+            // アラートダイアログを生成
+            let alertController = UIAlertController(title:"課題を削除",message:"課題を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
             
-            // taskDataArrayから削除
-            taskDataArray.remove(at:indexPath.row)
+            // OKボタンを宣言
+            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+                // OKボタンがタップされたときの処理
+                // 次回以降、この課題データを取得しないようにする
+                self.taskDataArray[indexPath.row].deleteTask()
+                self.taskDataArray[indexPath.row].updateTaskData()
+                    
+                // taskDataArrayから削除
+                self.taskDataArray.remove(at:indexPath.row)
+                    
+                // セルを削除
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }
+            //OKボタンを追加
+            alertController.addAction(okAction)
             
-            // セルを削除
-            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            //CANCELボタンを宣言
+            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            //CANCELボタンを追加
+            alertController.addAction(cancelButton)
+            
+            //アラートダイアログを表示
+            present(alertController,animated:true,completion:nil)
         }
     }
     
