@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -20,9 +21,29 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // データ取得
         freeNoteData.loadFreeNoteData()
         
-        // データのないセルを非表示
-        tableView.tableFooterView = UIView()
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // データの取得が終わるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+            // テーブルビューを更新
+            self.tableView?.reloadData()
+            
+            // データのないセルを非表示
+            self.tableView.tableFooterView = UIView()
+            
+            // HUDで処理中を非表示
+            SVProgressHUD.dismiss()
+        }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // データ取得
+        freeNoteData.loadFreeNoteData()
+        // テーブルビューを更新
+        self.tableView?.reloadData()
+    }
+    
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!

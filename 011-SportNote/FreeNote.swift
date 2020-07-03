@@ -96,6 +96,8 @@ class FreeNote {
         
         // Firebaseにアクセス
         let db = Firestore.firestore()
+        
+        // 現在のユーザーのフリーノートデータを取得する
         db.collection("FreeNoteData")
             .whereField("userID", isEqualTo: userID)
             .getDocuments() { (querySnapshot, err) in
@@ -116,6 +118,30 @@ class FreeNote {
         }
     }
     
+    
+    // Firebaseのデータを更新するメソッド
+    func updateFreeNoteData() {
+        // 更新日時を現在時刻にする
+        self.updated_at = getCurrentTime()
+        
+        // 更新したいデータを取得
+        let db = Firestore.firestore()
+        let freeNoteData = db.collection("FreeNoteData").document("\(self.userID)")
+
+        // 変更する可能性のあるデータのみ更新
+        freeNoteData.updateData([
+            "title"      : self.title,
+            "detail"     : self.detail,
+            "updated_at" : self.updated_at
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
+        print("フリーノートを更新しました")
+    }
     
     
     
