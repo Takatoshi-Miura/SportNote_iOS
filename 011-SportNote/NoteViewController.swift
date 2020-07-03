@@ -38,6 +38,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("呼ばれました")
         // データ取得
         freeNoteData.loadFreeNoteData()
         // テーブルビューを更新
@@ -54,6 +55,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     // ＋ボタンの処理
     @IBAction func addButton(_ sender: Any) {
+        // ノート追加画面に遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
+        self.present(nextView, animated: true, completion: nil)
     }
     
     
@@ -110,6 +115,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
                 return cell
         }
+    }
+    
+    
+    // NoteViewControllerに戻ったときの処理
+    @IBAction func goToNoteViewController(_segue:UIStoryboardSegue) {
     }
     
 }

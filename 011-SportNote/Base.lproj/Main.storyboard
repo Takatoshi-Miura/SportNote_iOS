@@ -132,6 +132,47 @@
             </objects>
             <point key="canvasLocation" x="7337.68115942029" y="791.51785714285711"/>
         </scene>
+        <!--Add Note View Controller-->
+        <scene sceneID="CJx-E8-7FJ">
+            <objects>
+                <viewController storyboardIdentifier="AddViewController" modalPresentationStyle="fullScreen" id="OaR-R4-4Tm" customClass="AddNoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Fsn-PJ-vQ6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ilq-kq-ePb">
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="ノートの追加" id="gpA-Xa-pMl">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" id="XD4-mR-HBK">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="yUJ-hO-EhV">
+                                                <rect key="frame" x="20" y="5.5" width="92" height="33"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <state key="normal" title="戻る"/>
+                                                <connections>
+                                                    <action selector="backButton:" destination="OaR-R4-4Tm" eventType="touchUpInside" id="nc3-P1-OE6"/>
+                                                    <segue destination="tQK-NN-CxH" kind="unwind" unwindAction="goToNoteViewControllerWith_segue:" id="6gY-zw-k98"/>
+                                                </connections>
+                                            </button>
+                                            <connections>
+                                                <action selector="backButton:" destination="OaR-R4-4Tm" id="7Er-En-08S"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="aae-w8-H1U"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zKG-SY-DLq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="tQK-NN-CxH" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="8148" y="1583"/>
+        </scene>
         <!--Free Note View Controller-->
         <scene sceneID="dVe-sH-KbY">
             <objects>
@@ -182,7 +223,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lmk-DK-ahc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7337.68115942029" y="1502.6785714285713"/>
+            <point key="canvasLocation" x="7338" y="1583"/>
         </scene>
         <!--課題-->
         <scene sceneID="ohu-sA-Us6">
@@ -391,7 +432,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ucV-fX-xnH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="789.85507246376812" y="1502.6785714285713"/>
+            <point key="canvasLocation" x="790" y="1582"/>
         </scene>
         <!--課題の詳細-->
         <scene sceneID="b7g-px-DFT">
@@ -516,7 +557,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ddG-nM-WUl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="zbE-5F-qgg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1773.913043478261" y="1502.6785714285713"/>
+            <point key="canvasLocation" x="1774" y="1582"/>
         </scene>
         <!--対策の詳細-->
         <scene sceneID="96F-4y-On1">
@@ -580,7 +621,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4mj-OY-YH7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2527.536231884058" y="1502.6785714285713"/>
+            <point key="canvasLocation" x="2526" y="1582"/>
         </scene>
         <!--解決済み-->
         <scene sceneID="Nku-13-Wal">
@@ -637,7 +678,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TzN-uh-t37" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3440.579710144928" y="1502.6785714285713"/>
+            <point key="canvasLocation" x="3441" y="1582"/>
         </scene>
         <!--課題の詳細-->
         <scene sceneID="Lff-3E-gfx">
@@ -749,7 +790,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BfP-j6-YQq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Isl-yR-aQv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4248" y="1503"/>
+            <point key="canvasLocation" x="4248" y="1582"/>
         </scene>
         <!--対策の詳細-->
         <scene sceneID="Bf0-rB-wEZ">
@@ -814,7 +855,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nEF-Dl-agU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5055" y="1503"/>
+            <point key="canvasLocation" x="5054" y="1582"/>
         </scene>
         <!--設定-->
         <scene sceneID="dDU-p3-Ad6">
@@ -870,7 +911,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="9679.7101449275378" y="791.51785714285711"/>
+            <point key="canvasLocation" x="10735" y="792"/>
         </scene>
         <!--アカウント-->
         <scene sceneID="obn-lU-ZMC">
@@ -902,7 +943,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LRQ-nF-RHo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Xyz-8C-kZw" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="9681" y="1503"/>
+            <point key="canvasLocation" x="10735" y="1503"/>
         </scene>
         <!--通知-->
         <scene sceneID="wIC-22-pEa">
@@ -918,7 +959,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QvU-Zb-Mre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10513" y="1503"/>
+            <point key="canvasLocation" x="11567" y="1503"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">
@@ -996,7 +1037,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YX-CG-YNj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8768" y="792"/>
+            <point key="canvasLocation" x="9822" y="792"/>
         </scene>
     </scenes>
     <resources>
