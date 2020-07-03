@@ -38,7 +38,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("呼ばれました")
         // データ取得
         freeNoteData.loadFreeNoteData()
         // テーブルビューを更新

@@ -43,9 +43,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // TaskViewControllerが呼ばれたときの処理
     override func viewWillAppear(_ animated: Bool) {
-        // テーブルビューを更新
-        self.tableView?.reloadData()
-        reloadTableView()
+        // データの取得が終わるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            // テーブルビューを更新
+            self.reloadTableView()
+        }
     }
     
     
