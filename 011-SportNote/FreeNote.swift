@@ -20,6 +20,14 @@ class FreeNote {
     
     
     // セッター
+    func setTitle(_ title:String) {
+        self.title = title
+    }
+    
+    func setDetail(_ detail:String) {
+        self.detail = detail
+    }
+    
     func setUserID(_ userID:String) {
         self.userID = userID
     }
@@ -31,6 +39,17 @@ class FreeNote {
     func setUpdated_at(_ updated_at:String) {
         self.updated_at = updated_at
     }
+    
+    
+    // ゲッター
+    func getTitle() -> String {
+        return self.title
+    }
+    
+    func getDetail() -> String {
+        return self.detail
+    }
+    
     
     
     // 現在時刻を取得するメソッド
@@ -65,6 +84,34 @@ class FreeNote {
                 print("Error writing document: \(err)")
             } else {
                 print("Document successfully written!")
+            }
+        }
+    }
+    
+    
+    // Firebaseからフリーノートデータを読み込むメソッド
+    func loadFreeNoteData() {
+        // ユーザーUIDをセット
+        setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        db.collection("FreeNoteData")
+            .whereField("userID", isEqualTo: userID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let freeNoteDataCollection = document.data()
+                    
+                    // フリーノートデータを反映
+                    self.setTitle(freeNoteDataCollection["title"] as! String)
+                    self.setDetail(freeNoteDataCollection["detail"] as! String)
+                    self.setUserID(freeNoteDataCollection["userID"] as! String)
+                    self.setCreated_at(freeNoteDataCollection["created_at"] as! String)
+                    self.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
+                }
             }
         }
     }

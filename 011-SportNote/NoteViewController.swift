@@ -17,6 +17,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.delegate = self
         tableView.dataSource = self
         
+        // データ取得
+        freeNoteData.loadFreeNoteData()
+        
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
     }
@@ -24,11 +27,47 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
+    // データ格納用
+    var freeNoteData = FreeNote()
     
 
     // ＋ボタンの処理
     @IBAction func addButton(_ sender: Any) {
     }
+    
+    
+    // セルをタップしたときの処理
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 編集時の処理
+        if tableView.isEditing {
+            // 選択されたセルの行番号を格納
+        } else {
+            // 通常時の処理
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+            
+            // 画面遷移
+            if indexPath.row == 0 {
+                // フリーノートセルがタップされたとき
+                performSegue(withIdentifier: "goFreeNoteViewController", sender: nil)
+            } else {
+                // ノートセルがタップされたとき
+            }
+        }
+    }
+    
+    // 画面遷移時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goFreeNoteViewController" {
+            // 表示するデータを確認画面へ渡す
+            let freeNoteViewController = segue.destination as! FreeNoteViewController
+            freeNoteViewController.freeNoteData = freeNoteData
+        }
+    }
+    
+    
+    
+    
     
     // ノート数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -42,8 +81,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             case 0:
                 // フリーノートセルを返却
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
-                cell.textLabel!.text = "フリーノート"
-                cell.detailTextLabel!.text = "常に最上位に表示されるノートです。"
+                cell.textLabel!.text = freeNoteData.getTitle()
+                cell.detailTextLabel!.text = freeNoteData.getDetail()
                 return cell
             default:
                 // ノートセルを返却
