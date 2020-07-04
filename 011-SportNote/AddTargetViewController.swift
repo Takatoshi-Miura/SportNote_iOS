@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -26,6 +27,8 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     let years  = (1950...2200).map { $0 }
     let months = ["--","1","2","3","4","5","6","7","8","9","10","11","12"]
     
+    var selectedYear:Int = 2020
+    var selectedMonth:Int = 13
     
     
     //MARK:- UIの設定
@@ -38,6 +41,25 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
+        // 目標データを作成
+        let targetData = TargetData()
+        
+        // 入力値を反映
+        targetData.setYear(selectedYear)
+        targetData.setMonth(selectedMonth)
+        targetData.setDetail(targetTextField.text!)
+        
+        // 目標データを保存
+        targetData.saveTargetData()
+        
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // NoteViewControllerに遷移
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            // HUDで処理中を非表示
+            SVProgressHUD.dismiss()
+        }
     }
     
     
@@ -51,6 +73,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // 初期値の設定(2020年に設定)
         pickerView.selectRow(70, inComponent: 0, animated: true)
+        pickerView.selectRow(0, inComponent: 1, animated: true)
     }
     
     // Pickerの列数を返却
@@ -84,7 +107,12 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let year = years[pickerView.selectedRow(inComponent: 0)]
         let month = months[pickerView.selectedRow(inComponent: 1)]
-        let text = "\(year)年 \(month)月"
+        selectedYear = year
+        if month == "--" {
+            selectedMonth = 13  // HACK:年目標は最上位に表示させるため、12月よりも大きい13をセットする
+        } else {
+            selectedMonth = Int(month)!
+        }
     }
     
     

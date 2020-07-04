@@ -335,6 +335,7 @@
                                                 <state key="normal" title="保存"/>
                                                 <connections>
                                                     <action selector="saveButton:" destination="amY-Jr-lK0" eventType="touchUpInside" id="CkK-FW-hOV"/>
+                                                    <segue destination="b7J-O9-BiP" kind="unwind" unwindAction="goToNoteViewControllerWith_segue:" id="lDs-4V-mfc"/>
                                                 </connections>
                                             </button>
                                         </barButtonItem>
