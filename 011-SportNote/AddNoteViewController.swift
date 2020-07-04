@@ -30,12 +30,10 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         typeTextField.inputAccessoryView = toolbar
     }
     
-    
-    
     // テキスト
     @IBOutlet weak var typeTextField: UITextField!
     
-
+    
     // Picker用
     let noteType:[String] = ["目標設定","練習記録","大会記録"]
     var index:Int = 0
@@ -64,8 +62,27 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     }
 
     @objc func done() {
+        // テキストフィールドに反映
         typeTextField.text = noteType[index]
         typeTextField.endEditing(true)
+        
+        // 画面遷移
+        switch index {
+        case 0:
+            // 目標追加画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddTargetViewController")
+            self.present(nextView, animated: false, completion: nil)
+            break
+        case 1:
+            // 練習記録追加画面に遷移
+            break
+        case 2:
+            // 大会記録追加画面に遷移
+            break
+        default:
+            break
+        }
     }
 
     
