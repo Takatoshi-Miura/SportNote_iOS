@@ -11,6 +11,7 @@ import SVProgressHUD
 
 class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    //MARK:- ライフサイクルメソッド
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,13 +46,23 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    // テーブルビュー
-    @IBOutlet weak var tableView: UITableView!
+    
+    //MARK:- 変数の宣言
     
     // データ格納用
     var freeNoteData = FreeNote()
     
-
+    // テーブル用
+    var sectionTitle:[String] = ["フリーノート", "2020年","7月","6月","5月"]
+    var dataInSection         = [["フリーノート"],[]   , ["7月20日:練習記録","7月15日:大会記録","7月4日:練習記録"], ["6月20日:練習記録","6月15日:大会記録"],[]]
+    
+    
+    
+    //MARK:- UIの設定
+    
+    // テーブルビュー
+    @IBOutlet weak var tableView: UITableView!
+    
     // ＋ボタンの処理
     @IBAction func addButton(_ sender: Any) {
         // ノート追加画面に遷移
@@ -60,6 +71,42 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.present(nextView, animated: true, completion: nil)
     }
     
+    
+    
+    //MARK:- テーブルビューの設定
+    
+    // セルの個数(ノート数)を返却
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataInSection[section].count
+    }
+    
+    // テーブルの行ごとのセルを返却する
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // 最上位はフリーノートセル、それ以外はノートセル
+        switch indexPath.section {
+            case 0:
+                // フリーノートセルを返却
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
+                cell.textLabel!.text = freeNoteData.getTitle()
+                cell.detailTextLabel!.text = freeNoteData.getDetail()
+                return cell
+            default:
+                // ノートセルを返却
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for:indexPath)
+                cell.textLabel?.text = dataInSection[indexPath.section][indexPath.row]
+                return cell
+        }
+    }
+
+    //セクション名を返す
+    func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String?{
+        return sectionTitle[section]
+    }
+    
+    //セクションの個数を返す
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sectionTitle.count
+    }
     
     // セルをタップしたときの処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -72,7 +119,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // 画面遷移
-            if indexPath.row == 0 {
+            if indexPath.section == 0 {
                 // フリーノートセルがタップされたとき
                 performSegue(withIdentifier: "goFreeNoteViewController", sender: nil)
             } else {
@@ -80,6 +127,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
+    
+    
+    
+    
+    //MARK:- 画面遷移
     
     // 画面遷移時に呼ばれる処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -89,33 +141,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             freeNoteViewController.freeNoteData = freeNoteData
         }
     }
-    
-    
-    
-    
-    
-    // ノート数を返却
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    // テーブルの行ごとのセルを返却する
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 最上位はフリーノートセル、それ以外はノートセル
-        switch indexPath.row {
-            case 0:
-                // フリーノートセルを返却
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
-                cell.textLabel!.text = freeNoteData.getTitle()
-                cell.detailTextLabel!.text = freeNoteData.getDetail()
-                return cell
-            default:
-                // ノートセルを返却
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
-                return cell
-        }
-    }
-    
     
     // NoteViewControllerに戻ったときの処理
     @IBAction func goToNoteViewController(_segue:UIStoryboardSegue) {
