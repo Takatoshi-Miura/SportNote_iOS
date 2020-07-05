@@ -120,24 +120,13 @@
 				8D665D2624A17CD300441B32 /* AppDelegate.swift */,
 				8D665D2824A17CD300441B32 /* SceneDelegate.swift */,
 				8D665D2C24A17CD300441B32 /* Main.storyboard */,
-				8D665D3A24A17D9A00441B32 /* LoginViewController.swift */,
-				8D01652F24AEEBD100F9D69F /* NoteViewController.swift */,
-				8D01653524AF202F00F9D69F /* AddNoteViewController.swift */,
-				8DA4121524B03077002FD67A /* AddTargetViewController.swift */,
-				8DA4121724B06F0E002FD67A /* TargetData.swift */,
-				8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */,
-				8D01653124AEF14300F9D69F /* FreeNote.swift */,
-				8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */,
-				8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */,
-				8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */,
-				8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */,
-				8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */,
-				8D3585A824AB317800882A32 /* ResolvedTaskDetailViewController.swift */,
-				8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */,
+				8DE8B1E924B1C28000E1195B /* ログイン */,
+				8DE8B1EA24B1C31900E1195B /* 課題 */,
+				8DE8B1EC24B1C53A00E1195B /* ノート */,
+				8DE8B1EB24B1C4D200E1195B /* 設定 */,
 				8D7BAB4C24A5AF5300BE196B /* TaskData.swift */,
-				8D06D5DC24A834A4004D5307 /* SettingViewController.swift */,
-				8D06D5DE24A839D5004D5307 /* SettingAccountViewController.swift */,
-				8D06D5E024A83C26004D5307 /* SettingNotificationViewController.swift */,
+				8D01653124AEF14300F9D69F /* FreeNote.swift */,
+				8DA4121724B06F0E002FD67A /* TargetData.swift */,
 				8D665D2F24A17CD400441B32 /* Assets.xcassets */,
 				8D665D3124A17CD400441B32 /* LaunchScreen.storyboard */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
@@ -148,6 +137,49 @@
 				8D57AFD624A47F7D007450BF /* 011-SportNote-Bridging-Header.h */,
 			);
 			path = "011-SportNote";
+			sourceTree = "<group>";
+		};
+		8DE8B1E924B1C28000E1195B /* ログイン */ = {
+			isa = PBXGroup;
+			children = (
+				8D665D3A24A17D9A00441B32 /* LoginViewController.swift */,
+			);
+			path = "ログイン";
+			sourceTree = "<group>";
+		};
+		8DE8B1EA24B1C31900E1195B /* 課題 */ = {
+			isa = PBXGroup;
+			children = (
+				8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */,
+				8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */,
+				8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */,
+				8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */,
+				8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */,
+				8D3585A824AB317800882A32 /* ResolvedTaskDetailViewController.swift */,
+				8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */,
+			);
+			path = "課題";
+			sourceTree = "<group>";
+		};
+		8DE8B1EB24B1C4D200E1195B /* 設定 */ = {
+			isa = PBXGroup;
+			children = (
+				8D06D5DC24A834A4004D5307 /* SettingViewController.swift */,
+				8D06D5DE24A839D5004D5307 /* SettingAccountViewController.swift */,
+				8D06D5E024A83C26004D5307 /* SettingNotificationViewController.swift */,
+			);
+			path = "設定";
+			sourceTree = "<group>";
+		};
+		8DE8B1EC24B1C53A00E1195B /* ノート */ = {
+			isa = PBXGroup;
+			children = (
+				8D01652F24AEEBD100F9D69F /* NoteViewController.swift */,
+				8D01653524AF202F00F9D69F /* AddNoteViewController.swift */,
+				8DA4121524B03077002FD67A /* AddTargetViewController.swift */,
+				8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */,
+			);
+			path = "ノート";
 			sourceTree = "<group>";
 		};
 		C286C2B0EED91BEBB760A936 /* Frameworks */ = {
