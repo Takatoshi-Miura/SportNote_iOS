@@ -8,12 +8,16 @@
 
 import UIKit
 
-class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
 
     //MARK:- ライフサイクルメソッド
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // デリゲートとデータソースの指定
+        tableView.delegate   = self
+        tableView.dataSource = self
         
         // Pickerの宣言
         let picker = UIPickerView()
@@ -28,6 +32,8 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
+        
+        
 
         typeTextField.inputView = picker
         typeTextField.inputAccessoryView = toolbar
@@ -48,7 +54,30 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     // テキスト
     @IBOutlet weak var typeTextField: UITextField!
     
+    // テーブルビュー
+    @IBOutlet weak var tableView: UITableView!
+    
 
+    
+    //MARK:- テーブルビューの設定
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1   // 種別のみのため1を返却
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TypeCell", for: indexPath)
+        cell.textLabel!.text = "種別"
+        cell.detailTextLabel!.text = noteType[index]
+        return cell
+    }
+    
+    // セルをタップした時の処理
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
+    
     
     //MARK:- Pickerの設定
     
@@ -72,12 +101,18 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     @objc func cancel() {
         typeTextField.text = ""
         typeTextField.endEditing(true)
+        
+        // テーブルビューを更新
+        tableView.reloadData()
     }
 
     @objc func done() {
         // テキストフィールドに反映
         typeTextField.text = noteType[index]
         typeTextField.endEditing(true)
+        
+        // テーブルビューを更新
+        tableView.reloadData()
         
         // 画面遷移
         switch index {

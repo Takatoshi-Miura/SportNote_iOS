@@ -96,7 +96,11 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         if component == 0 {
             return "\(years[row])年"
         } else if component == 1 {
-            return "\(months[row])月"
+            if months[row] == "--" {
+                return "年間目標"
+            } else {
+                return "\(months[row])月"
+            }
         } else {
             return nil
         }
