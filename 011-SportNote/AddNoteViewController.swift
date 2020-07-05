@@ -26,7 +26,8 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         toolbar.frame = CGRect(x: 0, y: 0, width: toolbar.frame.width, height: 44)
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.done))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
-        toolbar.setItems([cancelItem, doneItem], animated: true)
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
 
         typeTextField.inputView = picker
         typeTextField.inputAccessoryView = toolbar
