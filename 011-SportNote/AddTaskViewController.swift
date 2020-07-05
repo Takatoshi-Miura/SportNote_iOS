@@ -21,14 +21,16 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
+        
+        // taskIDの設定（データベースからの読み込みに時間がかかるため、画面起動時に行っておく）
+        taskData.setNewTaskID()
     }
     
     
     
     //MARK:- 変数の宣言
-    
-    // 対策タイトルを格納する配列
-    var measuresTitleArray:[String] = []
+    var taskData = TaskData()               // 課題データ格納用
+    var measuresTitleArray:[String] = []    // 対策タイトルを格納する配列
     
     
     
@@ -81,7 +83,6 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
         // 入力されたテキストをTaskDataにセット
-        let taskData = TaskData()
         taskData.setTaskTitle(taskTitleTextField.text!)
         taskData.setTaskCause(causeTextView.text!)
         

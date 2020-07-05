@@ -33,11 +33,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // データの取得が終わるまで時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-            // テーブルビューを更新
-            self.reloadTableView()
-        }
+        // テーブルビューを更新
+        self.reloadTableView()
     }
     
     
@@ -203,10 +200,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     
-    
-    
-    
-    
     //MARK:- 画面遷移
     
     // 画面遷移時に呼ばれる処理
@@ -241,6 +234,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // テーブルビューを更新するメソッド
     func reloadTableView() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
         // データベースの課題データを取得
         let databaseTaskData = TaskData()
         databaseTaskData.loadUnresolvedTaskData()
@@ -253,6 +249,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
             // テーブルビューの更新
             self.tableView?.reloadData()
+            
+            // HUDで処理中を非表示
+            SVProgressHUD.dismiss()
         }
     }
 

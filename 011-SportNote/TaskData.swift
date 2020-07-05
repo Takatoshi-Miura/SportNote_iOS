@@ -112,45 +112,38 @@ class TaskData {
     
     // Firebaseにデータを保存するメソッド
     func saveTaskData() {
-        // taskIDの設定
-        setTaskID()
-        
-        // データの取得が終わるまで時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-        
-            // 現在時刻を取得
-            self.created_at = self.getCurrentTime()
-            self.updated_at = self.created_at
-        
-            // ユーザーUIDを取得
-            self.userID = Auth.auth().currentUser!.uid
-        
-            // Firebaseにアクセス
-            let db = Firestore.firestore()
-            db.collection("TaskData").document("\(self.userID)_\(self.taskID)").setData([
-                "taskID"         : self.taskID,
-                "taskTitle"      : self.taskTitle,
-                "taskCause"      : self.taskCause,
-                "taskAchievement": self.taskAchievement,
-                "isDeleted"      : self.isDeleted,
-                "userID"         : self.userID,
-                "created_at"     : self.created_at,
-                "updated_at"     : self.updated_at,
-                "measuresTitle"         : self.measuresTitle,
-                "measuresEffectiveness" : self.measuresEffectiveness,
-                "measuresPriorityIndex" : self.measuresPriorityIndex
-            ]) { err in
-                if let err = err {
-                    print("Error writing document: \(err)")
-                } else {
-                    print("Document successfully written!")
-                }
+        // 現在時刻を取得
+        self.created_at = self.getCurrentTime()
+        self.updated_at = self.created_at
+    
+        // ユーザーUIDを取得
+        self.userID = Auth.auth().currentUser!.uid
+    
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        db.collection("TaskData").document("\(self.userID)_\(self.taskID)").setData([
+            "taskID"         : self.taskID,
+            "taskTitle"      : self.taskTitle,
+            "taskCause"      : self.taskCause,
+            "taskAchievement": self.taskAchievement,
+            "isDeleted"      : self.isDeleted,
+            "userID"         : self.userID,
+            "created_at"     : self.created_at,
+            "updated_at"     : self.updated_at,
+            "measuresTitle"         : self.measuresTitle,
+            "measuresEffectiveness" : self.measuresEffectiveness,
+            "measuresPriorityIndex" : self.measuresPriorityIndex
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
             }
         }
     }
     
     // 新規課題用の課題IDを設定するメソッド
-    func setTaskID() {
+    func setNewTaskID() {
         // ユーザーUIDを取得
         let userID = Auth.auth().currentUser!.uid
         
