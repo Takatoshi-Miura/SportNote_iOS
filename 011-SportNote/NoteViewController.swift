@@ -18,31 +18,47 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // デリゲートとデータソースの指定
         tableView.delegate = self
         tableView.dataSource = self
-        
-        // データ取得
-        freeNoteData.loadFreeNoteData()
-        
+    
+        // データのないセルを非表示
+        self.tableView.tableFooterView = UIView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
-        // データの取得が終わるまで時間待ち
+        // データ取得
+        freeNoteData.loadFreeNoteData()
+        target.loadTargetData()
+        
+        // 時間待ち
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+            // テーブルデータ初期化
+            self.sectionTitleInit()
+            self.dataInSectionInit()
+            
+            self.targetData = self.target.targetData
+            
+            // テーブルデータ更新
+            for index in 0...(self.targetData.count - 1) {
+                // 年間目標と月間目標の区別
+                if self.targetData[index].getMonth() == 13 {
+                    self.sectionTitle.append("\(self.targetData[index].getYear())年:\(self.targetData[index].getDetail())")
+                } else {
+                    self.sectionTitle.append("\(self.targetData[index].getMonth())月:\(self.targetData[index].getDetail())")
+                }
+            }
+        
+            for _ in self.sectionTitle {
+                self.dataInSection.append([])
+            }
+        
             // テーブルビューを更新
             self.tableView?.reloadData()
-            
-            // データのないセルを非表示
-            self.tableView.tableFooterView = UIView()
             
             // HUDで処理中を非表示
             SVProgressHUD.dismiss()
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        // データ取得
-        freeNoteData.loadFreeNoteData()
-        // テーブルビューを更新
-        self.tableView?.reloadData()
     }
     
     
@@ -51,10 +67,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // データ格納用
     var freeNoteData = FreeNote()
+    var target = TargetData()
+    var targetData = [TargetData]()
     
     // テーブル用
-    var sectionTitle:[String] = ["フリーノート", "2020年","7月","6月","5月"]
-    var dataInSection         = [["フリーノート"],[]   , ["7月20日:練習記録","7月15日:大会記録","7月4日:練習記録"], ["6月20日:練習記録","6月15日:大会記録"],[]]
+    var sectionTitle:[String] = ["フリーノート"]
+    var dataInSection         = [["フリーノート"]]
     
     
     
@@ -145,5 +163,20 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // NoteViewControllerに戻ったときの処理
     @IBAction func goToNoteViewController(_segue:UIStoryboardSegue) {
     }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // 初期化sectionTitle
+    func sectionTitleInit() {
+        self.sectionTitle = ["フリーノート"]
+    }
+    
+    // 初期化dataInSection
+    func dataInSectionInit() {
+        self.dataInSection = [["フリーノート"]]
+    }
+    
     
 }

@@ -15,9 +15,13 @@ class TargetData {
     private var year:Int = 2020         // 年
     private var month:Int = 1           // 月
     private var detail:String = ""      // 内容
+    private var isDeleted:Bool = false  // 削除フラグ
     private var userID:String = ""      // ユーザーUID
     private var created_at:String = ""  // 作成日
     private var updated_at:String = ""  // 更新日
+    
+    // データ格納用
+    var targetData = [TargetData]()
     
     
     
@@ -32,6 +36,10 @@ class TargetData {
     
     func setDetail(_ detail:String) {
         self.detail = detail
+    }
+    
+    func setIsDeleted(_ isDeleted:Bool) {
+        self.isDeleted = isDeleted
     }
     
     func setUserID(_ userID:String) {
@@ -49,9 +57,33 @@ class TargetData {
     
     
     //MARK:- ゲッター
+    func getYear() -> Int {
+        return self.year
+    }
     
+    func getMonth() -> Int {
+        return self.month
+    }
     
+    func getDetail() -> String {
+        return self.detail
+    }
     
+    func getIsDeleted() -> Bool {
+        return self.isDeleted
+    }
+    
+    func getUserID() -> String {
+        return self.userID
+    }
+    
+    func getCreated_at() -> String {
+        return self.created_at
+    }
+    
+    func getUpdated_at() -> String {
+        return self.updated_at
+    }
     
     
     
@@ -72,6 +104,7 @@ class TargetData {
             "year"       : self.year,
             "month"      : self.month,
             "detail"     : self.detail,
+            "isDeleted"  : self.isDeleted,
             "userID"     : self.userID,
             "created_at" : self.created_at,
             "updated_at" : self.updated_at
@@ -84,7 +117,48 @@ class TargetData {
         }
     }
     
-    
+    // Firebaseからデータを取得するメソッド
+    func loadTargetData() {
+        // targetDataを初期化
+        targetData = []
+        
+        // ユーザーUIDをセット
+        setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーの目標データを取得する
+        db.collection("TargetData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標オブジェクトを作成
+                    let target = TargetData()
+                    
+                    // 目標データを反映
+                    let targetDataCollection = document.data()
+                    target.setYear(targetDataCollection["year"] as! Int)
+                    target.setMonth(targetDataCollection["month"] as! Int)
+                    target.setDetail(targetDataCollection["detail"] as! String)
+                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                    target.setUserID(targetDataCollection["userID"] as! String)
+                    target.setCreated_at(targetDataCollection["created_at"] as! String)
+                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.targetData.append(target)
+                }
+            }
+        }
+    }
+
     
     
     
