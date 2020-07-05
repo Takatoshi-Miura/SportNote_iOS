@@ -40,18 +40,21 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             self.targetData = self.target.targetData
             
-            // テーブルデータ更新
-            for index in 0...(self.targetData.count - 1) {
-                // 年間目標と月間目標の区別
-                if self.targetData[index].getMonth() == 13 {
-                    self.sectionTitle.append("\(self.targetData[index].getYear())年:\(self.targetData[index].getDetail())")
-                } else {
-                    self.sectionTitle.append("\(self.targetData[index].getMonth())月:\(self.targetData[index].getDetail())")
+            // targetDataが空の時は更新しない（エラー対策）
+            if self.targetData.isEmpty == false {
+                // テーブルデータ更新
+                for index in 0...(self.targetData.count - 1) {
+                    // 年間目標と月間目標の区別
+                    if self.targetData[index].getMonth() == 13 {
+                        self.sectionTitle.append("\(self.targetData[index].getYear())年:\(self.targetData[index].getDetail())")
+                    } else {
+                        self.sectionTitle.append("\(self.targetData[index].getMonth())月:\(self.targetData[index].getDetail())")
+                    }
                 }
-            }
         
-            for _ in self.sectionTitle {
-                self.dataInSection.append([])
+                for _ in self.sectionTitle {
+                    self.dataInSection.append([])
+                }
             }
         
             // テーブルビューを更新
