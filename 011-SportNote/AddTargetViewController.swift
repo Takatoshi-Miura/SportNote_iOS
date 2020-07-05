@@ -23,12 +23,11 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     
     //MARK:- 変数の宣言
-    
     let years  = (1950...2200).map { $0 }
     let months = ["--","1","2","3","4","5","6","7","8","9","10","11","12"]
-    
-    var selectedYear:Int = 2020
+    var selectedYear:Int  = 2020
     var selectedMonth:Int = 13
+    
     
     
     //MARK:- UIの設定

@@ -75,6 +75,34 @@ class TaskData {
         self.measuresPriorityIndex = measuresPriorityIndex
     }
     
+    // 新規課題用の課題IDを設定するメソッド
+    func setNewTaskID() {
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
+        
+        // ユーザーの課題データを取得
+        let db = Firestore.firestore()
+        db.collection("TaskData")
+            .whereField("userID", isEqualTo: userID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let taskDataCollection = document.data()
+                    // 課題IDの重複対策
+                    // データベースの課題IDの最大値を取得
+                    if taskDataCollection["taskID"] as! Int  > TaskData.taskCount {
+                        TaskData.taskCount = taskDataCollection["taskID"] as! Int
+                    }
+                }
+                // 課題IDは課題IDの最大値＋１で設定
+                TaskData.taskCount += 1
+                self.taskID = TaskData.taskCount
+            }
+        }
+    }
+    
     
     
     //MARK:- ゲッター
@@ -142,34 +170,6 @@ class TaskData {
         }
     }
     
-    // 新規課題用の課題IDを設定するメソッド
-    func setNewTaskID() {
-        // ユーザーUIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // ユーザーの課題データを取得
-        let db = Firestore.firestore()
-        db.collection("TaskData")
-            .whereField("userID", isEqualTo: userID)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let taskDataCollection = document.data()
-                    // 課題IDの重複対策
-                    // データベースの課題IDの最大値を取得
-                    if taskDataCollection["taskID"] as! Int  > TaskData.taskCount {
-                        TaskData.taskCount = taskDataCollection["taskID"] as! Int
-                    }
-                }
-                // 課題IDは課題IDの最大値＋１で設定
-                TaskData.taskCount += 1
-                self.taskID = TaskData.taskCount
-            }
-        }
-    }
-    
     // Firebaseの未解決課題データを取得するメソッド
     func loadUnresolvedTaskData() {
         // 配列の初期化
@@ -178,7 +178,7 @@ class TaskData {
         // ユーザーUIDを取得
         let userID = Auth.auth().currentUser!.uid
         
-        // ユーザーの課題データ取得
+        // ユーザーの未解決課題データ取得
         // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
@@ -210,12 +210,6 @@ class TaskData {
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
-                    
-                    // 課題IDの重複対策
-                    // データベースの課題IDの最大値を取得し、新規投稿時のIDは最大値＋１で設定
-                    if databaseTaskData.taskID > TaskData.taskCount {
-                        TaskData.taskCount = databaseTaskData.taskID
-                    }
                 }
             }
         }
@@ -229,7 +223,7 @@ class TaskData {
         // ユーザーUIDを取得
         let userID = Auth.auth().currentUser!.uid
         
-        // ユーザーの課題データ取得
+        // ユーザーの解決済み課題データ取得
         // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
