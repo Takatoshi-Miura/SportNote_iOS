@@ -19,24 +19,6 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         tableView.delegate   = self
         tableView.dataSource = self
         
-        // Pickerの宣言
-        let picker = UIPickerView()
-        picker.delegate = self
-        picker.dataSource = self
-        picker.showsSelectionIndicator = true
-
-        // ツールバーの設定(ボタン追加)
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: toolbar.frame.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.done))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
-        
-
-        typeTextField.inputView = picker
-        typeTextField.inputAccessoryView = toolbar
     }
     
     
@@ -44,15 +26,13 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     //MARK:- 変数の宣言
 
     // Picker用
-    let noteType:[String] = ["目標設定","練習記録","大会記録"]
+    let noteType:[String] = ["----","目標設定","練習記録","大会記録"]
     var index:Int = 0
+    var pickerView = UIView()
     
     
     
     //MARK:- UIの設定
-    
-    // テキスト
-    @IBOutlet weak var typeTextField: UITextField!
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
@@ -69,11 +49,38 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "TypeCell", for: indexPath)
         cell.textLabel!.text = "種別"
         cell.detailTextLabel!.text = noteType[index]
+        cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
     }
     
     // セルをタップした時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Pickerの宣言
+        let picker = UIPickerView()
+        picker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: picker.bounds.size.height)
+        picker.delegate = self
+        picker.dataSource = self
+        
+        // ツールバーの宣言
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.done))
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
+        
+        // ビューを追加
+        pickerView = UIView(frame: picker.bounds)
+        pickerView.addSubview(picker)
+        pickerView.addSubview(toolbar)
+        view.addSubview(pickerView)
+        
+        // 下からPickerを呼び出す
+        let screenSize = UIScreen.main.bounds.size
+        pickerView.frame.origin.y = screenSize.height
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
+        }
         
     }
     
@@ -94,22 +101,27 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        typeTextField.text = noteType[row]
         index = row
     }
     
     @objc func cancel() {
-        typeTextField.text = ""
-        typeTextField.endEditing(true)
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        
+        // Pickerにデフォルト値をセット
+        index = 0
         
         // テーブルビューを更新
         tableView.reloadData()
     }
 
     @objc func done() {
-        // テキストフィールドに反映
-        typeTextField.text = noteType[index]
-        typeTextField.endEditing(true)
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
         
         // テーブルビューを更新
         tableView.reloadData()
@@ -117,15 +129,17 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         // 画面遷移
         switch index {
         case 0:
+            break
+        case 1:
             // 目標追加画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
             let nextView = storyboard.instantiateViewController(withIdentifier: "AddTargetViewController")
             self.present(nextView, animated: false, completion: nil)
             break
-        case 1:
+        case 2:
             // 練習記録追加画面に遷移
             break
-        case 2:
+        case 3:
             // 大会記録追加画面に遷移
             break
         default:
