@@ -13,9 +13,15 @@ import SVProgressHUD
 
 class LoginViewController: UIViewController {
 
+    //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    
+    
+    //MARK:- UIの設定
     
     // テキストフィールド
     @IBOutlet weak var mailAddressTextField: UITextField!
@@ -93,16 +99,23 @@ class LoginViewController: UIViewController {
     }
     
     
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+
+    //MARK:- 画面遷移
     
     // ログイン画面に戻ってくるときに呼び出される処理
     @IBAction func goToLogin(_segue:UIStoryboardSegue){
         // テキストフィールドをクリア
         mailAddressTextField.text = ""
         passwordTextField.text    = ""
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // テキストフィールド以外をタップでキーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     

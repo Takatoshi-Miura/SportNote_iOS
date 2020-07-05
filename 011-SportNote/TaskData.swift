@@ -9,7 +9,7 @@ import Firebase
 
 class TaskData {
     
-    // 保持するデータ
+    //MARK:- 保持データ
     static var taskCount:Int = 0                // 課題の数
     private var taskID:Int = 0                  // 課題ID
     private var taskTitle:String = ""           // タイトル
@@ -28,6 +28,14 @@ class TaskData {
     var taskDataArray = [TaskData]()
     
     
+    
+    //MARK:- セッター
+    
+    func setTextData(taskTitle:String,taskCause:String) {
+        self.taskTitle = taskTitle
+        self.taskCause = taskCause
+    }
+    
     // 課題データをセットするメソッド(データベースの課題用)
     func setDatabaseTaskData(_ taskID:Int,_ taskTitle:String,_ taskCause:String,_ taskAchievement:Bool,
                              _ isDeleted:Bool,_ userID:String,_ created_at:String,_ updated_at:String,
@@ -45,11 +53,42 @@ class TaskData {
         self.measuresPriorityIndex = measuresPriorityIndex
     }
     
-    // テキストデータをセットするメソッド
-    func setTextData(taskTitle:String,taskCause:String) {
-        self.taskTitle = taskTitle
-        self.taskCause = taskCause
+    
+    
+    //MARK:- ゲッター
+    func getTaskTitle() -> String {
+        return self.taskTitle
     }
+    
+    func getTaskCouse() -> String {
+        return self.taskCause
+    }
+    
+    func getMeasuresTitle(_ index:Int) -> String {
+        return self.measuresTitle[index]
+    }
+    
+    func getAllMeasuresTitle() -> [String] {
+        return self.measuresTitle
+    }
+    
+    func getMeasuresEffectiveness(_ index:Int) -> String {
+        return self.measuresEffectiveness[index]
+    }
+    
+    func getMeasuresPriorityIndex() -> Int {
+        return self.measuresPriorityIndex
+    }
+    
+    func getMeasuresCount() -> Int {
+        return self.measuresTitle.count
+    }
+    
+    
+    
+    
+    
+    //MARK:- リファクタリング対象
     
     // 対策を追加するメソッド
     func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
@@ -68,11 +107,6 @@ class TaskData {
         self.measuresPriorityIndex = index
     }
     
-    // 最有力の対策を取得するメソッド
-    func getPriorityIndex() -> Int {
-        return self.measuresPriorityIndex
-    }
-    
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
         self.measuresTitle.remove(at: index)
@@ -84,51 +118,15 @@ class TaskData {
         self.taskAchievement.toggle()
     }
     
-    // 対策タイトルを取得するメソッド
-    func getMeasuresTitle(_ index:Int) -> String {
-        return self.measuresTitle[index]
-    }
-    
-    // 対策タイトルを全取得するメソッド
-    func getAllMeasuresTitle() -> [String] {
-        return self.measuresTitle
-    }
-    
-    // 対策の有効性コメントを取得するメソッド
-    func getMeasuresEffectiveness(_ index:Int) -> String {
-        return self.measuresEffectiveness[index]
-    }
-    
-    // 対策数を取得するメソッド
-    func getMeasuresCount() -> Int {
-        return self.measuresTitle.count
-    }
     
     // 非表示対象の課題にするメソッド
     func deleteTask() {
         self.isDeleted = true
     }
     
-    // taskTitleのゲッター
-    func getTaskTitle() -> String {
-        return self.taskTitle
-    }
-    
-    // taskCauseのゲッター
-    func getTaskCouse() -> String {
-        return self.taskCause
-    }
     
     
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
-    
+    //MARK:- データベース関連
     
     // Firebaseにデータを保存するメソッド
     func saveTaskData() {
@@ -169,7 +167,6 @@ class TaskData {
         }
     }
     
-    
     // 新規課題用の課題IDを設定するメソッド
     func setTaskID() {
         // ユーザーUIDを取得
@@ -197,7 +194,6 @@ class TaskData {
             }
         }
     }
-    
     
     // Firebaseの未解決課題データを取得するメソッド
     func loadUnresolvedTaskData() {
@@ -295,8 +291,6 @@ class TaskData {
         }
     }
     
-    
-    
     // Firebaseの課題データを更新するメソッド
     func updateTaskData() {
         // 更新日時を現在時刻にする
@@ -326,6 +320,19 @@ class TaskData {
                 print("Document successfully updated")
             }
         }
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
     }
     
 }

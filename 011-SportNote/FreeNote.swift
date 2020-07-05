@@ -11,7 +11,7 @@ import Firebase
 
 class FreeNote {
     
-    // 保持するデータ
+    //MARK:- 保持データ
     private var title:String  = "フリーノート"                        // タイトル
     private var detail:String = "常に最上位に表示されるノートです。"      // 内容
     private var userID:String = ""                                 // ユーザーUID
@@ -19,7 +19,8 @@ class FreeNote {
     private var updated_at:String = ""                             // 更新日
     
     
-    // セッター
+    
+    //MARK:- セッター
     func setTitle(_ title:String) {
         self.title = title
     }
@@ -41,7 +42,8 @@ class FreeNote {
     }
     
     
-    // ゲッター
+    
+    //MARK:- ゲッター
     func getTitle() -> String {
         return self.title
     }
@@ -50,18 +52,22 @@ class FreeNote {
         return self.detail
     }
     
+    func getUserID() -> String {
+        return self.userID
+    }
     
+    func getCreated_at() -> String {
+        return self.created_at
+    }
     
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
+    func getUpdated_at() -> String {
+        return self.updated_at
     }
     
     
+    
+    //MARK:- データベース関連
+
     // Firebaseにデータを保存するメソッド(アカウント作成時のみ実行される)
     func saveFreeNoteData() {
         // 現在時刻をセット
@@ -87,7 +93,6 @@ class FreeNote {
             }
         }
     }
-    
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
@@ -118,7 +123,6 @@ class FreeNote {
         }
     }
     
-    
     // Firebaseのデータを更新するメソッド
     func updateFreeNoteData() {
         // 更新日時を現在時刻にする
@@ -144,5 +148,16 @@ class FreeNote {
     }
     
     
+    
+    //MARK:- その他のメソッド
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
     
 }

@@ -9,6 +9,8 @@
 import UIKit
 
 class MeasuresDetailViewController: UIViewController,UINavigationControllerDelegate {
+    
+    //MARK:- ライフサイクルメソッド
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +25,16 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         // 受け取った対策データを表示
         printMeasuresData(taskData)
     }
+    
+    
+    
+    //MARK:- 変数の宣言
+    var taskData = TaskData()   // 課題データ格納用
+    var indexPath = 0           // 行番号格納用
+    
+    
+    
+    //MARK:- UIの設定
     
     // テキスト
     @IBOutlet weak var measuresTitleTextField: UITextField!
@@ -40,29 +52,8 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     }
     
     
-    // 課題データ格納用
-    var taskData = TaskData()
-    var indexPath = 0
     
-    
-    // データを表示するメソッド
-    func printMeasuresData(_ taskData:TaskData) {
-        // テキストの表示
-        measuresTitleTextField.text        = taskData.getMeasuresTitle(indexPath)
-        measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
-        
-        // 最有力の対策ならチェックボックスを選択済みにする
-        if taskData.getPriorityIndex() == indexPath {
-            self.checkButton.isSelected = !self.checkButton.isSelected
-        }
-    }
-    
-    
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
+    //MARK:- 画面遷移
     
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
@@ -79,5 +70,25 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         }
     }
     
+    
+    
+    //MARK:- その他のメソッド
+    
+    // データを表示するメソッド
+    func printMeasuresData(_ taskData:TaskData) {
+        // テキストの表示
+        measuresTitleTextField.text        = taskData.getMeasuresTitle(indexPath)
+        measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
+        
+        // 最有力の対策ならチェックボックスを選択済みにする
+        if taskData.getMeasuresPriorityIndex() == indexPath {
+            self.checkButton.isSelected = !self.checkButton.isSelected
+        }
+    }
+    
+    // テキストフィールド以外をタップでキーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 
 }

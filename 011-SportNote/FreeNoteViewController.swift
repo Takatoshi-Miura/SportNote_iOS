@@ -10,6 +10,8 @@ import UIKit
 
 class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
 
+    //MARK:- ライフサイクルメソッド
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,23 +23,24 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
         printDetail()
     }
     
-    // テキスト
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var detailTextView: UITextView!
+    
+    
+    //MARK:- 変数の宣言
     
     // フリーノートデータ格納用
     var freeNoteData = FreeNote()
     
     
-    // 文字列表示メソッド
-    func printTitle() {
-        titleTextField.text = freeNoteData.getTitle()
-    }
     
-    func printDetail() {
-        detailTextView.text = freeNoteData.getDetail()
-    }
+    //MARK:- UIの設定
     
+    // テキスト
+    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var detailTextView: UITextView!
+    
+    
+    
+    //MARK:- 画面遷移
     
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
@@ -47,6 +50,19 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
             freeNoteData.setDetail(detailTextView.text!)
             freeNoteData.updateFreeNoteData()
         }
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // 文字列表示メソッド
+    func printTitle() {
+        titleTextField.text = freeNoteData.getTitle()
+    }
+    
+    func printDetail() {
+        detailTextView.text = freeNoteData.getDetail()
     }
 
 }

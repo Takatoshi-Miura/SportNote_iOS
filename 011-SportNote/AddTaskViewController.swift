@@ -10,6 +10,8 @@ import UIKit
 
 class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
+    //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,15 +23,23 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         tableView.tableFooterView = UIView()
     }
     
+    
+    
+    //MARK:- 変数の宣言
+    
+    // 対策タイトルを格納する配列
+    var measuresTitleArray:[String] = []
+    
+    
+    
+    //MARK:- UIの設定
+    
     // テキスト
     @IBOutlet weak var taskTitleTextField: UITextField!
     @IBOutlet weak var causeTextView: UITextView!
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
-    
-    // 対策タイトルを格納する配列
-    var measuresTitleArray:[String] = []
     
     // 追加ボタンの処理
     @IBAction func addMeasuresButton(_ sender: Any) {
@@ -62,13 +72,11 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         present(alertController,animated:true,completion:nil)
     }
     
-    
     // 戻るボタンの処理
     @IBAction func backButton(_ sender: Any) {
         // モーダルを閉じる
         dismiss(animated: true, completion: nil)
     }
-    
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
@@ -90,11 +98,8 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     }
     
     
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
     
+    //MARK:- テーブルビューの設定
     
     // 対策の項目数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -110,6 +115,15 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         cell.textLabel?.text = measuresTitleArray[indexPath.row]
         
         return cell
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // テキストフィールド以外をタップでキーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 
 }

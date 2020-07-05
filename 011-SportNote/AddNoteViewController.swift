@@ -10,6 +10,8 @@ import UIKit
 
 class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
+    //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,15 +32,25 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         typeTextField.inputAccessoryView = toolbar
     }
     
-    // テキスト
-    @IBOutlet weak var typeTextField: UITextField!
     
     
+    //MARK:- 変数の宣言
+
     // Picker用
     let noteType:[String] = ["目標設定","練習記録","大会記録"]
     var index:Int = 0
     
-    // Picker設定
+    
+    
+    //MARK:- UIの設定
+    
+    // テキスト
+    @IBOutlet weak var typeTextField: UITextField!
+    
+
+    
+    //MARK:- Pickerの設定
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -85,6 +97,9 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         }
     }
 
+    
+    
+    //MARK:- 画面遷移
     
     // 戻るボタンの処理
     @IBAction func backButton(_ sender: Any) {

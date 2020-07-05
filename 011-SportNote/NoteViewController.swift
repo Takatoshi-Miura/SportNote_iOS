@@ -12,6 +12,7 @@ import SVProgressHUD
 class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

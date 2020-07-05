@@ -11,6 +11,8 @@ import SVProgressHUD
 
 class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource {
 
+    //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,29 +35,23 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         self.tableView?.reloadData()
     }
     
+    
+    
+    //MARK:- 変数の宣言
+    var taskData = TaskData()               // 課題データの格納用
+    var measuresTitleArray:[String] = []    // 対策タイトルの格納用
+    var indexPath:Int = 0                   // 行番号格納用
+    
+    
+    
+    //MARK:- UIの設定
+    
     // テキスト
     @IBOutlet weak var taskTitleTextField: UITextField!
     @IBOutlet weak var taskCauseTextView: UITextView!
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
-    
-    // 課題データの格納用
-    var taskData = TaskData()
-    
-    // 対策タイトルの格納用
-    var measuresTitleArray:[String] = []
-
-    
-    // 前画面に戻るときに呼ばれる処理
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        if viewController is TaskViewController {
-            // 課題データを更新
-            taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: taskCauseTextView.text!)
-            taskData.updateTaskData()
-        }
-    }
-    
     
     // 解決済みにするボタンの処理
     @IBAction func resolvedButton(_ sender: Any) {
@@ -65,7 +61,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         // 通知
         SVProgressHUD.showSuccess(withStatus: "解決済みにしました")
     }
-    
     
     // 追加ボタンの処理
     @IBAction func addMeasuresButton(_ sender: Any) {
@@ -103,17 +98,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     
     
-    // セルの内容を表示するメソッド
-    func printTaskData(_ taskData:TaskData) {
-        taskTitleTextField.text = taskData.getTaskTitle()
-        taskCauseTextView.text  = taskData.getTaskCouse()
-    }
-    
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
+    //MARK:- テーブルビューの設定
     
     // 対策の数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -132,10 +117,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         return cell
     }
     
-    
     // セルをタップした時の処理
-    var indexPath:Int = 0   // 行番号格納用
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // タップしたときの選択色を消去
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
@@ -147,6 +129,19 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         performSegue(withIdentifier: "goMeasuresDetailViewController", sender: nil)
     }
     
+    
+    
+    //MARK:- 画面遷移
+    
+    // 前画面に戻るときに呼ばれる処理
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        if viewController is TaskViewController {
+            // 課題データを更新
+            taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: taskCauseTextView.text!)
+            taskData.updateTaskData()
+        }
+    }
+    
     // 画面遷移時に呼ばれる処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goMeasuresDetailViewController" {
@@ -155,6 +150,21 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             measuresDetailViewController.taskData = taskData
             measuresDetailViewController.indexPath = indexPath
         }
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // セルの内容を表示するメソッド
+    func printTaskData(_ taskData:TaskData) {
+        taskTitleTextField.text = taskData.getTaskTitle()
+        taskCauseTextView.text  = taskData.getTaskCouse()
+    }
+    
+    // テキストフィールド以外をタップでキーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
 

@@ -12,10 +12,15 @@ import SVProgressHUD
 
 class SettingAccountViewController: UIViewController {
 
+    //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
+    
+    
+    //MARK:- UIの設定
     
     // ログアウトボタンの処理
     @IBAction func logoutButton(_ sender: Any) {
@@ -28,14 +33,7 @@ class SettingAccountViewController: UIViewController {
             print ("Error signing out: %@", signOutError)
             SVProgressHUD.showError(withStatus: "ログアウトに失敗しました。")
         }
-        
         // ログイン画面へ遷移
     }
-    
-    
-    
-    
-
-
 
 }

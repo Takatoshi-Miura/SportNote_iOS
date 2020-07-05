@@ -10,6 +10,8 @@ import UIKit
 
 class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
+    //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -17,12 +19,21 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         tableView.tableFooterView = UIView()
     }
     
+    
+    
+    //MARK:- 変数の宣言
+    let cellTitle = ["アカウント","通知"]      // セルの中身
+    
+    
+    
+    //MARK:- UIの設定
+    
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
-    // セルの中身
-    let cellTitle = ["アカウント","通知"]
     
+    
+    //MARK:- テーブルビューの設定
     
     // セルをタップした時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -39,7 +50,6 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         }
     }
     
-    
     // セルの個数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellTitle.count
@@ -53,6 +63,5 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         cell.textLabel!.text = cellTitle[indexPath.row]
         return cell
     }
-
 
 }

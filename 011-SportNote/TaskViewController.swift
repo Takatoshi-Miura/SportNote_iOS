@@ -10,6 +10,8 @@ import UIKit
 import SVProgressHUD
 
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    //MARK:- ライフサイクルメソッド
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,18 +32,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.tableFooterView = UIView()
     }
     
-    
-    // TaskDataを格納する配列
-    var taskDataArray = [TaskData]()
-    
-    // テーブルビュー
-    @IBOutlet weak var tableView: UITableView!
-    
-    // リフレッシュ機能用
-    fileprivate let refreshCtl = UIRefreshControl()
-    
-    
-    // TaskViewControllerが呼ばれたときの処理
     override func viewWillAppear(_ animated: Bool) {
         // データの取得が終わるまで時間待ち
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
@@ -51,29 +41,42 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    // テーブルビューを下に下げたときの処理(リフレッシュ機能)
-    @objc func refresh(sender: UIRefreshControl) {
-        // ここが引っ張られるたびに呼び出される
-        reloadTableView()
-        
-        // 通信終了後、ロードインジケーター終了
-        self.tableView.refreshControl?.endRefreshing()
-    }
+    
+    //MARK:- 変数の宣言
+    
+    // TaskDataを格納する配列
+    var taskDataArray = [TaskData]()
+    
+    // リフレッシュ機能用
+    fileprivate let refreshCtl = UIRefreshControl()
+    
+    // 行番号格納用
+    var indexPath:Int = 0
+    var indexPathList:[Int] = []
     
     
+    
+    //MARK:- UIの設定
+    
+    // テーブルビュー
+    @IBOutlet weak var tableView: UITableView!
+
     // ＋ボタンの処理
     @IBAction func addButton(_ sender: Any) {
         // 課題追加画面に遷移
         self.performSegue(withIdentifier: "goAddTaskViewController", sender: nil)
     }
-    
-    
+        
     // 編集ボタンの処理
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         //tableViewの編集モードを切り替える
         tableView.isEditing = editing
     }
+    
+    
+    
+    //MARK:- テーブルビューの設定
     
     // 解決済みの課題セルを編集不可能にする
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -82,10 +85,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // セルをタップした時の処理
-    // 行番号格納用
-    var indexPath:Int = 0
-    var indexPathList:[Int] = []
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 編集時の処理
         if tableView.isEditing {
@@ -115,7 +114,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
 
     }
-    
     
     // セルを削除したときの処理（左スワイプ）
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -177,37 +175,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return UISwipeActionsConfiguration(actions: [resolveAction])
     }
     
-    
-    // テーブルビューを更新するメソッド
-    func reloadTableView() {
-        // データベースの課題データを取得
-        let databaseTaskData = TaskData()
-        databaseTaskData.loadUnresolvedTaskData()
-        
-        // データの取得が終わるまで時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-            // 課題データの受け取り
-            self.taskDataArray = []
-            self.taskDataArray = databaseTaskData.taskDataArray
-        
-            // テーブルビューの更新
-            self.tableView?.reloadData()
-        }
-    }
-    
-    
-    // 画面遷移時に呼ばれる処理
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goTaskDetailViewController" {
-            // 表示する課題データを課題詳細確認画面へ渡す
-            let taskDetailViewController = segue.destination as! TaskDetailViewController
-            taskDetailViewController.taskData = taskDataArray[indexPath]
-        } else if segue.identifier == "goResolvedTaskViewController" {
-            // 解決済みの課題一覧画面へ遷移
-        }
-    }
-
-    
     // TaskDataArrayの項目の数 + 1(解決済みの課題一覧用セル)を返却する
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskDataArray.count + 1
@@ -234,10 +201,59 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    
+    
+    
+    
+    
+    
+    //MARK:- 画面遷移
+    
+    // 画面遷移時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goTaskDetailViewController" {
+            // 表示する課題データを課題詳細確認画面へ渡す
+            let taskDetailViewController = segue.destination as! TaskDetailViewController
+            taskDetailViewController.taskData = taskDataArray[indexPath]
+        } else if segue.identifier == "goResolvedTaskViewController" {
+            // 解決済みの課題一覧画面へ遷移
+        }
+    }
+    
     // TaskViewControllerに戻ったときの処理
     @IBAction func goToTaskViewController(_segue:UIStoryboardSegue) {
         // データの更新
         reloadTableView()
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // テーブルビューを下に下げたときの処理(リフレッシュ機能)
+    @objc func refresh(sender: UIRefreshControl) {
+        // ここが引っ張られるたびに呼び出される
+        reloadTableView()
+        
+        // 通信終了後、ロードインジケーター終了
+        self.tableView.refreshControl?.endRefreshing()
+    }
+    
+    // テーブルビューを更新するメソッド
+    func reloadTableView() {
+        // データベースの課題データを取得
+        let databaseTaskData = TaskData()
+        databaseTaskData.loadUnresolvedTaskData()
+        
+        // データの取得が終わるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            // 課題データの受け取り
+            self.taskDataArray = []
+            self.taskDataArray = databaseTaskData.taskDataArray
+        
+            // テーブルビューの更新
+            self.tableView?.reloadData()
+        }
     }
 
 

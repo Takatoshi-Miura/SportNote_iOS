@@ -9,6 +9,8 @@
 import UIKit
 
 class ResolvedMeasuresDetailViewController: UIViewController {
+    
+    //MARK:- ライフサイクルメソッド
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,16 @@ class ResolvedMeasuresDetailViewController: UIViewController {
         // 受け取った対策データを表示
         printMeasuresData(taskData)
     }
+    
+    
+    
+    //MARK:- 変数の宣言
+    var taskData = TaskData()   // 課題データ格納用
+    var indexPath = 0           // 行番号格納用
+    
+    
+    
+    //MARK:- UIの設定
     
     // テキスト
     @IBOutlet weak var measuresTitleTextField: UITextField!
@@ -36,10 +48,8 @@ class ResolvedMeasuresDetailViewController: UIViewController {
     }
     
     
-    // 課題データ格納用
-    var taskData = TaskData()
-    var indexPath = 0
     
+    //MARK:- その他のメソッド
     
     // データを表示するメソッド
     func printMeasuresData(_ taskData:TaskData) {
@@ -48,7 +58,7 @@ class ResolvedMeasuresDetailViewController: UIViewController {
         measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
         
         // 最有力の対策ならチェックボックスを選択済みにする
-        if taskData.getPriorityIndex() == indexPath {
+        if taskData.getMeasuresPriorityIndex() == indexPath {
             self.checkButton.isSelected = !self.checkButton.isSelected
         }
     }
