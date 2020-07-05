@@ -31,25 +31,47 @@ class TaskData {
     
     //MARK:- セッター
     
-    func setTextData(taskTitle:String,taskCause:String) {
+    func setTaskID(_ taskID:Int) {
+        self.taskID = taskID
+    }
+    
+    func setTaskTitle(_ taskTitle:String) {
         self.taskTitle = taskTitle
+    }
+    
+    func setTaskCause(_ taskCause:String) {
         self.taskCause = taskCause
     }
     
-    // 課題データをセットするメソッド(データベースの課題用)
-    func setDatabaseTaskData(_ taskID:Int,_ taskTitle:String,_ taskCause:String,_ taskAchievement:Bool,
-                             _ isDeleted:Bool,_ userID:String,_ created_at:String,_ updated_at:String,
-                             _ measuresTitle:[String],_ measuresEffectiveness:[String],_ measuresPriorityIndex:Int) {
-        self.taskID = taskID
-        self.taskTitle = taskTitle
-        self.taskCause = taskCause
+    func setTaskAchievement(_ taskAchievement:Bool) {
         self.taskAchievement = taskAchievement
+    }
+    
+    func setIsDeleted(_ isDeleted:Bool) {
         self.isDeleted = isDeleted
+    }
+    
+    func setUserID(_ userID:String) {
         self.userID = userID
+    }
+    
+    func setCreated_at(_ created_at:String) {
         self.created_at = created_at
+    }
+    
+    func setUpdated_at(_ updated_at:String) {
         self.updated_at = updated_at
+    }
+    
+    func setMeasuresTitle(_ measuresTitle:[String]) {
         self.measuresTitle = measuresTitle
+    }
+    
+    func setMeasuresEffectiveness(_ measuresEffectiveness:[String]) {
         self.measuresEffectiveness = measuresEffectiveness
+    }
+    
+    func setMeasuresPriorityIndex(_ measuresPriorityIndex:Int) {
         self.measuresPriorityIndex = measuresPriorityIndex
     }
     
@@ -82,46 +104,6 @@ class TaskData {
     
     func getMeasuresCount() -> Int {
         return self.measuresTitle.count
-    }
-    
-    
-    
-    
-    
-    //MARK:- リファクタリング対象
-    
-    // 対策を追加するメソッド
-    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
-        self.measuresTitle.insert(measuresTitle, at: 0)
-        self.measuresEffectiveness.insert(measuresEffectiveness, at: 0)
-    }
-    
-    // 対策を更新するメソッド
-    func updateMeasures(_ measuresTitle:String,_ measuresEffectiveness:String,_ index:Int) {
-        self.measuresTitle[index] = measuresTitle
-        self.measuresEffectiveness[index] = measuresEffectiveness
-    }
-    
-    // 最有力の対策を更新するメソッド
-    func updatePriorityIndex(_ index:Int) {
-        self.measuresPriorityIndex = index
-    }
-    
-    // 対策を削除するメソッド
-    func deleteMeasures(_ index:Int) {
-        self.measuresTitle.remove(at: index)
-        self.measuresEffectiveness.remove(at: index)
-    }
-    
-    // 解決、未解決を反転するメソッド
-    func changeAchievement() {
-        self.taskAchievement.toggle()
-    }
-    
-    
-    // 非表示対象の課題にするメソッド
-    func deleteTask() {
-        self.isDeleted = true
     }
     
     
@@ -221,17 +203,17 @@ class TaskData {
                 
                     // 取得データを基に、課題データを作成
                     let databaseTaskData = TaskData()
-                    databaseTaskData.setDatabaseTaskData(taskDataCollection["taskID"] as! Int,
-                                                         taskDataCollection["taskTitle"] as! String,
-                                                         taskDataCollection["taskCause"] as! String,
-                                                         taskDataCollection["taskAchievement"] as! Bool,
-                                                         taskDataCollection["isDeleted"] as! Bool,
-                                                         taskDataCollection["userID"] as! String,
-                                                         taskDataCollection["created_at"] as! String,
-                                                         taskDataCollection["updated_at"] as! String,
-                                                         taskDataCollection["measuresTitle"] as! [String],
-                                                         taskDataCollection["measuresEffectiveness"] as! [String],
-                                                         taskDataCollection["measuresPriorityIndex"] as! Int)
+                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
+                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
+                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
+                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
+                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
+                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
+                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
+                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
+                    databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
+                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String])
+                    databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
@@ -272,17 +254,17 @@ class TaskData {
                 
                     // 取得データを基に、課題データを作成
                     let databaseTaskData = TaskData()
-                    databaseTaskData.setDatabaseTaskData(taskDataCollection["taskID"] as! Int,
-                                                         taskDataCollection["taskTitle"] as! String,
-                                                         taskDataCollection["taskCause"] as! String,
-                                                         taskDataCollection["taskAchievement"] as! Bool,
-                                                         taskDataCollection["isDeleted"] as! Bool,
-                                                         taskDataCollection["userID"] as! String,
-                                                         taskDataCollection["created_at"] as! String,
-                                                         taskDataCollection["updated_at"] as! String,
-                                                         taskDataCollection["measuresTitle"] as! [String],
-                                                         taskDataCollection["measuresEffectiveness"] as! [String],
-                                                         taskDataCollection["measuresPriorityIndex"] as! Int)
+                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
+                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
+                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
+                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
+                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
+                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
+                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
+                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
+                    databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
+                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String])
+                    databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
@@ -333,6 +315,29 @@ class TaskData {
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return dateFormatter.string(from: now)
+    }
+    
+    // 対策を追加するメソッド
+    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
+        self.measuresTitle.insert(measuresTitle, at: 0)
+        self.measuresEffectiveness.insert(measuresEffectiveness, at: 0)
+    }
+    
+    // 対策を更新するメソッド
+    func updateMeasures(_ measuresTitle:String,_ measuresEffectiveness:String,_ index:Int) {
+        self.measuresTitle[index] = measuresTitle
+        self.measuresEffectiveness[index] = measuresEffectiveness
+    }
+    
+    // 対策を削除するメソッド
+    func deleteMeasures(_ index:Int) {
+        self.measuresTitle.remove(at: index)
+        self.measuresEffectiveness.remove(at: index)
+    }
+    
+    // 解決、未解決を反転するメソッド
+    func changeAchievement() {
+        self.taskAchievement.toggle()
     }
     
 }

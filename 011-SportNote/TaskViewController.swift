@@ -126,7 +126,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // OKボタンがタップされたときの処理
                 // 次回以降、この課題データを取得しないようにする
-                self.taskDataArray[indexPath.row].deleteTask()
+                self.taskDataArray[indexPath.row].setIsDeleted(true)
                 self.taskDataArray[indexPath.row].updateTaskData()
                     
                 // taskDataArrayから削除

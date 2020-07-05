@@ -137,7 +137,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskViewController {
             // 課題データを更新
-            taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: taskCauseTextView.text!)
+            taskData.setTaskTitle(taskTitleTextField.text!)
+            taskData.setTaskCause(taskCauseTextView.text!)
             taskData.updateTaskData()
         }
     }

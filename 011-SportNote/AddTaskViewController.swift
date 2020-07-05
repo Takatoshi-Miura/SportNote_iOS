@@ -82,7 +82,8 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     @IBAction func saveButton(_ sender: Any) {
         // 入力されたテキストをTaskDataにセット
         let taskData = TaskData()
-        taskData.setTextData(taskTitle: taskTitleTextField.text!, taskCause: causeTextView.text!)
+        taskData.setTaskTitle(taskTitleTextField.text!)
+        taskData.setTaskCause(causeTextView.text!)
         
         // 対策の追加
         measuresTitleArray.reverse()

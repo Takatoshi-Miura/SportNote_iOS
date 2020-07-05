@@ -63,7 +63,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             
             // チェックボックスが選択されている場合は、この対策を最有力にする
             if self.checkButton.isSelected {
-                taskData.updatePriorityIndex(indexPath)
+                taskData.setMeasuresPriorityIndex(indexPath)
             }
             
             taskData.updateTaskData()
