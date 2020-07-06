@@ -35,6 +35,7 @@
 		8DA4121824B06F0E002FD67A /* TargetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA4121724B06F0E002FD67A /* TargetData.swift */; };
 		8DB9155924AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */; };
 		8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */; };
+		8DF91CB724B3051500FFE201 /* AddPracticeNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		8DA4121724B06F0E002FD67A /* TargetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetData.swift; sourceTree = "<group>"; };
 		8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedMeasuresDetailViewController.swift; sourceTree = "<group>"; };
 		8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
+		8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteViewController.swift; sourceTree = "<group>"; };
 		C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -177,6 +179,7 @@
 				8D01652F24AEEBD100F9D69F /* NoteViewController.swift */,
 				8D01653524AF202F00F9D69F /* AddNoteViewController.swift */,
 				8DA4121524B03077002FD67A /* AddTargetViewController.swift */,
+				8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */,
 				8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */,
 			);
 			path = "ノート";
@@ -320,6 +323,7 @@
 				8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */,
 				8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */,
 				8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */,
+				8DF91CB724B3051500FFE201 /* AddPracticeNoteViewController.swift in Sources */,
 				8D01653024AEEBD100F9D69F /* NoteViewController.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,

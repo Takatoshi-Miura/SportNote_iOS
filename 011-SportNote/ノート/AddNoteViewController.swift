@@ -57,6 +57,9 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     
     // セルをタップした時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // ビューの初期化
+        pickerView.removeFromSuperview()
+        
         // Pickerの宣言
         let picker = UIPickerView()
         picker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: picker.bounds.size.height)

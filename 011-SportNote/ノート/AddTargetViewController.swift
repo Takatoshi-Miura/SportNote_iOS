@@ -201,9 +201,6 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
         }
         
-        // Pickerにデフォルト値をセット
-        typeIndex = 1
-        
         // テーブルビューを更新
         tableView.reloadData()
     }
@@ -222,21 +219,18 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         switch typeIndex {
         case 0:
             // AddNoteViewControllerに遷移する意味はないため、現在の画面に留まる
-            typeIndex = 1
             break
         case 1:
             // 目標追加画面のまま
             break
         case 2:
             // 練習記録追加画面に遷移
-            typeIndex = 2
             let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "AddTargetViewController")
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddPracticeNoteViewController")
             self.present(nextView, animated: false, completion: nil)
             break
         case 3:
             // 大会記録追加画面に遷移
-            typeIndex = 3
             let storyboard: UIStoryboard = self.storyboard!
             let nextView = storyboard.instantiateViewController(withIdentifier: "AddTargetViewController")
                 self.present(nextView, animated: false, completion: nil)
@@ -314,6 +308,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 選択された年月を取得
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView.tag == 0 {
+            typeIndex = row
+        }
         if pickerView.tag == 1 {
             // 期間Pickerの選択を取得
             let year = years[pickerView.selectedRow(inComponent: 0)]
