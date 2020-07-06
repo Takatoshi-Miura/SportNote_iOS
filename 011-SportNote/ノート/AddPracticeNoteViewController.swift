@@ -24,6 +24,9 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         // Pickerのタグ付け
         typePicker.tag    = 0
         weatherPicker.tag = 1
+        
+        // 初期値の設定(気温20度に設定)
+        weatherPicker.selectRow(60, inComponent: 1, animated: true)
     }
     
     
@@ -188,6 +191,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         
         // Pickerの宣言
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
+        typePicker.backgroundColor = UIColor.systemGray5
         
         // ツールバーの宣言
         let toolbar = UIToolbar()
@@ -211,6 +215,11 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
         }
         
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
+        }
+        
         // テーブルビューを更新
         tableView.reloadData()
     }
@@ -220,6 +229,11 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
         }
            
         // テーブルビューを更新
@@ -260,6 +274,8 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         datePicker.date = Date()
         datePicker.datePickerMode = .date
         datePicker.locale = Locale(identifier: "ja")
+        datePicker.backgroundColor = UIColor.systemGray5
+        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         
         // ツールバーの宣言
         let toolbar = UIToolbar()
@@ -283,6 +299,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         
         // Pickerの宣言
         weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
+        weatherPicker.backgroundColor = UIColor.systemGray5
         
         // ツールバーの宣言
         let toolbar = UIToolbar()

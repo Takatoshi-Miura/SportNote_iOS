@@ -65,6 +65,7 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         picker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: picker.bounds.size.height)
         picker.delegate = self
         picker.dataSource = self
+        picker.backgroundColor = UIColor.systemGray5
         
         // ツールバーの宣言
         let toolbar = UIToolbar()
@@ -115,6 +116,11 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
         }
         
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
+        }
+        
         // Pickerにデフォルト値をセット
         index = 0
         
@@ -126,6 +132,11 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
         }
         
         // テーブルビューを更新

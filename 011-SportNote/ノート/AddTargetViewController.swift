@@ -154,6 +154,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // Pickerの宣言
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
+        typePicker.backgroundColor = UIColor.systemGray5
         
         // ツールバーの宣言
         let toolbar = UIToolbar()
@@ -177,6 +178,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // Pickerの宣言
         periodPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: periodPicker.bounds.size.height)
+        periodPicker.backgroundColor = UIColor.systemGray5
         
         // ツールバーの宣言
         let toolbar = UIToolbar()
