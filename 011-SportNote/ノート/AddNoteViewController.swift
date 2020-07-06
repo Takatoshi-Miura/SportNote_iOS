@@ -143,6 +143,9 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             break
         case 2:
             // 練習記録追加画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddPracticeNoteViewController")
+            self.present(nextView, animated: false, completion: nil)
             break
         case 3:
             // 大会記録追加画面に遷移
