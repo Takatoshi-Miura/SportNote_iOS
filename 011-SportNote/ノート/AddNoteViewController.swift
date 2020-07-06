@@ -19,6 +19,8 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         tableView.delegate   = self
         tableView.dataSource = self
         
+        // データのないセルを非表示
+        self.tableView.tableFooterView = UIView()
     }
     
     
