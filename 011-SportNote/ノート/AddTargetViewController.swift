@@ -24,9 +24,6 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         periodPicker.delegate   = self
         periodPicker.dataSource = self
         
-        // データのないセルを非表示
-        self.tableView.tableFooterView = UIView()
-        
         // Pickerのタグ付け
         typePicker.tag   = 0
         periodPicker.tag = 1
@@ -34,6 +31,8 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         // 初期値の設定(2020年に設定)
         periodPicker.selectRow(70, inComponent: 0, animated: true)
 
+        // データのないセルを非表示
+        self.tableView.tableFooterView = UIView()
     }
     
     
@@ -62,7 +61,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
-    // テキスト
+    // テキストフィールド
     @IBOutlet weak var targetTextField: UITextField!
     
     // 保存ボタンの処理
