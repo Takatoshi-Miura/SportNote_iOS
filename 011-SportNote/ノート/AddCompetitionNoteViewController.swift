@@ -45,6 +45,9 @@ class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, 
     // 日付Picker
     var datePicker = UIDatePicker()
     var selectedDate:String = ""
+    var year:Int = 2020
+    var month:Int = 1
+    var date:Int = 1
     
     // 天候Picker
     let weatherPicker = UIPickerView()
@@ -60,11 +63,37 @@ class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, 
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
+    // テキストビュー
+    @IBOutlet weak var physicalConditionTextView: UITextView!
+    @IBOutlet weak var targetTextView: UITextView!
+    @IBOutlet weak var consciousnessTextView: UITextView!
+    @IBOutlet weak var resultTextView: UITextView!
+    @IBOutlet weak var reflectionTextView: UITextView!
+    
     // スクロールビュー
     @IBOutlet weak var scrollView: UIScrollView!
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
+        // 大会ノートデータを作成
+        let competitionNoteData = CompetitionNote()
+        
+        // Pickerの選択項目をセット
+        competitionNoteData.setYear(year)
+        competitionNoteData.setMonth(month)
+        competitionNoteData.setDate(date)
+        competitionNoteData.setWeather(weather[weatherIndex])
+        competitionNoteData.setTemperature(temperature[temperatureIndex])
+        
+        // 入力テキストをセット
+//        competitionNoteData.setPhysicalCondition(physicalConditionTextView.text!)
+//        competitionNoteData.setTarget(targetTextView.text!)
+//        competitionNoteData.setConsciousness(consciousnessTextView.text!)
+//        competitionNoteData.setResult(resultTextView.text!)
+//        competitionNoteData.setReflection(reflectionTextView.text!)
+        
+        // データをFirebaseに保存
+        competitionNoteData.saveCompetitionNoteData()
     }
     
     
@@ -384,7 +413,16 @@ class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, 
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "y年M月d日(E)"
-        return dateFormatter.string(from: now)
+        let returnText = "\(dateFormatter.string(from: now))"
+        
+        dateFormatter.dateFormat = "y"
+        year = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "M"
+        month = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "d"
+        date = Int("\(dateFormatter.string(from: now))")!
+        
+        return returnText
     }
     
     // DatePickerの選択した日付を取得するメソッド
@@ -392,7 +430,16 @@ class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, 
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "y年M月d日(E)"
-        return "\(dateFormatter.string(from: datePicker.date))"
+        let returnText = "\(dateFormatter.string(from: datePicker.date))"
+        
+        dateFormatter.dateFormat = "y"
+        year = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "M"
+        month = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "d"
+        date = Int("\(dateFormatter.string(from: datePicker.date))")!
+        
+        return returnText
     }
     
     // テキストフィールド以外をタップでキーボードを下げる設定
