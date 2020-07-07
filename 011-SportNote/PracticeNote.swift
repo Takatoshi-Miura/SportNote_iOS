@@ -27,6 +27,9 @@ class PracticeNote {
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
     
+    // データ格納用
+    var practiceNoteData = [PracticeNote]()
+    
     
     
     //MARK:- セッター
@@ -141,6 +144,7 @@ class PracticeNote {
     
     //MARK:- データベース関連
     
+    // Firebaseにデータを保存するメソッド
     func savePracticeNoteData() {
         // 現在時刻をセット
         setCreated_at(getCurrentTime())
@@ -170,6 +174,55 @@ class PracticeNote {
                 print("Error writing document: \(err)")
             } else {
                 print("Document successfully written!")
+            }
+        }
+    }
+    
+    // Firebaseからデータを取得するメソッド
+    func loadPracticeNoteData() {
+        // competitionNoteDataを初期化
+        practiceNoteData = []
+        
+        // ユーザーUIDをセット
+        setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーのデータを取得する
+        db.collection("PracticeNoteData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .order(by: "date", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // オブジェクトを作成
+                    let practiceNote = PracticeNote()
+                    
+                    // 目標データを反映
+                    let practiceNoteDataCollection = document.data()
+                    practiceNote.setYear(practiceNoteDataCollection["year"] as! Int)
+                    practiceNote.setMonth(practiceNoteDataCollection["month"] as! Int)
+                    practiceNote.setDate(practiceNoteDataCollection["date"] as! Int)
+                    practiceNote.setWeather(practiceNoteDataCollection["weather"] as! String)
+                    practiceNote.setTemperature(practiceNoteDataCollection["temperature"] as! Int)
+                    practiceNote.setPhysicalCondition(practiceNoteDataCollection["physicalCondition"] as! String)
+                    practiceNote.setPurpose(practiceNoteDataCollection["purpose"] as! String)
+                    practiceNote.setDetail(practiceNoteDataCollection["detail"] as! String)
+                    practiceNote.setReflection(practiceNoteDataCollection["reflection"] as! String)
+                    practiceNote.setIsDeleted(practiceNoteDataCollection["isDeleted"] as! Bool)
+                    practiceNote.setUserID(practiceNoteDataCollection["userID"] as! String)
+                    practiceNote.setCreated_at(practiceNoteDataCollection["created_at"] as! String)
+                    practiceNote.setUpdated_at(practiceNoteDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.practiceNoteData.append(practiceNote)
+                }
             }
         }
     }

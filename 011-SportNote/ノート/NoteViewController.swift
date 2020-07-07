@@ -31,6 +31,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // データ取得
         freeNoteData.loadFreeNoteData()
         target.loadTargetData()
+        practiceNote.loadPracticeNoteData()
         competitionNote.loadCompetitionNoteData()
         
         // 時間待ち
@@ -40,6 +41,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.dataInSectionInit()
             
             self.targetData = self.target.targetData
+            self.practiceNoteData = self.practiceNote.practiceNoteData
             self.competitionNoteData = self.competitionNote.competitionNoteData
             
             // targetDataが空の時は更新しない（エラー対策）
@@ -75,6 +77,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var freeNoteData = FreeNote()
     var target = TargetData()
     var targetData = [TargetData]()
+    var practiceNote = PracticeNote()
+    var practiceNoteData = [PracticeNote]()
     var competitionNote = CompetitionNote()
     var competitionNoteData = [CompetitionNote]()
     
