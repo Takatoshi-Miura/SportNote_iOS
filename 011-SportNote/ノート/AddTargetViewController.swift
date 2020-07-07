@@ -208,6 +208,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 完了ボタンの処理
     @objc func typeDone() {
+        // 選択されたIndexを取得
+        typeIndex = typePicker.selectedRow(inComponent: 0)
+        
         // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
@@ -254,6 +257,13 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 完了ボタンの処理
     @objc func periodDone() {
+        // 選択された項目を取得
+        selectedYear  = years[periodPicker.selectedRow(inComponent: 0)]
+        selectedMonth = periodPicker.selectedRow(inComponent: 1)
+        if selectedMonth == 0 {
+            selectedMonth = 13  // HACK:年間目標は最上位に表示させるため、12月よりも大きい13をセットする
+        }
+        
         // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
@@ -303,24 +313,6 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                 }
             } else {
                 return nil
-            }
-        }
-    }
-    
-    // 選択された年月を取得
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView.tag == 0 {
-            typeIndex = row
-        }
-        if pickerView.tag == 1 {
-            // 期間Pickerの選択を取得
-            let year = years[pickerView.selectedRow(inComponent: 0)]
-            let month = months[pickerView.selectedRow(inComponent: 1)]
-            selectedYear = year
-            if month == "--" {
-                selectedMonth = 13  // HACK:年間目標は最上位に表示させるため、12月よりも大きい13をセットする
-            } else {
-                selectedMonth = Int(month)!
             }
         }
     }
