@@ -190,22 +190,6 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         }
     }
     
-    // 選択された項目を取得
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView.tag == 0 {
-            // 種別Pickerの項目を取得
-            typeIndex = row
-        }
-        if pickerView.tag == 1 {
-            // 天候Pickerの選択を取得
-            if component == 0 {
-                weatherIndex = row
-            } else {
-                temperatureIndex = row
-            }
-        }
-    }
-    
     // 種別セル初期化メソッド
     func typeCellPickerInit() {
         // ビューの初期化
@@ -250,6 +234,9 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     
     // 完了ボタンの処理
     @objc func typeDone() {
+        // 選択されたIndexを取得
+        typeIndex = typePicker.selectedRow(inComponent: 0)
+        
         // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
@@ -344,6 +331,10 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     
     // 完了ボタンの処理
     @objc func weatherDone() {
+        // 選択されたIndexを取得
+        weatherIndex     = weatherPicker.selectedRow(inComponent: 0)
+        temperatureIndex = weatherPicker.selectedRow(inComponent: 1)
+        
         // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
