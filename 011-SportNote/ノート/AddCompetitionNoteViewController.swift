@@ -1,14 +1,14 @@
 //
-//  AddPracticeNoteViewController.swift
+//  AddCompetitionNoteViewController.swift
 //  011-SportNote
 //
-//  Created by Takatoshi Miura on 2020/07/06.
+//  Created by Takatoshi Miura on 2020/07/07.
 //  Copyright © 2020 Takatoshi Miura. All rights reserved.
 //
 
 import UIKit
 
-class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
+class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
     
     //MARK:- ライフサイクルメソッド
     
@@ -40,7 +40,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     // 種別Picker
     let typePicker = UIPickerView()
     let noteType:[String] = ["----","目標設定","練習記録","大会記録"]
-    var typeIndex:Int = 2
+    var typeIndex:Int = 3
     
     // 日付Picker
     var datePicker = UIDatePicker()
@@ -266,13 +266,13 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
             self.present(nextView, animated: false, completion: nil)
             break
         case 2:
-            // 練習記録追加画面のまま
+            // 練習記録追加画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddPracticeNoteViewController")
+            self.present(nextView, animated: false, completion: nil)
             break
         case 3:
-            // 大会記録追加画面に遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "AddCompetitionNoteViewController")
-            self.present(nextView, animated: false, completion: nil)
+            // 大会記録追加画面のまま
             break
         default:
             break

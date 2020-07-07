@@ -236,7 +236,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         case 3:
             // 大会記録追加画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "AddTargetViewController")
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddCompetitionNoteViewController")
             self.present(nextView, animated: false, completion: nil)
             break
         default:
