@@ -12,6 +12,7 @@ import Firebase
 class CompetitionNote {
     
     //MARK:- 保持データ
+    
     private var year:Int  = 2020                // 年
     private var month:Int = 1                   // 月
     private var date:Int  = 1                   // 日
@@ -27,9 +28,13 @@ class CompetitionNote {
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
     
+    // データ格納用
+    var competitionNoteData = [CompetitionNote]()
+    
     
     
     //MARK:- セッター
+    
     func setYear(_ year:Int) {
         self.year = year
     }
@@ -89,6 +94,7 @@ class CompetitionNote {
     
     
     //MARK:- ゲッター
+    
     func getYear() -> Int {
         return self.year
     }
@@ -149,6 +155,7 @@ class CompetitionNote {
     
     //MARK:- データベース関連
     
+    // Firebaseにデータを保存するメソッド
     func saveCompetitionNoteData() {
         // 現在時刻をセット
         setCreated_at(getCurrentTime())
@@ -179,6 +186,56 @@ class CompetitionNote {
                 print("Error writing document: \(err)")
             } else {
                 print("Document successfully written!")
+            }
+        }
+    }
+    
+    // Firebaseからデータを取得するメソッド
+    func loadCompetitionNoteData() {
+        // competitionNoteDataを初期化
+        competitionNoteData = []
+        
+        // ユーザーUIDをセット
+        setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーのデータを取得する
+        db.collection("CompetitionNoteData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .order(by: "date", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // オブジェクトを作成
+                    let competitionNote = CompetitionNote()
+                    
+                    // 目標データを反映
+                    let competitionNoteDataCollection = document.data()
+                    competitionNote.setYear(competitionNoteDataCollection["year"] as! Int)
+                    competitionNote.setMonth(competitionNoteDataCollection["month"] as! Int)
+                    competitionNote.setDate(competitionNoteDataCollection["date"] as! Int)
+                    competitionNote.setWeather(competitionNoteDataCollection["weather"] as! String)
+                    competitionNote.setTemperature(competitionNoteDataCollection["temperature"] as! Int)
+                    competitionNote.setPhysicalCondition(competitionNoteDataCollection["physicalCondition"] as! String)
+                    competitionNote.setTarget(competitionNoteDataCollection["target"] as! String)
+                    competitionNote.setConsciousness(competitionNoteDataCollection["consciousness"] as! String)
+                    competitionNote.setResult(competitionNoteDataCollection["result"] as! String)
+                    competitionNote.setReflection(competitionNoteDataCollection["reflection"] as! String)
+                    competitionNote.setIsDeleted(competitionNoteDataCollection["isDeleted"] as! Bool)
+                    competitionNote.setUserID(competitionNoteDataCollection["userID"] as! String)
+                    competitionNote.setCreated_at(competitionNoteDataCollection["created_at"] as! String)
+                    competitionNote.setUpdated_at(competitionNoteDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.competitionNoteData.append(competitionNote)
+                }
             }
         }
     }
