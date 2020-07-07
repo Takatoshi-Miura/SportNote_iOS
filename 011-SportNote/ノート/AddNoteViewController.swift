@@ -28,6 +28,7 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     //MARK:- 変数の宣言
 
     // Picker用
+    let picker = UIPickerView()
     let noteType:[String] = ["----","目標設定","練習記録","大会記録"]
     var index:Int = 0
     var pickerView = UIView()
@@ -61,7 +62,6 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         pickerView.removeFromSuperview()
         
         // Pickerの宣言
-        let picker = UIPickerView()
         picker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: picker.bounds.size.height)
         picker.delegate = self
         picker.dataSource = self
@@ -129,6 +129,9 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     }
 
     @objc func done() {
+        // 選択されたIndexを取得
+        index = picker.selectedRow(inComponent: 0)
+        
         // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
             self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
