@@ -48,6 +48,8 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     let weatherPicker = UIPickerView()
     let weather:[String]  = ["晴れ","くもり","雨"]
     let temperature:[Int] = (-40...40).map { $0 }
+    var weatherIndex:Int = 0
+    var temperatureIndex:Int = 60
     
     
     
@@ -55,6 +57,9 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
+    
+    // スクロールビュー
+    @IBOutlet weak var scrollView: UIScrollView!
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
@@ -86,6 +91,8 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         } else {
             // 2行目のセルは天候セルを返却
             cell.textLabel!.text = "天候"
+            cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
+            cell.detailTextLabel?.textColor = UIColor.systemGray
             return cell
         }
     }
@@ -93,6 +100,9 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             // 種別セルがタップされた時
+            // スクロール禁止
+            //scrollView.isScrollEnabled = false
+            
             // Pickerの初期化
             typeCellPickerInit()
             
@@ -104,6 +114,9 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
             }
         } else if indexPath.row == 1 {
             // 日付セルがタップされた時
+            // スクロール禁止
+            //scrollView.isScrollEnabled = false
+            
             // Pickerの初期化
             datePickerInit()
             
@@ -115,6 +128,9 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
             }
         } else {
             // 天候セルがタップされた時
+            // スクロール禁止
+            //scrollView.isScrollEnabled = false
+            
             // Pickerの初期化
             weatherPickerInit()
             
@@ -174,13 +190,19 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         }
     }
     
-    // 選択された年月を取得
+    // 選択された項目を取得
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView.tag == 0 {
+            // 種別Pickerの項目を取得
             typeIndex = row
         }
         if pickerView.tag == 1 {
             // 天候Pickerの選択を取得
+            if component == 0 {
+                weatherIndex = row
+            } else {
+                temperatureIndex = row
+            }
         }
     }
     
@@ -218,6 +240,8 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
+            // スクロール許可
+            //self.scrollView.isScrollEnabled = true
         }
         
         // テーブルビューを更新
@@ -234,6 +258,8 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
+            // スクロール許可
+            //self.scrollView.isScrollEnabled = true
         }
            
         // テーブルビューを更新
@@ -304,7 +330,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.typeDone))
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.weatherDone))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
@@ -314,6 +340,24 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         pickerView.addSubview(weatherPicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+    }
+    
+    // 完了ボタンの処理
+    @objc func weatherDone() {
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
+            // スクロール許可
+            //self.scrollView.isScrollEnabled = true
+        }
+           
+        // テーブルビューを更新
+        tableView.reloadData()
     }
     
     

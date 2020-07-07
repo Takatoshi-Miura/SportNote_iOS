@@ -275,6 +275,9 @@
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="Q6l-Ff-GQU"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="6x5-51-5ve"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ahu-gn-1xh" id="t3e-EB-9Ny"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -289,6 +292,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="j3r-7L-q29"/>
                     </view>
+                    <connections>
+                        <outlet property="scrollView" destination="reB-Sy-ImG" id="P09-F7-P6i"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oHy-mv-5HH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="mmr-1S-Y1R" userLabel="Exit" sceneMemberID="exit"/>
