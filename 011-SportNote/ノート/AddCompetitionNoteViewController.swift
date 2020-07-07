@@ -141,7 +141,7 @@ class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, 
             let screenSize = UIScreen.main.bounds.size
             pickerView.frame.origin.y = screenSize.height
             UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
+                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
             }
         } else if indexPath.row == 1 {
             // 日付セルがタップされた時
@@ -155,7 +155,7 @@ class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, 
             let screenSize = UIScreen.main.bounds.size
             pickerView.frame.origin.y = screenSize.height
             UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
+                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
             }
         } else {
             // 天候セルがタップされた時
@@ -169,7 +169,7 @@ class AddCompetitionNoteViewController: UIViewController, UIPickerViewDelegate, 
             let screenSize = UIScreen.main.bounds.size
             pickerView.frame.origin.y = screenSize.height
             UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
+                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
             }
         }
     }

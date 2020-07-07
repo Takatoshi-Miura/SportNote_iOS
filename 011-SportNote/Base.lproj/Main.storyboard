@@ -253,8 +253,8 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="reB-Sy-ImG">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="reB-Sy-ImG">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <subviews>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5xu-JM-X7Y">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
@@ -299,7 +299,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oHy-mv-5HH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="mmr-1S-Y1R" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="8943" y="2372"/>
+            <point key="canvasLocation" x="8942.0289855072479" y="2371.875"/>
         </scene>
         <!--Add Target View Controller-->
         <scene sceneID="DeH-CK-s0u">
@@ -1431,8 +1431,8 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GkY-7o-vQl">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GkY-7o-vQl">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <subviews>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UjJ-DV-2r5">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
@@ -1477,7 +1477,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T0q-jo-hBT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="0ae-u6-csv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="10661" y="2373"/>
+            <point key="canvasLocation" x="10660.869565217392" y="2372.5446428571427"/>
         </scene>
         <!--Add Competition Note View Controller-->
         <scene sceneID="fEl-kY-zr7">

@@ -51,13 +51,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                     // 年間目標と月間目標の区別
                     if self.targetData[index].getMonth() == 13 {
                         self.sectionTitle.append("\(self.targetData[index].getYear())年:\(self.targetData[index].getDetail())")
+                        self.dataInSection.append([])
                     } else {
                         self.sectionTitle.append("\(self.targetData[index].getMonth())月:\(self.targetData[index].getDetail())")
+                        self.dataInSection.append(["ノート"])
                     }
-                }
-        
-                for _ in self.sectionTitle {
-                    self.dataInSection.append([])
                 }
             }
         

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
+class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
     
     //MARK:- ライフサイクルメソッド
     
@@ -20,6 +20,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         typePicker.dataSource    = self
         weatherPicker.delegate   = self
         weatherPicker.dataSource = self
+        navigationController?.delegate = self
         
         // Pickerのタグ付け
         typePicker.tag    = 0
@@ -129,7 +130,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
             let screenSize = UIScreen.main.bounds.size
             pickerView.frame.origin.y = screenSize.height
             UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
+                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
             }
         } else if indexPath.row == 1 {
             // 日付セルがタップされた時
@@ -143,7 +144,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
             let screenSize = UIScreen.main.bounds.size
             pickerView.frame.origin.y = screenSize.height
             UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
+                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
             }
         } else {
             // 天候セルがタップされた時
@@ -157,7 +158,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
             let screenSize = UIScreen.main.bounds.size
             pickerView.frame.origin.y = screenSize.height
             UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
+                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
             }
         }
     }
