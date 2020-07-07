@@ -105,37 +105,34 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //MARK:- テーブルビューの設定
     
-    // セルの個数(ノート数)を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataInSection[section].count
+        return dataInSection[section].count     // セルの個数(ノート数)を返却
     }
     
-    // テーブルの行ごとのセルを返却する
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 最上位はフリーノートセル、それ以外はノートセル
         switch indexPath.section {
             case 0:
                 // フリーノートセルを返却
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath)
                 cell.textLabel!.text = freeNoteData.getTitle()
                 cell.detailTextLabel!.text = freeNoteData.getDetail()
                 return cell
             default:
                 // ノートセルを返却
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for:indexPath)
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for:indexPath)
                 cell.textLabel?.text = dataInSection[indexPath.section][indexPath.row]
+                
                 return cell
         }
     }
-
-    //セクション名を返す
+    
     func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String?{
-        return sectionTitle[section]
+        return sectionTitle[section]    //セクション名を返す
     }
     
-    //セクションの個数を返す
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sectionTitle.count
+        return sectionTitle.count       //セクションの個数を返す
     }
     
     // セルをタップしたときの処理

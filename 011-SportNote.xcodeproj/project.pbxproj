@@ -36,6 +36,7 @@
 		8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */; };
 		8DA6351024B4233B00186358 /* PracticeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6350F24B4233B00186358 /* PracticeNote.swift */; };
 		8DA6351224B427B900186358 /* CompetitionNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6351124B427B900186358 /* CompetitionNote.swift */; };
+		8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6351324B47A1A00186358 /* TabBarController.swift */; };
 		8DB9155924AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */; };
 		8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */; };
 		8DF91CB724B3051500FFE201 /* AddPracticeNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */; };
@@ -75,6 +76,7 @@
 		8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteViewController.swift; sourceTree = "<group>"; };
 		8DA6350F24B4233B00186358 /* PracticeNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNote.swift; sourceTree = "<group>"; };
 		8DA6351124B427B900186358 /* CompetitionNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionNote.swift; sourceTree = "<group>"; };
+		8DA6351324B47A1A00186358 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedMeasuresDetailViewController.swift; sourceTree = "<group>"; };
 		8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				8D665D2624A17CD300441B32 /* AppDelegate.swift */,
 				8D665D2824A17CD300441B32 /* SceneDelegate.swift */,
 				8D665D2C24A17CD300441B32 /* Main.storyboard */,
+				8DA6351324B47A1A00186358 /* TabBarController.swift */,
 				8DE8B1E924B1C28000E1195B /* ログイン */,
 				8DE8B1EA24B1C31900E1195B /* 課題 */,
 				8DE8B1EC24B1C53A00E1195B /* ノート */,
@@ -322,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */,
+				8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */,
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8DB9155924AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift in Sources */,
