@@ -18,11 +18,9 @@ class PracticeNote {
     private var weather:String = ""             // 天気
     private var temperature:Int = 0             // 気温
     private var physicalCondition:String = ""   // 体調
-    
     private var purpose:String = ""             // 練習の目的
     private var detail:String = ""              // 練習の内容
     private var reflection:String = ""          // 反省
-    
     
     private var isDeleted:Bool = false          // 削除フラグ
     private var userID:String = ""              // ユーザーUID
@@ -56,8 +54,17 @@ class PracticeNote {
         self.physicalCondition = physicalCondition
     }
     
+    func setPurpose(_ purpose:String) {
+        self.purpose = purpose
+    }
     
+    func setDetail(_ detail:String) {
+        self.detail = detail
+    }
     
+    func setReflection(_ reflection:String) {
+        self.reflection = reflection
+    }
     
     func setIsDeleted(_ isDeleted:Bool) {
         self.isDeleted = isDeleted
@@ -102,8 +109,17 @@ class PracticeNote {
         return self.physicalCondition
     }
     
+    func getPurpose() -> String {
+        return self.purpose
+    }
     
+    func getDetail() -> String {
+        return self.detail
+    }
     
+    func getReflection() -> String {
+        return self.reflection
+    }
     
     func getIsDeleted() -> Bool {
         return self.isDeleted
@@ -121,5 +137,54 @@ class PracticeNote {
         return self.updated_at
     }
     
+    
+    
+    //MARK:- データベース関連
+    
+    func savePracticeNoteData() {
+        // 現在時刻をセット
+        setCreated_at(getCurrentTime())
+        setUpdated_at(created_at)
+        
+        // ユーザーUIDをセット
+        setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("PracticeNoteData").document("\(self.userID)_\(self.year)_\(self.month)_\(self.date)").setData([
+            "year"              : self.year,
+            "month"             : self.month,
+            "date"              : self.date,
+            "weather"           : self.weather,
+            "temperature"       : self.temperature,
+            "physicalCondition" : self.physicalCondition,
+            "purpose"           : self.purpose,
+            "detail"            : self.detail,
+            "reflection"        : self.reflection,
+            "isDeleted"         : self.isDeleted,
+            "userID"            : self.userID,
+            "created_at"        : self.created_at,
+            "updated_at"        : self.updated_at
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
+    
+    
+    
+    //MARK:- その他メソッド
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
     
 }

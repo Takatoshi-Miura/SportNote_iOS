@@ -45,6 +45,9 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     // 日付Picker
     var datePicker = UIDatePicker()
     var selectedDate:String = ""
+    var year:Int = 2020
+    var month:Int = 1
+    var date:Int = 1
     
     // 天候Picker
     let weatherPicker = UIPickerView()
@@ -65,6 +68,20 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
+        // 練習ノートデータを作成
+        let practiceNoteData = PracticeNote()
+        
+        // Pickerの選択項目をセット
+        practiceNoteData.setYear(year)
+        practiceNoteData.setMonth(month)
+        practiceNoteData.setDate(date)
+        practiceNoteData.setWeather(weather[weatherIndex])
+        practiceNoteData.setTemperature(temperature[temperatureIndex])
+        
+        // 入力テキストをセット
+        
+        // データをFirebaseに保存
+        practiceNoteData.savePracticeNoteData()
     }
     
     
@@ -384,7 +401,16 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "y年M月d日(E)"
-        return dateFormatter.string(from: now)
+        let returnText = "\(dateFormatter.string(from: now))"
+        
+        dateFormatter.dateFormat = "y"
+        year = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "M"
+        month = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "d"
+        date = Int("\(dateFormatter.string(from: now))")!
+        
+        return returnText
     }
     
     // DatePickerの選択した日付を取得するメソッド
@@ -392,7 +418,16 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "y年M月d日(E)"
-        return "\(dateFormatter.string(from: datePicker.date))"
+        let returnText = "\(dateFormatter.string(from: datePicker.date))"
+        
+        dateFormatter.dateFormat = "y"
+        year = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "M"
+        month = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "d"
+        date = Int("\(dateFormatter.string(from: datePicker.date))")!
+        
+        return returnText
     }
     
     // テキストフィールド以外をタップでキーボードを下げる設定
