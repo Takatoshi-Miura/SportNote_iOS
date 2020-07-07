@@ -27,6 +27,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
+        selectedDate = getCurrentTime()
     }
     
     
@@ -43,6 +44,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
     
     // 日付Picker
     var datePicker = UIDatePicker()
+    var selectedDate:String = ""
     
     // 天候Picker
     let weatherPicker = UIPickerView()
@@ -85,7 +87,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         } else if indexPath.row == 1 {
             // 1行目のセルは日付セルを返却
             cell.textLabel!.text = "日付"
-            cell.detailTextLabel!.text = getCurrentTime()
+            cell.detailTextLabel!.text = selectedDate
             cell.detailTextLabel?.textColor = UIColor.systemGray
             return cell
         } else {
@@ -293,7 +295,7 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.typeDone))
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.datePickerDone))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
@@ -303,6 +305,27 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         pickerView.addSubview(datePicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+    }
+    
+    // 完了ボタンの処理
+    @objc func datePickerDone() {
+        // 選択された日付を取得
+        selectedDate = getDatePickerDate()
+        
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
+            // スクロール許可
+            //self.scrollView.isScrollEnabled = true
+        }
+           
+        // テーブルビューを更新
+        tableView.reloadData()
     }
     
     // 天候Pickerの初期化メソッド
@@ -362,6 +385,14 @@ class AddPracticeNoteViewController: UIViewController, UIPickerViewDelegate, UIP
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "y年M月d日(E)"
         return dateFormatter.string(from: now)
+    }
+    
+    // DatePickerの選択した日付を取得するメソッド
+    func getDatePickerDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "y年M月d日(E)"
+        return "\(dateFormatter.string(from: datePicker.date))"
     }
     
     // テキストフィールド以外をタップでキーボードを下げる設定
