@@ -65,10 +65,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                                 noteData.append("\(self.practiceNoteData[count].getYear())年\(self.practiceNoteData[count].getMonth())月\(self.practiceNoteData[count].getDate())日：\(self.practiceNoteData[count].getWeather())\(self.practiceNoteData[count].getTemperature())℃")
                             }
                         }
-                        self.dataInSection.append(noteData)
+                        // 年,月が合致する大会ノート数だけappendする。
+                        for count in 0...(self.competitionNoteData.count - 1) {
+                            if self.competitionNoteData[count].getYear() == self.targetData[index - 1].getYear()
+                                && self.competitionNoteData[count].getMonth() == self.targetData[index].getMonth() {
+                                noteData.append("\(self.competitionNoteData[count].getYear())年\(self.competitionNoteData[count].getMonth())月\(self.competitionNoteData[count].getDate())日：\(self.competitionNoteData[count].getWeather())\(self.competitionNoteData[count].getTemperature())℃")
+                            }
+                        }
+                        self.dataInSection.append(noteData)                        
                     }
-                        
-                    
                 }
             }
         
