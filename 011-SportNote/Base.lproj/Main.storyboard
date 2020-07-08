@@ -1276,10 +1276,10 @@
             </objects>
             <point key="canvasLocation" x="12587" y="792"/>
         </scene>
-        <!--Add Practice Note View Controller-->
+        <!--Add Practice Note Content View Controller-->
         <scene sceneID="e8I-2C-rCq">
             <objects>
-                <viewController id="Sk2-R9-nPQ" customClass="AddPracticeNoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Sk2-R9-nPQ" customClass="AddPracticeNoteContentViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XsU-Zt-YWp">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

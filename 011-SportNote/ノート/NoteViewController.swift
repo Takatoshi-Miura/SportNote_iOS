@@ -50,12 +50,25 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 for index in 0...(self.targetData.count - 1) {
                     // 年間目標と月間目標の区別
                     if self.targetData[index].getMonth() == 13 {
+                        // 年間目標セクション追加
                         self.sectionTitle.append("\(self.targetData[index].getYear())年:\(self.targetData[index].getDetail())")
                         self.dataInSection.append([])
                     } else {
+                        // 月間目標セクション追加
                         self.sectionTitle.append("\(self.targetData[index].getMonth())月:\(self.targetData[index].getDetail())")
-                        self.dataInSection.append(["ノート"])
+                        // ノートデータ追加
+                        // 年,月が合致する練習ノート数だけappendする。
+                        var noteData:[String] = []
+                        for count in 0...(self.practiceNoteData.count - 1) {
+                            if self.practiceNoteData[count].getYear() == self.targetData[index - 1].getYear()
+                                && self.practiceNoteData[count].getMonth() == self.targetData[index].getMonth() {
+                                noteData.append("\(self.practiceNoteData[count].getYear())年\(self.practiceNoteData[count].getMonth())月\(self.practiceNoteData[count].getDate())日：\(self.practiceNoteData[count].getWeather())\(self.practiceNoteData[count].getTemperature())℃")
+                            }
+                        }
+                        self.dataInSection.append(noteData)
                     }
+                        
+                    
                 }
             }
         
