@@ -1,14 +1,14 @@
 //
-//  AddPracticeNoteViewController.swift
+//  AddCompetitionNoteViewController.swift
 //  011-SportNote
 //
-//  Created by Takatoshi Miura on 2020/07/06.
+//  Created by Takatoshi Miura on 2020/07/07.
 //  Copyright © 2020 Takatoshi Miura. All rights reserved.
 //
 
 import UIKit
 
-class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
+class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
     
     //MARK:- ライフサイクルメソッド
     
@@ -20,7 +20,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.dataSource    = self
         weatherPicker.delegate   = self
         weatherPicker.dataSource = self
-        navigationController?.delegate = self
         
         // Pickerのタグ付け
         typePicker.tag    = 0
@@ -41,7 +40,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // 種別Picker
     let typePicker = UIPickerView()
     let noteType:[String] = ["----","目標設定","練習記録","大会記録"]
-    var typeIndex:Int = 2
+    var typeIndex:Int = 3
     
     // 日付Picker
     var datePicker = UIDatePicker()
@@ -66,30 +65,32 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // テキストビュー
     @IBOutlet weak var physicalConditionTextView: UITextView!
-    @IBOutlet weak var purposeTextView: UITextView!
-    @IBOutlet weak var detailTextView: UITextView!
+    @IBOutlet weak var targetTextView: UITextView!
+    @IBOutlet weak var consciousnessTextView: UITextView!
+    @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var reflectionTextView: UITextView!
     
     // 保存ボタンの処理
     func saveButton() {
-        // 練習ノートデータを作成
-        let practiceNoteData = PracticeNote()
+        // 大会ノートデータを作成
+        let competitionNoteData = CompetitionNote()
         
         // Pickerの選択項目をセット
-        practiceNoteData.setYear(year)
-        practiceNoteData.setMonth(month)
-        practiceNoteData.setDate(date)
-        practiceNoteData.setWeather(weather[weatherIndex])
-        practiceNoteData.setTemperature(temperature[temperatureIndex])
+        competitionNoteData.setYear(year)
+        competitionNoteData.setMonth(month)
+        competitionNoteData.setDate(date)
+        competitionNoteData.setWeather(weather[weatherIndex])
+        competitionNoteData.setTemperature(temperature[temperatureIndex])
         
         // 入力テキストをセット
-        practiceNoteData.setPhysicalCondition(physicalConditionTextView.text!)
-        practiceNoteData.setPurpose(purposeTextView.text!)
-        practiceNoteData.setDetail(detailTextView.text!)
-        practiceNoteData.setReflection(reflectionTextView.text!)
+        competitionNoteData.setPhysicalCondition(physicalConditionTextView.text!)
+        competitionNoteData.setTarget(targetTextView.text!)
+        competitionNoteData.setConsciousness(consciousnessTextView.text!)
+        competitionNoteData.setResult(resultTextView.text!)
+        competitionNoteData.setReflection(reflectionTextView.text!)
         
         // データをFirebaseに保存
-        practiceNoteData.savePracticeNoteData()
+        competitionNoteData.saveCompetitionNoteData()
     }
     
     
@@ -291,13 +292,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             self.present(nextView, animated: false, completion: nil)
             break
         case 2:
-            // 練習記録追加画面のまま
+            // 練習記録追加画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddPracticeNoteViewController")
+            self.present(nextView, animated: false, completion: nil)
             break
         case 3:
-            // 大会記録追加画面に遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "AddCompetitionNoteViewController")
-            self.present(nextView, animated: false, completion: nil)
+            // 大会記録追加画面のまま
             break
         default:
             break
@@ -434,7 +435,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         month = Int("\(dateFormatter.string(from: datePicker.date))")!
         dateFormatter.dateFormat = "d"
         date = Int("\(dateFormatter.string(from: datePicker.date))")!
-        print("\(year)/\(month)/\(date)")
         
         return returnText
     }
@@ -445,4 +445,3 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
 
 }
-

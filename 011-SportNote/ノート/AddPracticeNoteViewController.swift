@@ -27,10 +27,9 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
     @IBAction func saveButton(_ sender: Any) {
         // コンテナからVC2のオブジェクトを取得
         let vc2 = self.children[0] as! AddPracticeNoteContentViewController
-        vc2.saveButton()
         
+        // 練習ノートデータを保存する
+        vc2.saveButton()
     }
-    
-    
 
 }
