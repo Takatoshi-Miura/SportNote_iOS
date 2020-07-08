@@ -31,8 +31,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // データ取得
         freeNoteData.loadFreeNoteData()
         target.loadTargetData()
-        practiceNote.loadPracticeNoteData()
-        competitionNote.loadCompetitionNoteData()
+        noteData.loadNoteData()
         
         // 時間待ち
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
@@ -40,39 +39,37 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.sectionTitleInit()
             self.dataInSectionInit()
             
-            self.targetData = self.target.targetData
-            self.practiceNoteData = self.practiceNote.practiceNoteData
-            self.competitionNoteData = self.competitionNote.competitionNoteData
+            // データ配列の受け取り
+            self.targetDataArray = self.target.targetData
+            self.noteDataArray   = self.noteData.noteDataArray
             
-            // targetDataが空の時は更新しない（エラー対策）
-            if self.targetData.isEmpty == false {
+            // targetDataArrayが空の時は更新しない（エラー対策）
+            if self.targetDataArray.isEmpty == false {
                 // テーブルデータ更新
-                for index in 0...(self.targetData.count - 1) {
+                for index in 0...(self.targetDataArray.count - 1) {
                     // 年間目標と月間目標の区別
-                    if self.targetData[index].getMonth() == 13 {
+                    if self.targetDataArray[index].getMonth() == 13 {
                         // 年間目標セクション追加
-                        self.sectionTitle.append("\(self.targetData[index].getYear())年:\(self.targetData[index].getDetail())")
+                        self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
                         self.dataInSection.append([])
                     } else {
                         // 月間目標セクション追加
-                        self.sectionTitle.append("\(self.targetData[index].getMonth())月:\(self.targetData[index].getDetail())")
+                        self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
                         // ノートデータ追加
-                        // 年,月が合致する練習ノート数だけappendする。
-                        var noteData:[String] = []
-                        for count in 0...(self.practiceNoteData.count - 1) {
-                            if self.practiceNoteData[count].getYear() == self.targetData[index - 1].getYear()
-                                && self.practiceNoteData[count].getMonth() == self.targetData[index].getMonth() {
-                                noteData.append("\(self.practiceNoteData[count].getYear())年\(self.practiceNoteData[count].getMonth())月\(self.practiceNoteData[count].getDate())日：\(self.practiceNoteData[count].getWeather())\(self.practiceNoteData[count].getTemperature())℃")
+                        // noteDataArrayが空の時は更新しない（エラー対策）
+                        if self.noteDataArray.isEmpty == false {
+                            var noteArray:[String] = []
+                            // 年,月が合致するノート数だけappendする。
+                            for count in 0...(self.noteDataArray.count - 1) {
+                                if self.noteDataArray[count].getYear() == self.targetDataArray[index - 1].getYear()
+                                    && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
+                                    noteArray.append("\(self.noteDataArray[count].getYear())年\(self.noteDataArray[count].getMonth())月\(self.noteDataArray[count].getDate())日：\(self.noteDataArray[count].getWeather())\(self.noteDataArray[count].getTemperature())℃")
+                                }
                             }
+                            self.dataInSection.append(noteArray)
+                        } else {
+                            self.dataInSection.append([])
                         }
-                        // 年,月が合致する大会ノート数だけappendする。
-                        for count in 0...(self.competitionNoteData.count - 1) {
-                            if self.competitionNoteData[count].getYear() == self.targetData[index - 1].getYear()
-                                && self.competitionNoteData[count].getMonth() == self.targetData[index].getMonth() {
-                                noteData.append("\(self.competitionNoteData[count].getYear())年\(self.competitionNoteData[count].getMonth())月\(self.competitionNoteData[count].getDate())日：\(self.competitionNoteData[count].getWeather())\(self.competitionNoteData[count].getTemperature())℃")
-                            }
-                        }
-                        self.dataInSection.append(noteData)                        
                     }
                 }
             }
@@ -92,11 +89,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // データ格納用
     var freeNoteData = FreeNote()
     var target = TargetData()
-    var targetData = [TargetData]()
-    var practiceNote = PracticeNote()
-    var practiceNoteData = [PracticeNote]()
-    var competitionNote = CompetitionNote()
-    var competitionNoteData = [CompetitionNote]()
+    var targetDataArray = [TargetData]()
+    var noteData = NoteData()
+    var noteDataArray = [NoteData]()
     
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
@@ -138,7 +133,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // ノートセルを返却
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for:indexPath)
                 cell.textLabel?.text = dataInSection[indexPath.section][indexPath.row]
-                
+                cell.detailTextLabel?.text = noteDataArray[indexPath.row].getNoteType()
+                if noteDataArray[indexPath.row].getNoteType() == "練習記録" {
+                    cell.detailTextLabel?.textColor = UIColor.systemGreen
+                } else {
+                    cell.detailTextLabel?.textColor = UIColor.systemRed
+                }
                 return cell
         }
     }

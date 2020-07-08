@@ -73,7 +73,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // 保存ボタンの処理
     func saveButton() {
         // 練習ノートデータを作成
-        let practiceNoteData = PracticeNote()
+        let practiceNoteData = NoteData()
+        practiceNoteData.setNoteType("練習記録")
         
         // Pickerの選択項目をセット
         practiceNoteData.setYear(year)
@@ -89,7 +90,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         practiceNoteData.setReflection(reflectionTextView.text!)
         
         // データをFirebaseに保存
-        practiceNoteData.savePracticeNoteData()
+        practiceNoteData.saveNoteData()
     }
     
     

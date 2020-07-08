@@ -73,7 +73,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     // 保存ボタンの処理
     func saveButton() {
         // 大会ノートデータを作成
-        let competitionNoteData = CompetitionNote()
+        let competitionNoteData = NoteData()
+        competitionNoteData.setNoteType("大会記録")
         
         // Pickerの選択項目をセット
         competitionNoteData.setYear(year)
@@ -90,7 +91,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         competitionNoteData.setReflection(reflectionTextView.text!)
         
         // データをFirebaseに保存
-        competitionNoteData.saveCompetitionNoteData()
+        competitionNoteData.saveNoteData()
     }
     
     
