@@ -1394,6 +1394,15 @@
                                     <outlet property="delegate" destination="lGt-87-NJU" id="e9p-yw-Cal"/>
                                 </connections>
                             </textView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xmx-r9-c5P">
+                                <rect key="frame" x="0.0" y="580" width="414" height="86"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Sk2-R9-nPQ" id="X1y-E6-w90"/>
+                                    <outlet property="delegate" destination="Sk2-R9-nPQ" id="nwH-YK-6ST"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="7Ev-LV-ZKv"/>
@@ -1404,6 +1413,7 @@
                         <outlet property="purposeTextView" destination="oEc-L0-amh" id="6n6-WC-NLV"/>
                         <outlet property="reflectionTextView" destination="qP1-7i-lWU" id="sXR-k7-rrl"/>
                         <outlet property="tableView" destination="9c0-Xc-DkN" id="aUv-rE-DzZ"/>
+                        <outlet property="taskTableView" destination="xmx-r9-c5P" id="Lep-8J-ZPa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fIE-tp-2Yr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

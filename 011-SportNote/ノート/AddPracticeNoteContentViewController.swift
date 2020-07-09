@@ -20,7 +20,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.dataSource    = self
         weatherPicker.delegate   = self
         weatherPicker.dataSource = self
+        taskTableView.dataSource = self
+        taskTableView.delegate   = self
         navigationController?.delegate = self
+        
+        // TaskMeasuresTableViewCellを登録
+        taskTableView.register(UINib(nibName: "TaskMeasuresTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
         
         // Pickerのタグ付け
         typePicker.tag    = 0
@@ -32,6 +37,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // データ取得
         targetData.loadTargetData()
+        taskData.loadUnresolvedTaskData()
     }
     
     
@@ -62,12 +68,14 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // データ格納用
     let targetData = TargetData()
+    let taskData = TaskData()
     
     
     //MARK:- UIの設定
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var taskTableView: UITableView!
     
     // テキストビュー
     @IBOutlet weak var physicalConditionTextView: UITextView!

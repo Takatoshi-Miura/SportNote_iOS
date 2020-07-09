@@ -19,7 +19,6 @@ class TaskData {
     private var userID:String = ""              // ユーザーUID
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
-    
     private var measuresTitle:[String] = []             // 対策タイトル
     private var measuresEffectiveness:[String] = []     // 対策の有効性
     private var measuresPriorityIndex:Int = 0           // 最優先の対策が格納されているIndex
