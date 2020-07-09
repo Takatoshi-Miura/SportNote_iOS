@@ -34,13 +34,13 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         noteData.loadNoteData()
         
         // 時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
             // テーブルデータ初期化
             self.sectionTitleInit()
             self.dataInSectionInit()
             
             // データ配列の受け取り
-            self.targetDataArray = self.target.targetData
+            self.targetDataArray = self.target.targetDataArray
             self.noteDataArray   = self.noteData.noteDataArray
             
             // targetDataArrayが空の時は更新しない（エラー対策）
@@ -55,20 +55,19 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                     } else {
                         // 月間目標セクション追加
                         self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
+                        
                         // ノートデータ追加
                         // noteDataArrayが空の時は更新しない（エラー対策）
                         if self.noteDataArray.isEmpty == false {
                             var noteArray:[String] = []
                             // 年,月が合致するノート数だけappendする。
                             for count in 0...(self.noteDataArray.count - 1) {
-                                if self.noteDataArray[count].getYear() == self.targetDataArray[index - 1].getYear()
+                                if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
                                     && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
                                     noteArray.append("\(self.noteDataArray[count].getYear())年\(self.noteDataArray[count].getMonth())月\(self.noteDataArray[count].getDate())日：\(self.noteDataArray[count].getWeather())\(self.noteDataArray[count].getTemperature())℃")
                                 }
                             }
                             self.dataInSection.append(noteArray)
-                        } else {
-                            self.dataInSection.append([])
                         }
                     }
                 }
@@ -128,6 +127,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath)
                 cell.textLabel!.text = freeNoteData.getTitle()
                 cell.detailTextLabel!.text = freeNoteData.getDetail()
+                cell.detailTextLabel?.textColor = UIColor.systemGray
                 return cell
             default:
                 // ノートセルを返却

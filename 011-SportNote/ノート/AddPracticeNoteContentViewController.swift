@@ -29,6 +29,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
         selectedDate = getCurrentTime()
+        
+        // データ取得
+        targetData.loadTargetData()
     }
     
     
@@ -57,6 +60,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     var weatherIndex:Int = 0
     var temperatureIndex:Int = 60
     
+    // データ格納用
+    let targetData = TargetData()
     
     
     //MARK:- UIの設定
@@ -91,6 +96,32 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // データをFirebaseに保存
         practiceNoteData.saveNoteData()
+        
+        // その年月の目標データがなければ作成
+        if targetData.targetDataArray.count == 0 {
+            // 目標データを作成
+            targetData.setYear(self.year)
+            targetData.setMonth(self.month)
+            targetData.setDetail("")
+            targetData.targetDataArray = []
+            targetData.saveTargetData()
+        } else {
+            // 既に目標登録済みの月を取得
+            var monthArray:[Int] = []
+            for num in 0...(targetData.targetDataArray.count - 1) {
+                if targetData.targetDataArray[num].getYear() == self.year {
+                    monthArray.append(targetData.targetDataArray[num].getMonth())
+                }
+            }
+            // 月間目標の登録がなければ(monthArrayに要素がなければ)目標作成
+            if monthArray.firstIndex(of: self.month) == nil {
+                targetData.setYear(self.year)
+                targetData.setMonth(self.month)
+                targetData.setDetail("")
+                targetData.targetDataArray = []
+                targetData.saveTargetData()
+            }
+        }
     }
     
     

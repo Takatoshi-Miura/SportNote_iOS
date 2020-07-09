@@ -21,7 +21,7 @@ class TargetData {
     private var updated_at:String = ""  // 更新日
     
     // データ格納用
-    var targetData = [TargetData]()
+    var targetDataArray = [TargetData]()
     
     
     
@@ -120,7 +120,7 @@ class TargetData {
     // Firebaseからデータを取得するメソッド
     func loadTargetData() {
         // targetDataを初期化
-        targetData = []
+        targetDataArray = []
         
         // ユーザーUIDをセット
         setUserID(Auth.auth().currentUser!.uid)
@@ -153,7 +153,7 @@ class TargetData {
                     target.setUpdated_at(targetDataCollection["updated_at"] as! String)
                     
                     // 取得データを格納
-                    self.targetData.append(target)
+                    self.targetDataArray.append(target)
                 }
             }
         }
