@@ -291,6 +291,40 @@ class NoteData {
             }
         }
     }
+    
+    // Firebaseのデータを更新するメソッド
+    func updateNoteData() {
+        // 更新日時を現在時刻にする
+        self.updated_at = getCurrentTime()
+        
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let taskData = db.collection("NoteData").document("\(userID)_\(self.noteID)")
+
+        // 変更する可能性のあるデータのみ更新
+        taskData.updateData([
+            "physicalCondition" : self.physicalCondition,
+            "purpose"           : self.purpose,
+            "detail"            : self.detail,
+            "target"            : self.target,
+            "consciousness"     : self.consciousness,
+            "result"            : self.result,
+            "reflection"        : self.reflection,
+            "isDeleted"         : self.isDeleted,
+            "updated_at"        : self.updated_at
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
+    }
+    
+    
   
     
     

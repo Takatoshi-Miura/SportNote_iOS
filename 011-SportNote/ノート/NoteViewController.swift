@@ -57,9 +57,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                         self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
                         
                         // ノートデータ追加
+                        var noteArray:[NoteData] = []
                         // noteDataArrayが空の時は更新しない（エラー対策）
                         if self.noteDataArray.isEmpty == false {
-                            var noteArray:[NoteData] = []
                             // 年,月が合致するノート数だけappendする。
                             for count in 0...(self.noteDataArray.count - 1) {
                                 if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
@@ -67,8 +67,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                                     noteArray.append(self.noteDataArray[count])
                                 }
                             }
-                            self.dataInSection.append(noteArray)
                         }
+                        self.dataInSection.append(noteArray)
                     }
                 }
             }
@@ -124,7 +124,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         switch indexPath.section {
             case 0:
                 // フリーノートセルを返却
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath)
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
                 cell.textLabel!.text = freeNoteData.getTitle()
                 cell.detailTextLabel!.text = freeNoteData.getDetail()
                 cell.detailTextLabel?.textColor = UIColor.systemGray
@@ -168,6 +168,48 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             } else {
                 // ノートセルがタップされたとき
             }
+        }
+    }
+    
+    // セルの編集可否の設定
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 0 {
+            return false    // フリーノートセルは編集不可
+        } else {
+            return true     // 他のノートセルは編集可能
+        }
+    }
+    
+    // セルを削除したときの処理（左スワイプ）
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // 削除処理かどうかの判定
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            // アラートダイアログを生成
+            let alertController = UIAlertController(title:"ノートを削除",message:"ノートを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+            
+            // OKボタンを宣言
+            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+                // OKボタンがタップされたときの処理
+                // 次回以降、このノートデータを取得しないようにする
+                self.dataInSection[indexPath.section][indexPath.row].setIsDeleted(true)
+                self.dataInSection[indexPath.section][indexPath.row].updateNoteData()
+                    
+                // セルのみを削除(セクションは残す)
+                self.dataInSection[indexPath.section].remove(at:indexPath.row)
+                    
+                // セルを削除
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }
+            //OKボタンを追加
+            alertController.addAction(okAction)
+            
+            //CANCELボタンを宣言
+            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            //CANCELボタンを追加
+            alertController.addAction(cancelButton)
+            
+            //アラートダイアログを表示
+            present(alertController,animated:true,completion:nil)
         }
     }
     

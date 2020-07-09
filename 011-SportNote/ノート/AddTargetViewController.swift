@@ -84,8 +84,10 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         targetData.saveTargetData()
         
         // その月の年間目標データがなければ作成
-        if targetData.targetDataArray.count == 0 {
-            if selectedMonth != 13 {
+        if self.targetData.targetDataArray.count == 0 {
+            if selectedMonth == 13 {
+                // 年間目標データを作成するなら何もしない
+            } else {
                 // 年間目標データを作成
                 targetData.setYear(selectedYear)
                 targetData.setMonth(13)
@@ -95,9 +97,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
             var monthArray:[Int] = []
-            for num in 0...(targetData.targetDataArray.count - 1) {
-                if targetData.targetDataArray[num].getYear() == selectedYear {
-                    monthArray.append(targetData.targetDataArray[num].getMonth())
+            for num in 0...(self.targetData.targetDataArray.count - 1) {
+                if self.targetData.targetDataArray[num].getYear() == selectedYear {
+                    monthArray.append(self.targetData.targetDataArray[num].getMonth())
                 }
             }
             // 年間目標の登録がなければ、年間目標作成
