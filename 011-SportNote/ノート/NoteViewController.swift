@@ -133,7 +133,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             default:
                 // ノートセルを返却
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for:indexPath)
-                cell.textLabel?.text = "\(dataInSection[indexPath.section][indexPath.row].getYear())年\(dataInSection[indexPath.section][indexPath.row].getMonth())月\(dataInSection[indexPath.section][indexPath.row].getDate())日:\(dataInSection[indexPath.section][indexPath.row].getWeather()) \(dataInSection[indexPath.section][indexPath.row].getTemperature())℃"
+                cell.textLabel?.text       = dataInSection[indexPath.section][indexPath.row].getCellTitle()
                 cell.detailTextLabel?.text = dataInSection[indexPath.section][indexPath.row].getNoteType()
                 if dataInSection[indexPath.section][indexPath.row].getNoteType() == "練習記録" {
                     cell.detailTextLabel?.textColor = UIColor.systemGreen

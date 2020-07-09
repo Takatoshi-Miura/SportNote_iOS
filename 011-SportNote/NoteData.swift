@@ -305,4 +305,9 @@ class NoteData {
         return dateFormatter.string(from: now)
     }
     
+    // ノートセルに表示させるタイトルを取得するメソッド
+    func getCellTitle() -> String {
+        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日:\(self.getWeather())\(self.getTemperature())℃"
+    }
+    
 }
