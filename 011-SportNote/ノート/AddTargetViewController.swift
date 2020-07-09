@@ -33,6 +33,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
 
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
+        
+        // データ取得
+        targetData.loadTargetData()
     }
     
     
@@ -53,6 +56,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     let months = ["--","1","2","3","4","5","6","7","8","9","10","11","12"]
     var selectedYear:Int  = 2020
     var selectedMonth:Int = 13   // "--"が選択された時は13が入る
+    
+    // データ格納用
+    let targetData = TargetData()
     
     
     
@@ -76,6 +82,32 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // 目標データを保存
         targetData.saveTargetData()
+        
+        // その月の年間目標データがなければ作成
+        if targetData.targetDataArray.count == 0 {
+            if selectedMonth != 13 {
+                // 年間目標データを作成
+                targetData.setYear(selectedYear)
+                targetData.setMonth(13)
+                targetData.setDetail("")
+                targetData.saveTargetData()
+            }
+        } else {
+            // 既に目標登録済みの月を取得(同じ年の)
+            var monthArray:[Int] = []
+            for num in 0...(targetData.targetDataArray.count - 1) {
+                if targetData.targetDataArray[num].getYear() == selectedYear {
+                    monthArray.append(targetData.targetDataArray[num].getMonth())
+                }
+            }
+            // 年間目標の登録がなければ、年間目標作成
+            if monthArray.firstIndex(of: 13) == nil {
+                targetData.setYear(selectedYear)
+                targetData.setMonth(13)
+                targetData.setDetail("")
+                targetData.saveTargetData()
+            }
+        }
         
         // HUDで処理中を表示
         SVProgressHUD.show()
