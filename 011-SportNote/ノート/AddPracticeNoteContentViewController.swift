@@ -247,6 +247,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             }
         } else {
             // 未解決の課題セルをタップしたときの処理
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         }
     }
     
@@ -256,6 +258,37 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             return 44
         } else {
             return 220
+        }
+    }
+    
+    // セルの編集可否の設定
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if tableView.tag == 0 {
+            return false    // 種別,日付,天候セルは編集不可
+        } else {
+            return true     // 未解決の課題セルは編集可能
+        }
+    }
+    
+    // セルを削除したときの処理（左スワイプ）
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if tableView.tag == 1 {
+            // 削除処理かどうかの判定
+            if editingStyle == UITableViewCell.EditingStyle.delete {
+                // taskDataArrayから削除
+                self.taskData.taskDataArray.remove(at:indexPath.row)
+                // セルを削除
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }
+        }
+    }
+    
+    // deleteの表示名を変更
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        if tableView.tag == 0 {
+            return "非表示"
+        } else {
+            return "非表示"
         }
     }
     
