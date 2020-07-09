@@ -20,8 +20,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.dataSource    = self
         weatherPicker.delegate   = self
         weatherPicker.dataSource = self
+        
+        tableView.delegate       = self
+        tableView.dataSource     = self
         taskTableView.dataSource = self
         taskTableView.delegate   = self
+        
         navigationController?.delegate = self
         
         // TaskMeasuresTableViewCellを登録
@@ -38,6 +42,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // データ取得
         targetData.loadTargetData()
         taskData.loadUnresolvedTaskData()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            self.taskTableView?.reloadData()
+        }
     }
     
     
@@ -69,6 +77,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // データ格納用
     let targetData = TargetData()
     let taskData = TaskData()
+    
     
     
     //MARK:- UIの設定
@@ -146,76 +155,99 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3    // 種別セル,日付セル,天候セルの3つ
+        if tableView.tag == 0 {
+            return 3    // 種別セル,日付セル,天候セルの3つ
+        } else {
+            return taskData.taskDataArray.count     // 未解決の課題の数
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        if indexPath.row == 0 {
-            // 0行目のセルは種別セルを返却
-            cell.textLabel!.text = "種別"
-            cell.detailTextLabel!.text = noteType[typeIndex]
-            cell.detailTextLabel?.textColor = UIColor.systemGray
-            return cell
-        } else if indexPath.row == 1 {
-            // 1行目のセルは日付セルを返却
-            cell.textLabel!.text = "日付"
-            cell.detailTextLabel!.text = selectedDate
-            cell.detailTextLabel?.textColor = UIColor.systemGray
-            return cell
+        if tableView.tag == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            if indexPath.row == 0 {
+                // 0行目のセルは種別セルを返却
+                cell.textLabel!.text = "種別"
+                cell.detailTextLabel!.text = noteType[typeIndex]
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
+            } else if indexPath.row == 1 {
+                // 1行目のセルは日付セルを返却
+                cell.textLabel!.text = "日付"
+                cell.detailTextLabel!.text = selectedDate
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
+            } else {
+                // 2行目のセルは天候セルを返却
+                cell.textLabel!.text = "天候"
+                cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
+            }
         } else {
-            // 2行目のセルは天候セルを返却
-            cell.textLabel!.text = "天候"
-            cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
-            cell.detailTextLabel?.textColor = UIColor.systemGray
+            // 未解決の課題セルを返却
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
+            cell.printTaskData(taskData.taskDataArray[indexPath.row])
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            // 種別セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
-            
-            // Pickerの初期化
-            typeCellPickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-            }
-        } else if indexPath.row == 1 {
-            // 日付セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
-            
-            // Pickerの初期化
-            datePickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+        if tableView.tag == 0 {
+            if indexPath.row == 0 {
+                // 種別セルがタップされた時
+                // スクロール禁止
+                //scrollView.isScrollEnabled = false
+                
+                // Pickerの初期化
+                typeCellPickerInit()
+                
+                // 下からPickerを呼び出す
+                let screenSize = UIScreen.main.bounds.size
+                pickerView.frame.origin.y = screenSize.height
+                UIView.animate(withDuration: 0.3) {
+                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                }
+            } else if indexPath.row == 1 {
+                // 日付セルがタップされた時
+                // スクロール禁止
+                //scrollView.isScrollEnabled = false
+                
+                // Pickerの初期化
+                datePickerInit()
+                
+                // 下からPickerを呼び出す
+                let screenSize = UIScreen.main.bounds.size
+                pickerView.frame.origin.y = screenSize.height
+                UIView.animate(withDuration: 0.3) {
+                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                }
+            } else {
+                // 天候セルがタップされた時
+                // スクロール禁止
+                //scrollView.isScrollEnabled = false
+                
+                // Pickerの初期化
+                weatherPickerInit()
+                
+                // 下からPickerを呼び出す
+                let screenSize = UIScreen.main.bounds.size
+                pickerView.frame.origin.y = screenSize.height
+                UIView.animate(withDuration: 0.3) {
+                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                }
             }
         } else {
-            // 天候セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
-            
-            // Pickerの初期化
-            weatherPickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-            }
+            // 未解決の課題セルをタップしたときの処理
+        }
+    }
+    
+    // セルの高さ設定
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView.tag == 0 {
+            return 40
+        } else {
+            return 220
         }
     }
     
