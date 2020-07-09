@@ -29,6 +29,18 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
         selectedDate = getCurrentTime()
         
+        // テキストビューに枠線追加
+        physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        physicalConditionTextView.layer.borderWidth = 1.0
+        targetTextView.layer.borderColor = UIColor.systemGray.cgColor
+        targetTextView.layer.borderWidth = 1.0
+        consciousnessTextView.layer.borderColor = UIColor.systemGray.cgColor
+        consciousnessTextView.layer.borderWidth = 1.0
+        resultTextView.layer.borderColor = UIColor.systemGray.cgColor
+        resultTextView.layer.borderWidth = 1.0
+        reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        reflectionTextView.layer.borderWidth = 1.0
+        
         // データ取得
         targetData.loadTargetData()
     }

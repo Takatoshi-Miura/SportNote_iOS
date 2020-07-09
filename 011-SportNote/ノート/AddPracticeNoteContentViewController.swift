@@ -20,12 +20,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.dataSource    = self
         weatherPicker.delegate   = self
         weatherPicker.dataSource = self
-        
         tableView.delegate       = self
         tableView.dataSource     = self
         taskTableView.dataSource = self
         taskTableView.delegate   = self
-        
         navigationController?.delegate = self
         
         // TaskMeasuresTableViewCellを登録
@@ -38,6 +36,16 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
         selectedDate = getCurrentTime()
+        
+        // テキストビューの枠線付け
+        physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        physicalConditionTextView.layer.borderWidth = 1.0
+        purposeTextView.layer.borderColor = UIColor.systemGray.cgColor
+        purposeTextView.layer.borderWidth = 1.0
+        detailTextView.layer.borderColor = UIColor.systemGray.cgColor
+        detailTextView.layer.borderWidth = 1.0
+        reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        reflectionTextView.layer.borderWidth = 1.0
         
         // データ取得
         targetData.loadTargetData()
@@ -245,7 +253,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // セルの高さ設定
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView.tag == 0 {
-            return 40
+            return 44
         } else {
             return 220
         }
