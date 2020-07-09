@@ -51,7 +51,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                     if self.targetDataArray[index].getMonth() == 13 {
                         // 年間目標セクション追加
                         self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
-                        self.dataInSection.append(contentsOf: [])
+                        self.dataInSection.append([])
                     } else {
                         // 月間目標セクション追加
                         self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
@@ -65,7 +65,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                                 if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
                                     && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
                                     noteArray.append(self.noteDataArray[count])
-                                    //noteArray.append("\(self.noteDataArray[count].getYear())年\(self.noteDataArray[count].getMonth())月\(self.noteDataArray[count].getDate())日：\(self.noteDataArray[count].getWeather())\(self.noteDataArray[count].getTemperature())℃")
                                 }
                             }
                             self.dataInSection.append(noteArray)
