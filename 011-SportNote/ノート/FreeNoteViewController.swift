@@ -21,6 +21,10 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
         // 受け取ったフリーノートデータの文字列を表示
         printTitle()
         printDetail()
+        
+        // テキストビューの枠線付け
+        detailTextView.layer.borderColor = UIColor.systemGray.cgColor
+        detailTextView.layer.borderWidth = 1.0
     }
     
     

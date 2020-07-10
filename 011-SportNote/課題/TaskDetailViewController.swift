@@ -27,6 +27,10 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         // TaskViewControllerから受け取った課題データの対策を取得
         measuresTitleArray = taskData.getAllMeasuresTitle()
         
+        // テキストビューの枠線付け
+        taskCauseTextView.layer.borderColor = UIColor.systemGray.cgColor
+        taskCauseTextView.layer.borderWidth = 1.0
+        
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
     }

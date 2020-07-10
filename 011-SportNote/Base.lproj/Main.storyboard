@@ -323,7 +323,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oHy-mv-5HH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="mmr-1S-Y1R" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="8942.0289855072479" y="2371.875"/>
+            <point key="canvasLocation" x="8942" y="2782"/>
         </scene>
         <!--Add Target View Controller-->
         <scene sceneID="DeH-CK-s0u">
@@ -432,7 +432,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zqx-GW-OGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="b7J-O9-BiP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="8147.826086956522" y="2371.875"/>
+            <point key="canvasLocation" x="8148" y="2782"/>
         </scene>
         <!--Free Note View Controller-->
         <scene sceneID="dVe-sH-KbY">
@@ -450,12 +450,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="タイトルを入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YQt-0S-EVZ">
-                                <rect key="frame" x="20" y="123" width="374" height="34"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　内容" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Qd-p5-ENl">
                                 <rect key="frame" x="0.0" y="185" width="414" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
@@ -465,13 +459,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="常に最上位に表示されるノートです。" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="idN-Xg-QwJ">
-                                <rect key="frame" x="15" y="223" width="384" height="521"/>
+                                <rect key="frame" x="15" y="223" width="384" height="425"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="タイトルを入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YQt-0S-EVZ">
+                                <rect key="frame" x="15" y="131" width="384" height="34"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="NEu-H5-BXw"/>
@@ -484,7 +484,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lmk-DK-ahc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7338" y="1583"/>
+            <point key="canvasLocation" x="7337.68115942029" y="1582.3660714285713"/>
         </scene>
         <!--課題-->
         <scene sceneID="ohu-sA-Us6">
@@ -632,12 +632,6 @@
                                     <outlet property="delegate" destination="wUj-cO-jPj" id="axd-ay-N66"/>
                                 </connections>
                             </tableView>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-JU-aBw">
-                                <rect key="frame" x="20" y="126" width="374" height="34"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="h9u-U4-kY8">
                                 <rect key="frame" x="15" y="225" width="384" height="128"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
@@ -672,6 +666,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-JU-aBw">
+                                <rect key="frame" x="15" y="132" width="384" height="34"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="sdz-PZ-Kib"/>
@@ -693,7 +693,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ucV-fX-xnH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="790" y="1582"/>
+            <point key="canvasLocation" x="789.85507246376812" y="1581.6964285714284"/>
         </scene>
         <!--課題の詳細-->
         <scene sceneID="b7g-px-DFT">
@@ -797,8 +797,8 @@
                                     <segue destination="zbE-5F-qgg" kind="unwind" unwindAction="goToTaskViewControllerWith_segue:" id="z5l-uW-rW6"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="opI-eD-Aj8">
-                                <rect key="frame" x="20" y="126" width="374" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="opI-eD-Aj8">
+                                <rect key="frame" x="15" y="133" width="384" height="34"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -818,7 +818,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ddG-nM-WUl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="zbE-5F-qgg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1774" y="1582"/>
+            <point key="canvasLocation" x="1773.913043478261" y="1581.6964285714284"/>
         </scene>
         <!--対策の詳細-->
         <scene sceneID="96F-4y-On1">
@@ -836,12 +836,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="対策の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fBP-LM-uWJ">
-                                <rect key="frame" x="20" y="124" width="374" height="34"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　対策の有効性" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UwF-Ia-l8E">
                                 <rect key="frame" x="0.0" y="186" width="414" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
@@ -869,6 +863,12 @@
                                     <action selector="checkButtonTap:" destination="YNk-XQ-KMM" eventType="touchUpInside" id="5l7-Ku-bGj"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="対策の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fBP-LM-uWJ">
+                                <rect key="frame" x="15" y="132" width="384" height="34"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="rKF-ge-Oqr"/>
@@ -882,7 +882,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4mj-OY-YH7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2526" y="1582"/>
+            <point key="canvasLocation" x="2524.6376811594205" y="1581.6964285714284"/>
         </scene>
         <!--解決済み-->
         <scene sceneID="Nku-13-Wal">
@@ -1030,8 +1030,8 @@
                                     <segue destination="Isl-yR-aQv" kind="unwind" unwindAction="goToResolvedTaskViewControllerWith_segue:" id="12Q-sg-k8f"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TWj-8x-6hO">
-                                <rect key="frame" x="20" y="121" width="374" height="34"/>
+                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="課題の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TWj-8x-6hO">
+                                <rect key="frame" x="15" y="129" width="384" height="34"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -1051,7 +1051,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BfP-j6-YQq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Isl-yR-aQv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4248" y="1582"/>
+            <point key="canvasLocation" x="4247.826086956522" y="1581.6964285714284"/>
         </scene>
         <!--対策の詳細-->
         <scene sceneID="Bf0-rB-wEZ">
@@ -1069,12 +1069,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="対策の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vgh-eO-NtU">
-                                <rect key="frame" x="20" y="132" width="374" height="34"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　対策の有効性" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4lT-ep-QaW">
                                 <rect key="frame" x="0.0" y="194" width="414" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
@@ -1103,6 +1097,12 @@
                                     <action selector="checkButtonTap:" destination="YNk-XQ-KMM" eventType="touchUpInside" id="v43-z2-Y58"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="対策の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vgh-eO-NtU">
+                                <rect key="frame" x="15" y="140" width="384" height="34"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="5F7-Cl-cRY"/>
@@ -1116,7 +1116,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nEF-Dl-agU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5054" y="1582"/>
+            <point key="canvasLocation" x="5053.6231884057979" y="1581.6964285714284"/>
         </scene>
         <!--設定-->
         <scene sceneID="dDU-p3-Ad6">
@@ -1442,7 +1442,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fIE-tp-2Yr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="9731.8840579710159" y="2473.6607142857142"/>
+            <point key="canvasLocation" x="9732" y="2884"/>
         </scene>
         <!--Add Competition Note View Controller-->
         <scene sceneID="gHj-wc-cSr">
@@ -1532,7 +1532,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T0q-jo-hBT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="0ae-u6-csv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="10660.869565217392" y="2372.5446428571427"/>
+            <point key="canvasLocation" x="10661" y="2783"/>
         </scene>
         <!--Add Competition Note Content View Controller-->
         <scene sceneID="fEl-kY-zr7">
@@ -1675,7 +1675,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mE4-Co-uji" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="11481.159420289856" y="2472.3214285714284"/>
+            <point key="canvasLocation" x="11481" y="2883"/>
         </scene>
     </scenes>
     <resources>

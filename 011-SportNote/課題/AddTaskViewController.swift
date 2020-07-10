@@ -22,6 +22,10 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
         
+        // テキストビューの枠線付け
+        causeTextView.layer.borderColor = UIColor.systemGray.cgColor
+        causeTextView.layer.borderWidth = 1.0
+        
         // taskIDの設定（データベースからの読み込みに時間がかかるため、画面起動時に行っておく）
         taskData.setNewTaskID()
     }

@@ -19,6 +19,10 @@ class ResolvedMeasuresDetailViewController: UIViewController {
         self.checkButton.setImage(uncheckedImage, for: .normal)
         self.checkButton.setImage(checkedImage, for: .selected)
 
+        // テキストビューの枠線付け
+        measuresEffectivenessTextView.layer.borderColor = UIColor.systemGray.cgColor
+        measuresEffectivenessTextView.layer.borderWidth = 1.0
+        
         // 受け取った対策データを表示
         printMeasuresData(taskData)
     }
