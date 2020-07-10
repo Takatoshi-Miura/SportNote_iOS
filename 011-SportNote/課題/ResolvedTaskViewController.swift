@@ -72,7 +72,8 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         // 行番号に合った課題データをラベルに表示する
         let resolvedTaskData = resolvedTaskDataArray[indexPath.row]
         cell.textLabel!.text = resolvedTaskData.getTaskTitle()
-        cell.detailTextLabel!.text = resolvedTaskData.getTaskCouse()
+        cell.detailTextLabel!.text = "原因：\(resolvedTaskData.getTaskCouse())"
+        cell.detailTextLabel?.textColor = UIColor.systemGray
         
         return cell
     }
