@@ -74,6 +74,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     var year:Int = 2020
     var month:Int = 1
     var date:Int = 1
+    var day:String = ""
     
     // 天候Picker
     let weatherPicker = UIPickerView()
@@ -110,6 +111,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         practiceNoteData.setYear(year)
         practiceNoteData.setMonth(month)
         practiceNoteData.setDate(date)
+        practiceNoteData.setDay(day)
         practiceNoteData.setWeather(weather[weatherIndex])
         practiceNoteData.setTemperature(temperature[temperatureIndex])
         
@@ -539,6 +541,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         month = Int("\(dateFormatter.string(from: now))")!
         dateFormatter.dateFormat = "d"
         date = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "E"
+        day = String(dateFormatter.string(from: datePicker.date))
         
         return returnText
     }
@@ -556,7 +560,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         month = Int("\(dateFormatter.string(from: datePicker.date))")!
         dateFormatter.dateFormat = "d"
         date = Int("\(dateFormatter.string(from: datePicker.date))")!
-        print("\(year)/\(month)/\(date)")
+        dateFormatter.dateFormat = "E"
+        day = String(dateFormatter.string(from: datePicker.date))
+        print("\(year)/\(month)/\(date)/\(day)")
         
         return returnText
     }

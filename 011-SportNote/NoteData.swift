@@ -18,6 +18,7 @@ class NoteData {
     private var year:Int  = 2020                // 年
     private var month:Int = 1                   // 月
     private var date:Int  = 1                   // 日
+    private var day:String = "日"               // 曜日
     private var weather:String = ""             // 天気
     private var temperature:Int = 0             // 気温
     private var physicalCondition:String = ""   // 体調
@@ -57,6 +58,10 @@ class NoteData {
     
     func setDate(_ date:Int) {
         self.date = date
+    }
+    
+    func setDay(_ day:String) {
+        self.day = day
     }
     
     func setWeather(_ weather:String) {
@@ -132,6 +137,10 @@ class NoteData {
     
     func getDate() -> Int {
         return self.date
+    }
+    
+    func getDay() -> String {
+        return self.day
     }
     
     func getWeather() -> String {
@@ -211,6 +220,7 @@ class NoteData {
             "year"              : self.year,
             "month"             : self.month,
             "date"              : self.date,
+            "day"               : self.day,
             "weather"           : self.weather,
             "temperature"       : self.temperature,
             "physicalCondition" : self.physicalCondition,
@@ -266,6 +276,7 @@ class NoteData {
                     noteData.setYear(dataCollection["year"] as! Int)
                     noteData.setMonth(dataCollection["month"] as! Int)
                     noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
                     noteData.setWeather(dataCollection["weather"] as! String)
                     noteData.setTemperature(dataCollection["temperature"] as! Int)
                     noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
@@ -341,7 +352,7 @@ class NoteData {
     
     // ノートセルに表示させるタイトルを取得するメソッド
     func getCellTitle() -> String {
-        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日:\(self.getWeather())\(self.getTemperature())℃"
+        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日(\(self.day))：\(self.getWeather())\(self.getTemperature())℃"
     }
     
 }

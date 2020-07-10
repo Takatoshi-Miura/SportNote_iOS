@@ -63,6 +63,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     var year:Int = 2020
     var month:Int = 1
     var date:Int = 1
+    var day:String = ""
     
     // 天候Picker
     let weatherPicker = UIPickerView()
@@ -98,6 +99,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         competitionNoteData.setYear(year)
         competitionNoteData.setMonth(month)
         competitionNoteData.setDate(date)
+        competitionNoteData.setDay(day)
         competitionNoteData.setWeather(weather[weatherIndex])
         competitionNoteData.setTemperature(temperature[temperatureIndex])
         
@@ -472,6 +474,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         month = Int("\(dateFormatter.string(from: now))")!
         dateFormatter.dateFormat = "d"
         date = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "E"
+        day = String(dateFormatter.string(from: datePicker.date))
         
         return returnText
     }
@@ -489,6 +493,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         month = Int("\(dateFormatter.string(from: datePicker.date))")!
         dateFormatter.dateFormat = "d"
         date = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "E"
+        day = String(dateFormatter.string(from: datePicker.date))
         
         return returnText
     }
