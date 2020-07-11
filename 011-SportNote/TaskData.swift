@@ -102,6 +102,12 @@ class TaskData {
         }
     }
     
+    // 対策を削除するメソッド
+    func removeMeasures(_ index:Int) {
+        self.measuresTitle.remove(at: index)
+        self.measuresEffectiveness.remove(at: index)
+    }
+    
     
     
     //MARK:- ゲッター

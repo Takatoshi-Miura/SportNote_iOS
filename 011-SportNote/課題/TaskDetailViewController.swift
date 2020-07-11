@@ -136,6 +136,45 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         performSegue(withIdentifier: "goMeasuresDetailViewController", sender: nil)
     }
     
+    // セルの編集可否設定
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    // セルを削除したときの処理（左スワイプ）
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // 削除処理かどうかの判定
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            // アラートダイアログを生成
+            let alertController = UIAlertController(title:"対策を削除",message:"対策を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+            
+            // OKボタンを宣言
+            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+                // OKボタンがタップされたときの処理
+                // 次回以降、この対策データを取得しないようにする
+                self.taskData.removeMeasures(indexPath.row)
+                    
+                // セルを削除
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }
+            //OKボタンを追加
+            alertController.addAction(okAction)
+            
+            //CANCELボタンを宣言
+            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            //CANCELボタンを追加
+            alertController.addAction(cancelButton)
+            
+            //アラートダイアログを表示
+            present(alertController,animated:true,completion:nil)
+        }
+    }
+    
+    // deleteの表示名を変更
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "削除"
+    }
+    
     
     
     //MARK:- 画面遷移
