@@ -317,6 +317,12 @@ class NoteData {
 
         // 変更する可能性のあるデータのみ更新
         taskData.updateData([
+            "year"              : self.year,
+            "month"             : self.month,
+            "date"              : self.date,
+            "day"               : self.day,
+            "weather"           : self.weather,
+            "temperature"       : self.temperature,
             "physicalCondition" : self.physicalCondition,
             "purpose"           : self.purpose,
             "detail"            : self.detail,

@@ -49,7 +49,26 @@ class NoteDetailViewController: UIViewController {
     
     // 編集ボタンの処理
     @IBAction func editButton(_ sender: Any) {
-        
+        if noteData.getNoteType() == "練習記録" {
+            // 練習記録追加画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "UpdatePracticeNoteViewController") as! UpdatePracticeNoteViewController
+            nextView.noteData = self.noteData
+            self.present(nextView, animated: true, completion: nil)
+        } else if noteData.getNoteType() == "大会記録" {
+            // 大会記録追加画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddCompetitionNoteViewController")
+            self.present(nextView, animated: true, completion: nil)
+        }
+    }
+    
+    
+    
+    //MARK:- 画面遷移
+    
+    // NoteDetailViewControllerに戻ったときの処理
+    @IBAction func goToNoteDetailViewController(_segue:UIStoryboardSegue) {
     }
     
     
