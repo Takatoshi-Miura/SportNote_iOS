@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/it6210/Documents/Program/Github/011-SportNote/011-SportNote/&#x30ce;&#x30fc;&#x30c8;/NoteDetailContentViewController.swift">
-   </FileRef>
-   <FileRef
       location = "group:011-SportNote.xcodeproj">
    </FileRef>
    <FileRef

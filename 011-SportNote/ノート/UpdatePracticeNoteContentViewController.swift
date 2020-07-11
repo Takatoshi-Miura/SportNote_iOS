@@ -16,12 +16,25 @@ class UpdatePracticeNoteContentViewController: AddPracticeNoteContentViewControl
         super.viewDidLoad()
         
         // 時間待ち(ノートデータ受け取り)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            // 初期値の設定(受け取ったnoteDataに値に設定)
+            self.temperatureIndex = self.noteData.getTemperature() + 40
+            self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
+            if self.noteData.getWeather() == "くもり" {
+                self.weatherIndex = 1
+            } else if self.noteData.getWeather() == "雨" {
+                self.weatherIndex = 2
+            }
+            self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
+            
             // テキストビューに値をセット
             self.physicalConditionTextView.text = self.noteData.getPhysicalCondition()
             self.purposeTextView.text = self.noteData.getPurpose()
             self.detailTextView.text = self.noteData.getDetail()
             self.reflectionTextView.text = self.noteData.getReflection()
+            
+            // テーブルビューを更新
+            self.tableView.reloadData()
         }
     }
     

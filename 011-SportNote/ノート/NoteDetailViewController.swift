@@ -58,7 +58,8 @@ class NoteDetailViewController: UIViewController {
         } else if noteData.getNoteType() == "大会記録" {
             // 大会記録追加画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "AddCompetitionNoteViewController")
+            let nextView = storyboard.instantiateViewController(withIdentifier: "UpdateCompetitionNoteViewController") as! UpdateCompetitionNoteViewController
+            nextView.noteData = self.noteData
             self.present(nextView, animated: true, completion: nil)
         }
     }
