@@ -167,6 +167,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 performSegue(withIdentifier: "goFreeNoteViewController", sender: nil)
             } else {
                 // ノートセルがタップされたとき
+                performSegue(withIdentifier: "goNoteDetailViewController", sender: nil)
             }
         }
     }

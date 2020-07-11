@@ -150,6 +150,7 @@
                     <connections>
                         <outlet property="tableView" destination="NKo-mz-uVK" id="mu0-0U-6sd"/>
                         <segue destination="HCb-bV-yRs" kind="show" identifier="goFreeNoteViewController" id="p4p-t4-Yj4"/>
+                        <segue destination="SYw-hC-7gT" kind="show" identifier="goNoteDetailViewController" id="xba-6F-7Hd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D7y-C0-dn4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1676,6 +1677,167 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mE4-Co-uji" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="11481" y="2883"/>
+        </scene>
+        <!--ノートの日付-->
+        <scene sceneID="H6t-6O-2QR">
+            <objects>
+                <viewController storyboardIdentifier="NoteDetailViewController" modalPresentationStyle="fullScreen" id="SYw-hC-7gT" customClass="NoteDetailViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1wu-nO-TQT">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jHS-63-S6H">
+                                <rect key="frame" x="0.0" y="56" width="414" height="703"/>
+                                <subviews>
+                                    <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fMQ-IU-6bH">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1239"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1200" id="wfQ-2f-EmF"/>
+                                        </constraints>
+                                        <connections>
+                                            <segue destination="Dx7-QX-lio" kind="embed" id="sgd-M9-Gk9"/>
+                                        </connections>
+                                    </containerView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="fMQ-IU-6bH" firstAttribute="leading" secondItem="KW4-ul-5GK" secondAttribute="leading" id="7RU-J1-uPS"/>
+                                    <constraint firstItem="fMQ-IU-6bH" firstAttribute="bottom" secondItem="KW4-ul-5GK" secondAttribute="bottom" id="B5Y-wE-gUt"/>
+                                    <constraint firstItem="fMQ-IU-6bH" firstAttribute="trailing" secondItem="KW4-ul-5GK" secondAttribute="trailing" id="KD5-dB-rRj"/>
+                                    <constraint firstItem="fMQ-IU-6bH" firstAttribute="top" secondItem="KW4-ul-5GK" secondAttribute="top" id="bnn-LW-g2C"/>
+                                    <constraint firstItem="fMQ-IU-6bH" firstAttribute="width" secondItem="Ylp-3v-IEI" secondAttribute="width" id="qx5-Fn-qhD"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="KW4-ul-5GK"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="Ylp-3v-IEI"/>
+                                <connections>
+                                    <outlet property="delegate" destination="SYw-hC-7gT" id="cIP-FC-AVM"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="jHS-63-S6H" firstAttribute="trailing" secondItem="Fen-AR-PSS" secondAttribute="trailing" id="14n-TE-iCy"/>
+                            <constraint firstItem="jHS-63-S6H" firstAttribute="top" secondItem="Fen-AR-PSS" secondAttribute="top" id="4X7-BP-2bK"/>
+                            <constraint firstItem="jHS-63-S6H" firstAttribute="leading" secondItem="Fen-AR-PSS" secondAttribute="leading" id="C96-qS-lhp"/>
+                            <constraint firstItem="jHS-63-S6H" firstAttribute="bottom" secondItem="Fen-AR-PSS" secondAttribute="bottom" id="hHb-Uc-zaW"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Fen-AR-PSS"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="ノートの日付" id="Gle-j7-YXx">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="aWU-Ax-DZ3">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MB9-mo-4tJ">
+                                <rect key="frame" x="302" y="11.5" width="92" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="編集"/>
+                                <connections>
+                                    <action selector="editButton:" destination="SYw-hC-7gT" eventType="touchUpInside" id="o0C-ei-ojq"/>
+                                    <action selector="saveButton:" destination="SYw-hC-7gT" eventType="touchUpInside" id="WjM-Q2-blB"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="scrollView" destination="jHS-63-S6H" id="iWs-PH-zXY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Psd-G7-D5r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="8940.579710144928" y="1582.3660714285713"/>
+        </scene>
+        <!--Note Detail Content View Controller-->
+        <scene sceneID="X4F-Wo-i7T">
+            <objects>
+                <viewController id="Dx7-QX-lio" customClass="NoteDetailContentViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ICb-KJ-ddE">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1239"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　体調" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fwZ-AO-Tfy">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="RI6-W1-FRD">
+                                <rect key="frame" x="20" y="38" width="374" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　練習の目的" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vwm-cH-MGX">
+                                <rect key="frame" x="0.0" y="104" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gE4-QY-Ren">
+                                <rect key="frame" x="20" y="142" width="374" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　練習内容" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DGE-GJ-fd1">
+                                <rect key="frame" x="0.0" y="208" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="q1x-GD-dqK">
+                                <rect key="frame" x="20" y="246" width="374" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　取り組んだ課題と対策の有効性" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmx-yx-6PP">
+                                <rect key="frame" x="-1" y="312" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　反省・気づいたこと" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1n-XN-S7V">
+                                <rect key="frame" x="-1" y="416" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dps-Gr-7Gl">
+                                <rect key="frame" x="20" y="454" width="374" height="173"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="BJl-su-dfD"/>
+                    </view>
+                    <connections>
+                        <outlet property="detailTextView" destination="q1x-GD-dqK" id="7v0-eI-AGw"/>
+                        <outlet property="physicalConditionTextView" destination="RI6-W1-FRD" id="Gbe-hR-15n"/>
+                        <outlet property="purposeTextView" destination="gE4-QY-Ren" id="gm7-T8-Y1l"/>
+                        <outlet property="reflectionTextView" destination="dps-Gr-7Gl" id="tA3-eO-SCV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6rS-fU-jpS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="9732" y="1683"/>
         </scene>
     </scenes>
     <resources>
