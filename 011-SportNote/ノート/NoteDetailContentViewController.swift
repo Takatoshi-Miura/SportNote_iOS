@@ -12,11 +12,9 @@ class NoteDetailContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // テキストビューに表示
-        physicalConditionTextView.text = ""
-        purposeTextView.text = ""
-        detailTextView.text = ""
-        reflectionTextView.text = ""
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+            self.printNoteData(self.noteData)
+        }
     }
     
     //MARK:- UIの設定
@@ -27,4 +25,24 @@ class NoteDetailContentViewController: UIViewController {
     @IBOutlet weak var reflectionTextView: UITextView!
     
 
+    
+    //MARK:- 変数の宣言
+    
+    // データ格納用
+    var noteData = NoteData()
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // テキストビューにnoteDataを表示するメソッド
+    func printNoteData(_ noteData:NoteData) {
+        // テキストビューに表示
+        physicalConditionTextView.text = noteData.getPhysicalCondition()
+        purposeTextView.text = noteData.getPurpose()
+        detailTextView.text = noteData.getDetail()
+        reflectionTextView.text = noteData.getReflection()
+    }
+    
+    
 }

@@ -95,6 +95,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
     var dataInSection:[[NoteData]] = [[]]
+    var sectionIndex:Int = 0
+    var rowIndex:Int = 0
     
     
     
@@ -166,6 +168,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // フリーノートセルがタップされたとき
                 performSegue(withIdentifier: "goFreeNoteViewController", sender: nil)
             } else {
+                // 選択されたIndexを取得
+                sectionIndex = indexPath.section
+                rowIndex = indexPath.row
+                
                 // ノートセルがタップされたとき
                 performSegue(withIdentifier: "goNoteDetailViewController", sender: nil)
             }
@@ -225,6 +231,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 表示するデータを確認画面へ渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
             freeNoteViewController.freeNoteData = freeNoteData
+        } else if segue.identifier == "goNoteDetailViewController" {
+            // 表示するデータを確認画面へ渡す
+            let noteDetailViewController = segue.destination as! NoteDetailViewController
+            noteDetailViewController.noteData = dataInSection[sectionIndex][rowIndex]
         }
     }
     
