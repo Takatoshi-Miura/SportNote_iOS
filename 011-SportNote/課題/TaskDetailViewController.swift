@@ -33,6 +33,9 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
+        
+        // ツールバーを作成
+        createToolBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -172,5 +175,30 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         self.view.endEditing(true)
     }
     
+    // ツールバーを作成するメソッド
+    func createToolBar() {
+        // ツールバーのインスタンスを作成
+        let toolBar = UIToolbar()
+
+        // ツールバーに配置するアイテムのインスタンスを作成
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
+
+        // アイテムを配置
+        toolBar.setItems([flexibleItem, okButton], animated: true)
+
+        // ツールバーのサイズを指定
+        toolBar.sizeToFit()
+        
+        // テキストフィールドにツールバーを設定
+        taskTitleTextField.inputAccessoryView = toolBar
+        taskCauseTextView.inputAccessoryView = toolBar
+    }
+    
+    // OKボタンの処理
+    @objc func tapOkButton(_ sender: UIButton){
+        // キーボードを閉じる
+        self.view.endEditing(true)
+    }
 
 }

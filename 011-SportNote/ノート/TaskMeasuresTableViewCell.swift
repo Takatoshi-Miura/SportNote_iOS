@@ -52,7 +52,5 @@ class TaskMeasuresTableViewCell: UITableViewCell {
         self.checkBox.setImage(checkedImage, for: .selected)
     }
     
-    // 
-    
     
 }

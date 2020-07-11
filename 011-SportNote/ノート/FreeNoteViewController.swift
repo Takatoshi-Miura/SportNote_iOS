@@ -25,6 +25,9 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
         // テキストビューの枠線付け
         detailTextView.layer.borderColor = UIColor.systemGray.cgColor
         detailTextView.layer.borderWidth = 1.0
+        
+        // ツールバーを作成
+        createToolBar()
     }
     
     
@@ -71,6 +74,32 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
     
     // テキストフィールド以外をタップでキーボードを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // ツールバーを作成するメソッド
+    func createToolBar() {
+        // ツールバーのインスタンスを作成
+        let toolBar = UIToolbar()
+
+        // ツールバーに配置するアイテムのインスタンスを作成
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
+
+        // アイテムを配置
+        toolBar.setItems([flexibleItem, okButton], animated: true)
+
+        // ツールバーのサイズを指定
+        toolBar.sizeToFit()
+        
+        // テキストフィールドにツールバーを設定
+        titleTextField.inputAccessoryView = toolBar
+        detailTextView.inputAccessoryView = toolBar
+    }
+    
+    // OKボタンの処理
+    @objc func tapOkButton(_ sender: UIButton){
+        // キーボードを閉じる
         self.view.endEditing(true)
     }
 
