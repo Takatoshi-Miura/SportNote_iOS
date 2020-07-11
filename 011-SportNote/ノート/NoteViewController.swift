@@ -152,7 +152,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
             // アラートダイアログを生成
-            let alertController = UIAlertController(title:"ノートを削除",message:"ノートを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+            let alertController = UIAlertController(title:"ノートを削除",message:"\(dataInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
             
             // OKボタンを宣言
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
@@ -219,7 +219,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         sectionIndex = sender.tag
         
         // アラートダイアログを生成
-        let alertController = UIAlertController(title:"目標を削除",message:"目標を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+        let alertController = UIAlertController(title:"目標を削除",message:"\(self.sectionTitle[self.sectionIndex])\nを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
         
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
