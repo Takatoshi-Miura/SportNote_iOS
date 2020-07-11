@@ -259,7 +259,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         if tableView.tag == 0 {
             return 44
         } else {
-            return 220
+            return 260
         }
     }
     

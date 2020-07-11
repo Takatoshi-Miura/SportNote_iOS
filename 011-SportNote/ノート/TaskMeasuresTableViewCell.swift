@@ -19,6 +19,16 @@ class TaskMeasuresTableViewCell: UITableViewCell {
     // テキストビュー
     @IBOutlet weak var effectivenessTextView: UITextView!
     
+    // チェックボックス
+    @IBOutlet weak var checkBox: UIButton!
+    private let checkedImage = UIImage(named: "check_on")
+    private let uncheckedImage = UIImage(named: "check_off")
+    
+    @IBAction func chexBox(_ sender: Any) {
+        // 選択状態を反転させる
+        self.checkBox.isSelected = !self.checkBox.isSelected
+    }
+    
     
     
     //MARK:- その他のメソッド
@@ -36,8 +46,13 @@ class TaskMeasuresTableViewCell: UITableViewCell {
         // テキストフィールドの枠線追加
         effectivenessTextView.layer.borderColor = UIColor.systemGray.cgColor
         effectivenessTextView.layer.borderWidth = 1.0
+        
+        // チェックボックスの設定
+        self.checkBox.setImage(uncheckedImage, for: .normal)
+        self.checkBox.setImage(checkedImage, for: .selected)
     }
     
+    // 
     
     
 }
