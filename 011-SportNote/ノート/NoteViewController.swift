@@ -29,60 +29,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
         // データ取得
-        freeNoteData.loadFreeNoteData()
-        target.loadTargetData()
-        noteData.loadNoteData()
-        
-        // 時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-            // テーブルデータ初期化
-            self.sectionTitleInit()
-            self.dataInSectionInit()
-            
-            // データ配列の受け取り
-            self.targetDataArray = self.target.targetDataArray
-            self.noteDataArray   = self.noteData.noteDataArray
-            
-            // targetDataArrayが空の時は更新しない（エラー対策）
-            if self.targetDataArray.isEmpty == false {
-                // テーブルデータ更新
-                for index in 0...(self.targetDataArray.count - 1) {
-                    // 年間目標と月間目標の区別
-                    if self.targetDataArray[index].getMonth() == 13 {
-                        // 年間目標セクション追加
-                        self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
-                        self.dataInSection.append([])
-                    } else {
-                        // 月間目標セクション追加
-                        self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
-                        
-                        // ノートデータ追加
-                        var noteArray:[NoteData] = []
-                        // noteDataArrayが空の時は更新しない（エラー対策）
-                        if self.noteDataArray.isEmpty == false {
-                            // 年,月が合致するノート数だけappendする。
-                            for count in 0...(self.noteDataArray.count - 1) {
-                                if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
-                                    && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
-                                    noteArray.append(self.noteDataArray[count])
-                                }
-                            }
-                        }
-                        self.dataInSection.append(noteArray)
-                    }
-                }
-            }
-        
-            // テーブルビューを更新
-            self.tableView?.reloadData()
-            
-            // HUDで処理中を非表示
-            SVProgressHUD.dismiss()
-        }
+        reloadData()
     }
     
     
@@ -231,6 +179,72 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect.zero)
+        
+        if section == 0 {
+            // フリーノートセクションは削除不可
+            // セクションラベルの設定
+            let label = UILabel(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 30))
+            label.text = "   \(sectionTitle[section])"
+            label.textAlignment = NSTextAlignment.left
+            label.backgroundColor = UIColor.systemGray5
+            label.textColor =  UIColor.black
+            view.addSubview(label)
+        } else {
+            // セクションラベルの設定
+            let label = UILabel(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 30))
+            label.text = "   \(sectionTitle[section])"
+            label.textAlignment = NSTextAlignment.left
+            label.backgroundColor = UIColor.systemGray5
+            label.textColor =  UIColor.black
+            
+            // セクションボタンの設定
+            let button = UIButton(frame: CGRect(x:self.view.frame.maxX - 50, y:0, width:50, height: 30))
+            button.backgroundColor = UIColor.systemRed
+            button.setTitle("削除", for: .normal)
+            button.tag = section //ボタンにタグをつける
+            button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
+            
+            // ビューを追加
+            view.addSubview(label)
+            view.addSubview(button)
+        }
+        return view
+    }
+    
+    @objc func buttonTapped(sender:UIButton){
+        sectionIndex = sender.tag
+        
+        // アラートダイアログを生成
+        let alertController = UIAlertController(title:"目標を削除",message:"目標を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+        
+        // OKボタンを宣言
+        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+            // OKボタンがタップされたときの処理
+            // ノートデータがない月のセクションであればセクションごと削除する
+            if self.dataInSection[self.sectionIndex].isEmpty == true {
+                self.dataInSection[self.sectionIndex - 1].removeAll()
+                self.targetDataArray[self.sectionIndex - 1].setIsDeleted(true)
+            } else {
+                // ノートがある場合は目標テキストをクリア
+                self.targetDataArray[self.sectionIndex - 1].setDetail("")
+            }
+            self.targetDataArray[self.sectionIndex - 1].updateTargetData()
+            self.reloadData()
+        }
+        //OKボタンを追加
+        alertController.addAction(okAction)
+        
+        //CANCELボタンを宣言
+        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        //CANCELボタンを追加
+        alertController.addAction(cancelButton)
+        
+        //アラートダイアログを表示
+        present(alertController,animated:true,completion:nil)
+    }
+    
     
     
     
@@ -270,5 +284,62 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dataInSection[0].append(dummyNoteData)
     }
     
+    // データを取得するメソッド
+    func reloadData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // データ取得
+        freeNoteData.loadFreeNoteData()
+        target.loadTargetData()
+        noteData.loadNoteData()
+        
+        // 時間待ち
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            // テーブルデータ初期化
+            self.sectionTitleInit()
+            self.dataInSectionInit()
+            
+            // データ配列の受け取り
+            self.targetDataArray = self.target.targetDataArray
+            self.noteDataArray   = self.noteData.noteDataArray
+            
+            // targetDataArrayが空の時は更新しない（エラー対策）
+            if self.targetDataArray.isEmpty == false {
+                // テーブルデータ更新
+                for index in 0...(self.targetDataArray.count - 1) {
+                    // 年間目標と月間目標の区別
+                    if self.targetDataArray[index].getMonth() == 13 {
+                        // 年間目標セクション追加
+                        self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
+                        self.dataInSection.append([])
+                    } else {
+                        // 月間目標セクション追加
+                        self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
+                        
+                        // ノートデータ追加
+                        var noteArray:[NoteData] = []
+                        // noteDataArrayが空の時は更新しない（エラー対策）
+                        if self.noteDataArray.isEmpty == false {
+                            // 年,月が合致するノート数だけappendする。
+                            for count in 0...(self.noteDataArray.count - 1) {
+                                if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
+                                    && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
+                                    noteArray.append(self.noteDataArray[count])
+                                }
+                            }
+                        }
+                        self.dataInSection.append(noteArray)
+                    }
+                }
+            }
+        
+            // テーブルビューを更新
+            self.tableView?.reloadData()
+            
+            // HUDで処理中を非表示
+            SVProgressHUD.dismiss()
+        }
+    }
     
 }

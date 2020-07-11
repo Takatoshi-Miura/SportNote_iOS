@@ -158,6 +158,29 @@ class TargetData {
             }
         }
     }
+    
+    // Firebaseのデータを更新するメソッド
+    func updateTargetData() {
+        // 更新日時を現在時刻にする
+        self.updated_at = getCurrentTime()
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let targetData = db.collection("TargetData").document("\(self.userID)_\(self.year)_\(self.month)")
+
+        // 変更する可能性のあるデータのみ更新
+        targetData.updateData([
+            "detail"     : self.detail,
+            "isDeleted"  : self.isDeleted,
+            "updated_at" : self.updated_at
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
+    }
 
     
         

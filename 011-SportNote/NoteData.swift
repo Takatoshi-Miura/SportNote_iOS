@@ -313,10 +313,10 @@ class NoteData {
         
         // 更新したい課題データを取得
         let db = Firestore.firestore()
-        let taskData = db.collection("NoteData").document("\(userID)_\(self.noteID)")
+        let noteData = db.collection("NoteData").document("\(userID)_\(self.noteID)")
 
         // 変更する可能性のあるデータのみ更新
-        taskData.updateData([
+        noteData.updateData([
             "year"              : self.year,
             "month"             : self.month,
             "date"              : self.date,
