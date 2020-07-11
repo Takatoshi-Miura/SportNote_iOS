@@ -20,6 +20,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.delegate = self
         tableView.dataSource = self
     
+        // 編集ボタンの設定(複数選択可能)
+        tableView.allowsMultipleSelectionDuringEditing = true
+        navigationItem.leftBarButtonItem = editButtonItem
+        
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
     }
@@ -111,6 +115,13 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         let storyboard: UIStoryboard = self.storyboard!
         let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
         self.present(nextView, animated: true, completion: nil)
+    }
+    
+    // 編集ボタンの処理
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        //tableViewの編集モードを切り替える
+        tableView.isEditing = editing
     }
     
     
