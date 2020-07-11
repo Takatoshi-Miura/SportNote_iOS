@@ -14,6 +14,19 @@ class NoteDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // タイトル文字列の設定
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.numberOfLines = 2
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
+        label.textAlignment = .center
+        if noteData.getNoteType() == "練習記録" {
+            label.textColor = .systemGreen
+        } else {
+            label.textColor = .systemRed
+        }
+        label.text = "\(noteData.getNavigationTitle())\n\(noteData.getNoteType())"
+        self.navigationItem.titleView = label
         
         // データを表示
         printNoteData(noteData)
