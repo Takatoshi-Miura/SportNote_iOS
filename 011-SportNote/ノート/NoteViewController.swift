@@ -68,6 +68,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // 編集ボタンの処理
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
+        tableView.reloadData()
         //tableViewの編集モードを切り替える
         tableView.isEditing = editing
     }
@@ -198,17 +199,18 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             label.textAlignment = NSTextAlignment.left
             label.backgroundColor = UIColor.systemGray5
             label.textColor =  UIColor.black
-            
-            // セクションボタンの設定
-            let button = UIButton(frame: CGRect(x:self.view.frame.maxX - 50, y:0, width:50, height: 30))
-            button.backgroundColor = UIColor.systemRed
-            button.setTitle("削除", for: .normal)
-            button.tag = section //ボタンにタグをつける
-            button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
-            
-            // ビューを追加
             view.addSubview(label)
-            view.addSubview(button)
+            
+            // 編集時の表示
+            if tableView.isEditing {
+                // セクションボタンの設定
+                let button = UIButton(frame: CGRect(x:self.view.frame.maxX - 50, y:0, width:50, height: 30))
+                button.backgroundColor = UIColor.systemRed
+                button.setTitle("削除", for: .normal)
+                button.tag = section //ボタンにタグをつける
+                button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
+                view.addSubview(button)
+            }
         }
         return view
     }
