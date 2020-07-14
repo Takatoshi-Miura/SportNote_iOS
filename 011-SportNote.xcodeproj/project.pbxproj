@@ -42,6 +42,8 @@
 		8DA4121824B06F0E002FD67A /* TargetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA4121724B06F0E002FD67A /* TargetData.swift */; };
 		8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */; };
 		8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6351324B47A1A00186358 /* TabBarController.swift */; };
+		8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */; };
+		8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */; };
 		8DB9155924AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */; };
 		8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */; };
 		8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */; };
@@ -90,6 +92,8 @@
 		8DA4121724B06F0E002FD67A /* TargetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetData.swift; sourceTree = "<group>"; };
 		8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteViewController.swift; sourceTree = "<group>"; };
 		8DA6351324B47A1A00186358 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
 		8DB9155824AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedMeasuresDetailViewController.swift; sourceTree = "<group>"; };
 		8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteContentViewController.swift; sourceTree = "<group>"; };
@@ -217,6 +221,8 @@
 				8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */,
 				8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */,
 				8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */,
+				8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */,
+				8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */,
 			);
 			path = "ノート";
 			sourceTree = "<group>";
@@ -297,6 +303,7 @@
 				8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */,
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
 				8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */,
+				8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +384,7 @@
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,
 				8D665D2924A17CD300441B32 /* SceneDelegate.swift in Sources */,
 				8D7853FE24A6FE0000CCA440 /* TaskDetailViewController.swift in Sources */,
+				8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */,
 				8D01653624AF202F00F9D69F /* AddNoteViewController.swift in Sources */,
 				8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */,
 				8D3585A924AB317800882A32 /* ResolvedTaskDetailViewController.swift in Sources */,
