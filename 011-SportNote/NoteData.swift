@@ -12,22 +12,26 @@ import Firebase
 class NoteData {
     
     //MARK:- 保持データ
-    static var noteCount:Int = 0                // ノートの数
-    private var noteID:Int = 0                  // ID
-    private var noteType:String = "練習記録"     // 種別（"練習記録" or "大会記録"）
-    private var year:Int  = 2020                // 年
-    private var month:Int = 1                   // 月
-    private var date:Int  = 1                   // 日
-    private var day:String = "日"               // 曜日
-    private var weather:String = ""             // 天気
-    private var temperature:Int = 0             // 気温
-    private var physicalCondition:String = ""   // 体調
-    private var purpose:String = ""             // 練習の目的
-    private var detail:String = ""              // 練習の内容
-    private var target:String = ""              // 目標
-    private var consciousness:String = ""       // 意識すること
-    private var result:String = ""              // 結果
-    private var reflection:String = ""          // 反省
+    static var noteCount:Int = 0                    // ノートの数
+    private var noteID:Int = 0                      // ID
+    private var noteType:String = "練習記録"         // 種別（"練習記録" or "大会記録"）
+    private var year:Int  = 2020                    // 年
+    private var month:Int = 1                       // 月
+    private var date:Int  = 1                       // 日
+    private var day:String = "日"                   // 曜日
+    private var weather:String = ""                 // 天気
+    private var temperature:Int = 0                 // 気温
+    private var physicalCondition:String = ""       // 体調
+    private var purpose:String = ""                 // 練習の目的
+    private var detail:String = ""                  // 練習の内容
+    private var target:String = ""                  // 目標
+    private var consciousness:String = ""           // 意識すること
+    private var result:String = ""                  // 結果
+    private var reflection:String = ""              // 反省
+    
+    private var taskTitle:[String] = []             // 課題タイトル
+    private var measuresTitle:[String] = []         // 対策タイトル
+    private var measuresEffectiveness:[String] = [] // 対策の有効性
     
     private var isDeleted:Bool = false          // 削除フラグ
     private var userID:String = ""              // ユーザーUID
@@ -98,6 +102,18 @@ class NoteData {
     
     func setReflection(_ reflection:String) {
         self.reflection = reflection
+    }
+    
+    func setTaskTitle(_ taskTitle:[String]) {
+        self.taskTitle = taskTitle
+    }
+    
+    func setMeasuresTitle(_ measuresTitle:[String]) {
+        self.measuresTitle = measuresTitle
+    }
+    
+    func setMeasuresEffectiveness(_ measuresEffectiveness:[String]) {
+        self.measuresEffectiveness = measuresEffectiveness
     }
     
     func setIsDeleted(_ isDeleted:Bool) {
@@ -179,6 +195,18 @@ class NoteData {
         return self.reflection
     }
     
+    func getTaskTitle() -> [String] {
+        return taskTitle
+    }
+    
+    func getMeasuresTitle() -> [String] {
+        return measuresTitle
+    }
+    
+    func getMeasuresEffectiveness() -> [String] {
+        return measuresEffectiveness
+    }
+    
     func getIsDeleted() -> Bool {
         return self.isDeleted
     }
@@ -215,25 +243,28 @@ class NoteData {
         // Firebaseにデータを保存
         let db = Firestore.firestore()
         db.collection("NoteData").document("\(self.userID)_\(self.noteID)").setData([
-            "noteID"            : self.noteID,
-            "noteType"          : self.noteType,
-            "year"              : self.year,
-            "month"             : self.month,
-            "date"              : self.date,
-            "day"               : self.day,
-            "weather"           : self.weather,
-            "temperature"       : self.temperature,
-            "physicalCondition" : self.physicalCondition,
-            "purpose"           : self.purpose,
-            "detail"            : self.detail,
-            "target"            : self.target,
-            "consciousness"     : self.consciousness,
-            "result"            : self.result,
-            "reflection"        : self.reflection,
-            "isDeleted"         : self.isDeleted,
-            "userID"            : self.userID,
-            "created_at"        : self.created_at,
-            "updated_at"        : self.updated_at
+            "noteID"                : self.noteID,
+            "noteType"              : self.noteType,
+            "year"                  : self.year,
+            "month"                 : self.month,
+            "date"                  : self.date,
+            "day"                   : self.day,
+            "weather"               : self.weather,
+            "temperature"           : self.temperature,
+            "physicalCondition"     : self.physicalCondition,
+            "purpose"               : self.purpose,
+            "detail"                : self.detail,
+            "target"                : self.target,
+            "consciousness"         : self.consciousness,
+            "result"                : self.result,
+            "reflection"            : self.reflection,
+            "taskTitle"             : self.taskTitle,
+            "measuresTitle"         : self.measuresTitle,
+            "measuresEffectiveness" : self.measuresEffectiveness,
+            "isDeleted"             : self.isDeleted,
+            "userID"                : self.userID,
+            "created_at"            : self.created_at,
+            "updated_at"            : self.updated_at
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -286,6 +317,9 @@ class NoteData {
                     noteData.setConsciousness(dataCollection["consciousness"] as! String)
                     noteData.setResult(dataCollection["result"] as! String)
                     noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
                     noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
                     noteData.setUserID(dataCollection["userID"] as! String)
                     noteData.setCreated_at(dataCollection["created_at"] as! String)
@@ -317,21 +351,24 @@ class NoteData {
 
         // 変更する可能性のあるデータのみ更新
         noteData.updateData([
-            "year"              : self.year,
-            "month"             : self.month,
-            "date"              : self.date,
-            "day"               : self.day,
-            "weather"           : self.weather,
-            "temperature"       : self.temperature,
-            "physicalCondition" : self.physicalCondition,
-            "purpose"           : self.purpose,
-            "detail"            : self.detail,
-            "target"            : self.target,
-            "consciousness"     : self.consciousness,
-            "result"            : self.result,
-            "reflection"        : self.reflection,
-            "isDeleted"         : self.isDeleted,
-            "updated_at"        : self.updated_at
+            "year"                  : self.year,
+            "month"                 : self.month,
+            "date"                  : self.date,
+            "day"                   : self.day,
+            "weather"               : self.weather,
+            "temperature"           : self.temperature,
+            "physicalCondition"     : self.physicalCondition,
+            "purpose"               : self.purpose,
+            "detail"                : self.detail,
+            "target"                : self.target,
+            "consciousness"         : self.consciousness,
+            "result"                : self.result,
+            "reflection"            : self.reflection,
+            "taskTitle"             : self.taskTitle,
+            "measuresTitle"         : self.measuresTitle,
+            "measuresEffectiveness" : self.measuresEffectiveness,
+            "isDeleted"             : self.isDeleted,
+            "updated_at"            : self.updated_at
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
@@ -340,8 +377,6 @@ class NoteData {
             }
         }
     }
-    
-    
   
     
     

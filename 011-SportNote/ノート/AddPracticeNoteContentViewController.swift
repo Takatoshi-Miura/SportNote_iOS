@@ -124,6 +124,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         practiceNoteData.setDetail(detailTextView.text!)
         practiceNoteData.setReflection(reflectionTextView.text!)
         
+        // 対策データをセット
+        var taskTitle:[String] = []
+        var measuresTitle:[String] = []
+        for num in 0...self.taskData.taskDataArray.count - 1 {
+            taskTitle.append(self.taskData.taskDataArray[num].getTaskTitle())
+            measuresTitle.append(self.taskData.taskDataArray[num].getMeasuresTitle(self.taskData.getMeasuresPriorityIndex()))
+        }
+        practiceNoteData.setTaskTitle(taskTitle)
+        practiceNoteData.setMeasuresTitle(measuresTitle)
+        //practiceNoteData.setMeasuresEffectiveness()
+        
         // データをFirebaseに保存
         practiceNoteData.saveNoteData()
         
