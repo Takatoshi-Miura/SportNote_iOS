@@ -151,6 +151,7 @@
                         <outlet property="tableView" destination="NKo-mz-uVK" id="mu0-0U-6sd"/>
                         <segue destination="HCb-bV-yRs" kind="show" identifier="goFreeNoteViewController" id="p4p-t4-Yj4"/>
                         <segue destination="RqT-kq-vcH" kind="show" identifier="goNoteDetailViewController" id="BGT-Xk-K49"/>
+                        <segue destination="ZFp-5s-vSW" kind="show" identifier="goCompetitionNoteDetailViewController" id="ILr-mH-cA9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D7y-C0-dn4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -324,7 +325,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oHy-mv-5HH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="mmr-1S-Y1R" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="9733" y="2798"/>
+            <point key="canvasLocation" x="10704" y="2798"/>
         </scene>
         <!--Add Target View Controller-->
         <scene sceneID="DeH-CK-s0u">
@@ -433,7 +434,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zqx-GW-OGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="b7J-O9-BiP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="8941" y="2798"/>
+            <point key="canvasLocation" x="9738" y="2798"/>
         </scene>
         <!--Free Note View Controller-->
         <scene sceneID="dVe-sH-KbY">
@@ -1173,7 +1174,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="14690" y="792"/>
+            <point key="canvasLocation" x="15829" y="792"/>
         </scene>
         <!--アカウント-->
         <scene sceneID="obn-lU-ZMC">
@@ -1205,7 +1206,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LRQ-nF-RHo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Xyz-8C-kZw" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="14690" y="1503"/>
+            <point key="canvasLocation" x="15829" y="1503"/>
         </scene>
         <!--通知-->
         <scene sceneID="wIC-22-pEa">
@@ -1221,7 +1222,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QvU-Zb-Mre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="15519" y="1503"/>
+            <point key="canvasLocation" x="16658" y="1503"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">
@@ -1299,7 +1300,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YX-CG-YNj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="13777" y="792"/>
+            <point key="canvasLocation" x="14916" y="792"/>
         </scene>
         <!--Add Practice Note Content View Controller-->
         <scene sceneID="e8I-2C-rCq">
@@ -1443,7 +1444,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fIE-tp-2Yr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10524.637681159422" y="2899.5535714285711"/>
+            <point key="canvasLocation" x="11497" y="2900"/>
         </scene>
         <!--Add Competition Note View Controller-->
         <scene sceneID="gHj-wc-cSr">
@@ -1533,7 +1534,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T0q-jo-hBT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="0ae-u6-csv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="11454" y="2798"/>
+            <point key="canvasLocation" x="12426" y="2798"/>
         </scene>
         <!--Add Competition Note Content View Controller-->
         <scene sceneID="fEl-kY-zr7">
@@ -1676,7 +1677,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mE4-Co-uji" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="12272" y="2899"/>
+            <point key="canvasLocation" x="13243" y="2899"/>
         </scene>
         <!--ノートの日付-->
         <scene sceneID="UwF-xO-AzF">
@@ -1796,6 +1797,124 @@
             </objects>
             <point key="canvasLocation" x="8940.579710144928" y="1581.6964285714284"/>
         </scene>
+        <!--ノートの日付-->
+        <scene sceneID="Uzc-da-LXQ">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="ZFp-5s-vSW" customClass="CompetitionNoteDetailViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="btB-s0-m7y">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　体調" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SXh-vS-J8p">
+                                <rect key="frame" x="0.0" y="88" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Pw8-x6-9Iz">
+                                <rect key="frame" x="20" y="126" width="374" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　目標" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dfv-c4-th4">
+                                <rect key="frame" x="0.0" y="192" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="aTv-uA-rph">
+                                <rect key="frame" x="20" y="230" width="374" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　意識すること" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IU1-Ox-lLN">
+                                <rect key="frame" x="0.0" y="296" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="uXi-8q-IbL">
+                                <rect key="frame" x="20" y="334" width="374" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　結果" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ojk-HC-wuZ">
+                                <rect key="frame" x="-1" y="400" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　反省・気づいたこと" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C4u-co-xoU">
+                                <rect key="frame" x="-1" y="504" width="414" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3ys-xb-rC4">
+                                <rect key="frame" x="21" y="438" width="374" height="58"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="H0B-f1-9o8">
+                                <rect key="frame" x="21" y="542" width="374" height="132"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="8oF-wa-iIF"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="ノートの日付" id="Jkc-hG-vrC">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="NTF-B1-yv3">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="87u-og-RkA">
+                                <rect key="frame" x="302" y="11.5" width="92" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="編集"/>
+                                <connections>
+                                    <action selector="editButton:" destination="RqT-kq-vcH" eventType="touchUpInside" id="0YF-0P-PsC"/>
+                                    <action selector="editButton:" destination="ZFp-5s-vSW" eventType="touchUpInside" id="ORn-L6-1ma"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="consciousnessTextView" destination="uXi-8q-IbL" id="amq-KW-cQ3"/>
+                        <outlet property="physicalConditionTextView" destination="Pw8-x6-9Iz" id="TUu-YM-xCR"/>
+                        <outlet property="reflectionTextView" destination="H0B-f1-9o8" id="3y0-wu-LlJ"/>
+                        <outlet property="resultTextView" destination="3ys-xb-rC4" id="iiS-pf-yXY"/>
+                        <outlet property="targetTextView" destination="aTv-uA-rph" id="Gwh-eW-Yoy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="biA-6g-Zcp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="9738" y="1582"/>
+        </scene>
         <!--Update Practice Note View Controller-->
         <scene sceneID="LmP-Oh-mSh">
             <objects>
@@ -1884,7 +2003,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UE1-Ju-cjl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Owh-6G-erR" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="9733" y="1582"/>
+            <point key="canvasLocation" x="10704" y="1582"/>
         </scene>
         <!--Update Practice Note Content View Controller-->
         <scene sceneID="jaN-dJ-UlK">
@@ -1988,15 +2107,6 @@
                                     <outlet property="delegate" destination="lGt-87-NJU" id="ood-bK-fwV"/>
                                 </connections>
                             </textView>
-                            <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oxn-Pm-lOK">
-                                <rect key="frame" x="0.0" y="580" width="414" height="336"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="pyG-qj-eD7" id="1Nc-ll-QCF"/>
-                                    <outlet property="delegate" destination="pyG-qj-eD7" id="GKb-El-sFP"/>
-                                </connections>
-                            </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　反省・気づいたこと" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F17-Mj-kUz">
                                 <rect key="frame" x="0.0" y="924" width="414" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
@@ -2013,6 +2123,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="f4e-HS-OlF">
+                                <rect key="frame" x="0.0" y="580" width="414" height="336"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Sk2-R9-nPQ" id="EyB-5W-T5L"/>
+                                    <outlet property="delegate" destination="Sk2-R9-nPQ" id="NTT-ct-tQc"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="MqN-OL-wuY"/>
@@ -2027,7 +2146,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="adn-32-Ysx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10524.637681159422" y="1682.8125"/>
+            <point key="canvasLocation" x="11497" y="1683"/>
         </scene>
         <!--Update Competition Note View Controller-->
         <scene sceneID="pP6-Xd-Gv5">
@@ -2049,7 +2168,7 @@
                                                 <state key="normal" title="戻る"/>
                                                 <connections>
                                                     <action selector="backButton:" destination="OaR-R4-4Tm" eventType="touchUpInside" id="OeB-uq-MUK"/>
-                                                    <segue destination="siy-XP-Q2r" kind="unwind" unwindAction="goToNoteDetailViewControllerWith_segue:" id="vPt-XI-etM"/>
+                                                    <segue destination="siy-XP-Q2r" kind="unwind" unwindAction="goToCompetitionNoteDetailViewControllerWith_segue:" id="yuf-gY-t73"/>
                                                 </connections>
                                             </button>
                                             <connections>
@@ -2117,7 +2236,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rRp-f2-QcX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="siy-XP-Q2r" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="11481" y="1582"/>
+            <point key="canvasLocation" x="12452" y="1582"/>
         </scene>
         <!--Update Competition Note Content View Controller-->
         <scene sceneID="VND-Q0-Q5b">
@@ -2260,7 +2379,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mpK-MI-qZb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="12300" y="1683"/>
+            <point key="canvasLocation" x="13272" y="1683"/>
         </scene>
     </scenes>
     <resources>

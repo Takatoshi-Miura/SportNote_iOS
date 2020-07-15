@@ -21,11 +21,7 @@ class NoteDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         label.numberOfLines = 2
         label.font = UIFont.boldSystemFont(ofSize: 16.0)
         label.textAlignment = .center
-        if noteData.getNoteType() == "練習記録" {
-            label.textColor = .systemGreen
-        } else {
-            label.textColor = .systemRed
-        }
+        label.textColor = .systemGreen
         label.text = "\(noteData.getNavigationTitle())\n\(noteData.getNoteType())"
         self.navigationItem.titleView = label
         
@@ -64,19 +60,11 @@ class NoteDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // 編集ボタンの処理
     @IBAction func editButton(_ sender: Any) {
-        if noteData.getNoteType() == "練習記録" {
-            // 練習記録追加画面に遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "UpdatePracticeNoteViewController") as! UpdatePracticeNoteViewController
-            nextView.noteData = self.noteData
-            self.present(nextView, animated: true, completion: nil)
-        } else if noteData.getNoteType() == "大会記録" {
-            // 大会記録追加画面に遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "UpdateCompetitionNoteViewController") as! UpdateCompetitionNoteViewController
-            nextView.noteData = self.noteData
-            self.present(nextView, animated: true, completion: nil)
-        }
+        // 練習記録追加画面に遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "UpdatePracticeNoteViewController") as! UpdatePracticeNoteViewController
+        nextView.noteData = self.noteData
+        self.present(nextView, animated: true, completion: nil)
     }
     
     

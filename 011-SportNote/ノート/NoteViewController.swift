@@ -148,7 +148,13 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 rowIndex = indexPath.row
                 
                 // ノートセルがタップされたとき
-                performSegue(withIdentifier: "goNoteDetailViewController", sender: nil)
+                if dataInSection[indexPath.section][indexPath.row].getNoteType() == "練習記録" {
+                    // 練習ノートセル
+                    performSegue(withIdentifier: "goNoteDetailViewController", sender: nil)
+                } else {
+                    // 大会ノートセル
+                    performSegue(withIdentifier: "goCompetitionNoteDetailViewController", sender: nil)
+                }
             }
         }
     }
@@ -315,6 +321,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else if segue.identifier == "goNoteDetailViewController" {
             // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! NoteDetailViewController
+            noteDetailViewController.noteData = dataInSection[sectionIndex][rowIndex]
+        } else if segue.identifier == "goCompetitionNoteDetailViewController" {
+            // 表示するデータを確認画面へ渡す
+            let noteDetailViewController = segue.destination as! CompetitionNoteDetailViewController
             noteDetailViewController.noteData = dataInSection[sectionIndex][rowIndex]
         }
     }
