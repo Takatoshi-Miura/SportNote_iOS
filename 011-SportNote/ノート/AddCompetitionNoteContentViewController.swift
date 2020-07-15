@@ -43,6 +43,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         
         // データ取得
         targetData.loadTargetData()
+        competitionNoteData.setNewNoteID()
         
         // ツールバーを作成
         createToolBar()
@@ -77,7 +78,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // データ格納用
     let targetData = TargetData()
-    
+    let competitionNoteData = NoteData()
     
     
     //MARK:- UIの設定
@@ -95,7 +96,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     // 保存ボタンの処理
     func saveButton() {
         // 大会ノートデータを作成
-        let competitionNoteData = NoteData()
         competitionNoteData.setNoteType("大会記録")
         
         // Pickerの選択項目をセット

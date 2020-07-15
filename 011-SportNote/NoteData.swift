@@ -132,6 +132,37 @@ class NoteData {
         self.updated_at = updated_at
     }
     
+    // 新規ノートのIDを設定するメソッド
+    func setNewNoteID() {
+        // ユーザーUIDをセット
+        setUserID(Auth.auth().currentUser!.uid)
+            
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+            
+        // 現在のユーザーのデータを取得する
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: userID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    //  ノートデータを取得
+                    let dataCollection = document.data()
+            
+                    // ノートIDの重複対策
+                    if dataCollection["noteID"] as! Int > NoteData.noteCount {
+                        NoteData.noteCount = dataCollection["noteID"] as! Int
+                    }
+                }
+            }
+            // 新規ノートIDはノート数+1で設定
+            NoteData.noteCount += 1
+            self.setNoteID(NoteData.noteCount)
+        }
+    }
+    
     
     
     //MARK:- ゲッター
@@ -229,10 +260,6 @@ class NoteData {
     
     // Firebaseにデータを保存するメソッド
     func saveNoteData() {
-        // ノートIDをセット
-        NoteData.noteCount += 1
-        setNoteID(NoteData.noteCount)
-        
         // 現在時刻をセット
         setCreated_at(getCurrentTime())
         setUpdated_at(created_at)

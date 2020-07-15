@@ -50,6 +50,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // データ取得
         targetData.loadTargetData()
         taskData.loadUnresolvedTaskData()
+        practiceNoteData.setNewNoteID()
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
             self.taskTableView?.reloadData()
@@ -89,6 +90,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // データ格納用
     let targetData = TargetData()
     let taskData = TaskData()
+    let practiceNoteData = NoteData()
     
     
     
@@ -107,7 +109,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // 保存ボタンの処理
     func saveButton() {
         // 練習ノートデータを作成
-        let practiceNoteData = NoteData()
         practiceNoteData.setNoteType("練習記録")
         
         // Pickerの選択項目をセット
@@ -127,13 +128,16 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 対策データをセット
         var taskTitle:[String] = []
         var measuresTitle:[String] = []
+        var measuresEffectiveness:[String] = []
         for num in 0...self.taskData.taskDataArray.count - 1 {
             taskTitle.append(self.taskData.taskDataArray[num].getTaskTitle())
             measuresTitle.append(self.taskData.taskDataArray[num].getMeasuresTitle(self.taskData.getMeasuresPriorityIndex()))
+            let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell  // FIX:セルを再利用するため、隠れているセルがある場合エラーとなる
+            measuresEffectiveness.append(cell.effectivenessTextView.text)
         }
         practiceNoteData.setTaskTitle(taskTitle)
         practiceNoteData.setMeasuresTitle(measuresTitle)
-        //practiceNoteData.setMeasuresEffectiveness()
+        practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
         
         // データをFirebaseに保存
         practiceNoteData.saveNoteData()

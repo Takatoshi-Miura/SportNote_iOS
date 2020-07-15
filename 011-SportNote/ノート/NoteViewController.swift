@@ -68,9 +68,20 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // 編集ボタンの処理
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        tableView.reloadData()
-        //tableViewの編集モードを切り替える
+        
+        if editing {
+            // 編集開始
+            self.editButtonItem.title = "完了"
+            self.editButtonItem.tintColor = UIColor.systemBlue
+        } else {
+            // 編集終了
+            self.editButtonItem.title = "編集"
+            self.editButtonItem.tintColor = UIColor.systemBlue
+            self.deleteRows()
+        }
+        // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
+        tableView.reloadData()
     }
     
     
@@ -117,7 +128,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 編集時の処理
         if tableView.isEditing {
-            // 選択されたセルの行番号を格納
+            // 選択肢にチェックが一つでも入ってたら「削除」を表示する。
+            if let _ = self.tableView.indexPathsForSelectedRows {
+                self.editButtonItem.title = "削除"
+                self.editButtonItem.tintColor = UIColor.systemRed
+            }
         } else {
             // 通常時の処理
             // タップしたときの選択色を消去
@@ -136,6 +151,45 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 performSegue(withIdentifier: "goNoteDetailViewController", sender: nil)
             }
         }
+    }
+    
+    // 複数のセルを削除
+    private func deleteRows() {
+        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
+            return
+        }
+        
+        // アラートダイアログを生成
+        let alertController = UIAlertController(title:"ノートを削除",message:"選択されたノートを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+        
+        // OKボタンを宣言
+        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+            // OKボタンがタップされたときの処理
+            // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
+            let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+            for indexPathList in sortedIndexPaths {
+                self.noteDataArray[indexPathList.row].setIsDeleted(true)
+                self.noteDataArray[indexPathList.row].updateNoteData()
+                self.noteDataArray.remove(at: indexPathList.row) // 選択肢のindexPathから配列の要素を削除
+                self.dataInSection[indexPathList.section].remove(at: indexPathList.row)
+            }
+            
+            // tableViewの行を削除
+            self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
+            
+            // 画面更新
+            self.reloadData()
+        }
+        //OKボタンを追加
+        alertController.addAction(okAction)
+        
+        //CANCELボタンを宣言
+        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        //CANCELボタンを追加
+        alertController.addAction(cancelButton)
+        
+        //アラートダイアログを表示
+        present(alertController,animated:true,completion:nil)
     }
     
     // セルの編集可否の設定

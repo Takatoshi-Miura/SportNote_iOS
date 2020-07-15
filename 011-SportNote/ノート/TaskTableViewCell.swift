@@ -24,7 +24,7 @@ class TaskTableViewCell: UITableViewCell {
     func printTaskData(_ noteData:NoteData,_ index:Int) {
         taskTitle.text             = noteData.getTaskTitle()[index]
         measuresTitle.text         = "対策：\(noteData.getMeasuresTitle()[index])"
-//        measuresEffectiveness.text = noteData.getMeasuresEffectiveness()[index]
+        measuresEffectiveness.text = noteData.getMeasuresEffectiveness()[index]
     }
     
 }

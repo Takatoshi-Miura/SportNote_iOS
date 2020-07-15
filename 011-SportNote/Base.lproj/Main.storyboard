@@ -1443,7 +1443,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fIE-tp-2Yr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10525" y="2900"/>
+            <point key="canvasLocation" x="10524.637681159422" y="2899.5535714285711"/>
         </scene>
         <!--Add Competition Note View Controller-->
         <scene sceneID="gHj-wc-cSr">
@@ -2023,12 +2023,11 @@
                         <outlet property="purposeTextView" destination="L9h-JV-BAX" id="Ufc-oA-l7W"/>
                         <outlet property="reflectionTextView" destination="2eq-ox-dUT" id="QQK-kH-haA"/>
                         <outlet property="tableView" destination="QNZ-gz-3OC" id="44r-o3-eWh"/>
-                        <outlet property="taskTableView" destination="oxn-Pm-lOK" id="73c-i7-OUO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="adn-32-Ysx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10525" y="1683"/>
+            <point key="canvasLocation" x="10524.637681159422" y="1682.8125"/>
         </scene>
         <!--Update Competition Note View Controller-->
         <scene sceneID="pP6-Xd-Gv5">
