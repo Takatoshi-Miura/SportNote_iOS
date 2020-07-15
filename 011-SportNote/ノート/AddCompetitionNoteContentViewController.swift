@@ -187,8 +187,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             // 種別セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // Pickerの初期化
             typeCellPickerInit()
@@ -201,8 +201,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
             }
         } else if indexPath.row == 1 {
             // 日付セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // Pickerの初期化
             datePickerInit()
@@ -215,8 +215,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
             }
         } else {
             // 天候セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // Pickerの初期化
             weatherPickerInit()
@@ -311,8 +311,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
         
         // テーブルビューを更新
@@ -332,8 +330,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
            
         // テーブルビューを更新
@@ -405,8 +401,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
            
         // テーブルビューを更新
@@ -451,8 +445,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
            
         // テーブルビューを更新
@@ -502,9 +494,16 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         return returnText
     }
     
-    // テキストフィールド以外をタップでキーボードを下げる設定
+    // テキストフィールド以外をタップでキーボードとPickerを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            self.pickerView.removeFromSuperview()
+        }
     }
     
     // ツールバーを作成するメソッド

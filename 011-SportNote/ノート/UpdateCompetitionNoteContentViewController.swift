@@ -97,8 +97,8 @@ class UpdateCompetitionNoteContentViewController: AddCompetitionNoteContentViewC
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             // 日付セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // Pickerの初期化
             datePickerInit()
@@ -111,8 +111,8 @@ class UpdateCompetitionNoteContentViewController: AddCompetitionNoteContentViewC
             }
         } else {
             // 天候セルがタップされた時
-            // スクロール禁止
-            //scrollView.isScrollEnabled = false
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // Pickerの初期化
             weatherPickerInit()

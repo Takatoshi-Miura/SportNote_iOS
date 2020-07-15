@@ -108,8 +108,8 @@ class UpdatePracticeNoteContentViewController: AddPracticeNoteContentViewControl
         if tableView.tag == 0 {
             if indexPath.row == 0 {
                 // 日付セルがタップされた時
-                // スクロール禁止
-                //scrollView.isScrollEnabled = false
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                 
                 // Pickerの初期化
                 datePickerInit()
@@ -122,8 +122,8 @@ class UpdatePracticeNoteContentViewController: AddPracticeNoteContentViewControl
                 }
             } else {
                 // 天候セルがタップされた時
-                // スクロール禁止
-                //scrollView.isScrollEnabled = false
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                 
                 // Pickerの初期化
                 weatherPickerInit()

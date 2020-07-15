@@ -224,8 +224,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         if tableView.tag == 0 {
             if indexPath.row == 0 {
                 // 種別セルがタップされた時
-                // スクロール禁止
-                //scrollView.isScrollEnabled = false
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                 
                 // Pickerの初期化
                 typeCellPickerInit()
@@ -238,8 +238,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 }
             } else if indexPath.row == 1 {
                 // 日付セルがタップされた時
-                // スクロール禁止
-                //scrollView.isScrollEnabled = false
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                 
                 // Pickerの初期化
                 datePickerInit()
@@ -252,8 +252,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 }
             } else {
                 // 天候セルがタップされた時
-                // スクロール禁止
-                //scrollView.isScrollEnabled = false
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                 
                 // Pickerの初期化
                 weatherPickerInit()
@@ -393,8 +393,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
         
         // テーブルビューを更新
@@ -414,8 +412,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
            
         // テーブルビューを更新
@@ -487,8 +483,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
            
         // テーブルビューを更新
@@ -533,8 +527,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
-            // スクロール許可
-            //self.scrollView.isScrollEnabled = true
         }
            
         // テーブルビューを更新
@@ -585,9 +577,16 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         return returnText
     }
     
-    // テキストフィールド以外をタップでキーボードを下げる設定
+    // テキストフィールド以外をタップでキーボードとPickerを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            self.pickerView.removeFromSuperview()
+        }
     }
     
     // ツールバーを作成するメソッド
