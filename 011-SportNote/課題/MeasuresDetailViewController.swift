@@ -61,6 +61,38 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         self.checkButton.isSelected = !self.checkButton.isSelected
     }
     
+    // 追加ボタンの処理
+    @IBAction func addButton(_ sender: Any) {
+        // アラートダイアログを生成
+        let alertController = UIAlertController(title:"有効性コメントを追加",message:"有効性を入力してください",preferredStyle:UIAlertController.Style.alert)
+        
+        // テキストエリアを追加
+        alertController.addTextField(configurationHandler:nil)
+        
+        // OKボタンを宣言
+        let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
+            // OKボタンがタップされたときの処理
+            if let textField = alertController.textFields?.first {
+                // 有効性の配列にコメントを追加。
+                self.taskData.addEffectiveness(self.taskData.getMeasuresTitle(self.indexPath), textField.text!)
+                
+                //テーブルに行が追加されたことをテーブルに通知
+                self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
+            }
+        }
+        //OKボタンを追加
+        alertController.addAction(okAction)
+        
+        //CANCELボタンを宣言
+        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        //CANCELボタンを追加
+        alertController.addAction(cancelButton)
+        
+        //アラートダイアログを表示
+        present(alertController,animated:true,completion:nil)
+    }
+    
+    
     
     
     //MARK:- テーブルビューの設定
@@ -86,7 +118,13 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskDetailViewController {
             // 対策データを更新
-            //taskData.updateMeasures(measuresTitleTextField.text!, measuresEffectivenessTextView.text!, indexPath)
+            if self.taskData.getMeasuresTitle(indexPath) == measuresTitleTextField.text {
+                // 何もしない
+            } else {
+                let effectiveness =  self.taskData.getMeasuresEffectiveness(self.taskData.getMeasuresTitle(indexPath))
+                self.taskData.deleteMeasures(indexPath)
+                taskData.addMeasures(measuresTitleTextField.text!,effectiveness)
+            }
             
             // チェックボックスが選択されている場合は、この対策を最有力にする
             if self.checkButton.isSelected {

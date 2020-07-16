@@ -66,6 +66,10 @@ class TaskData {
         self.measuresTitle = measuresTitle
     }
     
+    func setMeasuresTitle(_ measuresTitle:String,_ index:Int) {
+        self.measuresTitle[index] = measuresTitle
+    }
+    
     func setMeasuresEffectiveness(_ measuresEffectiveness:[String:[String]]) {
         self.measuresEffectiveness = measuresEffectiveness
     }
@@ -316,16 +320,15 @@ class TaskData {
         self.measuresEffectiveness[measuresTitle] = measuresEffectiveness
     }
     
-    // 対策を更新するメソッド
-    func updateMeasures(_ measuresTitle:String,_ measuresEffectiveness:[String],_ index:Int) {
-        self.measuresTitle[index] = measuresTitle
-        self.measuresEffectiveness[index as! String] = measuresEffectiveness
+    // 有効性コメントを追加するメソッド
+    func addEffectiveness(_ measuresTitle:String,_ effectiveness:String) {
+        self.measuresEffectiveness[measuresTitle]?.insert(effectiveness, at: 0)
     }
     
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
+        self.measuresEffectiveness[measuresTitle[index]] = []
         self.measuresTitle.remove(at: index)
-        self.measuresEffectiveness[index as! String] = []
     }
     
     // 解決、未解決を反転するメソッド
