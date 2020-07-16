@@ -8,20 +8,23 @@
 
 import UIKit
 
-class ResolvedMeasuresDetailViewController: UIViewController {
+class ResolvedMeasuresDetailViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     //MARK:- ライフサイクルメソッド
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // デリゲートの指定
+        tableView.delegate   = self
+        tableView.dataSource = self
+        
         // チェックボックスの設定
         self.checkButton.setImage(uncheckedImage, for: .normal)
         self.checkButton.setImage(checkedImage, for: .selected)
 
-        // テキストビューの枠線付け
-        measuresEffectivenessTextView.layer.borderColor = UIColor.systemGray.cgColor
-        measuresEffectivenessTextView.layer.borderWidth = 1.0
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
         
         // 受け取った対策データを表示
         printMeasuresData(taskData)
@@ -39,7 +42,10 @@ class ResolvedMeasuresDetailViewController: UIViewController {
     
     // テキスト
     @IBOutlet weak var measuresTitleTextField: UITextField!
-    @IBOutlet weak var measuresEffectivenessTextView: UITextView!
+    
+    // テーブルビュー
+    @IBOutlet weak var tableView: UITableView!
+    
     
     // チェックボックス
     @IBOutlet weak var checkButton: UIButton!
@@ -53,13 +59,28 @@ class ResolvedMeasuresDetailViewController: UIViewController {
     
     
     
+    //MARK:- テーブルビューの設定
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // 有効性コメント数を返却
+        return self.taskData.getMeasuresEffectiveness(self.taskData.getMeasuresTitle(indexPath)).count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // セルを取得
+        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
+        cell.textLabel!.text = self.taskData.getMeasuresEffectiveness(self.taskData.getMeasuresTitle(self.indexPath))[indexPath.row]
+        return cell
+    }
+    
+    
+    
     //MARK:- その他のメソッド
     
     // データを表示するメソッド
     func printMeasuresData(_ taskData:TaskData) {
         // テキストの表示
-        measuresTitleTextField.text        = taskData.getMeasuresTitle(indexPath)
-        //measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
+        measuresTitleTextField.text = taskData.getMeasuresTitle(indexPath)
         
         // 最有力の対策ならチェックボックスを選択済みにする
         if taskData.getMeasuresPriorityIndex() == indexPath {

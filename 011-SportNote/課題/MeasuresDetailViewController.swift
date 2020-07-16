@@ -111,7 +111,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     
     
-    
     //MARK:- 画面遷移
     
     // 前画面に戻るときに呼ばれる処理
@@ -142,7 +141,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     // データを表示するメソッド
     func printMeasuresData(_ taskData:TaskData) {
         // テキストの表示
-        measuresTitleTextField.text        = taskData.getMeasuresTitle(indexPath)
+        measuresTitleTextField.text = taskData.getMeasuresTitle(indexPath)
         
         // 最有力の対策ならチェックボックスを選択済みにする
         if taskData.getMeasuresPriorityIndex() == indexPath {
