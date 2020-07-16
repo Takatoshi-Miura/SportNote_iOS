@@ -66,7 +66,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskDetailViewController {
             // 対策データを更新
-            taskData.updateMeasures(measuresTitleTextField.text!, measuresEffectivenessTextView.text!, indexPath)
+            //taskData.updateMeasures(measuresTitleTextField.text!, measuresEffectivenessTextView.text!, indexPath)
             
             // チェックボックスが選択されている場合は、この対策を最有力にする
             if self.checkButton.isSelected {
@@ -85,7 +85,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     func printMeasuresData(_ taskData:TaskData) {
         // テキストの表示
         measuresTitleTextField.text        = taskData.getMeasuresTitle(indexPath)
-        measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
+        //measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
         
         // 最有力の対策ならチェックボックスを選択済みにする
         if taskData.getMeasuresPriorityIndex() == indexPath {

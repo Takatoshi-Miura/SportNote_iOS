@@ -82,7 +82,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             // OKボタンがタップされたときの処理
             if let textField = alertController.textFields?.first {
                 // データベースの対策データを追加
-                self.taskData.addMeasures(textField.text!, "練習後に対策の有効性を記入しましょう。")
+                self.taskData.addMeasures(textField.text!, [])
                 
                 // 対策タイトルの配列に入力値を挿入。先頭に挿入する
                 self.measuresTitleArray.insert(textField.text!,at:0)
@@ -119,7 +119,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         //行番号に合った対策データをラベルに表示する
         cell.textLabel!.text = taskData.getMeasuresTitle(indexPath.row)
-        cell.detailTextLabel?.text = "有効性：\(taskData.getMeasuresEffectiveness(indexPath.row))"
+        //cell.detailTextLabel?.text = "有効性：\(taskData.getMeasuresEffectiveness(indexPath.row))"
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
     }

@@ -78,7 +78,7 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
         
         //行番号に合った対策データをラベルに表示する
         cell.textLabel!.text = taskData.getMeasuresTitle(indexPath.row)
-        cell.detailTextLabel?.text = "有効性：\(taskData.getMeasuresEffectiveness(indexPath.row))"
+        //cell.detailTextLabel?.text = "有効性：\(taskData.getMeasuresEffectiveness(indexPath.row))"
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
     }

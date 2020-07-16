@@ -19,9 +19,9 @@ class TaskData {
     private var userID:String = ""              // ユーザーUID
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
-    private var measuresTitle:[String] = []             // 対策タイトル
-    private var measuresEffectiveness:[String] = []     // 対策の有効性
-    private var measuresPriorityIndex:Int = 0           // 最優先の対策が格納されているIndex
+    private var measuresTitle:[String] = []                     // 対策タイトル
+    private var measuresEffectiveness:[String:[String]] = [:]   // [対策タイトル,[対策の有効性]]
+    private var measuresPriorityIndex:Int = 0                   // 最優先の対策が格納されているIndex
     
     // 課題データを格納する配列
     var taskDataArray = [TaskData]()
@@ -66,7 +66,7 @@ class TaskData {
         self.measuresTitle = measuresTitle
     }
     
-    func setMeasuresEffectiveness(_ measuresEffectiveness:[String]) {
+    func setMeasuresEffectiveness(_ measuresEffectiveness:[String:[String]]) {
         self.measuresEffectiveness = measuresEffectiveness
     }
     
@@ -105,7 +105,7 @@ class TaskData {
     // 対策を削除するメソッド
     func removeMeasures(_ index:Int) {
         self.measuresTitle.remove(at: index)
-        self.measuresEffectiveness.remove(at: index)
+        self.measuresEffectiveness[index as! String] = nil
     }
     
     
@@ -127,8 +127,8 @@ class TaskData {
         return self.measuresTitle
     }
     
-    func getMeasuresEffectiveness(_ index:Int) -> String {
-        return self.measuresEffectiveness[index]
+    func getMeasuresEffectiveness(_ index:String) -> [String] {
+        return self.measuresEffectiveness[index]!
     }
     
     func getMeasuresPriorityIndex() -> Int {
@@ -165,7 +165,8 @@ class TaskData {
             "updated_at"     : self.updated_at,
             "measuresTitle"         : self.measuresTitle,
             "measuresEffectiveness" : self.measuresEffectiveness,
-            "measuresPriorityIndex" : self.measuresPriorityIndex
+            "measuresPriorityIndex" : self.measuresPriorityIndex,
+            "dictionary"            : ["0":["有効性１","有効性2"],"1":["有効性１"]]
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -210,7 +211,7 @@ class TaskData {
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
                     databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
-                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String])
+                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[String]])
                     databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
@@ -255,7 +256,7 @@ class TaskData {
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
                     databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
-                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String])
+                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[String]])
                     databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
@@ -310,21 +311,21 @@ class TaskData {
     }
     
     // 対策を追加するメソッド
-    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
+    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:[String]) {
         self.measuresTitle.insert(measuresTitle, at: 0)
-        self.measuresEffectiveness.insert(measuresEffectiveness, at: 0)
+        self.measuresEffectiveness[measuresTitle] = measuresEffectiveness
     }
     
     // 対策を更新するメソッド
-    func updateMeasures(_ measuresTitle:String,_ measuresEffectiveness:String,_ index:Int) {
+    func updateMeasures(_ measuresTitle:String,_ measuresEffectiveness:[String],_ index:Int) {
         self.measuresTitle[index] = measuresTitle
-        self.measuresEffectiveness[index] = measuresEffectiveness
+        self.measuresEffectiveness[index as! String] = measuresEffectiveness
     }
     
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
         self.measuresTitle.remove(at: index)
-        self.measuresEffectiveness.remove(at: index)
+        self.measuresEffectiveness[index as! String] = []
     }
     
     // 解決、未解決を反転するメソッド

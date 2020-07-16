@@ -139,6 +139,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         practiceNoteData.setMeasuresTitle(measuresTitle)
         practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
         
+        
         // データをFirebaseに保存
         practiceNoteData.saveNoteData()
         

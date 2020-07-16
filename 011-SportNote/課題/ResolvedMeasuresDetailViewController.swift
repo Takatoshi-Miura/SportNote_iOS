@@ -59,7 +59,7 @@ class ResolvedMeasuresDetailViewController: UIViewController {
     func printMeasuresData(_ taskData:TaskData) {
         // テキストの表示
         measuresTitleTextField.text        = taskData.getMeasuresTitle(indexPath)
-        measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
+        //measuresEffectivenessTextView.text = taskData.getMeasuresEffectiveness(indexPath)
         
         // 最有力の対策ならチェックボックスを選択済みにする
         if taskData.getMeasuresPriorityIndex() == indexPath {
