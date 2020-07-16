@@ -169,8 +169,8 @@ class TaskData {
             "updated_at"     : self.updated_at,
             "measuresTitle"         : self.measuresTitle,
             "measuresEffectiveness" : self.measuresEffectiveness,
-            "measuresPriorityIndex" : self.measuresPriorityIndex,
-            "dictionary"            : ["0":["有効性１","有効性2"],"1":["有効性１"]]
+            "measuresPriorityIndex" : self.measuresPriorityIndex
+            //"dictionary"            : ["0":["有効性１","有効性2"],"1":["有効性１"]]
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")

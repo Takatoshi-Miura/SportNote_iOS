@@ -130,14 +130,28 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         var measuresTitle:[String] = []
         var measuresEffectiveness:[String] = []
         for num in 0...self.taskData.taskDataArray.count - 1 {
+            // 課題タイトル
             taskTitle.append(self.taskData.taskDataArray[num].getTaskTitle())
-            measuresTitle.append(self.taskData.taskDataArray[num].getMeasuresTitle(self.taskData.getMeasuresPriorityIndex()))
-            let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell  // FIX:セルを再利用するため、隠れているセルがある場合エラーとなる
+            
+            // 対策タイトル
+            let measures = self.taskData.taskDataArray[num].getMeasuresTitle(self.taskData.taskDataArray[num].getMeasuresPriorityIndex())
+            measuresTitle.append(measures)
+            
+            // 対策の有効性   FIX:セルを再利用するため、隠れているセルがある場合エラーとなる
+            let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
             measuresEffectiveness.append(cell.effectivenessTextView.text)
+            
+            // チェックが入っていればTaskDataの有効性コメントに追加
+            if cell.checkBox.isSelected {
+                self.taskData.taskDataArray[num].addEffectiveness(measures, cell.effectivenessTextView.text)
+                self.taskData.taskDataArray[num].updateTaskData()
+            }
         }
         practiceNoteData.setTaskTitle(taskTitle)
         practiceNoteData.setMeasuresTitle(measuresTitle)
         practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
+        
+        
         
         
         // データをFirebaseに保存
