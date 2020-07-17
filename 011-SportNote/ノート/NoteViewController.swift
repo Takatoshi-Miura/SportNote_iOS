@@ -161,6 +161,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // 複数のセルを削除
     private func deleteRows() {
+        
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
         }
@@ -171,13 +172,16 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
             // OKボタンがタップされたときの処理
+            
             // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
             let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-            for indexPathList in sortedIndexPaths {
-                self.noteDataArray[indexPathList.row].setIsDeleted(true)
-                self.noteDataArray[indexPathList.row].updateNoteData()
-                self.noteDataArray.remove(at: indexPathList.row) // 選択肢のindexPathから配列の要素を削除
-                self.dataInSection[indexPathList.section].remove(at: indexPathList.row)
+            for num in 0...sortedIndexPaths.count - 1 {
+                // 選択されたノートを削除
+                self.dataInSection[sortedIndexPaths[num][0]][sortedIndexPaths[num][1]].setIsDeleted(true)
+                self.dataInSection[sortedIndexPaths[num][0]][sortedIndexPaths[num][1]].updateNoteData()
+                
+                // セルの個数を揃える
+                self.dataInSection[sortedIndexPaths[num][0]].remove(at: 0)
             }
             
             // tableViewの行を削除
