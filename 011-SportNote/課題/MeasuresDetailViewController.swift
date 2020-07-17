@@ -110,8 +110,8 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         let obj = taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row))
         
         // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
-        //let stringArray = Array(obj.keys)
-        //cell.textLabel!.text = "\(stringArray[0])"
+        let stringArray = Array(obj[0].keys)
+        cell.textLabel!.text = "\(stringArray[0])"
         return cell
     }
     
