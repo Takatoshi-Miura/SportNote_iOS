@@ -20,7 +20,7 @@ class TaskData {
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
     private var measuresTitle:[String] = []                         // 対策タイトル
-    private var measuresEffectiveness:[String:[String:Int]] = [:]   // [対策タイトル,[対策の有効性コメント：ノートID]]
+    private var measuresEffectiveness:[String:[[String:Int]]] = [:]   // [対策タイトル,[ [対策の有効性コメント：ノートID],[対策の有効性コメント：ノートID] ] ]
     private var measuresPriorityIndex:Int = 0                       // 最優先の対策が格納されているIndex
     
     // 課題データを格納する配列
@@ -70,7 +70,7 @@ class TaskData {
         self.measuresTitle[index] = measuresTitle
     }
     
-    func setMeasuresEffectiveness(_ measuresEffectiveness:[String:[String:Int]]) {
+    func setMeasuresEffectiveness(_ measuresEffectiveness:[String:[[String:Int]]]) {
         self.measuresEffectiveness = measuresEffectiveness
     }
     
@@ -126,7 +126,7 @@ class TaskData {
         return self.measuresTitle
     }
     
-    func getMeasuresEffectiveness(_ index:String) -> [String:Int] {
+    func getMeasuresEffectiveness(_ index:String) -> [[String:Int]] {
         return self.measuresEffectiveness[index]!
     }
     
@@ -167,7 +167,7 @@ class TaskData {
             "measuresTitle"         : self.measuresTitle,
             "measuresEffectiveness" : self.measuresEffectiveness,
             "measuresPriorityIndex" : self.measuresPriorityIndex,
-            "dictionary"            : ["対策タイトル":obj]
+            "dictionary"            : ["対策タイトル":[obj,obj]]
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -212,7 +212,7 @@ class TaskData {
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
                     databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
-                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[String:Int]])
+                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[[String:Int]]])
                     databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
@@ -257,7 +257,7 @@ class TaskData {
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
                     databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
-                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[String:Int]])
+                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[[String:Int]]])
                     databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
@@ -315,13 +315,13 @@ class TaskData {
     func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String,_ noteID:Int) {
         self.measuresTitle.insert(measuresTitle, at: 0)
         let obj = [measuresEffectiveness : noteID]
-        self.measuresEffectiveness[measuresTitle] = obj
-        //self.measuresEffectiveness[measuresTitle] = measuresEffectiveness
+        self.measuresEffectiveness.updateValue([obj], forKey: measuresTitle)
     }
     
     // 有効性コメントを追加するメソッド
-    func addEffectiveness(_ measuresTitle:String,_ effectiveness:String) {
-        //self.measuresEffectiveness[measuresTitle]?.insert(effectiveness, at: 0)
+    func addEffectiveness(_ measuresTitle:String,_ measuresEffectiveness:String,_ noteID:Int) {
+        let obj = [measuresEffectiveness : noteID]
+        self.measuresEffectiveness[measuresTitle]!.insert(obj, at: 0)
     }
     
     // 対策を削除するメソッド

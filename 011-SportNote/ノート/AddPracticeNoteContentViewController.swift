@@ -143,16 +143,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // チェックが入っていればTaskDataの有効性コメントに追加
             if cell.checkBox.isSelected {
-                self.taskData.taskDataArray[num].addEffectiveness(measures, cell.effectivenessTextView.text)
+                //self.taskData.taskDataArray[num].addEffectiveness(measures, cell.effectivenessTextView.text)
                 self.taskData.taskDataArray[num].updateTaskData()
             }
         }
         practiceNoteData.setTaskTitle(taskTitle)
         practiceNoteData.setMeasuresTitle(measuresTitle)
         practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
-        
-        
-        
         
         // データをFirebaseに保存
         practiceNoteData.saveNoteData()

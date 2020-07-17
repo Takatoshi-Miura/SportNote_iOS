@@ -127,8 +127,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             let obj = taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row))
             
             // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
-            let stringArray = Array(obj.keys)
-            cell.detailTextLabel?.text = "有効性：\(stringArray[0])"
+            //let stringArray = Array(obj.keys)
+            //cell.detailTextLabel?.text = "有効性：\(stringArray[0])"
         }
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
