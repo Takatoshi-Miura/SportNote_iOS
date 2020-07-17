@@ -82,7 +82,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             // OKボタンがタップされたときの処理
             if let textField = alertController.textFields?.first {
                 // データベースの対策データを追加
-                self.taskData.addMeasures(textField.text!, [])
+                self.taskData.addMeasures(textField.text!,"対策の有効性をコメントしましょう",0)
                 
                 // 対策タイトルの配列に入力値を挿入。先頭に挿入する
                 self.measuresTitleArray.insert(textField.text!,at:0)
@@ -122,7 +122,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         if taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row)).count == 0 {
             cell.detailTextLabel?.text = "有効性："
         } else {
-            cell.detailTextLabel?.text = "有効性：\(taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row))[0])"
+            cell.detailTextLabel?.text = "有効性：\(taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row)))"
         }
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
@@ -156,7 +156,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // OKボタンがタップされたときの処理
                 // 次回以降、この対策データを取得しないようにする
-                self.taskData.removeMeasures(indexPath.row)
+                self.taskData.deleteMeasures(indexPath.row)
                     
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
