@@ -122,7 +122,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         if taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row)).count == 0 {
             cell.detailTextLabel?.text = "有効性："
         } else {
-            cell.detailTextLabel?.text = "有効性：\(taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row)))"
+            let obj = taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row))
+            cell.detailTextLabel?.text = "有効性：\(obj.keys)"
         }
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
