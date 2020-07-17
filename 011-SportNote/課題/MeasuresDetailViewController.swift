@@ -128,7 +128,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             } else {
                 let effectiveness =  self.taskData.getMeasuresEffectiveness(self.taskData.getMeasuresTitle(indexPath))
                 self.taskData.deleteMeasures(indexPath)
-                //taskData.addMeasures(measuresTitleTextField.text!,effectiveness)
             }
             
             // チェックボックスが選択されている場合は、この対策を最有力にする

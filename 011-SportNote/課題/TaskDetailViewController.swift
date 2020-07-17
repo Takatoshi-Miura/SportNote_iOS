@@ -141,6 +141,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         // タップしたセルの行番号を取得
         self.indexPath = indexPath.row
+        print(indexPath.row)
         
         // 課題詳細確認画面へ遷移
         performSegue(withIdentifier: "goMeasuresDetailViewController", sender: nil)
@@ -163,9 +164,20 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 // OKボタンがタップされたときの処理
                 // 次回以降、この対策データを取得しないようにする
                 self.taskData.deleteMeasures(indexPath.row)
+                
+                // 削除した対策が最有力だった場合、他の対策を最有力にする
+                if indexPath.row == self.taskData.getMeasuresPriorityIndex() {
+                    self.taskData.setMeasuresPriorityIndex(0)
+                }
+                
+                // データを更新
+                self.taskData.updateTaskData()
                     
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+                
+                // リロード
+                tableView.reloadData()
             }
             //OKボタンを追加
             alertController.addAction(okAction)

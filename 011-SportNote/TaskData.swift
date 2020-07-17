@@ -19,9 +19,9 @@ class TaskData {
     private var userID:String = ""              // ユーザーUID
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
-    private var measuresTitle:[String] = []                         // 対策タイトル
+    private var measuresTitle:[String] = []                           // 対策タイトル
     private var measuresEffectiveness:[String:[[String:Int]]] = [:]   // [対策タイトル,[ [対策の有効性コメント：ノートID],[対策の有効性コメント：ノートID] ] ]
-    private var measuresPriorityIndex:Int = 0                       // 最優先の対策が格納されているIndex
+    private var measuresPriorityIndex:Int = 0                         // 最優先の対策が格納されているIndex
     
     // 課題データを格納する配列
     var taskDataArray = [TaskData]()
@@ -151,7 +151,7 @@ class TaskData {
         // ユーザーUIDを取得
         self.userID = Auth.auth().currentUser!.uid
         
-        let obj = ["有効性１":1,"有効性2":2]
+        //let obj = ["有効性１":1,"有効性2":2]
     
         // Firebaseにアクセス
         let db = Firestore.firestore()
@@ -167,7 +167,7 @@ class TaskData {
             "measuresTitle"         : self.measuresTitle,
             "measuresEffectiveness" : self.measuresEffectiveness,
             "measuresPriorityIndex" : self.measuresPriorityIndex,
-            "dictionary"            : ["対策タイトル":[obj,obj]]
+            //"dictionary"            : ["対策タイトル":[obj,obj]]
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -326,7 +326,7 @@ class TaskData {
     
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
-        //self.measuresEffectiveness[measuresTitle[index]] = []
+        self.measuresEffectiveness[measuresTitle[index]] = nil
         self.measuresTitle.remove(at: index)
     }
     
