@@ -69,7 +69,13 @@ class ResolvedMeasuresDetailViewController: UIViewController,UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // セルを取得
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
-        //cell.textLabel!.text = self.taskData.getMeasuresEffectiveness(self.taskData.getMeasuresTitle(self.indexPath))[indexPath.row]
+        
+        // 有効性コメントを取得
+        let obj = taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row))
+        
+        // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
+        let stringArray = Array(obj.keys)
+        cell.textLabel!.text = "\(stringArray[0])"
         return cell
     }
     

@@ -78,11 +78,16 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
         
         //行番号に合った対策データをラベルに表示する
         cell.textLabel!.text = taskData.getMeasuresTitle(indexPath.row)
+        
+        // 有効性コメントを取得
         if taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row)).count == 0 {
             cell.detailTextLabel?.text = "有効性："
         } else {
             let obj = taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row))
-            cell.detailTextLabel?.text = "有効性：\(obj.keys)"
+            
+            // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
+            let stringArray = Array(obj.keys)
+            cell.detailTextLabel?.text = "有効性：\(stringArray[0])"
         }
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
