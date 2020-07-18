@@ -70,8 +70,17 @@ class ResolvedMeasuresDetailViewController: UIViewController,UITableViewDelegate
         // セルを取得
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
         
-        // 有効性コメントを取得
-        cell.textLabel!.text = "\(self.taskData.getMeasuresEffectiveness(indexPath.row))"
+        // [有効性コメント:ノートID]配列を取得
+        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(self.indexPath)
+        
+        // 有効性コメントのみの配列を作成
+        var stringArray:[String] = []
+        for num in 0...effectivenessArray.count - 1 {
+            stringArray.append(contentsOf: effectivenessArray[num].keys)
+        }
+        
+        // 有効性コメントを取得＆返却
+        cell.textLabel!.text = "\(stringArray[indexPath.row])"
         return cell
     }
     
