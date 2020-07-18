@@ -122,7 +122,21 @@ class TaskData {
         return stringArray
     }
     
-    func getMeasuresEffectiveness(_ index:Int) -> [[String:Int]] {
+    func getMeasuresEffectiveness(_ index:Int) -> String {
+        // index番目の対策タイトルを取得
+        let measuresTitle = getMeasuresTitle(index)
+        
+        // 有効性コメントリストを取得
+        let measuresEffectivenessArray = self.measuresData[measuresTitle]!
+        
+        // .keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
+        let stringArray = Array(measuresEffectivenessArray[0].keys)
+        
+        // 先頭の有効性コメントを返却
+        return stringArray[0]
+    }
+    
+    func getMeasuresEffectivenessArray(_ index:Int) -> [[String:Int]] {
         // index番目の対策タイトルを取得
         let measuresTitle = getMeasuresTitle(index)
         // 有効性コメントリストを返却

@@ -102,7 +102,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 有効性コメント数を返却
-        return self.taskData.getMeasuresEffectiveness(indexPath).count
+        return self.taskData.getMeasuresEffectivenessArray(indexPath).count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -110,11 +110,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
         
         // 有効性コメントを取得
-        let obj = taskData.getMeasuresEffectiveness(indexPath.row)
-        
-        // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
-        let stringArray = Array(obj[0].keys)
-        cell.textLabel!.text = "\(stringArray[0])"
+        cell.textLabel!.text = "\(self.taskData.getMeasuresEffectiveness(indexPath.row))"
         return cell
     }
     
@@ -130,7 +126,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
                 // 何もしない
             } else {
                 // 名前が変更になる対策の"有効性コメントリスト"を取得
-                let effectiveness =  self.taskData.getMeasuresEffectiveness(indexPath)
+                let effectiveness =  self.taskData.getMeasuresEffectivenessArray(indexPath)
                 
                 // 古い名前の対策を削除
                 self.taskData.deleteMeasures(indexPath)

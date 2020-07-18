@@ -121,14 +121,10 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         cell.textLabel!.text = taskData.getMeasuresTitle(indexPath.row)
         
         // 有効性コメントを取得
-        if taskData.getMeasuresEffectiveness(indexPath.row).count == 0 {
+        if taskData.getMeasuresEffectivenessArray(indexPath.row).count == 0 {
             cell.detailTextLabel?.text = "有効性："
         } else {
-            let obj = taskData.getMeasuresEffectiveness(indexPath.row)
-            
-            // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
-            let stringArray = Array(obj[0].keys)
-            cell.detailTextLabel?.text = "有効性：\(stringArray[0])"
+            cell.detailTextLabel?.text = "有効性：\(self.taskData.getMeasuresEffectiveness(indexPath.row))"
         }
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell

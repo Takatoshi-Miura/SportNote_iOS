@@ -63,7 +63,7 @@ class ResolvedMeasuresDetailViewController: UIViewController,UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 有効性コメント数を返却
-        return self.taskData.getMeasuresEffectiveness(indexPath).count
+        return self.taskData.getMeasuresEffectivenessArray(indexPath).count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,11 +71,7 @@ class ResolvedMeasuresDetailViewController: UIViewController,UITableViewDelegate
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
         
         // 有効性コメントを取得
-        let obj = taskData.getMeasuresEffectiveness(indexPath.row)
-        
-        // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
-        let stringArray = Array(obj[0].keys)
-        cell.textLabel!.text = "\(stringArray[0])"
+        cell.textLabel!.text = "\(self.taskData.getMeasuresEffectiveness(indexPath.row))"
         return cell
     }
     
