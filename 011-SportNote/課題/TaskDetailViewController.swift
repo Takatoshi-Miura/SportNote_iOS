@@ -25,7 +25,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         printTaskData(taskData)
         
         // TaskViewControllerから受け取った課題データの対策を取得
-        measuresTitleArray = taskData.getAllMeasuresTitle()
+        measuresTitleArray = taskData.getMeasuresTitleArray()
         
         // テキストビューの枠線付け
         taskCauseTextView.layer.borderColor = UIColor.systemGray.cgColor
@@ -109,7 +109,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     // 対策の数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskData.getAllMeasuresTitle().count
+        return taskData.getMeasuresTitleArray().count
     }
     
     // テーブルの行ごとのセルを返却する

@@ -37,7 +37,7 @@ class TaskMeasuresTableViewCell: UITableViewCell {
     func printTaskData(_ taskData:TaskData) {
         // ラベルに表示
         taskTitleLabel.text = taskData.getTaskTitle()
-        if taskData.getAllMeasuresTitle().isEmpty == true {
+        if taskData.getMeasuresTitleArray().isEmpty == true {
             taskMeasuresTitleLabel.text = "対策が未登録です"
         } else {
             taskMeasuresTitleLabel.text = "対策：\(taskData.getMeasuresTitle(taskData.getMeasuresPriorityIndex()))"

@@ -116,7 +116,7 @@ class TaskData {
         return stringArray[index]
     }
     
-    func getAllMeasuresTitle() -> [String] {
+    func getMeasuresTitleArray() -> [String] {
         // キーだけの配列を作成（.keysで取得すると[""]が付いてしまうため、これを防止する）
         let stringArray = Array(self.measuresData.keys)
         return stringArray
@@ -322,6 +322,18 @@ class TaskData {
         let obj = [measuresEffectiveness : 0]
         // [対策タイトル：[対策の有効性コメント：ノートID]]の形式で追加
         self.measuresData.updateValue([obj], forKey: measuresTitle)
+    }
+    
+    // 対策タイトルを更新するメソッド
+    func updateMeasuresTitle(_ newMeasuresTitle:String,_ index:Int) {
+        // 名前が変更になる対策の"有効性コメントリスト"を取得
+        let effectivenessArray = getMeasuresEffectivenessArray(index)
+        
+        // 古い名前の対策を削除
+        self.deleteMeasures(index)
+        
+        // 新しい名前の対策を追加
+        self.measuresData.updateValue(effectivenessArray, forKey: newMeasuresTitle)
     }
     
     // 有効性コメントを追加するメソッド（ノート追加時に使用するメソッド）
