@@ -138,22 +138,28 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         var taskTitle:[String] = []
         var measuresTitle:[String] = []
         var measuresEffectiveness:[String] = []
-        for num in 0...self.taskData.taskDataArray.count - 1 {
-            // 課題タイトル
-            taskTitle.append(self.taskData.taskDataArray[num].getTaskTitle())
-            
-            // 対策タイトル
-            let measures = self.taskData.taskDataArray[num].getMeasuresTitleArray()[self.taskData.taskDataArray[num].getMeasuresPriorityIndex()]
-            measuresTitle.append(measures)
-            
-            // 対策の有効性   FIX:セルを再利用するため、隠れているセルがある場合エラーとなる
-            let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
-            measuresEffectiveness.append(cell.effectivenessTextView.text)
-            
-            // チェックが入っていればTaskDataの有効性コメントに追加
-            if cell.checkBox.isSelected {
-                self.taskData.taskDataArray[num].addEffectiveness(measures, cell.effectivenessTextView.text,self.practiceNoteData.getNoteID())
-                self.taskData.taskDataArray[num].updateTaskData()
+        
+        // 課題を全て非表示にした際のエラー対策
+        if self.taskData.taskDataArray.isEmpty == true {
+            // 何もしない
+        } else {
+            for num in 0...self.taskData.taskDataArray.count - 1 {
+                // 課題タイトル
+                taskTitle.append(self.taskData.taskDataArray[num].getTaskTitle())
+                
+                // 対策タイトル
+                let measures = self.taskData.taskDataArray[num].getMeasuresTitleArray()[self.taskData.taskDataArray[num].getMeasuresPriorityIndex()]
+                measuresTitle.append(measures)
+                
+                // 対策の有効性   FIX:セルを再利用するため、隠れているセルがある場合エラーとなる
+                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+                measuresEffectiveness.append(cell.effectivenessTextView.text)
+                
+                // チェックが入っていればTaskDataの有効性コメントに追加
+                if cell.checkBox.isSelected {
+                    self.taskData.taskDataArray[num].addEffectiveness(measures, cell.effectivenessTextView.text,self.practiceNoteData.getNoteID())
+                    self.taskData.taskDataArray[num].updateTaskData()
+                }
             }
         }
         practiceNoteData.setTaskTitle(taskTitle)
