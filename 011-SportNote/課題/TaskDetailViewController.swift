@@ -82,7 +82,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             // OKボタンがタップされたときの処理
             if let textField = alertController.textFields?.first {
                 // データベースの対策データを追加
-                self.taskData.addMeasures(textField.text!,"対策の有効性をコメントしましょう",0)
+                self.taskData.addMeasures(textField.text!,"対策の有効性をコメントしましょう")
                 
                 // 対策タイトルの配列に入力値を挿入。先頭に挿入する
                 self.measuresTitleArray.insert(textField.text!,at:0)

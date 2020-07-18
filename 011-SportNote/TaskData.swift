@@ -126,8 +126,8 @@ class TaskData {
         return self.measuresTitle
     }
     
-    func getMeasuresEffectiveness(_ index:String) -> [[String:Int]] {
-        return self.measuresEffectiveness[index]!
+    func getMeasuresEffectiveness(_ measuresTitle:String) -> [[String:Int]] {
+        return self.measuresEffectiveness[measuresTitle]!
     }
     
     func getMeasuresPriorityIndex() -> Int {
@@ -311,14 +311,14 @@ class TaskData {
         return dateFormatter.string(from: now)
     }
     
-    // 対策を追加するメソッド
-    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String,_ noteID:Int) {
+    // 対策を追加するメソッド（ノート追加時には使用しないメソッドのため、ノートIDは存在しない0番を設定）
+    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
         self.measuresTitle.insert(measuresTitle, at: 0)
-        let obj = [measuresEffectiveness : noteID]
+        let obj = [measuresEffectiveness : 0]
         self.measuresEffectiveness.updateValue([obj], forKey: measuresTitle)
     }
     
-    // 有効性コメントを追加するメソッド
+    // 有効性コメントを追加するメソッド（ノート追加時に使用するメソッド）
     func addEffectiveness(_ measuresTitle:String,_ measuresEffectiveness:String,_ noteID:Int) {
         let obj = [measuresEffectiveness : noteID]
         self.measuresEffectiveness[measuresTitle]!.insert(obj, at: 0)

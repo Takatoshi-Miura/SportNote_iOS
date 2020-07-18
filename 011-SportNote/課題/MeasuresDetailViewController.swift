@@ -76,6 +76,9 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
                 // 有効性の配列にコメントを追加。
                 self.taskData.addEffectiveness(self.taskData.getMeasuresTitle(self.indexPath), textField.text!,0)
                 
+                // データを更新
+                self.taskData.updateTaskData()
+                
                 //テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
             }
@@ -126,8 +129,12 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             if self.taskData.getMeasuresTitle(indexPath) == measuresTitleTextField.text {
                 // 何もしない
             } else {
+                // 名前が変更になる対策の"有効性コメントリスト"を取得
                 let effectiveness =  self.taskData.getMeasuresEffectiveness(self.taskData.getMeasuresTitle(indexPath))
+                
+                // 古い名前の対策を削除
                 self.taskData.deleteMeasures(indexPath)
+                
             }
             
             // チェックボックスが選択されている場合は、この対策を最有力にする
