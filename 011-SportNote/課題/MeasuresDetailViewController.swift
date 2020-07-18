@@ -74,7 +74,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             // OKボタンがタップされたときの処理
             if let textField = alertController.textFields?.first {
                 // 有効性の配列にコメントを追加。
-                //self.taskData.addEffectiveness(self.taskData.getMeasuresTitle(self.indexPath), textField.text!)
+                self.taskData.addEffectiveness(self.taskData.getMeasuresTitle(self.indexPath), textField.text!,0)
                 
                 //テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
