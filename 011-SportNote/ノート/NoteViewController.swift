@@ -179,16 +179,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // 選択されたノートを削除
                 self.dataInSection[sortedIndexPaths[num][0]][sortedIndexPaths[num][1]].setIsDeleted(true)
                 self.dataInSection[sortedIndexPaths[num][0]][sortedIndexPaths[num][1]].updateNoteData()
-                
-                // セルの個数を揃える
-                self.dataInSection[sortedIndexPaths[num][0]].remove(at: 0)
+            }
+            
+            for _ in 0...sortedIndexPaths.count - 1 {
+                // セルの個数を揃える(上記のループ内にまとめると削除が正常に完了しないため、このループに記述)
+                self.dataInSection[sortedIndexPaths[0][0]].remove(at: 0)
             }
             
             // tableViewの行を削除
             self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
-            
-            // 画面更新
-            self.reloadData()
         }
         //OKボタンを追加
         alertController.addAction(okAction)
