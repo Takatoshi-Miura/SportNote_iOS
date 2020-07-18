@@ -80,10 +80,10 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
         cell.textLabel!.text = taskData.getMeasuresTitle(indexPath.row)
         
         // 有効性コメントを取得
-        if taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row)).count == 0 {
+        if taskData.getMeasuresEffectiveness(indexPath.row).count == 0 {
             cell.detailTextLabel?.text = "有効性："
         } else {
-            let obj = taskData.getMeasuresEffectiveness(taskData.getMeasuresTitle(indexPath.row))
+            let obj = taskData.getMeasuresEffectiveness(indexPath.row)
             
             // obj.keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
             let stringArray = Array(obj[0].keys)
