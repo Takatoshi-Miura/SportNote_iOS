@@ -68,7 +68,7 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
     
     // 対策の数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskData.getMeasuresCount()
+        return taskData.getAllMeasuresTitle().count
     }
     
     // テーブルの行ごとのセルを返却する

@@ -19,8 +19,7 @@ class TaskData {
     private var userID:String = ""              // ユーザーUID
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
-    private var measuresTitle:[String] = []                           // 対策タイトル
-    private var measuresEffectiveness:[String:[[String:Int]]] = [:]   // [対策タイトル,[ [対策の有効性コメント：ノートID],[対策の有効性コメント：ノートID] ] ]
+    private var measuresData:[String:[[String:Int]]] = [:]   // [対策タイトル,[ [対策の有効性コメント：ノートID],[対策の有効性コメント：ノートID] ] ]
     private var measuresPriorityIndex:Int = 0                         // 最優先の対策が格納されているIndex
     
     // 課題データを格納する配列
@@ -62,16 +61,8 @@ class TaskData {
         self.updated_at = updated_at
     }
     
-    func setMeasuresTitle(_ measuresTitle:[String]) {
-        self.measuresTitle = measuresTitle
-    }
-    
-    func setMeasuresTitle(_ measuresTitle:String,_ index:Int) {
-        self.measuresTitle[index] = measuresTitle
-    }
-    
-    func setMeasuresEffectiveness(_ measuresEffectiveness:[String:[[String:Int]]]) {
-        self.measuresEffectiveness = measuresEffectiveness
+    func setMeasuresData(_ measuresData:[String:[[String:Int]]]) {
+        self.measuresData = measuresData
     }
     
     func setMeasuresPriorityIndex(_ measuresPriorityIndex:Int) {
@@ -119,23 +110,24 @@ class TaskData {
     }
     
     func getMeasuresTitle(_ index:Int) -> String {
-        return self.measuresTitle[index]
+        // キーだけの配列を作成（.keysで取得すると[""]が付いてしまうため、これを防止する）
+        let stringArray = Array(self.measuresData.keys)
+        // index番目の対策タイトルを返却
+        return stringArray[index]
     }
     
     func getAllMeasuresTitle() -> [String] {
-        return self.measuresTitle
+        // キーだけの配列を作成（.keysで取得すると[""]が付いてしまうため、これを防止する）
+        let stringArray = Array(self.measuresData.keys)
+        return stringArray
     }
     
     func getMeasuresEffectiveness(_ measuresTitle:String) -> [[String:Int]] {
-        return self.measuresEffectiveness[measuresTitle]!
+        return self.measuresData[measuresTitle]!
     }
     
     func getMeasuresPriorityIndex() -> Int {
         return self.measuresPriorityIndex
-    }
-    
-    func getMeasuresCount() -> Int {
-        return self.measuresTitle.count
     }
     
     
@@ -164,9 +156,8 @@ class TaskData {
             "userID"         : self.userID,
             "created_at"     : self.created_at,
             "updated_at"     : self.updated_at,
-            "measuresTitle"         : self.measuresTitle,
-            "measuresEffectiveness" : self.measuresEffectiveness,
-            "measuresPriorityIndex" : self.measuresPriorityIndex,
+            "measuresData"   : self.measuresData,
+            "measuresPriorityIndex" : self.measuresPriorityIndex
             //"dictionary"            : ["対策タイトル":[obj,obj]]
         ]) { err in
             if let err = err {
@@ -211,8 +202,7 @@ class TaskData {
                     databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
-                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[[String:Int]]])
+                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
                     databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
@@ -256,8 +246,7 @@ class TaskData {
                     databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresTitle(taskDataCollection["measuresTitle"] as! [String])
-                    databaseTaskData.setMeasuresEffectiveness(taskDataCollection["measuresEffectiveness"] as! [String:[[String:Int]]])
+                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
                     databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
                     
                     // 課題データを格納
@@ -286,8 +275,7 @@ class TaskData {
             "taskAchievement": self.taskAchievement,
             "isDeleted"      : self.isDeleted,
             "updated_at"     : self.updated_at,
-            "measuresTitle"         : self.measuresTitle,
-            "measuresEffectiveness" : self.measuresEffectiveness,
+            "measuresData"   : self.measuresData,
             "measuresPriorityIndex" : self.measuresPriorityIndex
         ]) { err in
             if let err = err {
@@ -313,21 +301,21 @@ class TaskData {
     
     // 対策を追加するメソッド（ノート追加時には使用しないメソッドのため、ノートIDは存在しない0番を設定）
     func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
-        self.measuresTitle.insert(measuresTitle, at: 0)
+        // Firebaseはリストされた配列を扱えないため、[対策の有効性コメント：ノートID]型のオブジェクトを作成
         let obj = [measuresEffectiveness : 0]
-        self.measuresEffectiveness.updateValue([obj], forKey: measuresTitle)
+        // [対策タイトル：[対策の有効性コメント：ノートID]]の形式で追加
+        self.measuresData.updateValue([obj], forKey: measuresTitle)
     }
     
     // 有効性コメントを追加するメソッド（ノート追加時に使用するメソッド）
     func addEffectiveness(_ measuresTitle:String,_ measuresEffectiveness:String,_ noteID:Int) {
         let obj = [measuresEffectiveness : noteID]
-        self.measuresEffectiveness[measuresTitle]!.insert(obj, at: 0)
+        self.measuresData[measuresTitle]!.insert(obj, at: 0)
     }
     
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
-        self.measuresEffectiveness[measuresTitle[index]] = nil
-        self.measuresTitle.remove(at: index)
+        self.measuresData[getMeasuresTitle(index)] = nil
     }
     
     // 解決、未解決を反転するメソッド
