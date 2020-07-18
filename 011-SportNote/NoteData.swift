@@ -364,6 +364,66 @@ class NoteData {
         }
     }
     
+    // Firebaseから指定したノートIDのデータを取得するメソッド
+    func loadNoteData(_ noteID:Int) {
+        // noteDataArrayを初期化
+        noteDataArray = []
+        
+        // ユーザーUIDをセット
+        setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーのデータを取得する
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("noteID", isEqualTo: noteID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // オブジェクトを作成
+                    let noteData = NoteData()
+                    
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    noteData.setNoteType(dataCollection["noteType"] as! String)
+                    noteData.setYear(dataCollection["year"] as! Int)
+                    noteData.setMonth(dataCollection["month"] as! Int)
+                    noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
+                    noteData.setWeather(dataCollection["weather"] as! String)
+                    noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    noteData.setPurpose(dataCollection["purpose"] as! String)
+                    noteData.setDetail(dataCollection["detail"] as! String)
+                    noteData.setTarget(dataCollection["target"] as! String)
+                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    noteData.setResult(dataCollection["result"] as! String)
+                    noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    noteData.setUserID(dataCollection["userID"] as! String)
+                    noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                    
+                    // ノートIDの重複対策
+                    if dataCollection["noteID"] as! Int > NoteData.noteCount {
+                        NoteData.noteCount = dataCollection["noteID"] as! Int
+                    }
+                    
+                    // 取得データを格納
+                    self.noteDataArray.append(noteData)
+                }
+            }
+        }
+    }
+    
     // Firebaseのデータを更新するメソッド
     func updateNoteData() {
         // 更新日時を現在時刻にする

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class MeasuresDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource {
     
@@ -39,6 +40,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     //MARK:- 変数の宣言
     var taskData = TaskData()   // 課題データ格納用
     var indexPath = 0           // 行番号格納用
+    let noteData = NoteData()   // ノートデータ格納用（有効性セルタップ時にデータを格納）
     
     
     
@@ -123,6 +125,40 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // タップしたときの選択色を消去
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        
+        // [有効性コメント:ノートID]配列を取得
+        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(self.indexPath)
+        
+        // 有効性コメントのみの配列を作成
+        var stringArray:[String] = []
+        for num in 0...effectivenessArray.count - 1 {
+            stringArray.append(contentsOf: effectivenessArray[num].keys)
+        }
+        
+        // タップされた有効性コメントを取得
+        let comment:String = stringArray[indexPath.row]
+        
+        // ノートIDが存在をチェック
+        if effectivenessArray[indexPath.row][comment] == 0 {
+            // ノートIDがゼロなら何もしない
+        } else {
+            SVProgressHUD.showSuccess(withStatus: "ノート情報を取得しました。")
+            
+            // ノートデータを取得
+            noteData.loadNoteData(effectivenessArray[indexPath.row][comment]!)
+            
+            // データの取得が終わるまで時間待ち
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                
+                // ノート詳細確認画面へ遷移
+                self.performSegue(withIdentifier: "goNoteDetailView", sender: nil)
+            }
+        }
+    }
+    
     
     
     //MARK:- 画面遷移
@@ -144,6 +180,15 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             }
             
             taskData.updateTaskData()
+        }
+    }
+    
+    // 画面遷移時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goNoteDetailView" {
+            // 表示するデータを確認画面へ渡す
+            let noteDetailViewController = segue.destination as! NoteDetailViewController
+            noteDetailViewController.noteData = self.noteData.noteDataArray[0]
         }
     }
     

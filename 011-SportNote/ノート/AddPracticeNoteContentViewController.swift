@@ -47,17 +47,22 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
         reflectionTextView.layer.borderWidth = 1.0
         
+        // ツールバーを作成
+        createToolBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         // データ取得
         targetData.loadTargetData()
         taskData.loadUnresolvedTaskData()
         practiceNoteData.setNewNoteID()
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
             self.taskTableView?.reloadData()
         }
         
-        // ツールバーを作成
-        createToolBar()
+        // 遷移元の画面を取得する
+        
     }
     
     
@@ -91,6 +96,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     let targetData = TargetData()
     let taskData = TaskData()
     let practiceNoteData = NoteData()
+    
+    // 遷移元の画面
+    var viewController:UIViewController?
     
     
     
