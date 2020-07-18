@@ -53,6 +53,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     override func viewWillAppear(_ animated: Bool) {
         // データ取得
+        // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にまとめてやろうとするとID設定前にノートが保存されてしまう。
         targetData.loadTargetData()
         taskData.loadUnresolvedTaskData()
         practiceNoteData.setNewNoteID()

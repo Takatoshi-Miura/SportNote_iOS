@@ -258,7 +258,7 @@ class NoteData {
     
     //MARK:- データベース関連
     
-    // Firebaseにデータを保存するメソッド
+    // Firebaseにデータを保存するメソッド（新規ノート作成時のみ使用）
     func saveNoteData() {
         // 現在時刻をセット
         setCreated_at(getCurrentTime())
@@ -352,11 +352,6 @@ class NoteData {
                     noteData.setCreated_at(dataCollection["created_at"] as! String)
                     noteData.setUpdated_at(dataCollection["updated_at"] as! String)
                     
-                    // ノートIDの重複対策
-                    if dataCollection["noteID"] as! Int > NoteData.noteCount {
-                        NoteData.noteCount = dataCollection["noteID"] as! Int
-                    }
-                    
                     // 取得データを格納
                     self.noteDataArray.append(noteData)
                 }
@@ -411,11 +406,6 @@ class NoteData {
                     noteData.setUserID(dataCollection["userID"] as! String)
                     noteData.setCreated_at(dataCollection["created_at"] as! String)
                     noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                    
-                    // ノートIDの重複対策
-                    if dataCollection["noteID"] as! Int > NoteData.noteCount {
-                        NoteData.noteCount = dataCollection["noteID"] as! Int
-                    }
                     
                     // 取得データを格納
                     self.noteDataArray.append(noteData)

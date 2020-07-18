@@ -152,7 +152,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             
             // データの取得が終わるまで時間待ち
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                
                 // ノート詳細確認画面へ遷移
                 self.performSegue(withIdentifier: "goNoteDetailView", sender: nil)
             }
