@@ -91,7 +91,7 @@ class ResolvedMeasuresDetailViewController: UIViewController,UITableViewDelegate
     // データを表示するメソッド
     func printMeasuresData(_ taskData:TaskData) {
         // テキストの表示
-        measuresTitleTextField.text = taskData.getMeasuresTitle(indexPath)
+        measuresTitleTextField.text = taskData.getMeasuresTitleArray()[indexPath]
         
         // 最有力の対策ならチェックボックスを選択済みにする
         if taskData.getMeasuresPriorityIndex() == indexPath {

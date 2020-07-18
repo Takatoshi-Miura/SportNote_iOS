@@ -74,7 +74,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             // OKボタンがタップされたときの処理
             if let textField = alertController.textFields?.first {
                 // 有効性の配列にコメントを追加。
-                self.taskData.addEffectiveness(self.taskData.getMeasuresTitle(self.indexPath), textField.text!,0)
+                self.taskData.addEffectiveness(self.taskData.getMeasuresTitleArray()[self.indexPath], textField.text!,0)
                 
                 // データを更新
                 self.taskData.updateTaskData()
@@ -131,7 +131,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskDetailViewController {
             // 対策データを更新
-            if self.taskData.getMeasuresTitle(indexPath) == measuresTitleTextField.text {
+            if self.taskData.getMeasuresTitleArray()[indexPath] == measuresTitleTextField.text {
                 // 何もしない
             } else {
                 // 新しい対策名に更新
@@ -154,7 +154,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     // データを表示するメソッド
     func printMeasuresData(_ taskData:TaskData) {
         // テキストの表示
-        measuresTitleTextField.text = taskData.getMeasuresTitle(indexPath)
+        measuresTitleTextField.text = taskData.getMeasuresTitleArray()[indexPath]
         
         // 最有力の対策ならチェックボックスを選択済みにする
         if taskData.getMeasuresPriorityIndex() == indexPath {

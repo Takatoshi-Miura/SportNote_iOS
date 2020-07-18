@@ -109,13 +109,6 @@ class TaskData {
         return self.taskCause
     }
     
-    func getMeasuresTitle(_ index:Int) -> String {
-        // キーだけの配列を作成（.keysで取得すると[""]が付いてしまうため、これを防止する）
-        let stringArray = Array(self.measuresData.keys)
-        // index番目の対策タイトルを返却
-        return stringArray[index]
-    }
-    
     func getMeasuresTitleArray() -> [String] {
         // キーだけの配列を作成（.keysで取得すると[""]が付いてしまうため、これを防止する）
         let stringArray = Array(self.measuresData.keys)
@@ -124,7 +117,7 @@ class TaskData {
     
     func getMeasuresEffectiveness(_ index:Int) -> String {
         // index番目の対策タイトルを取得
-        let measuresTitle = getMeasuresTitle(index)
+        let measuresTitle = getMeasuresTitleArray()[index]
         
         // 有効性コメントリストを取得
         let measuresEffectivenessArray = self.measuresData[measuresTitle]!
@@ -138,7 +131,7 @@ class TaskData {
     
     func getMeasuresEffectivenessArray(_ index:Int) -> [[String:Int]] {
         // index番目の対策タイトルを取得
-        let measuresTitle = getMeasuresTitle(index)
+        let measuresTitle = getMeasuresTitleArray()[index]
         // 有効性コメントリストを返却
         return self.measuresData[measuresTitle]!
     }
@@ -344,7 +337,7 @@ class TaskData {
     
     // 対策を削除するメソッド
     func deleteMeasures(_ index:Int) {
-        self.measuresData[getMeasuresTitle(index)] = nil
+        self.measuresData[getMeasuresTitleArray()[index]] = nil
     }
     
     // 解決、未解決を反転するメソッド

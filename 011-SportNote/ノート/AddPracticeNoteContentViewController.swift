@@ -134,7 +134,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             taskTitle.append(self.taskData.taskDataArray[num].getTaskTitle())
             
             // 対策タイトル
-            let measures = self.taskData.taskDataArray[num].getMeasuresTitle(self.taskData.taskDataArray[num].getMeasuresPriorityIndex())
+            let measures = self.taskData.taskDataArray[num].getMeasuresTitleArray()[self.taskData.taskDataArray[num].getMeasuresPriorityIndex()]
             measuresTitle.append(measures)
             
             // 対策の有効性   FIX:セルを再利用するため、隠れているセルがある場合エラーとなる

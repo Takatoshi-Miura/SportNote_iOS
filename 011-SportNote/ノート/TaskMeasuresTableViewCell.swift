@@ -40,7 +40,7 @@ class TaskMeasuresTableViewCell: UITableViewCell {
         if taskData.getMeasuresTitleArray().isEmpty == true {
             taskMeasuresTitleLabel.text = "対策が未登録です"
         } else {
-            taskMeasuresTitleLabel.text = "対策：\(taskData.getMeasuresTitle(taskData.getMeasuresPriorityIndex()))"
+            taskMeasuresTitleLabel.text = "対策：\(taskData.getMeasuresTitleArray()[taskData.getMeasuresPriorityIndex()])"
         }
         
         // テキストフィールドの枠線追加

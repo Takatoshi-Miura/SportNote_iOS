@@ -118,7 +118,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         let cell = tableView.dequeueReusableCell(withIdentifier: "measuresCell", for: indexPath)
         
         //行番号に合った対策データをラベルに表示する
-        cell.textLabel!.text = taskData.getMeasuresTitle(indexPath.row)
+        cell.textLabel!.text = taskData.getMeasuresTitleArray()[indexPath.row]
         
         // 有効性コメントを取得
         if taskData.getMeasuresEffectivenessArray(indexPath.row).count == 0 {
