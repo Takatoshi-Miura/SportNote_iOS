@@ -15,6 +15,8 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 課題データが読み込まれるまで保存ボタンを無効にする
+        self.saveButton.isEnabled = false
 
         // 課題データの読み込みが終わるまで時間待ち
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
@@ -28,6 +30,9 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
             if height - 260 > 0 {
                 self.containerViewHeight.constant = 1200 + height - 260
             }
+            
+            // 保存ボタンを有効にする
+            self.saveButton.isEnabled = true
         }
         
     }
@@ -39,6 +44,9 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
     // スクロールビュー
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
+    
+    // 保存ボタン
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {

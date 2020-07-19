@@ -320,6 +320,7 @@
                     </view>
                     <connections>
                         <outlet property="containerViewHeight" destination="Wa0-z3-hnH" id="GGy-ht-bk6"/>
+                        <outlet property="saveButton" destination="B4W-9U-cic" id="w76-M9-y8M"/>
                         <outlet property="scrollView" destination="reB-Sy-ImG" id="P09-F7-P6i"/>
                     </connections>
                 </viewController>
