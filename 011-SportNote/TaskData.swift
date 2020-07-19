@@ -173,37 +173,6 @@ class TaskData {
     
     //MARK:- データベース関連
     
-    // Firebaseにデータを保存するメソッド
-    func saveTaskData() {
-        // 現在時刻を取得
-        self.created_at = self.getCurrentTime()
-        self.updated_at = self.created_at
-    
-        // ユーザーUIDを取得
-        self.userID = Auth.auth().currentUser!.uid
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        db.collection("TaskData").document("\(self.userID)_\(self.taskID)").setData([
-            "taskID"         : self.taskID,
-            "taskTitle"      : self.taskTitle,
-            "taskCause"      : self.taskCause,
-            "taskAchievement": self.taskAchievement,
-            "isDeleted"      : self.isDeleted,
-            "userID"         : self.userID,
-            "created_at"     : self.created_at,
-            "updated_at"     : self.updated_at,
-            "measuresData"   : self.measuresData,
-            "measuresPriorityIndex" : self.measuresPriorityIndex
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
-    
     // Firebaseの未解決課題データを取得するメソッド
     func loadUnresolvedTaskData() {
         // 配列の初期化
@@ -220,50 +189,6 @@ class TaskData {
             .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .whereField("taskAchievement", isEqualTo: false)
-            .order(by: "taskID", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let taskDataCollection = document.data()
-                
-                    // 取得データを基に、課題データを作成
-                    let databaseTaskData = TaskData()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
-                    
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
-                }
-            }
-        }
-    }
-    
-    // Firebaseの解決済み課題データを取得するメソッド
-    func loadResolvedTaskData() {
-        // 配列の初期化
-        taskDataArray = []
-        
-        // ユーザーUIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // ユーザーの解決済み課題データ取得
-        // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
-        // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
-        let db = Firestore.firestore()
-        db.collection("TaskData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .whereField("taskAchievement", isEqualTo: true)
             .order(by: "taskID", descending: true)
             .getDocuments() { (querySnapshot, err) in
             if let err = err {

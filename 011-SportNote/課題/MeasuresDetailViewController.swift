@@ -331,6 +331,9 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
                     self.noteData.setCreated_at(dataCollection["created_at"] as! String)
                     self.noteData.setUpdated_at(dataCollection["updated_at"] as! String)
                 }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                
                 // ノート詳細確認画面へ遷移
                 self.performSegue(withIdentifier: "goNoteDetailView", sender: nil)
             }
