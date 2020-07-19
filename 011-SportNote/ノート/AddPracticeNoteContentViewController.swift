@@ -60,11 +60,19 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
             self.taskTableView?.reloadData()
+            
+            // 課題数によってテーブルビューの高さを設定
+            self.taskTableView?.layoutIfNeeded()
+            self.taskTableView?.updateConstraints()
+            self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
         }
         
         // 遷移元の画面を取得する
         
     }
+    
+
+
     
     
     
@@ -108,6 +116,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var taskTableView: UITableView!
+    @IBOutlet weak var taskTableViewHeight: NSLayoutConstraint!
     
     // テキストビュー
     @IBOutlet weak var physicalConditionTextView: UITextView!
