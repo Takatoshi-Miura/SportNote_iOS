@@ -157,7 +157,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 
                 // チェックが入っていればTaskDataの有効性コメントに追加
                 if cell.checkBox.isSelected {
-                    self.taskData.taskDataArray[num].addEffectiveness(measures, cell.effectivenessTextView.text,self.practiceNoteData.getNoteID())
+                    self.taskData.taskDataArray[num].addEffectiveness(title: measures, effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
                     self.taskData.taskDataArray[num].updateTaskData()
                 }
             }

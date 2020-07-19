@@ -115,7 +115,7 @@ class TaskData {
         return stringArray
     }
     
-    func getMeasuresEffectiveness(_ index:Int) -> String {
+    func getMeasuresEffectiveness(at index:Int) -> String {
         // index番目の対策タイトルを取得
         let measuresTitle = getMeasuresTitleArray()[index]
         
@@ -129,7 +129,7 @@ class TaskData {
         return stringArray[0]
     }
     
-    func getMeasuresEffectivenessArray(_ index:Int) -> [[String:Int]] {
+    func getMeasuresEffectivenessArray(at index:Int) -> [[String:Int]] {
         // index番目の対策タイトルを取得
         let measuresTitle = getMeasuresTitleArray()[index]
         // 有効性コメントリストを返却
@@ -307,7 +307,7 @@ class TaskData {
     }
     
     // 対策を追加するメソッド（ノート追加時には使用しないメソッドのため、ノートIDは存在しない0番を設定）
-    func addMeasures(_ measuresTitle:String,_ measuresEffectiveness:String) {
+    func addMeasures(title measuresTitle:String,effectiveness measuresEffectiveness:String) {
         // Firebaseはリストされた配列を扱えないため、[対策の有効性コメント：ノートID]型のオブジェクトを作成
         let obj = [measuresEffectiveness : 0]
         // [対策タイトル：[対策の有効性コメント：ノートID]]の形式で追加
@@ -315,25 +315,25 @@ class TaskData {
     }
     
     // 対策タイトルを更新するメソッド
-    func updateMeasuresTitle(_ newMeasuresTitle:String,_ index:Int) {
+    func updateMeasuresTitle(newTitle newMeasuresTitle:String,at index:Int) {
         // 名前が変更になる対策の"有効性コメントリスト"を取得
-        let effectivenessArray = getMeasuresEffectivenessArray(index)
+        let effectivenessArray = getMeasuresEffectivenessArray(at: index)
         
         // 古い名前の対策を削除
-        self.deleteMeasures(index)
+        self.deleteMeasures(at: index)
         
         // 新しい名前の対策を追加
         self.measuresData.updateValue(effectivenessArray, forKey: newMeasuresTitle)
     }
     
     // 有効性コメントを追加するメソッド（ノート追加時に使用するメソッド）
-    func addEffectiveness(_ measuresTitle:String,_ measuresEffectiveness:String,_ noteID:Int) {
+    func addEffectiveness(title measuresTitle:String,effectiveness measuresEffectiveness:String,noteID:Int) {
         let obj = [measuresEffectiveness : noteID]
         self.measuresData[measuresTitle]!.insert(obj, at: 0)
     }
     
     // 対策を削除するメソッド
-    func deleteMeasures(_ index:Int) {
+    func deleteMeasures(at index:Int) {
         self.measuresData[getMeasuresTitleArray()[index]] = nil
     }
     

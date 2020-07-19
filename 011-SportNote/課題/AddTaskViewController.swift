@@ -96,7 +96,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         // 対策の追加
         measuresTitleArray.reverse()
         for measuresTitle in measuresTitleArray {
-            taskData.addMeasures(measuresTitle,"対策の有効性をコメントしましょう")
+            taskData.addMeasures(title: measuresTitle,effectiveness: "対策の有効性をコメントしましょう")
         }
         
         // データベースに保存

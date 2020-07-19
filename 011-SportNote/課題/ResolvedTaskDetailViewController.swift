@@ -80,10 +80,10 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
         cell.textLabel!.text = taskData.getMeasuresTitleArray()[indexPath.row]
         
         // 有効性コメントを取得
-        if taskData.getMeasuresEffectivenessArray(indexPath.row).count == 0 {
+        if taskData.getMeasuresEffectivenessArray(at: indexPath.row).count == 0 {
             cell.detailTextLabel?.text = "有効性："
         } else {
-            cell.detailTextLabel?.text = "有効性：\(self.taskData.getMeasuresEffectiveness(indexPath.row))"
+            cell.detailTextLabel?.text = "有効性：\(self.taskData.getMeasuresEffectiveness(at: indexPath.row))"
         }
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell

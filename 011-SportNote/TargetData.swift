@@ -89,7 +89,7 @@ class TargetData {
     
     //MARK:- データベース関連
     
-    // Firebaseにデータを保存するメソッド（AddTargetViewControllerにて、保存ボタンタップ時に実行）
+    // Firebaseにデータを保存するメソッド（新規目標追加時のみ使用）
     func saveTargetData() {
         // 現在時刻をセット
         setCreated_at(getCurrentTime())

@@ -76,7 +76,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             // OKボタンがタップされたときの処理
             if let textField = alertController.textFields?.first {
                 // 有効性の配列にコメントを追加。
-                self.taskData.addEffectiveness(self.taskData.getMeasuresTitleArray()[self.indexPath], textField.text!,0)
+                self.taskData.addEffectiveness(title: self.taskData.getMeasuresTitleArray()[self.indexPath], effectiveness: textField.text!,noteID: 0)
                 
                 // データを更新
                 self.taskData.updateTaskData()
@@ -104,7 +104,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 有効性コメント数を返却
-        return self.taskData.getMeasuresEffectivenessArray(indexPath).count
+        return self.taskData.getMeasuresEffectivenessArray(at: indexPath).count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -112,7 +112,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
         
         // [有効性コメント:ノートID]配列を取得
-        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(self.indexPath)
+        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(at: self.indexPath)
         
         // 有効性コメントのみの配列を作成
         var stringArray:[String] = []
@@ -130,7 +130,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         
         // [有効性コメント:ノートID]配列を取得
-        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(self.indexPath)
+        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(at: self.indexPath)
         
         // 有効性コメントのみの配列を作成
         var stringArray:[String] = []
@@ -170,7 +170,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
                 // 何もしない
             } else {
                 // 新しい対策名に更新
-                self.taskData.updateMeasuresTitle(measuresTitleTextField.text!, indexPath)
+                self.taskData.updateMeasuresTitle(newTitle: measuresTitleTextField.text!, at: indexPath)
             }
             
             // チェックボックスが選択されている場合は、この対策を最有力にする

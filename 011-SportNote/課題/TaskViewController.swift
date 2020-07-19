@@ -93,8 +93,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // セルをタップした時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 編集時の処理
+        
         if tableView.isEditing {
+            // 編集時の処理
             // 選択肢にチェックが一つでも入ってたら「削除」を表示する。
             if let _ = self.tableView.indexPathsForSelectedRows {
                 self.editButtonItem.title = "削除"
@@ -270,7 +271,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func refresh(sender: UIRefreshControl) {
         // ここが引っ張られるたびに呼び出される
         reloadTableView()
-        
         // 通信終了後、ロードインジケーター終了
         self.tableView.refreshControl?.endRefreshing()
     }

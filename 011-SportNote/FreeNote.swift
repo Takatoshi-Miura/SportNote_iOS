@@ -68,7 +68,7 @@ class FreeNote {
     
     //MARK:- データベース関連
 
-    // Firebaseにデータを保存するメソッド(アカウント作成時のみ実行される)
+    // Firebaseにデータを保存するメソッド(アカウント作成時のみ実行)
     func saveFreeNoteData() {
         // 現在時刻をセット
         setCreated_at(getCurrentTime())
