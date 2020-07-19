@@ -170,7 +170,7 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
             "isDeleted"      : taskData.getIsDeleted(),
             "updated_at"     : taskData.getUpdated_at(),
             "measuresData"   : taskData.getMeasuresData(),
-            "measuresPriorityIndex" : taskData.getMeasuresPriorityIndex()
+            "measuresPriority" : taskData.getMeasuresPriority()
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")

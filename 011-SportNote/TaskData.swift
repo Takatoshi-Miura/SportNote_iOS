@@ -20,7 +20,7 @@ class TaskData {
     private var created_at:String = ""          // 作成日
     private var updated_at:String = ""          // 更新日
     private var measuresData:[String:[[String:Int]]] = [:]   // [対策タイトル,[ [対策の有効性コメント：ノートID],[対策の有効性コメント：ノートID] ] ]
-    private var measuresPriorityIndex:Int = 0                // 最優先の対策が格納されているIndex
+    private var measuresPriority:String = ""                 // 最優先の対策名
     
     // 課題データを格納する配列
     var taskDataArray = [TaskData]()
@@ -65,8 +65,8 @@ class TaskData {
         self.measuresData = measuresData
     }
     
-    func setMeasuresPriorityIndex(_ measuresPriorityIndex:Int) {
-        self.measuresPriorityIndex = measuresPriorityIndex
+    func setMeasuresPriority(_ measuresPriority:String) {
+        self.measuresPriority = measuresPriority
     }
     
     // 新規課題用の課題IDを設定するメソッド
@@ -165,8 +165,8 @@ class TaskData {
         return self.measuresData[measuresTitle]!
     }
     
-    func getMeasuresPriorityIndex() -> Int {
-        return self.measuresPriorityIndex
+    func getMeasuresPriority() -> String {
+        return self.measuresPriority
     }
     
     
@@ -208,7 +208,7 @@ class TaskData {
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
                     databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
+                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
@@ -237,7 +237,7 @@ class TaskData {
             "isDeleted"      : self.isDeleted,
             "updated_at"     : self.updated_at,
             "measuresData"   : self.measuresData,
-            "measuresPriorityIndex" : self.measuresPriorityIndex
+            "measuresPriority" : self.measuresPriority
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")

@@ -193,7 +193,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
             "created_at"     : taskData.getCreated_at(),
             "updated_at"     : taskData.getUpdated_at(),
             "measuresData"   : taskData.getMeasuresData(),
-            "measuresPriorityIndex" : taskData.getMeasuresPriorityIndex()
+            "measuresPriority" : taskData.getMeasuresPriority()
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")

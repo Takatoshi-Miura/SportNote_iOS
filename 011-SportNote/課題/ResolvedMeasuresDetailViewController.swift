@@ -94,7 +94,7 @@ class ResolvedMeasuresDetailViewController: UIViewController,UITableViewDelegate
         measuresTitleTextField.text = taskData.getMeasuresTitleArray()[indexPath]
         
         // 最有力の対策ならチェックボックスを選択済みにする
-        if taskData.getMeasuresPriorityIndex() == indexPath {
+        if taskData.getMeasuresPriority() == taskData.getMeasuresTitleArray()[indexPath] {
             self.checkButton.isSelected = !self.checkButton.isSelected
         }
     }

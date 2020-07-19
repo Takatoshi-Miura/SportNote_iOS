@@ -184,7 +184,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         measuresTitleTextField.text = taskData.getMeasuresTitleArray()[indexPath]
         
         // 最有力の対策ならチェックボックスを選択済みにする
-        if taskData.getMeasuresPriorityIndex() == indexPath {
+        if taskData.getMeasuresPriority() == taskData.getMeasuresTitleArray()[indexPath] {
             self.checkButton.isSelected = !self.checkButton.isSelected
         }
     }
@@ -257,7 +257,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // チェックボックスが選択されている場合は、この対策を最有力にする
         if self.checkButton.isSelected {
-            taskData.setMeasuresPriorityIndex(indexPath)
+            taskData.setMeasuresPriority(measuresTitleTextField.text!)
         }
         
         // 更新日時を現在時刻にする
@@ -275,7 +275,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             "isDeleted"      : taskData.getIsDeleted(),
             "updated_at"     : taskData.getUpdated_at(),
             "measuresData"   : taskData.getMeasuresData(),
-            "measuresPriorityIndex" : taskData.getMeasuresPriorityIndex()
+            "measuresPriority" : taskData.getMeasuresPriority()
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")

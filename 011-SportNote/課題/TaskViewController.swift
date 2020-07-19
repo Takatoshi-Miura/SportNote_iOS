@@ -314,7 +314,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
                     databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
+                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
