@@ -101,12 +101,41 @@ class TaskData {
     
     
     //MARK:- ゲッター
+    
+    func getTaskID() -> Int {
+        return self.taskID
+    }
+    
     func getTaskTitle() -> String {
         return self.taskTitle
     }
     
     func getTaskCouse() -> String {
         return self.taskCause
+    }
+    
+    func getTaskAchievement() -> Bool {
+        return self.taskAchievement
+    }
+    
+    func getIsDeleted() -> Bool {
+        return self.isDeleted
+    }
+    
+    func getUserID() -> String {
+        return self.userID
+    }
+    
+    func getCreated_at() -> String {
+        return self.created_at
+    }
+    
+    func getUpdated_at() -> String {
+        return self.updated_at
+    }
+    
+    func getMeasuresData() -> [String:[[String:Int]]] {
+        return self.measuresData
     }
     
     func getMeasuresTitleArray() -> [String] {

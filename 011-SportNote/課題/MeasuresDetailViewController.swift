@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import SVProgressHUD
 
 class MeasuresDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource {
@@ -79,7 +80,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
                 self.taskData.addEffectiveness(title: self.taskData.getMeasuresTitleArray()[self.indexPath], effectiveness: textField.text!,noteID: 0)
                 
                 // データを更新
-                self.taskData.updateTaskData()
+                self.updateTaskData()
                 
                 //テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
@@ -148,13 +149,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             SVProgressHUD.showSuccess(withStatus: "ノート情報を取得しました。")
             
             // ノートデータを取得
-            noteData.loadNoteData(effectivenessArray[indexPath.row][comment]!)
-            
-            // データの取得が終わるまで時間待ち
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                // ノート詳細確認画面へ遷移
-                self.performSegue(withIdentifier: "goNoteDetailView", sender: nil)
-            }
+            loadNoteData(effectivenessArray[indexPath.row][comment]!)
         }
     }
     
@@ -165,20 +160,8 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskDetailViewController {
-            // 対策データを更新
-            if self.taskData.getMeasuresTitleArray()[indexPath] == measuresTitleTextField.text {
-                // 何もしない
-            } else {
-                // 新しい対策名に更新
-                self.taskData.updateMeasuresTitle(newTitle: measuresTitleTextField.text!, at: indexPath)
-            }
-            
-            // チェックボックスが選択されている場合は、この対策を最有力にする
-            if self.checkButton.isSelected {
-                taskData.setMeasuresPriorityIndex(indexPath)
-            }
-            
-            taskData.updateTaskData()
+            // データ更新
+            updateTaskData()
         }
     }
     
@@ -187,7 +170,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         if segue.identifier == "goNoteDetailView" {
             // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! NoteDetailViewController
-            noteDetailViewController.noteData = self.noteData.noteDataArray[0]
+            noteDetailViewController.noteData = self.noteData
         }
     }
     
@@ -234,6 +217,124 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 同じ対策名の登録がないか確認
+        var measuresTitleCheck:Bool = false
+        for num in 0...taskData.getMeasuresTitleArray().count - 1 {
+            if num == indexPath {
+                // 判定しない
+            } else {
+                // 対策名被りのチェック
+                if measuresTitleTextField.text == taskData.getMeasuresTitleArray()[num] {
+                    measuresTitleCheck = true
+                }
+            }
+        }
+        
+        // 同じ対策名の登録があった場合
+        if measuresTitleCheck == true {
+            SVProgressHUD.showError(withStatus: "同じ対策名が存在します。\n別の名前にしてください。")
+            return
+        } else {
+            // 対策を更新
+            taskData.updateMeasuresTitle(newTitle: measuresTitleTextField.text!, at: indexPath)
+        }
+        
+        // チェックボックスが選択されている場合は、この対策を最有力にする
+        if self.checkButton.isSelected {
+            taskData.setMeasuresPriorityIndex(indexPath)
+        }
+        
+        // 更新日時を現在時刻にする
+        taskData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
+
+        // 変更する可能性のあるデータのみ更新
+        database.updateData([
+            "taskTitle"      : taskData.getTaskTitle(),
+            "taskCause"      : taskData.getTaskCouse(),
+            "taskAchievement": taskData.getTaskAchievement(),
+            "isDeleted"      : taskData.getIsDeleted(),
+            "updated_at"     : taskData.getUpdated_at(),
+            "measuresData"   : taskData.getMeasuresData(),
+            "measuresPriorityIndex" : taskData.getMeasuresPriorityIndex()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("課題データを更新しました")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseから指定したノートIDのデータを取得するメソッド
+    func loadNoteData(_ noteID:Int) {
+        
+        // ユーザーUIDをセット
+        noteData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーのデータを取得する
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: noteData.getUserID())
+            .whereField("noteID", isEqualTo: noteID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    self.noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    self.noteData.setNoteType(dataCollection["noteType"] as! String)
+                    self.noteData.setYear(dataCollection["year"] as! Int)
+                    self.noteData.setMonth(dataCollection["month"] as! Int)
+                    self.noteData.setDate(dataCollection["date"] as! Int)
+                    self.noteData.setDay(dataCollection["day"] as! String)
+                    self.noteData.setWeather(dataCollection["weather"] as! String)
+                    self.noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    self.noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    self.noteData.setPurpose(dataCollection["purpose"] as! String)
+                    self.noteData.setDetail(dataCollection["detail"] as! String)
+                    self.noteData.setTarget(dataCollection["target"] as! String)
+                    self.noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    self.noteData.setResult(dataCollection["result"] as! String)
+                    self.noteData.setReflection(dataCollection["reflection"] as! String)
+                    self.noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    self.noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    self.noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    self.noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    self.noteData.setUserID(dataCollection["userID"] as! String)
+                    self.noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    self.noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                }
+                // ノート詳細確認画面へ遷移
+                self.performSegue(withIdentifier: "goNoteDetailView", sender: nil)
+            }
+        }
     }
 
 }

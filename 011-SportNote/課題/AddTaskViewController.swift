@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import SVProgressHUD
 
 class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
@@ -89,21 +91,8 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
-        // 入力されたテキストをTaskDataにセット
-        taskData.setTaskTitle(taskTitleTextField.text!)
-        taskData.setTaskCause(causeTextView.text!)
-        
-        // 対策の追加
-        measuresTitleArray.reverse()
-        for measuresTitle in measuresTitleArray {
-            taskData.addMeasures(title: measuresTitle,effectiveness: "対策の有効性をコメントしましょう")
-        }
-        
         // データベースに保存
-        taskData.saveTaskData()
-        
-        // モーダルを閉じる
-        dismiss(animated: true, completion: nil)
+        saveTaskData()
     }
     
     
@@ -159,6 +148,65 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // Firebaseにデータを保存するメソッド
+    func saveTaskData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // ユーザーUIDをセット
+        taskData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 入力されたテキストをTaskDataにセット
+        taskData.setTaskTitle(taskTitleTextField.text!)
+        taskData.setTaskCause(causeTextView.text!)
+        
+        // 現在時刻をセット
+        taskData.setCreated_at(self.getCurrentTime())
+        taskData.setUpdated_at(taskData.getCreated_at())
+    
+        // 対策をセット
+        measuresTitleArray.reverse()
+        for measuresTitle in measuresTitleArray {
+            taskData.addMeasures(title: measuresTitle,effectiveness: "対策の有効性をコメントしましょう")
+        }
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(taskData.getTaskID())").setData([
+            "taskID"         : taskData.getTaskID(),
+            "taskTitle"      : taskData.getTaskTitle(),
+            "taskCause"      : taskData.getTaskCouse(),
+            "taskAchievement": taskData.getTaskAchievement(),
+            "isDeleted"      : taskData.getIsDeleted(),
+            "userID"         : taskData.getUserID(),
+            "created_at"     : taskData.getCreated_at(),
+            "updated_at"     : taskData.getUpdated_at(),
+            "measuresData"   : taskData.getMeasuresData(),
+            "measuresPriorityIndex" : taskData.getMeasuresPriorityIndex()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                
+                // モーダルを閉じる
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
 
 }

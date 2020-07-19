@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import SVProgressHUD
 
 class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource {
@@ -41,7 +42,8 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
     var taskData = TaskData()               // 課題データ格納用
     var measuresTitleArray:[String] = []    // 対策タイトルの格納用
     var indexPath:Int = 0                   // 行番号格納用
-
+    var unsolvedButtonTap:Bool = false      // 未解決ボタンのタップ判定
+    
     
     
     //MARK:- UIの設定
@@ -55,11 +57,13 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
     
     // 未解決に戻すボタンの処理
     @IBAction func unsolvedButton(_ sender: Any) {
+        unsolvedButtonTap = true
+        
         // 未解決にする
         taskData.changeAchievement()
         
-        // 通知
-        SVProgressHUD.showSuccess(withStatus: "未解決にしました")
+        // データ更新
+        updateTaskData()
     }
     
     
@@ -119,7 +123,7 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is ResolvedTaskViewController {
             // 課題データを更新
-            taskData.updateTaskData()
+            updateTaskData()
         }
     }
     
@@ -131,6 +135,58 @@ class ResolvedTaskDetailViewController: UIViewController,UINavigationControllerD
     func printTaskData(_ taskData:TaskData) {
         taskTitleTextField.text = taskData.getTaskTitle()
         taskCauseTextView.text  = taskData.getTaskCouse()
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 課題データを更新
+        taskData.setTaskTitle(taskTitleTextField.text!)
+        taskData.setTaskCause(taskCauseTextView.text!)
+        
+        // 更新日時を現在時刻にする
+        taskData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
+
+        // 変更する可能性のあるデータのみ更新
+        database.updateData([
+            "taskTitle"      : taskData.getTaskTitle(),
+            "taskCause"      : taskData.getTaskCouse(),
+            "taskAchievement": taskData.getTaskAchievement(),
+            "isDeleted"      : taskData.getIsDeleted(),
+            "updated_at"     : taskData.getUpdated_at(),
+            "measuresData"   : taskData.getMeasuresData(),
+            "measuresPriorityIndex" : taskData.getMeasuresPriorityIndex()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("課題データを更新しました")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                
+                // 解決済みボタンをタップした場合
+                if self.unsolvedButtonTap == true {
+                    // 前の画面に戻る
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
     }
 
 }

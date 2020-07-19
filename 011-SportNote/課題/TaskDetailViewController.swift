@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import SVProgressHUD
 
 class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource {
@@ -48,6 +49,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     var taskData = TaskData()               // 課題データの格納用
     var measuresTitleArray:[String] = []    // 対策タイトルの格納用
     var indexPath:Int = 0                   // 行番号格納用
+    var resolvedButtonTap:Bool = false      // 解決済みボタンのタップ判定
     
     
     
@@ -62,11 +64,14 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     // 解決済みにするボタンの処理
     @IBAction func resolvedButton(_ sender: Any) {
+        // タップ判定
+        resolvedButtonTap = true
+        
         // 解決済みにする
         taskData.changeAchievement()
         
-        // 通知
-        SVProgressHUD.showSuccess(withStatus: "解決済みにしました")
+        // データ更新
+        updateTaskData()
     }
     
     // 追加ボタンの処理
@@ -83,6 +88,9 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             if let textField = alertController.textFields?.first {
                 // データベースの対策データを追加
                 self.taskData.addMeasures(title: textField.text!,effectiveness: "対策の有効性をコメントしましょう")
+                
+                // データ更新
+                self.updateTaskData()
                 
                 // 対策タイトルの配列に入力値を挿入。先頭に挿入する
                 self.measuresTitleArray.insert(textField.text!,at:0)
@@ -107,21 +115,19 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     //MARK:- テーブルビューの設定
     
-    // 対策の数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskData.getMeasuresTitleArray().count
+        return taskData.getMeasuresTitleArray().count   // 対策の数を返却
     }
     
-    // テーブルの行ごとのセルを返却する
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Storyboardで指定したtodoCell識別子を利用して再利用可能なセルを取得する
+        // セルを取得する
         let cell = tableView.dequeueReusableCell(withIdentifier: "measuresCell", for: indexPath)
         
-        //行番号に合った対策データをラベルに表示する
+        // 行番号に合った対策データをラベルに表示する
         cell.textLabel!.text = taskData.getMeasuresTitleArray()[indexPath.row]
         
         // 有効性コメントを取得
-        if taskData.getMeasuresEffectivenessArray(at: indexPath.row).count == 0 {
+        if taskData.getMeasuresEffectivenessArray(at: indexPath.row).isEmpty == true {
             cell.detailTextLabel?.text = "有効性："
         } else {
             cell.detailTextLabel?.text = "有効性：\(self.taskData.getMeasuresEffectiveness(at: indexPath.row))"
@@ -137,7 +143,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         // タップしたセルの行番号を取得
         self.indexPath = indexPath.row
-        print(indexPath.row)
         
         // 課題詳細確認画面へ遷移
         performSegue(withIdentifier: "goMeasuresDetailViewController", sender: nil)
@@ -167,7 +172,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 }
                 
                 // データを更新
-                self.taskData.updateTaskData()
+                self.updateTaskData()
                     
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
@@ -201,13 +206,11 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskViewController {
             // 課題データを更新
-            taskData.setTaskTitle(taskTitleTextField.text!)
-            taskData.setTaskCause(taskCauseTextView.text!)
-            taskData.updateTaskData()
+            updateTaskData()
         }
     }
     
-    // 画面遷移時に呼ばれる処理
+    // 対策詳細画面に遷移する時に呼ばれる処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goMeasuresDetailViewController" {
             // 課題データを対策詳細確認画面へ渡す
@@ -257,5 +260,57 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         // キーボードを閉じる
         self.view.endEditing(true)
     }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
 
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 課題データを更新
+        taskData.setTaskTitle(taskTitleTextField.text!)
+        taskData.setTaskCause(taskCauseTextView.text!)
+        
+        // 更新日時を現在時刻にする
+        taskData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
+
+        // 変更する可能性のあるデータのみ更新
+        database.updateData([
+            "taskTitle"      : taskData.getTaskTitle(),
+            "taskCause"      : taskData.getTaskCouse(),
+            "taskAchievement": taskData.getTaskAchievement(),
+            "isDeleted"      : taskData.getIsDeleted(),
+            "updated_at"     : taskData.getUpdated_at(),
+            "measuresData"   : taskData.getMeasuresData(),
+            "measuresPriorityIndex" : taskData.getMeasuresPriorityIndex()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("課題データを更新しました")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                
+                // 解決済みボタンをタップした場合
+                if self.resolvedButtonTap == true {
+                    // 前の画面に戻る
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
+    }
+    
 }

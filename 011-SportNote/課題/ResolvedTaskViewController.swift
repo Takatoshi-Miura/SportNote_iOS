@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import SVProgressHUD
 
 class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -25,9 +26,8 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.tableView?.reloadData()
         // テーブルビューを更新
-        reloadTableView()
+        reloadTaskData()
     }
     
     
@@ -100,27 +100,58 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     
     //MARK:- その他のメソッド
     
-    // テーブルビューを更新するメソッド
-    func reloadTableView() {
+    // 課題データを取得するメソッド
+    func reloadTaskData() {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
-        // データベースの課題データを取得
-        let databaseTaskData = TaskData()
-        databaseTaskData.loadResolvedTaskData()
+        // 配列の初期化
+        resolvedTaskDataArray = []
         
-        // データの取得が終わるまで時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-            // 課題データの受け取り
-            self.resolvedTaskDataArray = []
-            self.resolvedTaskDataArray = databaseTaskData.taskDataArray
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
         
-            // テーブルビューの更新
-            self.tableView?.reloadData()
-            
-            // HUDで処理中を非表示
-            SVProgressHUD.dismiss()
-        }
+        // ユーザーの解決済み課題データ取得
+        // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
+        // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
+        let db = Firestore.firestore()
+        db.collection("TaskData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .whereField("taskAchievement", isEqualTo: true)
+            .order(by: "taskID", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        let taskDataCollection = document.data()
+                
+                        // 取得データを基に、課題データを作成
+                        let databaseTaskData = TaskData()
+                        databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
+                        databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
+                        databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
+                        databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
+                        databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
+                        databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
+                        databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
+                        databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
+                        databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
+                        databaseTaskData.setMeasuresPriorityIndex(taskDataCollection["measuresPriorityIndex"] as! Int)
+                        
+                        // 課題データを格納
+                        self.resolvedTaskDataArray.append(databaseTaskData)
+                    }
+                    // テーブルビューの更新
+                    self.tableView?.reloadData()
+                    
+                    // HUDで処理中を非表示
+                    SVProgressHUD.dismiss()
+                    
+                    print("課題データを取得しました")
+                }
+            }
     }
 
 }
