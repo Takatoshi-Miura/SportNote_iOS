@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import SVProgressHUD
 
 class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
@@ -35,7 +36,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         self.tableView.tableFooterView = UIView()
         
         // データ取得
-        targetData.loadTargetData()
+        loadTargetData()
         
         // ツールバーを作成
         createToolBar()
@@ -61,7 +62,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     var selectedMonth:Int = 13   // "--"が選択された時は13が入る
     
     // データ格納用
-    let targetData = TargetData()
+    var targetDataArray = [TargetData]()
     
     
     
@@ -75,52 +76,29 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
-        // 目標データを作成
-        let targetData = TargetData()
-        
-        // 入力値を反映
-        targetData.setYear(selectedYear)
-        targetData.setMonth(selectedMonth)
-        targetData.setDetail(targetTextField.text!)
-        
         // 目標データを保存
-        targetData.saveTargetData()
+        saveTargetData(selectedMonth: selectedMonth,detail: targetTextField.text!)
         
         // その月の年間目標データがなければ作成
-        if self.targetData.targetDataArray.count == 0 {
+        if self.targetDataArray.count == 0 {
             if selectedMonth == 13 {
-                // 年間目標データを作成するなら何もしない
+                // 年間目標データを保存したなら何もしない
             } else {
-                // 年間目標データを作成
-                targetData.setYear(selectedYear)
-                targetData.setMonth(13)
-                targetData.setDetail("")
-                targetData.saveTargetData()
+                // 月間目標データを保存したなら年間目標データを作成
+                saveTargetData(selectedMonth: 13,detail: "")
             }
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
             var monthArray:[Int] = []
-            for num in 0...(self.targetData.targetDataArray.count - 1) {
-                if self.targetData.targetDataArray[num].getYear() == selectedYear {
-                    monthArray.append(self.targetData.targetDataArray[num].getMonth())
+            for num in 0...(self.targetDataArray.count - 1) {
+                if self.targetDataArray[num].getYear() == selectedYear {
+                    monthArray.append(self.targetDataArray[num].getMonth())
                 }
             }
             // 年間目標の登録がなければ、年間目標作成
             if monthArray.firstIndex(of: 13) == nil {
-                targetData.setYear(selectedYear)
-                targetData.setMonth(13)
-                targetData.setDetail("")
-                targetData.saveTargetData()
+                saveTargetData(selectedMonth: 13,detail: "")
             }
-        }
-        
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // NoteViewControllerに遷移
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-            // HUDで処理中を非表示
-            SVProgressHUD.dismiss()
         }
     }
     
@@ -386,6 +364,101 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // Firebaseから目標データを取得するメソッド
+    func loadTargetData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // targetDataArrayを初期化
+        targetDataArray = []
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーの目標データを取得する
+        db.collection("TargetData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標オブジェクトを作成
+                    let targetData = TargetData()
+                    
+                    // 目標データを反映
+                    let targetDataCollection = document.data()
+                    targetData.setYear(targetDataCollection["year"] as! Int)
+                    targetData.setMonth(targetDataCollection["month"] as! Int)
+                    targetData.setDetail(targetDataCollection["detail"] as! String)
+                    targetData.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                    targetData.setUserID(targetDataCollection["userID"] as! String)
+                    targetData.setCreated_at(targetDataCollection["created_at"] as! String)
+                    targetData.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.targetDataArray.append(targetData)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseにデータを保存するメソッド（新規目標追加時のみ使用）
+    func saveTargetData(selectedMonth selectedMonth:Int,detail detail:String) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 目標データを作成
+        let targetData = TargetData()
+        
+        // 入力値を反映
+        targetData.setYear(selectedYear)
+        targetData.setMonth(selectedMonth)
+        targetData.setDetail(detail)
+        
+        // ユーザーUIDをセット
+        targetData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 現在時刻をセット
+        targetData.setCreated_at(getCurrentTime())
+        targetData.setUpdated_at(targetData.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("TargetData").document("\(Auth.auth().currentUser!.uid)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+            "year"       : targetData.getYear(),
+            "month"      : targetData.getMonth(),
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "userID"     : targetData.getUserID(),
+            "created_at" : targetData.getCreated_at(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
     }
     
 }

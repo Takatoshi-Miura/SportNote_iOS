@@ -40,6 +40,11 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
+    // 戻るボタンの処理
+    @IBAction func backButton(_ sender: Any) {
+        // NoteViewControllerへ遷移
+    }
+    
 
     
     //MARK:- テーブルビューの設定
@@ -171,15 +176,5 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             break
         }
     }
-
-    
-    
-    //MARK:- 画面遷移
-    
-    // 戻るボタンの処理
-    @IBAction func backButton(_ sender: Any) {
-        // NoteViewControllerへ遷移
-    }
-    
 
 }
