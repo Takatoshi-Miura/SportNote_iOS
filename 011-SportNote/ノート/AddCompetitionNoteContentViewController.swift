@@ -149,8 +149,19 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
                 saveTargetData(year: self.year, month: 13)
             } else {
                 // 月間,年間ともに存在する場合
-                // モーダルを閉じる
-                self.dismiss(animated: true, completion: nil)
+                // ストーリーボードを取得
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                
+                // デフォルトでは下から上のアニメーションとなるため、それを上から下に変更
+                let transition = CATransition()
+                transition.duration = 0.15
+                transition.type = CATransitionType.push
+                transition.subtype = CATransitionSubtype.fromBottom
+                view.window!.layer.add(transition, forKey: kCATransition)
+                
+                // ノート画面に遷移
+                self.present(nextView, animated: false, completion: nil)
             }
         }
     }
@@ -698,7 +709,19 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
                 
                 // 最後の保存であればモーダルを閉じる
                 if self.saveDataFinished == true {
-                    self.dismiss(animated: true, completion: nil)
+                    // ストーリーボードを取得
+                    let storyboard: UIStoryboard = self.storyboard!
+                    let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                    
+                    // デフォルトでは下から上のアニメーションとなるため、それを上から下に変更  FIX:年月双方の目標が未設定のときOptional Valueでエラーになる
+//                    let transition = CATransition()
+//                    transition.duration = 0.15
+//                    transition.type = CATransitionType.push
+//                    transition.subtype = CATransitionSubtype.fromBottom
+//                    self.view.window!.layer.add(transition, forKey: kCATransition)
+                    
+                    // ノート画面に遷移
+                    self.present(nextView, animated: false, completion: nil)
                 }
             }
         }

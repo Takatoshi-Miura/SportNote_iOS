@@ -1277,7 +1277,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">
             <objects>
-                <tabBarController modalPresentationStyle="fullScreen" id="iTx-Cd-gKZ" customClass="TabBarController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" modalPresentationStyle="fullScreen" id="iTx-Cd-gKZ" customClass="TabBarController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="R7M-WX-mqH"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Jz0-AZ-Zjn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
