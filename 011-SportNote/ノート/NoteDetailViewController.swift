@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import SVProgressHUD
 
 class NoteDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -32,12 +34,11 @@ class NoteDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         // TaskTableViewCellを登録
         tableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskTableViewCell")
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-            self.tableView?.reloadData()
-        }
-        
         // データを表示
         printNoteData(noteData)
+        
+        // テーブルを再読み込み
+        self.tableView?.reloadData()
     }
     
     
