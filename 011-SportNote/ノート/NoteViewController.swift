@@ -174,6 +174,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
             let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+            
+            // エラー対策
+            if sortedIndexPaths == nil{
+                
+            }
+            
             for num in 0...sortedIndexPaths.count - 1 {
                 // 選択されたノートを削除
                 self.dataInSection[sortedIndexPaths[num][0]][sortedIndexPaths[num][1]].setIsDeleted(true)

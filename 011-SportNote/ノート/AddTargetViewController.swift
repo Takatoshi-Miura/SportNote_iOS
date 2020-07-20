@@ -419,7 +419,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         }
     }
     
-    // Firebaseにデータを保存するメソッド（新規目標追加時のみ使用）
+    // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
     func saveTargetData(selectedMonth selectedMonth:Int,detail detail:String) {
         // HUDで処理中を表示
         SVProgressHUD.show()

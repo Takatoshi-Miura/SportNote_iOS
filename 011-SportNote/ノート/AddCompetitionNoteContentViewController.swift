@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import SVProgressHUD
 
 class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
     
@@ -27,7 +29,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
-        selectedDate = getCurrentTime()
+        selectedDate = getCurrentPickerTime()
         
         // テキストビューに枠線追加
         physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
@@ -42,7 +44,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         reflectionTextView.layer.borderWidth = 1.0
         
         // データ取得
-        targetData.loadTargetData()
+        loadTargetData()
         competitionNoteData.setNewNoteID()
         
         // ツールバーを作成
@@ -77,8 +79,12 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     var temperatureIndex:Int = 60
     
     // データ格納用
-    let targetData = TargetData()
+    var targetDataArray = [TargetData]()
     let competitionNoteData = NoteData()
+    
+    // データ保存終了フラグ
+    var saveDataFinished:Bool = false
+    
     
     
     //MARK:- UIの設定
@@ -95,59 +101,56 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // 保存ボタンの処理
     func saveButton() {
-        // 大会ノートデータを作成
-        competitionNoteData.setNoteType("大会記録")
+        // 大会ノートデータをFirebaseに保存
+        saveNoteData()
         
-        // Pickerの選択項目をセット
-        competitionNoteData.setYear(year)
-        competitionNoteData.setMonth(month)
-        competitionNoteData.setDate(date)
-        competitionNoteData.setDay(day)
-        competitionNoteData.setWeather(weather[weatherIndex])
-        competitionNoteData.setTemperature(temperature[temperatureIndex])
-        
-        // 入力テキストをセット
-        competitionNoteData.setPhysicalCondition(physicalConditionTextView.text!)
-        competitionNoteData.setTarget(targetTextView.text!)
-        competitionNoteData.setConsciousness(consciousnessTextView.text!)
-        competitionNoteData.setResult(resultTextView.text!)
-        competitionNoteData.setReflection(reflectionTextView.text!)
-        
-        // データをFirebaseに保存
-        competitionNoteData.saveNoteData()
-        
-        // その年月の目標データがなければ作成
-        if targetData.targetDataArray.count == 0 {
+        // 目標データがなければ作成
+        if targetDataArray.count == 0 {
             // 月間目標データを作成
-            targetData.setYear(self.year)
-            targetData.setMonth(self.month)
-            targetData.setDetail("")
-            targetData.targetDataArray = []
-            targetData.saveTargetData()
+            saveTargetData(year: self.year, month: self.month)
+            
+            // フラグ
+            saveDataFinished = true
             
             // 年間目標データを作成
-            targetData.setMonth(13)
-            targetData.saveTargetData()
+            saveTargetData(year: self.year, month: 13)
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
             var monthArray:[Int] = []
-            for num in 0...(targetData.targetDataArray.count - 1) {
-                if targetData.targetDataArray[num].getYear() == self.year {
-                    monthArray.append(targetData.targetDataArray[num].getMonth())
+            for num in 0...(targetDataArray.count - 1) {
+                if targetDataArray[num].getYear() == self.year {
+                    monthArray.append(targetDataArray[num].getMonth())
                 }
             }
-            // 月間目標の登録がなければ(monthArrayに要素がなければ)、月間目標作成
-            if monthArray.firstIndex(of: self.month) == nil {
-                targetData.setYear(self.year)
-                targetData.setMonth(self.month)
-                targetData.setDetail("")
-                targetData.targetDataArray = []
-                targetData.saveTargetData()
-            }
-            // 年間目標の登録がなければ、年間目標作成
-            if monthArray.firstIndex(of: 13) == nil {
-                targetData.setMonth(13)
-                targetData.saveTargetData()
+            
+            // 月間,年間双方の登録がなければ、目標作成
+            if monthArray.firstIndex(of: self.month) == nil && monthArray.firstIndex(of: 13) == nil {
+                // 月間目標データを作成
+                saveTargetData(year: self.year, month: self.month)
+                
+                // フラグ
+                saveDataFinished = true
+                
+                // 年間目標データを作成
+                saveTargetData(year: self.year, month: 13)
+            } else if monthArray.firstIndex(of: self.month) == nil {
+                // 年間目標のみ存在する場合
+                // フラグ
+                saveDataFinished = true
+                
+                // 月間目標データを作成
+                saveTargetData(year: self.year, month: self.month)
+            } else if monthArray.firstIndex(of: 13) == nil {
+                // 月間目標のみ存在する場合
+                // フラグ
+                saveDataFinished = true
+                
+                // 年間目標データを作成
+                saveTargetData(year: self.year, month: 13)
+            } else {
+                // 月間,年間ともに存在する場合
+                // モーダルを閉じる
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }
@@ -455,8 +458,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     //MARK:- その他のメソッド
     
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
+    // 現在時刻をPickerにセットするメソッド
+    func getCurrentPickerTime() -> String {
         let now = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
@@ -492,6 +495,15 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         day = String(dateFormatter.string(from: datePicker.date))
         
         return returnText
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
     }
     
     // テキストフィールド以外をタップでキーボードとPickerを下げる設定
@@ -533,6 +545,163 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
+    }
+    
+    // Firebaseから目標データを取得するメソッド
+    func loadTargetData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // targetDataArrayを初期化
+        targetDataArray = []
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーの目標データを取得する
+        db.collection("TargetData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標オブジェクトを作成
+                    let targetData = TargetData()
+                    
+                    // 目標データを反映
+                    let targetDataCollection = document.data()
+                    targetData.setYear(targetDataCollection["year"] as! Int)
+                    targetData.setMonth(targetDataCollection["month"] as! Int)
+                    targetData.setDetail(targetDataCollection["detail"] as! String)
+                    targetData.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                    targetData.setUserID(targetDataCollection["userID"] as! String)
+                    targetData.setCreated_at(targetDataCollection["created_at"] as! String)
+                    targetData.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.targetDataArray.append(targetData)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseにノートデータを保存するメソッド（新規ノート作成時のみ使用）
+    func saveNoteData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 大会ノートデータを作成
+        competitionNoteData.setNoteType("大会記録")
+        
+        // Pickerの選択項目をセット
+        competitionNoteData.setYear(year)
+        competitionNoteData.setMonth(month)
+        competitionNoteData.setDate(date)
+        competitionNoteData.setDay(day)
+        competitionNoteData.setWeather(weather[weatherIndex])
+        competitionNoteData.setTemperature(temperature[temperatureIndex])
+        
+        // 入力テキストをセット
+        competitionNoteData.setPhysicalCondition(physicalConditionTextView.text!)
+        competitionNoteData.setTarget(targetTextView.text!)
+        competitionNoteData.setConsciousness(consciousnessTextView.text!)
+        competitionNoteData.setResult(resultTextView.text!)
+        competitionNoteData.setReflection(reflectionTextView.text!)
+        
+        // ユーザーUIDをセット
+        competitionNoteData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 現在時刻をセット
+        competitionNoteData.setCreated_at(getCurrentTime())
+        competitionNoteData.setUpdated_at(competitionNoteData.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("NoteData").document("\(competitionNoteData.getUserID())_\(competitionNoteData.getNoteID())").setData([
+            "noteID"                : competitionNoteData.getNoteID(),
+            "noteType"              : competitionNoteData.getNoteType(),
+            "year"                  : competitionNoteData.getYear(),
+            "month"                 : competitionNoteData.getMonth(),
+            "date"                  : competitionNoteData.getDate(),
+            "day"                   : competitionNoteData.getDay(),
+            "weather"               : competitionNoteData.getWeather(),
+            "temperature"           : competitionNoteData.getTemperature(),
+            "physicalCondition"     : competitionNoteData.getPhysicalCondition(),
+            "purpose"               : competitionNoteData.getPurpose(),
+            "detail"                : competitionNoteData.getDetail(),
+            "target"                : competitionNoteData.getTarget(),
+            "consciousness"         : competitionNoteData.getConsciousness(),
+            "result"                : competitionNoteData.getResult(),
+            "reflection"            : competitionNoteData.getReflection(),
+            "taskTitle"             : competitionNoteData.getTaskTitle(),
+            "measuresTitle"         : competitionNoteData.getMeasuresTitle(),
+            "measuresEffectiveness" : competitionNoteData.getMeasuresEffectiveness(),
+            "isDeleted"             : competitionNoteData.getIsDeleted(),
+            "userID"                : competitionNoteData.getUserID(),
+            "created_at"            : competitionNoteData.getCreated_at(),
+            "updated_at"            : competitionNoteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
+    func saveTargetData(year selectedYear:Int,month selectedMonth:Int) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 目標データを作成
+        let targetData = TargetData()
+        
+        // 年月をセット
+        targetData.setYear(selectedYear)
+        targetData.setMonth(selectedMonth)
+        
+        // ユーザーUIDをセット
+        targetData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 現在時刻をセット
+        targetData.setCreated_at(getCurrentTime())
+        targetData.setUpdated_at(targetData.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("TargetData").document("\(Auth.auth().currentUser!.uid)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+            "year"       : targetData.getYear(),
+            "month"      : targetData.getMonth(),
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "userID"     : targetData.getUserID(),
+            "created_at" : targetData.getCreated_at(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                
+                // 最後の保存であればモーダルを閉じる
+                if self.saveDataFinished == true {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+        }
     }
 
 }

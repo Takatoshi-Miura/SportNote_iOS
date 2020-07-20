@@ -652,6 +652,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // キーボードを閉じる
         self.view.endEditing(true)
     }
+    
+    
+    
+    
 
 }
 
