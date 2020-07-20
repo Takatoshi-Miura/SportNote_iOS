@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import SVProgressHUD
 
 class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -39,9 +40,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // データ格納用
     var freeNoteData = FreeNote()
-    var target = TargetData()
     var targetDataArray = [TargetData]()
-    var noteData = NoteData()
     var noteDataArray = [NoteData]()
     
     // テーブル用
@@ -353,62 +352,193 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dataInSection[0].append(dummyNoteData)
     }
     
+    // sectionTitleとdataInSectionを再構成するメソッド
+    func reloadSectionData() {
+        // データ初期化
+        self.sectionTitleInit()
+        self.dataInSectionInit()
+        
+        // targetDataArrayが空の時は更新しない（エラー対策）
+        if self.targetDataArray.isEmpty == false {
+            // テーブルデータ更新
+            for index in 0...(self.targetDataArray.count - 1) {
+                // 年間目標と月間目標の区別
+                if self.targetDataArray[index].getMonth() == 13 {
+                    // 年間目標セクション追加
+                    self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
+                    self.dataInSection.append([])
+                } else {
+                    // 月間目標セクション追加
+                    self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
+                    
+                    // ノートデータ追加
+                    var noteArray:[NoteData] = []
+                    // noteDataArrayが空の時は更新しない（エラー対策）
+                    if self.noteDataArray.isEmpty == false {
+                        // 年,月が合致するノート数だけappendする。
+                        for count in 0...(self.noteDataArray.count - 1) {
+                            if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
+                                && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
+                                noteArray.append(self.noteDataArray[count])
+                            }
+                        }
+                    }
+                    self.dataInSection.append(noteArray)
+                }
+            }
+        }
+    }
+    
+    // Firebaseからフリーノートデータを読み込むメソッド
+    func loadFreeNoteData() {
+        // ユーザーUIDをセット
+        freeNoteData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーのフリーノートデータを取得する
+        db.collection("FreeNoteData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let freeNoteDataCollection = document.data()
+                    
+                    // フリーノートデータを反映
+                    self.freeNoteData.setTitle(freeNoteDataCollection["title"] as! String)
+                    self.freeNoteData.setDetail(freeNoteDataCollection["detail"] as! String)
+                    self.freeNoteData.setUserID(freeNoteDataCollection["userID"] as! String)
+                    self.freeNoteData.setCreated_at(freeNoteDataCollection["created_at"] as! String)
+                    self.freeNoteData.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
+                }
+            }
+        }
+    }
+    
+    // Firebaseから目標データを取得するメソッド
+    func loadTargetData() {
+        // targetDataArrayを初期化
+        targetDataArray = []
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーの目標データを取得する
+        db.collection("TargetData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標オブジェクトを作成
+                    let target = TargetData()
+                    
+                    // 目標データを反映
+                    let targetDataCollection = document.data()
+                    target.setYear(targetDataCollection["year"] as! Int)
+                    target.setMonth(targetDataCollection["month"] as! Int)
+                    target.setDetail(targetDataCollection["detail"] as! String)
+                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                    target.setUserID(targetDataCollection["userID"] as! String)
+                    target.setCreated_at(targetDataCollection["created_at"] as! String)
+                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.targetDataArray.append(target)
+                }
+                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
+                // セクションデータを再構築
+                self.reloadSectionData()
+                
+                // テーブルビューを更新
+                self.tableView?.reloadData()
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseからデータを取得するメソッド
+    func loadNoteData() {
+        // noteDataArrayを初期化
+        noteDataArray = []
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーのデータを取得する
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .order(by: "date", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // オブジェクトを作成
+                    let noteData = NoteData()
+                    
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    noteData.setNoteType(dataCollection["noteType"] as! String)
+                    noteData.setYear(dataCollection["year"] as! Int)
+                    noteData.setMonth(dataCollection["month"] as! Int)
+                    noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
+                    noteData.setWeather(dataCollection["weather"] as! String)
+                    noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    noteData.setPurpose(dataCollection["purpose"] as! String)
+                    noteData.setDetail(dataCollection["detail"] as! String)
+                    noteData.setTarget(dataCollection["target"] as! String)
+                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    noteData.setResult(dataCollection["result"] as! String)
+                    noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    noteData.setUserID(dataCollection["userID"] as! String)
+                    noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.noteDataArray.append(noteData)
+                }
+                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
+                // セクションデータを再構築
+                self.reloadSectionData()
+                
+                // テーブルビューを更新
+                self.tableView?.reloadData()
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
     // データを取得するメソッド
     func reloadData() {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
         // データ取得
-        freeNoteData.loadFreeNoteData()
-        target.loadTargetData()
-        noteData.loadNoteData()
-        
-        // 時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
-            // テーブルデータ初期化
-            self.sectionTitleInit()
-            self.dataInSectionInit()
-            
-            // データ配列の受け取り
-            self.targetDataArray = self.target.targetDataArray
-            self.noteDataArray   = self.noteData.noteDataArray
-            
-            // targetDataArrayが空の時は更新しない（エラー対策）
-            if self.targetDataArray.isEmpty == false {
-                // テーブルデータ更新
-                for index in 0...(self.targetDataArray.count - 1) {
-                    // 年間目標と月間目標の区別
-                    if self.targetDataArray[index].getMonth() == 13 {
-                        // 年間目標セクション追加
-                        self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
-                        self.dataInSection.append([])
-                    } else {
-                        // 月間目標セクション追加
-                        self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
-                        
-                        // ノートデータ追加
-                        var noteArray:[NoteData] = []
-                        // noteDataArrayが空の時は更新しない（エラー対策）
-                        if self.noteDataArray.isEmpty == false {
-                            // 年,月が合致するノート数だけappendする。
-                            for count in 0...(self.noteDataArray.count - 1) {
-                                if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
-                                    && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
-                                    noteArray.append(self.noteDataArray[count])
-                                }
-                            }
-                        }
-                        self.dataInSection.append(noteArray)
-                    }
-                }
-            }
-        
-            // テーブルビューを更新
-            self.tableView?.reloadData()
-            
-            // HUDで処理中を非表示
-            SVProgressHUD.dismiss()
-        }
+        loadFreeNoteData()
+        loadTargetData()
+        loadNoteData()
     }
     
 }
