@@ -46,6 +46,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
     var dataInSection:[[NoteData]] = [[]]
+    var sortedIndexPaths:[IndexPath] = []
+    var deleteFinished:Bool = false
     var sectionIndex:Int = 0
     var rowIndex:Int = 0
     
@@ -172,27 +174,20 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
             // OKボタンがタップされたときの処理
             
-            // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
-            let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
+            self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
             
-            // エラー対策
-            if sortedIndexPaths == nil{
-                
+            for num in 0...self.sortedIndexPaths.count - 1 {
+                // 最後の削除であればフラグをtrueにする
+                if num == (self.sortedIndexPaths.count - 1) {
+                    self.deleteFinished = true
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
+                } else {
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
+                }
             }
-            
-            for num in 0...sortedIndexPaths.count - 1 {
-                // 選択されたノートを削除
-                self.dataInSection[sortedIndexPaths[num][0]][sortedIndexPaths[num][1]].setIsDeleted(true)
-                self.dataInSection[sortedIndexPaths[num][0]][sortedIndexPaths[num][1]].updateNoteData()
-            }
-            
-            for _ in 0...sortedIndexPaths.count - 1 {
-                // セルの個数を揃える(上記のループ内にまとめると削除が正常に完了しないため、このループに記述)
-                self.dataInSection[sortedIndexPaths[0][0]].remove(at: 0)
-            }
-            
-            // tableViewの行を削除
-            self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
         }
         //OKボタンを追加
         alertController.addAction(okAction)
@@ -225,15 +220,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // OKボタンを宣言
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // OKボタンがタップされたときの処理
-                // 次回以降、このノートデータを取得しないようにする
-                self.dataInSection[indexPath.section][indexPath.row].setIsDeleted(true)
-                self.dataInSection[indexPath.section][indexPath.row].updateNoteData()
-                    
-                // セルのみを削除(セクションは残す)
-                self.dataInSection[indexPath.section].remove(at:indexPath.row)
-                    
-                // セルを削除
-                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+                // ノートデータを削除
+                self.deleteFinished = true
+                self.deleteNoteData(note: self.dataInSection[indexPath.section][indexPath.row])
             }
             //OKボタンを追加
             alertController.addAction(okAction)
@@ -300,8 +289,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // ノートがある場合は目標テキストをクリア
                 self.targetDataArray[self.sectionIndex - 1].setDetail("")
             }
-            self.targetDataArray[self.sectionIndex - 1].updateTargetData()
-            self.reloadData()
+            self.updateTargetData(target: self.targetDataArray[self.sectionIndex - 1])
         }
         //OKボタンを追加
         alertController.addAction(okAction)
@@ -545,6 +533,69 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         loadFreeNoteData()
         loadTargetData()
         loadNoteData()
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // ノートデータを削除するメソッド
+    func deleteNoteData(note noteData:NoteData) {
+        // isDeletedをセット
+        noteData.setIsDeleted(true)
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("NoteData").document("\(Auth.auth().currentUser!.uid)_\(noteData.getNoteID())")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "isDeleted"  : true,
+            "updated_at" : getCurrentTime()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+                
+                // 最後の削除であればリロード
+                if self.deleteFinished == true {
+                    self.deleteFinished = false
+                    self.reloadData()
+                }
+            }
+        }
+    }
+    
+    // Firebaseのデータを更新するメソッド
+    func updateTargetData(target targetData:TargetData) {
+        // 更新日時を現在時刻にする
+        targetData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("TargetData").document("\(Auth.auth().currentUser!.uid)_\(targetData.getYear())_\(targetData.getMonth())")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+                
+                // リロード
+                self.reloadData()
+            }
+        }
     }
     
 }
