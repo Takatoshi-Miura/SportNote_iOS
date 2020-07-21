@@ -30,8 +30,6 @@
 		8D69FC9824B7085900DFECB3 /* TaskMeasuresTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */; };
 		8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */; };
 		8D6FB6A724B96130008ED809 /* NoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6FB6A624B96130008ED809 /* NoteDetailViewController.swift */; };
-		8D6FB6AF24B98AB0008ED809 /* UpdateCompetitionNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6FB6AE24B98AB0008ED809 /* UpdateCompetitionNoteViewController.swift */; };
-		8D6FB6B124B98AE0008ED809 /* UpdateCompetitionNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6FB6B024B98AE0008ED809 /* UpdateCompetitionNoteContentViewController.swift */; };
 		8D7853FE24A6FE0000CCA440 /* TaskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */; };
 		8D7BAB4D24A5AF5300BE196B /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4C24A5AF5300BE196B /* TaskData.swift */; };
 		8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */; };
@@ -79,8 +77,6 @@
 		8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMeasuresTableViewCell.swift; sourceTree = "<group>"; };
 		8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskMeasuresTableViewCell.xib; sourceTree = "<group>"; };
 		8D6FB6A624B96130008ED809 /* NoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailViewController.swift; sourceTree = "<group>"; };
-		8D6FB6AE24B98AB0008ED809 /* UpdateCompetitionNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCompetitionNoteViewController.swift; sourceTree = "<group>"; };
-		8D6FB6B024B98AE0008ED809 /* UpdateCompetitionNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCompetitionNoteContentViewController.swift; sourceTree = "<group>"; };
 		8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
 		8D7BAB4C24A5AF5300BE196B /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
 		8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
@@ -207,8 +203,6 @@
 				8D01652F24AEEBD100F9D69F /* NoteViewController.swift */,
 				8D6FB6A624B96130008ED809 /* NoteDetailViewController.swift */,
 				8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */,
-				8D6FB6AE24B98AB0008ED809 /* UpdateCompetitionNoteViewController.swift */,
-				8D6FB6B024B98AE0008ED809 /* UpdateCompetitionNoteContentViewController.swift */,
 				8D01653524AF202F00F9D69F /* AddNoteViewController.swift */,
 				8DA4121524B03077002FD67A /* AddTargetViewController.swift */,
 				8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */,
@@ -359,8 +353,6 @@
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8DB9155924AD9D620090D376 /* ResolvedMeasuresDetailViewController.swift in Sources */,
-				8D6FB6B124B98AE0008ED809 /* UpdateCompetitionNoteContentViewController.swift in Sources */,
-				8D6FB6AF24B98AB0008ED809 /* UpdateCompetitionNoteViewController.swift in Sources */,
 				8D01653224AEF14300F9D69F /* FreeNote.swift in Sources */,
 				8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */,
 				8DA4121824B06F0E002FD67A /* TargetData.swift in Sources */,

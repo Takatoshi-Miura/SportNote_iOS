@@ -25,6 +25,9 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
             vc.practiceNoteData = self.noteData
             vc.previousControllerName = "NoteDetailViewController"
             
+            // タイトル文字列の設定
+            navigationBar.items![0].title = "ノートの編集"
+            
             // 保存ボタンを有効にする
             self.saveButtonEnable()
         }
@@ -44,6 +47,9 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
     // スクロールビュー
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
+    
+    // ナビゲーションバー
+    @IBOutlet weak var navigationBar: UINavigationBar!
     
     // 保存ボタン
     @IBOutlet weak var saveButton: UIBarButtonItem!

@@ -28,8 +28,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         taskTableView.delegate   = self
         navigationController?.delegate = self
         
-        // TaskMeasuresTableViewCellを登録
-        taskTableView.register(UINib(nibName: "TaskMeasuresTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
+        // セルの登録
+        self.taskTableView.register(UINib(nibName: "TaskMeasuresTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
         
         // Pickerのタグ付け
         typePicker.tag    = 0
@@ -54,6 +54,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        // データ取得
+        loadTargetData()
+        
         // NoteDetailViewControllerから遷移してきた場合
         if previousControllerName == "NoteDetailViewController" {
             // 受け取ったノートデータを反映
@@ -79,7 +82,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
         } else {
             // データ取得
-            loadTargetData()
             loadTaskData()
             
             // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
@@ -231,43 +233,50 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         if tableView.tag == 0 {
+            // セルを取得
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-            // NoteDetailViewControllerから遷移してきた場合
-            if previousControllerName == "NoteDetailViewController" {
-                if indexPath.row == 0 {
-                    // 0行目のセルは日付セルを返却
+            
+            // 0行目のセル
+            if indexPath.row == 0 {
+                // NoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "NoteDetailViewController" {
+                    // 日付セルを返却
                     cell.textLabel!.text = "日付"
                     cell.detailTextLabel!.text = selectedDate
                     cell.detailTextLabel?.textColor = UIColor.systemGray
                     return cell
                 } else {
-                    // 1行目のセルは天候セルを返却
-                    cell.textLabel!.text = "天候"
-                    cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
-                    cell.detailTextLabel?.textColor = UIColor.systemGray
-                    return cell
-                }
-            } else {
-                if indexPath.row == 0 {
-                    // 0行目のセルは種別セルを返却
+                    // 種別セルを返却
                     cell.textLabel!.text = "種別"
                     cell.detailTextLabel!.text = noteType[typeIndex]
                     cell.detailTextLabel?.textColor = UIColor.systemGray
                     return cell
-                } else if indexPath.row == 1 {
-                    // 1行目のセルは日付セルを返却
-                    cell.textLabel!.text = "日付"
-                    cell.detailTextLabel!.text = selectedDate
-                    cell.detailTextLabel?.textColor = UIColor.systemGray
-                    return cell
-                } else {
-                    // 2行目のセルは天候セルを返却
+                }
+            // 1行目のセル
+            } else if indexPath.row == 1 {
+                // NoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "NoteDetailViewController" {
+                    // 天候セルを返却
                     cell.textLabel!.text = "天候"
                     cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
                     cell.detailTextLabel?.textColor = UIColor.systemGray
                     return cell
+                } else {
+                    // 日付セルを返却
+                    cell.textLabel!.text = "日付"
+                    cell.detailTextLabel!.text = selectedDate
+                    cell.detailTextLabel?.textColor = UIColor.systemGray
+                    return cell
                 }
+            // 2行目のセル
+            } else {
+                // 天候セルを返却
+                cell.textLabel!.text = "天候"
+                cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
             }
         } else {
             // 未解決の課題セルを返却
@@ -832,7 +841,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
     }
     
-    // Firebaseにノートデータを保存するメソッド（新規ノート作成時のみ使用）
+    // Firebaseにノートデータを保存するメソッド
     func saveNoteData() {
         // HUDで処理中を表示
         SVProgressHUD.show()

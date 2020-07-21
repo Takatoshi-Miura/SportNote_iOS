@@ -37,7 +37,6 @@ class CompetitionNoteDetailViewController: UIViewController {
     
     
     
-    
     //MARK:- UIの設定
     
     @IBOutlet weak var physicalConditionTextView: UITextView!
@@ -50,8 +49,13 @@ class CompetitionNoteDetailViewController: UIViewController {
     @IBAction func editButton(_ sender: Any) {
         // 大会記録追加画面に遷移
         let storyboard: UIStoryboard = self.storyboard!
-        let nextView = storyboard.instantiateViewController(withIdentifier: "UpdateCompetitionNoteViewController") as! UpdateCompetitionNoteViewController
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddCompetitionNoteViewController") as! AddCompetitionNoteViewController
+        
+        // ノートデータの受け渡し
         nextView.noteData = self.noteData
+        nextView.previousControllerName = "CompetitionNoteDetailViewController"
+        
+        // 画面遷移
         self.present(nextView, animated: true, completion: nil)
     }
     

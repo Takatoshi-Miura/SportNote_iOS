@@ -43,12 +43,42 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
         reflectionTextView.layer.borderWidth = 1.0
         
-        // データ取得
-        loadTargetData()
-        competitionNoteData.setNewNoteID()
-        
         // ツールバーを作成
         createToolBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // データ取得
+        loadTargetData()
+        
+        // CompetitionNoteDetailViewControllerから遷移してきた場合
+        if previousControllerName == "CompetitionNoteDetailViewController" {
+            // 受け取ったノートデータを反映
+            
+            // 初期値の設定(受け取ったnoteDataに値に設定)
+            self.temperatureIndex = self.competitionNoteData.getTemperature() + 40
+            self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
+            if self.competitionNoteData.getWeather() == "くもり" {
+                self.weatherIndex = 1
+            } else if self.competitionNoteData.getWeather() == "雨" {
+                self.weatherIndex = 2
+            }
+            self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
+            
+            // テキストビューに値をセット
+            self.physicalConditionTextView.text = self.competitionNoteData.getPhysicalCondition()
+            self.targetTextView.text = self.competitionNoteData.getTarget()
+            self.consciousnessTextView.text = self.competitionNoteData.getConsciousness()
+            self.resultTextView.text = self.competitionNoteData.getResult()
+            self.reflectionTextView.text = self.competitionNoteData.getReflection()
+            
+            // テーブルビューを更新
+            self.tableView.reloadData()
+            
+        } else {
+            // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
+            competitionNoteData.setNewNoteID()
+        }
     }
     
     
@@ -80,10 +110,13 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // データ格納用
     var targetDataArray = [TargetData]()
-    let competitionNoteData = NoteData()
+    var competitionNoteData = NoteData()
     
     // データ保存終了フラグ
     var saveDataFinished:Bool = false
+    
+    // ノート詳細確認画面からの遷移用
+    var previousControllerName:String = ""  // 前のViewController名
     
     
     
@@ -171,26 +204,53 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3    // 種別セル,日付セル,天候セルの3つ
+        // CompetitionNoteDetailViewControllerから遷移してきた場合
+        if previousControllerName == "CompetitionNoteDetailViewController" {
+            return 2    // 日付セル,天候セルの2つ
+        } else {
+            return 3    // 種別セル,日付セル,天候セルの3つ
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // セルを取得
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
+        // 0行目のセル
         if indexPath.row == 0 {
-            // 0行目のセルは種別セルを返却
-            cell.textLabel!.text = "種別"
-            cell.detailTextLabel!.text = noteType[typeIndex]
-            cell.detailTextLabel?.textColor = UIColor.systemGray
-            return cell
+            // CompetitionNoteDetailViewControllerから遷移してきた場合
+            if previousControllerName == "CompetitionNoteDetailViewController" {
+                // 日付セルを返却
+                cell.textLabel!.text = "日付"
+                cell.detailTextLabel!.text = selectedDate
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
+            } else {
+                // 種別セルを返却
+                cell.textLabel!.text = "種別"
+                cell.detailTextLabel!.text = noteType[typeIndex]
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
+            }
+        // 1行目のセル
         } else if indexPath.row == 1 {
-            // 1行目のセルは日付セルを返却
-            cell.textLabel!.text = "日付"
-            cell.detailTextLabel!.text = selectedDate
-            cell.detailTextLabel?.textColor = UIColor.systemGray
-            return cell
+            // CompetitionNoteDetailViewControllerから遷移してきた場合
+            if previousControllerName == "CompetitionNoteDetailViewController" {
+                // 天候セルを返却
+                cell.textLabel!.text = "天候"
+                cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
+            } else {
+                // 日付セルを返却
+                cell.textLabel!.text = "日付"
+                cell.detailTextLabel!.text = selectedDate
+                cell.detailTextLabel?.textColor = UIColor.systemGray
+                return cell
+            }
+        // 2行目のセル
         } else {
-            // 2行目のセルは天候セルを返却
+            // 天候セルを返却
             cell.textLabel!.text = "天候"
             cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
             cell.detailTextLabel?.textColor = UIColor.systemGray
@@ -199,40 +259,57 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 0行目のセルがタップされた時
         if indexPath.row == 0 {
-            // 種別セルがタップされた時
-            // タップしたときの選択色を消去
-            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-            
-            // Pickerの初期化
-            typeCellPickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+            // CompetitionNoteDetailViewControllerから遷移してきた場合
+            if previousControllerName == "CompetitionNoteDetailViewController" {
+                // 日付Pickerの初期化
+                datePickerInit()
+                
+                // 下からPickerを呼び出す
+                let screenSize = UIScreen.main.bounds.size
+                pickerView.frame.origin.y = screenSize.height
+                UIView.animate(withDuration: 0.3) {
+                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                }
+            } else {
+                // 種別Pickerの初期化
+                typeCellPickerInit()
+                
+                // 下からPickerを呼び出す
+                let screenSize = UIScreen.main.bounds.size
+                pickerView.frame.origin.y = screenSize.height
+                UIView.animate(withDuration: 0.3) {
+                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                }
             }
+        // 1行目のセルがタップされた時
         } else if indexPath.row == 1 {
-            // 日付セルがタップされた時
-            // タップしたときの選択色を消去
-            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-            
-            // Pickerの初期化
-            datePickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+            // CompetitionNoteDetailViewControllerから遷移してきた場合
+            if previousControllerName == "CompetitionNoteDetailViewController" {
+                // 天候Pickerの初期化
+                weatherPickerInit()
+                
+                // 下からPickerを呼び出す
+                let screenSize = UIScreen.main.bounds.size
+                pickerView.frame.origin.y = screenSize.height
+                UIView.animate(withDuration: 0.3) {
+                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                }
+            } else {
+                // 日付Pickerの初期化
+                datePickerInit()
+                
+                // 下からPickerを呼び出す
+                let screenSize = UIScreen.main.bounds.size
+                pickerView.frame.origin.y = screenSize.height
+                UIView.animate(withDuration: 0.3) {
+                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                }
             }
+        // 2行目のセルがタップされた時
         } else {
-            // 天候セルがタップされた時
-            // タップしたときの選択色を消去
-            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-            
-            // Pickerの初期化
+            // 天候Pickerの初期化
             weatherPickerInit()
             
             // 下からPickerを呼び出す
@@ -602,7 +679,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         }
     }
     
-    // Firebaseにノートデータを保存するメソッド（新規ノート作成時のみ使用）
+    // Firebaseにノートデータを保存するメソッド
     func saveNoteData() {
         // HUDで処理中を表示
         SVProgressHUD.show()
@@ -665,6 +742,16 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
                 
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
+                
+                // CompetitionNoteDetailViewControllerから遷移してきた場合
+                if self.previousControllerName == "CompetitionNoteDetailViewController" {
+                    // ストーリーボードを取得
+                    let storyboard: UIStoryboard = self.storyboard!
+                    let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                    
+                    // ノート画面に遷移
+                    self.present(nextView, animated: false, completion: nil)
+                }
             }
         }
     }
