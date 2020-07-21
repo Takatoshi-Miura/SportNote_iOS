@@ -35,6 +35,21 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
         
+        // 解決済みの課題の場合の設定
+        if previousControllerName == "ResolvedTaskViewController" {
+            // 解決済みボタンを未解決ボタンに変更
+            self.resolvedButton.backgroundColor = UIColor.systemRed
+            self.resolvedButton.setTitle("未解決に戻す", for: .normal)
+            
+            // 対策追加ボタンを隠す
+            self.addMeasuresButton.isHidden = true
+            
+            // テキストを編集不可能にする
+            self.taskTitleTextField.isEnabled = false
+            self.taskCauseTextView.isEditable = false
+            self.taskCauseTextView.isSelectable = false
+        }
+        
         // ツールバーを作成
         createToolBar()
     }
@@ -50,6 +65,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     var measuresTitleArray:[String] = []    // 対策タイトルの格納用
     var indexPath:Int = 0                   // 行番号格納用
     var resolvedButtonTap:Bool = false      // 解決済みボタンのタップ判定
+    var previousControllerName:String = ""  // 前のViewController名
     
     
     
@@ -62,12 +78,16 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
+    // ボタン
+    @IBOutlet weak var resolvedButton: UIButton!
+    @IBOutlet weak var addMeasuresButton: UIButton!
+    
     // 解決済みにするボタンの処理
     @IBAction func resolvedButton(_ sender: Any) {
         // タップ判定
         resolvedButtonTap = true
         
-        // 解決済みにする
+        // 解決済み or 未解決にする
         taskData.changeAchievement()
         
         // データ更新
@@ -150,7 +170,12 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     // セルの編集可否設定
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        // 解決済みの課題の場合の設定
+        if previousControllerName == "ResolvedTaskViewController" {
+            return false
+        } else {
+            return true
+        }
     }
     
     // セルを削除したときの処理（左スワイプ）
@@ -215,8 +240,9 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         if segue.identifier == "goMeasuresDetailViewController" {
             // 課題データを対策詳細確認画面へ渡す
             let measuresDetailViewController = segue.destination as! MeasuresDetailViewController
-            measuresDetailViewController.taskData = taskData
+            measuresDetailViewController.taskData  = taskData
             measuresDetailViewController.indexPath = indexPath
+            measuresDetailViewController.previousControllerName = self.previousControllerName
         }
     }
     

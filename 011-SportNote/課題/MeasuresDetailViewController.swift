@@ -32,6 +32,15 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         // 受け取った対策データを表示
         printMeasuresData(taskData)
         
+        // 解決済みの課題の場合の設定
+        if previousControllerName == "ResolvedTaskViewController" {
+            // 追加ボタンを隠す
+            self.addButton.isHidden = true
+            
+            // テキストを編集不可能にする
+            self.measuresTitleTextField.isEnabled = false
+        }
+        
         // ツールバーを作成
         createToolBar()
     }
@@ -39,9 +48,10 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     
     //MARK:- 変数の宣言
-    var taskData = TaskData()   // 課題データ格納用
-    var indexPath = 0           // 行番号格納用
-    let noteData = NoteData()   // ノートデータ格納用（有効性セルタップ時にデータを格納）
+    var taskData = TaskData()               // 課題データ格納用
+    var indexPath = 0                       // 行番号格納用
+    let noteData = NoteData()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
+    var previousControllerName:String = ""  // 前のViewController名
     
     
     
@@ -53,6 +63,9 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
+    // ボタン
+    @IBOutlet weak var addButton: UIButton!
+    
     // チェックボックス
     @IBOutlet weak var checkButton: UIButton!
     private let checkedImage = UIImage(named: "check_on")
@@ -60,8 +73,13 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // チェックボックスがタップされた時の処理
     @IBAction func checkButtonTap(_ sender: Any) {
-        // 選択状態を反転させる
-        self.checkButton.isSelected = !self.checkButton.isSelected
+        // 解決済みの課題の場合の設定
+        if previousControllerName == "ResolvedTaskViewController" {
+            // 編集不可能
+        } else {
+            // 選択状態を反転させる
+            self.checkButton.isSelected = !self.checkButton.isSelected
+        }
     }
     
     // 追加ボタンの処理
