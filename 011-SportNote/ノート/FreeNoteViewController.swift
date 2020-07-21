@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
 
@@ -53,9 +54,7 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is NoteViewController {
             // フリーノートデータを更新
-            freeNoteData.setTitle(titleTextField.text!)
-            freeNoteData.setDetail(detailTextView.text!)
-            freeNoteData.updateFreeNoteData()
+            updateFreeNoteData(noteData: self.freeNoteData)
         }
     }
     
@@ -101,6 +100,42 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate {
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // Firebaseのデータを更新するメソッド
+    func updateFreeNoteData(noteData freeNoteData:FreeNote) {
+        // テキストデータをセット
+        freeNoteData.setTitle(titleTextField.text!)
+        freeNoteData.setDetail(detailTextView.text!)
+        
+        // 更新日時を現在時刻にする
+        freeNoteData.setUpdated_at(getCurrentTime())
+        
+        // 更新したいデータを取得
+        let db = Firestore.firestore()
+        let data = db.collection("FreeNoteData").document("\(Auth.auth().currentUser!.uid)")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "title"      : freeNoteData.getTitle(),
+            "detail"     : freeNoteData.getDetail(),
+            "updated_at" : freeNoteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
     }
 
 }
