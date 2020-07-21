@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import SVProgressHUD
 
 class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
     
@@ -35,7 +37,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
-        selectedDate = getCurrentTime()
+        selectedDate = getCurrentPickerTime()
         
         // テキストビューの枠線付け
         physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
@@ -53,19 +55,11 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     override func viewWillAppear(_ animated: Bool) {
         // データ取得
-        // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にまとめてやろうとするとID設定前にノートが保存されてしまう。
-        targetData.loadTargetData()
-        taskData.loadUnresolvedTaskData()
-        practiceNoteData.setNewNoteID()
+        loadTargetData()
+        loadTaskData()
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-            self.taskTableView?.reloadData()
-            
-            // 課題数によってテーブルビューの高さを設定
-            self.taskTableView?.layoutIfNeeded()
-            self.taskTableView?.updateConstraints()
-            self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
-        }
+        // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
+        practiceNoteData.setNewNoteID()
         
         // 遷移元の画面を取得する
         
@@ -102,9 +96,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     var temperatureIndex:Int = 60
     
     // データ格納用
-    let targetData = TargetData()
-    let taskData = TaskData()
+    var targetDataArray  = [TargetData]()
+    var taskDataArray    = [TaskData]()
     let practiceNoteData = NoteData()
+    
+    // 終了フラグ
+    var loadFinished:Bool = false
+    var saveFinished:Bool = false
     
     // 遷移元の画面
     var viewController:UIViewController?
@@ -126,90 +124,66 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 保存ボタンの処理
     func saveButton() {
-        // 練習ノートデータを作成
-        practiceNoteData.setNoteType("練習記録")
+        // 練習ノートデータをFirebaseに保存
+        saveNoteData()
         
-        // Pickerの選択項目をセット
-        practiceNoteData.setYear(year)
-        practiceNoteData.setMonth(month)
-        practiceNoteData.setDate(date)
-        practiceNoteData.setDay(day)
-        practiceNoteData.setWeather(weather[weatherIndex])
-        practiceNoteData.setTemperature(temperature[temperatureIndex])
-        
-        // 入力テキストをセット
-        practiceNoteData.setPhysicalCondition(physicalConditionTextView.text!)
-        practiceNoteData.setPurpose(purposeTextView.text!)
-        practiceNoteData.setDetail(detailTextView.text!)
-        practiceNoteData.setReflection(reflectionTextView.text!)
-        
-        // 対策データをセット
-        var taskTitle:[String] = []
-        var measuresTitle:[String] = []
-        var measuresEffectiveness:[String] = []
-        
-        // 課題を全て非表示にした際のエラー対策
-        if self.taskData.taskDataArray.isEmpty == true {
-            // 何もしない
-        } else {
-            for num in 0...self.taskData.taskDataArray.count - 1 {
-                // 課題タイトル
-                taskTitle.append(self.taskData.taskDataArray[num].getTaskTitle())
-                
-                // 対策タイトル
-                let measures = self.taskData.taskDataArray[num].getMeasuresPriority()
-                measuresTitle.append(measures)
-                
-                // 対策の有効性   FIX:セルを再利用するため、隠れているセルがある場合エラーとなる
-                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
-                measuresEffectiveness.append(cell.effectivenessTextView.text)
-                
-                // チェックが入っていればTaskDataの有効性コメントに追加
-                if cell.checkBox.isSelected {
-                    self.taskData.taskDataArray[num].addEffectiveness(title: measures, effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
-                    self.taskData.taskDataArray[num].updateTaskData()
-                }
-            }
-        }
-        practiceNoteData.setTaskTitle(taskTitle)
-        practiceNoteData.setMeasuresTitle(measuresTitle)
-        practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
-        
-        // データをFirebaseに保存
-        practiceNoteData.saveNoteData()
-        
-        // その年月の目標データがなければ作成
-        if targetData.targetDataArray.count == 0 {
+        // 目標データがなければ作成
+        if targetDataArray.isEmpty == true {
             // 月間目標データを作成
-            targetData.setYear(self.year)
-            targetData.setMonth(self.month)
-            targetData.setDetail("")
-            targetData.targetDataArray = []
-            targetData.saveTargetData()
+            saveTargetData(year: self.year, month: self.month)
+            
+            // フラグ
+            saveFinished = true
             
             // 年間目標データを作成
-            targetData.setMonth(13)
-            targetData.saveTargetData()
+            saveTargetData(year: self.year, month: 13)
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
             var monthArray:[Int] = []
-            for num in 0...(targetData.targetDataArray.count - 1) {
-                if targetData.targetDataArray[num].getYear() == self.year {
-                    monthArray.append(targetData.targetDataArray[num].getMonth())
+            for num in 0...(targetDataArray.count - 1) {
+                if targetDataArray[num].getYear() == self.year {
+                    monthArray.append(targetDataArray[num].getMonth())
                 }
             }
-            // 月間目標の登録がなければ(monthArrayに要素がなければ)、月間目標作成
-            if monthArray.firstIndex(of: self.month) == nil {
-                targetData.setYear(self.year)
-                targetData.setMonth(self.month)
-                targetData.setDetail("")
-                targetData.targetDataArray = []
-                targetData.saveTargetData()
-            }
-            // 年間目標の登録がなければ、年間目標作成
-            if monthArray.firstIndex(of: 13) == nil {
-                targetData.setMonth(13)
-                targetData.saveTargetData()
+            // 月間,年間双方の登録がなければ、目標作成
+            if monthArray.firstIndex(of: self.month) == nil && monthArray.firstIndex(of: 13) == nil {
+                // 月間目標データを作成
+                saveTargetData(year: self.year, month: self.month)
+                
+                // フラグ
+                saveFinished = true
+                
+                // 年間目標データを作成
+                saveTargetData(year: self.year, month: 13)
+            } else if monthArray.firstIndex(of: self.month) == nil {
+                // 年間目標のみ存在する場合
+                // フラグ
+                saveFinished = true
+                
+                // 月間目標データを作成
+                saveTargetData(year: self.year, month: self.month)
+            } else if monthArray.firstIndex(of: 13) == nil {
+                // 月間目標のみ存在する場合
+                // フラグ
+                saveFinished = true
+                
+                // 年間目標データを作成
+                saveTargetData(year: self.year, month: 13)
+            } else {
+                // 月間,年間ともに存在する場合
+                // ストーリーボードを取得
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                
+                // デフォルトでは下から上のアニメーションとなるため、それを上から下に変更
+                let transition = CATransition()
+                transition.duration = 0.15
+                transition.type = CATransitionType.push
+                transition.subtype = CATransitionSubtype.fromBottom
+                view.window!.layer.add(transition, forKey: kCATransition)
+                
+                // ノート画面に遷移
+                self.present(nextView, animated: false, completion: nil)
             }
         }
     }
@@ -222,7 +196,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         if tableView.tag == 0 {
             return 3    // 種別セル,日付セル,天候セルの3つ
         } else {
-            return taskData.taskDataArray.count     // 未解決の課題の数
+            return taskDataArray.count     // 未解決の課題の数
         }
     }
     
@@ -251,7 +225,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         } else {
             // 未解決の課題セルを返却
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
-            cell.printTaskData(taskData.taskDataArray[indexPath.row])
+            cell.printTaskData(taskDataArray[indexPath.row])
             return cell
         }
     }
@@ -332,7 +306,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             // 削除処理かどうかの判定
             if editingStyle == UITableViewCell.EditingStyle.delete {
                 // taskDataArrayから削除
-                self.taskData.taskDataArray.remove(at:indexPath.row)
+                self.taskDataArray.remove(at:indexPath.row)
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
             }
@@ -574,7 +548,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     //MARK:- その他のメソッド
     
     // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
+    func getCurrentPickerTime() -> String {
         let now = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
@@ -591,6 +565,20 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         day = String(dateFormatter.string(from: datePicker.date))
         
         return returnText
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // ロードの進捗状況を取得するメソッド
+    func getLoadFinished() -> Bool {
+        return self.loadFinished
     }
     
     // DatePickerの選択した日付を取得するメソッド
@@ -653,7 +641,264 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         self.view.endEditing(true)
     }
     
+    // Firebaseから目標データを取得するメソッド
+    func loadTargetData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // targetDataArrayを初期化
+        targetDataArray = []
+        
+        // Firebaseにアクセス
+        let db = Firestore.firestore()
+        
+        // 現在のユーザーの目標データを取得する
+        db.collection("TargetData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標オブジェクトを作成
+                    let targetData = TargetData()
+                    
+                    // 目標データを反映
+                    let targetDataCollection = document.data()
+                    targetData.setYear(targetDataCollection["year"] as! Int)
+                    targetData.setMonth(targetDataCollection["month"] as! Int)
+                    targetData.setDetail(targetDataCollection["detail"] as! String)
+                    targetData.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                    targetData.setUserID(targetDataCollection["userID"] as! String)
+                    targetData.setCreated_at(targetDataCollection["created_at"] as! String)
+                    targetData.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.targetDataArray.append(targetData)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
     
+    // 課題データを取得するメソッド
+    func loadTaskData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 配列の初期化
+        taskDataArray = []
+        
+        // ユーザーUIDを取得
+        let userID = Auth.auth().currentUser!.uid
+        
+        // ユーザーの未解決課題データ取得
+        // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
+        // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
+        let db = Firestore.firestore()
+        db.collection("TaskData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .whereField("taskAchievement", isEqualTo: false)
+            .order(by: "taskID", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let taskDataCollection = document.data()
+                
+                    // 取得データを基に、課題データを作成
+                    let databaseTaskData = TaskData()
+                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
+                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
+                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
+                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
+                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
+                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
+                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
+                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
+                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
+                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
+                    
+                    // 課題データを格納
+                    self.taskDataArray.append(databaseTaskData)
+                }
+                // フラグ
+                self.loadFinished = true
+                
+                // テーブルビューの更新
+                self.taskTableView?.reloadData()
+                
+                // 課題数によってテーブルビューの高さを設定
+                self.taskTableView?.layoutIfNeeded()
+                self.taskTableView?.updateConstraints()
+                self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseにノートデータを保存するメソッド（新規ノート作成時のみ使用）
+    func saveNoteData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 大会ノートデータを作成
+        practiceNoteData.setNoteType("練習記録")
+        
+        // Pickerの選択項目をセット
+        practiceNoteData.setYear(year)
+        practiceNoteData.setMonth(month)
+        practiceNoteData.setDate(date)
+        practiceNoteData.setDay(day)
+        practiceNoteData.setWeather(weather[weatherIndex])
+        practiceNoteData.setTemperature(temperature[temperatureIndex])
+        
+        // 入力テキストをセット
+        practiceNoteData.setPhysicalCondition(physicalConditionTextView.text!)
+        practiceNoteData.setPurpose(purposeTextView.text!)
+        practiceNoteData.setDetail(detailTextView.text!)
+        practiceNoteData.setReflection(reflectionTextView.text!)
+        
+        // 対策データをセット
+        var taskTitle:[String] = []
+        var measuresTitle:[String] = []
+        var measuresEffectiveness:[String] = []
+        // 課題を全て非表示にした際のエラー対策
+        if self.taskDataArray.isEmpty == true {
+            // 何もしない
+        } else {
+            for num in 0...self.taskDataArray.count - 1 {
+                // 課題タイトル
+                taskTitle.append(self.taskDataArray[num].getTaskTitle())
+                
+                // 対策タイトル
+                let measures = self.taskDataArray[num].getMeasuresPriority()
+                measuresTitle.append(measures)
+                
+                // 対策の有効性
+                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+                measuresEffectiveness.append(cell.effectivenessTextView.text)
+                
+                // チェックが入っていればTaskDataの有効性コメントに追加
+                if cell.checkBox.isSelected {
+                    self.taskDataArray[num].addEffectiveness(title: measures, effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
+                    self.taskDataArray[num].updateTaskData()
+                }
+            }
+        }
+        practiceNoteData.setTaskTitle(taskTitle)
+        practiceNoteData.setMeasuresTitle(measuresTitle)
+        practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
+        
+        // ユーザーUIDをセット
+        practiceNoteData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 現在時刻をセット
+        practiceNoteData.setCreated_at(getCurrentTime())
+        practiceNoteData.setUpdated_at(practiceNoteData.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("NoteData").document("\(practiceNoteData.getUserID())_\(practiceNoteData.getNoteID())").setData([
+            "noteID"                : practiceNoteData.getNoteID(),
+            "noteType"              : practiceNoteData.getNoteType(),
+            "year"                  : practiceNoteData.getYear(),
+            "month"                 : practiceNoteData.getMonth(),
+            "date"                  : practiceNoteData.getDate(),
+            "day"                   : practiceNoteData.getDay(),
+            "weather"               : practiceNoteData.getWeather(),
+            "temperature"           : practiceNoteData.getTemperature(),
+            "physicalCondition"     : practiceNoteData.getPhysicalCondition(),
+            "purpose"               : practiceNoteData.getPurpose(),
+            "detail"                : practiceNoteData.getDetail(),
+            "target"                : practiceNoteData.getTarget(),
+            "consciousness"         : practiceNoteData.getConsciousness(),
+            "result"                : practiceNoteData.getResult(),
+            "reflection"            : practiceNoteData.getReflection(),
+            "taskTitle"             : practiceNoteData.getTaskTitle(),
+            "measuresTitle"         : practiceNoteData.getMeasuresTitle(),
+            "measuresEffectiveness" : practiceNoteData.getMeasuresEffectiveness(),
+            "isDeleted"             : practiceNoteData.getIsDeleted(),
+            "userID"                : practiceNoteData.getUserID(),
+            "created_at"            : practiceNoteData.getCreated_at(),
+            "updated_at"            : practiceNoteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
+    func saveTargetData(year selectedYear:Int,month selectedMonth:Int) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+            
+        // 目標データを作成
+        let targetData = TargetData()
+        
+        // 年月をセット
+        targetData.setYear(selectedYear)
+        targetData.setMonth(selectedMonth)
+            
+        // ユーザーUIDをセット
+        targetData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 現在時刻をセット
+        targetData.setCreated_at(getCurrentTime())
+        targetData.setUpdated_at(targetData.getCreated_at())
+            
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("TargetData").document("\(Auth.auth().currentUser!.uid)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+                "year"       : targetData.getYear(),
+                "month"      : targetData.getMonth(),
+                "detail"     : targetData.getDetail(),
+                "isDeleted"  : targetData.getIsDeleted(),
+                "userID"     : targetData.getUserID(),
+                "created_at" : targetData.getCreated_at(),
+                "updated_at" : targetData.getUpdated_at()
+            ]) { err in
+                if let err = err {
+                    print("Error writing document: \(err)")
+                } else {
+                    print("Document successfully written!")
+                    
+                    // HUDで処理中を非表示
+                    SVProgressHUD.dismiss()
+                    
+                    // 最後の保存であればモーダルを閉じる
+                    if self.saveFinished == true {
+                        // ストーリーボードを取得
+                        let storyboard: UIStoryboard = self.storyboard!
+                        let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                        
+                        // デフォルトでは下から上のアニメーションとなるため、それを上から下に変更  FIX:年月双方の目標が未設定のときOptional Valueでエラーになる
+    //                    let transition = CATransition()
+    //                    transition.duration = 0.15
+    //                    transition.type = CATransitionType.push
+    //                    transition.subtype = CATransitionSubtype.fromBottom
+    //                    self.view.window!.layer.add(transition, forKey: kCATransition)
+                        
+                        // ノート画面に遷移
+                        self.present(nextView, animated: false, completion: nil)
+                    }
+                }
+            }
+    }
     
     
 

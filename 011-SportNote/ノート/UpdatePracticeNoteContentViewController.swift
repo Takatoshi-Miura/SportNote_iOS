@@ -76,7 +76,7 @@ class UpdatePracticeNoteContentViewController: AddPracticeNoteContentViewControl
         if tableView.tag == 0 {
             return 2    // 日付セル,天候セルの2つ
         } else {
-            return taskData.taskDataArray.count     // 未解決の課題の数
+            return taskDataArray.count     // 未解決の課題の数
         }
     }
     
@@ -99,7 +99,7 @@ class UpdatePracticeNoteContentViewController: AddPracticeNoteContentViewControl
         } else {
             // 未解決の課題セルを返却
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
-            cell.printTaskData(taskData.taskDataArray[indexPath.row])
+            cell.printTaskData(taskDataArray[indexPath.row])
             return cell
         }
     }

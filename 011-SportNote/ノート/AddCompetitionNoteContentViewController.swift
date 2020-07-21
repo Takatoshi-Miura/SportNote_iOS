@@ -105,7 +105,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         saveNoteData()
         
         // 目標データがなければ作成
-        if targetDataArray.count == 0 {
+        if targetDataArray.isEmpty == true {
             // 月間目標データを作成
             saveTargetData(year: self.year, month: self.month)
             

@@ -35,7 +35,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         // テーブルビューを更新
-        self.reloadTaskData()
+        self.loadTaskData()
     }
     
     
@@ -261,7 +261,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     // TaskViewControllerに戻ったときの処理
     @IBAction func goToTaskViewController(_segue:UIStoryboardSegue) {
         // データの更新
-        reloadTaskData()
+        loadTaskData()
     }
     
     
@@ -271,13 +271,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     // テーブルビューを下に下げたときの処理(リフレッシュ機能)
     @objc func refresh(sender: UIRefreshControl) {
         // ここが引っ張られるたびに呼び出される
-        reloadTaskData()
+        loadTaskData()
         // 通信終了後、ロードインジケーター終了
         self.tableView.refreshControl?.endRefreshing()
     }
     
     // 課題データを取得するメソッド
-    func reloadTaskData() {
+    func loadTaskData() {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -324,8 +324,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
-                
-                print("課題データを取得しました")
             }
         }
     }
