@@ -17,24 +17,6 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
         
         // 課題データが読み込まれるまで保存ボタンを無効にする
         self.saveButton.isEnabled = false
-
-        // 課題データの読み込みが終わるまで時間待ち
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-        
-            // Containerの子配列からAddPracticeNoteContentViewControllerオブジェクトを取得
-            let obj = self.children[0] as! AddPracticeNoteContentViewController
-        
-            // taskTableViewの高さを取得
-            let height = obj.taskTableView.contentSize.height
-        
-            // デフォルトの高さより大きい場合、超過分をcontainerViewの高さにプラスする
-            if height - 260 > 0 {
-                self.containerViewHeight.constant = 1200 + height - 260
-            }
-        
-            // 保存ボタンを有効にする
-            self.saveButton.isEnabled = true
-        }
     }
     
     
@@ -55,6 +37,23 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
         
         // 練習ノートデータを保存する
         vc2.saveButton()
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // containerViewの高さをセットするメソッド
+    func setContainerViewHeight(height containerViewHeight:CGFloat) {
+        // デフォルトの高さより大きい場合、超過分をcontainerViewの高さにプラスする
+        if containerViewHeight - 260 > 0 {
+            self.containerViewHeight.constant = 1200 + containerViewHeight - 260
+        }
+    }
+    
+    // 保存ボタンを有効にするメソッド
+    func saveButtonEnable() {
+        self.saveButton.isEnabled = true
     }
 
 }

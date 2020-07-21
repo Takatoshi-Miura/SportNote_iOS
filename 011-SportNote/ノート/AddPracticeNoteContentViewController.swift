@@ -101,7 +101,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     let practiceNoteData = NoteData()
     
     // 終了フラグ
-    var loadFinished:Bool = false
     var saveFinished:Bool = false
     
     // 遷移元の画面
@@ -576,11 +575,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         return dateFormatter.string(from: now)
     }
     
-    // ロードの進捗状況を取得するメソッド
-    func getLoadFinished() -> Bool {
-        return self.loadFinished
-    }
-    
     // DatePickerの選択した日付を取得するメソッド
     func getDatePickerDate() -> String {
         let dateFormatter = DateFormatter()
@@ -728,9 +722,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
                 }
-                // フラグ
-                self.loadFinished = true
-                
                 // テーブルビューの更新
                 self.taskTableView?.reloadData()
                 
@@ -738,6 +729,15 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 self.taskTableView?.layoutIfNeeded()
                 self.taskTableView?.updateConstraints()
                 self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
+                
+                // AddPracticeNoteViewControllerオブジェクトを取得
+                let obj = self.parent as! AddPracticeNoteViewController
+                
+                // containerViewの高さを設定
+                obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
+                
+                // 保存ボタンを有効にする
+                obj.saveButtonEnable()
                 
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
