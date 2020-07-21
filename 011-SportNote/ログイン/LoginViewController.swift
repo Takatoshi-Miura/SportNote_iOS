@@ -29,7 +29,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var mailAddressTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
-    
     // ログインボタンの処理
     @IBAction func loginButton(_ sender: Any) {
         if let address = mailAddressTextField.text, let password = passwordTextField.text {
@@ -88,8 +87,7 @@ class LoginViewController: UIViewController {
                 SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました。")
                 
                 // フリーノートデータを作成
-                let freeNote = FreeNote()
-                freeNote.saveFreeNoteData()
+                self.createFreeNoteData()
                 
                 // タブ画面に遷移
                 // メッセージが隠れてしまうため、遅延処理を行う
@@ -144,6 +142,44 @@ class LoginViewController: UIViewController {
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // Firebaseにデータを作成するメソッド(アカウント作成時のみ実行)
+    func createFreeNoteData() {
+        // フリーノートデータを作成
+        let freeNote = FreeNote()
+        
+        // ユーザーUIDをセット
+        freeNote.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 現在時刻をセット
+        freeNote.setCreated_at(getCurrentTime())
+        freeNote.setUpdated_at(freeNote.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("FreeNoteData").document("\(freeNote.getUserID())").setData([
+            "title"      : freeNote.getTitle(),
+            "detail"     : freeNote.getDetail(),
+            "userID"     : freeNote.getUserID(),
+            "created_at" : freeNote.getCreated_at(),
+            "updated_at" : freeNote.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
     }
     
 }

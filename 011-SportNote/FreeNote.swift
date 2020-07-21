@@ -68,31 +68,7 @@ class FreeNote {
     
     //MARK:- データベース関連
 
-    // Firebaseにデータを保存するメソッド(アカウント作成時のみ実行)
-    func saveFreeNoteData() {
-        // 現在時刻をセット
-        setCreated_at(getCurrentTime())
-        setUpdated_at(created_at)
-        
-        // ユーザーUIDをセット
-        setUserID(Auth.auth().currentUser!.uid)
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("FreeNoteData").document("\(self.userID)").setData([
-            "title"      : self.title,
-            "detail"     : self.detail,
-            "userID"     : self.userID,
-            "created_at" : self.created_at,
-            "updated_at" : self.updated_at
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
+    
     
     // Firebaseのデータを更新するメソッド
     func updateFreeNoteData() {
