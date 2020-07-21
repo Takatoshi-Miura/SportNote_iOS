@@ -54,15 +54,37 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // データ取得
-        loadTargetData()
-        loadTaskData()
-        
-        // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
-        practiceNoteData.setNewNoteID()
-        
-        // 遷移元の画面を取得する
-        
+        // NoteDetailViewControllerから遷移してきた場合
+        if previousControllerName == "NoteDetailViewController" {
+            // 受け取ったノートデータを反映
+            
+            // 初期値の設定(受け取ったnoteDataに値に設定)
+            self.temperatureIndex = self.practiceNoteData.getTemperature() + 40
+            self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
+            if self.practiceNoteData.getWeather() == "くもり" {
+                self.weatherIndex = 1
+            } else if self.practiceNoteData.getWeather() == "雨" {
+                self.weatherIndex = 2
+            }
+            self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
+            
+            // テキストビューに値をセット
+            self.physicalConditionTextView.text = self.practiceNoteData.getPhysicalCondition()
+            self.purposeTextView.text = self.practiceNoteData.getPurpose()
+            self.detailTextView.text = self.practiceNoteData.getDetail()
+            self.reflectionTextView.text = self.practiceNoteData.getReflection()
+            
+            // テーブルビューを更新
+            self.tableView.reloadData()
+            
+        } else {
+            // データ取得
+            loadTargetData()
+            loadTaskData()
+            
+            // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
+            practiceNoteData.setNewNoteID()
+        }
     }
     
 
@@ -98,13 +120,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // データ格納用
     var targetDataArray  = [TargetData]()
     var taskDataArray    = [TaskData]()
-    let practiceNoteData = NoteData()
+    var practiceNoteData = NoteData()
     
     // 終了フラグ
     var saveFinished:Bool = false
     
-    // 遷移元の画面
-    var viewController:UIViewController?
+    // ノート詳細確認画面からの遷移用
+    var previousControllerName:String = ""  // 前のViewController名
     
     
     
@@ -192,39 +214,72 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.tag == 0 {
-            return 3    // 種別セル,日付セル,天候セルの3つ
+        // NoteDetailViewControllerから遷移してきた場合
+        if previousControllerName == "NoteDetailViewController" {
+            if tableView.tag == 0 {
+                return 2    // 日付セル,天候セルの2つ
+            } else {
+                return self.practiceNoteData.getTaskTitle().count   // 課題数を返却
+            }
         } else {
-            return taskDataArray.count     // 未解決の課題の数
+            if tableView.tag == 0 {
+                return 3    // 種別セル,日付セル,天候セルの3つ
+            } else {
+                return taskDataArray.count     // 未解決の課題の数
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView.tag == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-            if indexPath.row == 0 {
-                // 0行目のセルは種別セルを返却
-                cell.textLabel!.text = "種別"
-                cell.detailTextLabel!.text = noteType[typeIndex]
-                cell.detailTextLabel?.textColor = UIColor.systemGray
-                return cell
-            } else if indexPath.row == 1 {
-                // 1行目のセルは日付セルを返却
-                cell.textLabel!.text = "日付"
-                cell.detailTextLabel!.text = selectedDate
-                cell.detailTextLabel?.textColor = UIColor.systemGray
-                return cell
+            // NoteDetailViewControllerから遷移してきた場合
+            if previousControllerName == "NoteDetailViewController" {
+                if indexPath.row == 0 {
+                    // 0行目のセルは日付セルを返却
+                    cell.textLabel!.text = "日付"
+                    cell.detailTextLabel!.text = selectedDate
+                    cell.detailTextLabel?.textColor = UIColor.systemGray
+                    return cell
+                } else {
+                    // 1行目のセルは天候セルを返却
+                    cell.textLabel!.text = "天候"
+                    cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
+                    cell.detailTextLabel?.textColor = UIColor.systemGray
+                    return cell
+                }
             } else {
-                // 2行目のセルは天候セルを返却
-                cell.textLabel!.text = "天候"
-                cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
-                cell.detailTextLabel?.textColor = UIColor.systemGray
-                return cell
+                if indexPath.row == 0 {
+                    // 0行目のセルは種別セルを返却
+                    cell.textLabel!.text = "種別"
+                    cell.detailTextLabel!.text = noteType[typeIndex]
+                    cell.detailTextLabel?.textColor = UIColor.systemGray
+                    return cell
+                } else if indexPath.row == 1 {
+                    // 1行目のセルは日付セルを返却
+                    cell.textLabel!.text = "日付"
+                    cell.detailTextLabel!.text = selectedDate
+                    cell.detailTextLabel?.textColor = UIColor.systemGray
+                    return cell
+                } else {
+                    // 2行目のセルは天候セルを返却
+                    cell.textLabel!.text = "天候"
+                    cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
+                    cell.detailTextLabel?.textColor = UIColor.systemGray
+                    return cell
+                }
             }
         } else {
             // 未解決の課題セルを返却
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
-            cell.printTaskData(taskDataArray[indexPath.row])
+            cell.addTextViewBorder()
+            cell.initCheckBox()
+            // NoteDetailViewControllerから遷移してきた場合
+            if previousControllerName == "NoteDetailViewController" {
+                cell.printTaskData(noteData: practiceNoteData, at: indexPath.row)
+            } else {
+                cell.printTaskData(taskData: taskDataArray[indexPath.row])
+            }
             return cell
         }
     }
@@ -232,46 +287,78 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.tag == 0 {
             if indexPath.row == 0 {
-                // 種別セルがタップされた時
-                // タップしたときの選択色を消去
-                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-                
-                // Pickerの初期化
-                typeCellPickerInit()
-                
-                // 下からPickerを呼び出す
-                let screenSize = UIScreen.main.bounds.size
-                pickerView.frame.origin.y = screenSize.height
-                UIView.animate(withDuration: 0.3) {
-                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                // NoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "NoteDetailViewController" {
+                    // 日付セルがタップされた時
+                    
+                    // Pickerの初期化
+                    datePickerInit()
+                    
+                    // 下からPickerを呼び出す
+                    let screenSize = UIScreen.main.bounds.size
+                    pickerView.frame.origin.y = screenSize.height
+                    UIView.animate(withDuration: 0.3) {
+                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                    }
+                } else {
+                    // 種別セルがタップされた時
+                    
+                    // Pickerの初期化
+                    typeCellPickerInit()
+                    
+                    // 下からPickerを呼び出す
+                    let screenSize = UIScreen.main.bounds.size
+                    pickerView.frame.origin.y = screenSize.height
+                    UIView.animate(withDuration: 0.3) {
+                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                    }
                 }
             } else if indexPath.row == 1 {
-                // 日付セルがタップされた時
-                // タップしたときの選択色を消去
-                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-                
-                // Pickerの初期化
-                datePickerInit()
-                
-                // 下からPickerを呼び出す
-                let screenSize = UIScreen.main.bounds.size
-                pickerView.frame.origin.y = screenSize.height
-                UIView.animate(withDuration: 0.3) {
-                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                // NoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "NoteDetailViewController" {
+                    // 天候セルがタップされた時
+                    
+                    // Pickerの初期化
+                    weatherPickerInit()
+                    
+                    // 下からPickerを呼び出す
+                    let screenSize = UIScreen.main.bounds.size
+                    pickerView.frame.origin.y = screenSize.height
+                    UIView.animate(withDuration: 0.3) {
+                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                    }
+                } else {
+                    // 日付セルがタップされた時
+                    
+                    // Pickerの初期化
+                    datePickerInit()
+                    
+                    // 下からPickerを呼び出す
+                    let screenSize = UIScreen.main.bounds.size
+                    pickerView.frame.origin.y = screenSize.height
+                    UIView.animate(withDuration: 0.3) {
+                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                    }
                 }
             } else {
-                // 天候セルがタップされた時
-                // タップしたときの選択色を消去
-                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-                
-                // Pickerの初期化
-                weatherPickerInit()
-                
-                // 下からPickerを呼び出す
-                let screenSize = UIScreen.main.bounds.size
-                pickerView.frame.origin.y = screenSize.height
-                UIView.animate(withDuration: 0.3) {
-                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                // NoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "NoteDetailViewController" {
+                    // タップしたときの選択色を消去
+                    tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+                } else {
+                    // 天候セルがタップされた時
+                    // タップしたときの選択色を消去
+                    tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+                    
+                    // Pickerの初期化
+                    weatherPickerInit()
+                    
+                    // 下からPickerを呼び出す
+                    let screenSize = UIScreen.main.bounds.size
+                    pickerView.frame.origin.y = screenSize.height
+                    UIView.animate(withDuration: 0.3) {
+                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
+                    }
                 }
             }
         } else {
@@ -771,39 +858,47 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         var taskTitle:[String] = []
         var measuresTitle:[String] = []
         var measuresEffectiveness:[String] = []
-        // 課題を全て非表示にした際のエラー対策
-        if self.taskDataArray.isEmpty == true {
-            // 何もしない
+        
+        if previousControllerName == "NoteDetailViewController" {
+            // 更新日時に現在時刻をセット
+            practiceNoteData.setUpdated_at(getCurrentTime())
+            
         } else {
-            for num in 0...self.taskDataArray.count - 1 {
-                // 課題タイトル
-                taskTitle.append(self.taskDataArray[num].getTaskTitle())
-                
-                // 対策タイトル
-                let measures = self.taskDataArray[num].getMeasuresPriority()
-                measuresTitle.append(measures)
-                
-                // 対策の有効性
-                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
-                measuresEffectiveness.append(cell.effectivenessTextView.text)
-                
-                // チェックが入っていればTaskDataの有効性コメントに追加
-                if cell.checkBox.isSelected {
-                    self.taskDataArray[num].addEffectiveness(title: measures, effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
-                    self.taskDataArray[num].updateTaskData()
+            // 課題を全て非表示にした際のエラー対策
+            if self.taskDataArray.isEmpty == true {
+                // 何もしない
+            } else {
+                for num in 0...self.taskDataArray.count - 1 {
+                    // 課題タイトル
+                    taskTitle.append(self.taskDataArray[num].getTaskTitle())
+                    
+                    // 対策タイトル
+                    let measures = self.taskDataArray[num].getMeasuresPriority()
+                    measuresTitle.append(measures)
+                    
+                    // 対策の有効性
+                    let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+                    measuresEffectiveness.append(cell.effectivenessTextView.text)
+                    
+                    // チェックが入っていればTaskDataの有効性コメントに追加
+                    if cell.checkBox.isSelected {
+                        self.taskDataArray[num].addEffectiveness(title: measures, effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
+                        self.taskDataArray[num].updateTaskData()
+                    }
                 }
             }
+            practiceNoteData.setTaskTitle(taskTitle)
+            practiceNoteData.setMeasuresTitle(measuresTitle)
+            practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
+            
+            // ユーザーUIDをセット
+            practiceNoteData.setUserID(Auth.auth().currentUser!.uid)
+            
+            // 現在時刻をセット
+            practiceNoteData.setCreated_at(getCurrentTime())
+            practiceNoteData.setUpdated_at(practiceNoteData.getCreated_at())
+        
         }
-        practiceNoteData.setTaskTitle(taskTitle)
-        practiceNoteData.setMeasuresTitle(measuresTitle)
-        practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
-        
-        // ユーザーUIDをセット
-        practiceNoteData.setUserID(Auth.auth().currentUser!.uid)
-        
-        // 現在時刻をセット
-        practiceNoteData.setCreated_at(getCurrentTime())
-        practiceNoteData.setUpdated_at(practiceNoteData.getCreated_at())
         
         // Firebaseにデータを保存
         let db = Firestore.firestore()
@@ -838,6 +933,16 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
+                
+                // NoteDetailViewControllerから遷移してきた場合
+                if self.previousControllerName == "NoteDetailViewController" {
+                    // ストーリーボードを取得
+                    let storyboard: UIStoryboard = self.storyboard!
+                    let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                    
+                    // ノート画面に遷移
+                    self.present(nextView, animated: false, completion: nil)
+                }
             }
         }
     }

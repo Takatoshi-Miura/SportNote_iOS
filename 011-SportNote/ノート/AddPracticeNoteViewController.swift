@@ -17,7 +17,25 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
         
         // 課題データが読み込まれるまで保存ボタンを無効にする
         self.saveButton.isEnabled = false
+        
+        // NoteDetailViewControllerから遷移してきた場合
+        if previousControllerName == "NoteDetailViewController" {
+            // 子ビューにnoteDataを渡す
+            let vc = children[0] as! AddPracticeNoteContentViewController
+            vc.practiceNoteData = self.noteData
+            vc.previousControllerName = "NoteDetailViewController"
+            
+            // 保存ボタンを有効にする
+            self.saveButtonEnable()
+        }
     }
+    
+    
+    
+    //MARK:- 変数の宣言
+    
+    var previousControllerName:String = ""  // 前のViewController名
+    var noteData = NoteData()               // ノート詳細画面からの遷移用
     
     
     
@@ -32,11 +50,11 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
-        // コンテナからVC2のオブジェクトを取得
-        let vc2 = self.children[0] as! AddPracticeNoteContentViewController
+        // コンテナからVCのオブジェクトを取得
+        let vc = self.children[0] as! AddPracticeNoteContentViewController
         
         // 練習ノートデータを保存する
-        vc2.saveButton()
+        vc.saveButton()
     }
     
     

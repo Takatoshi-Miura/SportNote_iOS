@@ -99,7 +99,7 @@ class UpdatePracticeNoteContentViewController: AddPracticeNoteContentViewControl
         } else {
             // 未解決の課題セルを返却
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
-            cell.printTaskData(taskDataArray[indexPath.row])
+            //cell.printTaskData(taskDataArray[indexPath.row])
             return cell
         }
     }

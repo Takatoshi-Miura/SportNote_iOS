@@ -34,20 +34,32 @@ class TaskMeasuresTableViewCell: UITableViewCell {
     //MARK:- その他のメソッド
     
     // 課題データをラベルに表示するメソッド
-    func printTaskData(_ taskData:TaskData) {
+    func printTaskData(taskData task:TaskData) {
         // ラベルに表示
-        taskTitleLabel.text = taskData.getTaskTitle()
-        if taskData.getMeasuresTitleArray().isEmpty == true {
+        taskTitleLabel.text = task.getTaskTitle()
+        if task.getMeasuresTitleArray().isEmpty == true {
             taskMeasuresTitleLabel.text = "対策が未登録です"
         } else {
-            taskMeasuresTitleLabel.text = "対策：\(taskData.getMeasuresPriority())"
+            taskMeasuresTitleLabel.text = "対策：\(task.getMeasuresPriority())"
         }
-        
-        // テキストフィールドの枠線追加
+    }
+    
+    // 課題データをラベルに表示するメソッド
+    func printTaskData(noteData note:NoteData,at index:Int) {
+        // ラベルに表示
+        taskTitleLabel.text = note.getTaskTitle()[index]
+        taskMeasuresTitleLabel.text = note.getMeasuresTitle()[index]
+        effectivenessTextView.text  = note.getMeasuresEffectiveness()[index]
+    }
+    
+    // テキストフィールドの枠線追加
+    func addTextViewBorder() {
         effectivenessTextView.layer.borderColor = UIColor.systemGray.cgColor
         effectivenessTextView.layer.borderWidth = 1.0
-        
-        // チェックボックスの設定
+    }
+    
+    // チェックボックスの設定
+    func initCheckBox() {
         self.checkBox.setImage(uncheckedImage, for: .normal)
         self.checkBox.setImage(checkedImage, for: .selected)
     }

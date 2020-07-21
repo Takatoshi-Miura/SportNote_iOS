@@ -61,10 +61,15 @@ class NoteDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // 編集ボタンの処理
     @IBAction func editButton(_ sender: Any) {
-        // 練習記録追加画面に遷移
+        // 練習記録追加画面を取得
         let storyboard: UIStoryboard = self.storyboard!
-        let nextView = storyboard.instantiateViewController(withIdentifier: "UpdatePracticeNoteViewController") as! UpdatePracticeNoteViewController
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddPracticeNoteViewController") as! AddPracticeNoteViewController
+        
+        // ノートデータの受け渡し
         nextView.noteData = self.noteData
+        nextView.previousControllerName = "NoteDetailViewController"
+        
+        // 画面遷移
         self.present(nextView, animated: true, completion: nil)
     }
     
