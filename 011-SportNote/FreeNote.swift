@@ -6,8 +6,6 @@
 //  Copyright © 2020 Takatoshi Miura. All rights reserved.
 //
 
-import Foundation
-
 class FreeNote {
     
     //MARK:- 保持データ

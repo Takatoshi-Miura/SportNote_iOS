@@ -6,7 +6,6 @@
 //  Copyright © 2020 Takatoshi Miura. All rights reserved.
 //
 
-import Foundation
 import Firebase
 
 class NoteData {
@@ -28,15 +27,13 @@ class NoteData {
     private var consciousness:String = ""           // 意識すること
     private var result:String = ""                  // 結果
     private var reflection:String = ""              // 反省
-    
     private var taskTitle:[String] = []             // 課題タイトル
     private var measuresTitle:[String] = []         // 対策タイトル
     private var measuresEffectiveness:[String] = [] // 対策の有効性
-    
-    private var isDeleted:Bool = false          // 削除フラグ
-    private var userID:String = ""              // ユーザーUID
-    private var created_at:String = ""          // 作成日
-    private var updated_at:String = ""          // 更新日
+    private var isDeleted:Bool = false              // 削除フラグ
+    private var userID:String = ""                  // ユーザーUID
+    private var created_at:String = ""              // 作成日
+    private var updated_at:String = ""              // 更新日
     
     
     
@@ -251,6 +248,16 @@ class NoteData {
         return self.updated_at
     }
     
+    // ノートセルに表示させるタイトルを取得するメソッド
+    func getCellTitle() -> String {
+        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日(\(self.day))：\(self.getWeather())\(self.getTemperature())℃"
+    }
+    
+    // ナビゲーションバーに表示させるタイトルを取得するメソッド
+    func getNavigationTitle() -> String {
+        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日(\(self.day))"
+    }
+    
     
     
     //MARK:- データベース関連
@@ -307,16 +314,6 @@ class NoteData {
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return dateFormatter.string(from: now)
-    }
-    
-    // ノートセルに表示させるタイトルを取得するメソッド
-    func getCellTitle() -> String {
-        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日(\(self.day))：\(self.getWeather())\(self.getTemperature())℃"
-    }
-    
-    // ナビゲーションバーに表示させるタイトルを取得するメソッド
-    func getNavigationTitle() -> String {
-        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日(\(self.day))"
     }
     
 }
