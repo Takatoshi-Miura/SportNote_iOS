@@ -94,35 +94,6 @@ class FreeNote {
         }
     }
     
-    // Firebaseからフリーノートデータを読み込むメソッド
-    func loadFreeNoteData() {
-        // ユーザーUIDをセット
-        setUserID(Auth.auth().currentUser!.uid)
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
-        // 現在のユーザーのフリーノートデータを取得する
-        db.collection("FreeNoteData")
-            .whereField("userID", isEqualTo: userID)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let freeNoteDataCollection = document.data()
-                    
-                    // フリーノートデータを反映
-                    self.setTitle(freeNoteDataCollection["title"] as! String)
-                    self.setDetail(freeNoteDataCollection["detail"] as! String)
-                    self.setUserID(freeNoteDataCollection["userID"] as! String)
-                    self.setCreated_at(freeNoteDataCollection["created_at"] as! String)
-                    self.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
-                }
-            }
-        }
-    }
-    
     // Firebaseのデータを更新するメソッド
     func updateFreeNoteData() {
         // 更新日時を現在時刻にする
@@ -144,7 +115,6 @@ class FreeNote {
                 print("Document successfully updated")
             }
         }
-        print("フリーノートを更新しました")
     }
     
     

@@ -22,9 +22,6 @@ class TaskData {
     private var measuresData:[String:[[String:Int]]] = [:]   // [対策タイトル,[ [対策の有効性コメント：ノートID],[対策の有効性コメント：ノートID] ] ]
     private var measuresPriority:String = ""                 // 最優先の対策名
     
-    // 課題データを格納する配列
-    var taskDataArray = [TaskData]()
-    
     
     
     //MARK:- セッター
@@ -96,7 +93,6 @@ class TaskData {
             }
         }
     }
-    
     
     
     
@@ -172,50 +168,6 @@ class TaskData {
     
     
     //MARK:- データベース関連
-    
-    // Firebaseの未解決課題データを取得するメソッド
-    func loadUnresolvedTaskData() {
-        // 配列の初期化
-        taskDataArray = []
-        
-        // ユーザーUIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // ユーザーの未解決課題データ取得
-        // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
-        // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
-        let db = Firestore.firestore()
-        db.collection("TaskData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .whereField("taskAchievement", isEqualTo: false)
-            .order(by: "taskID", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let taskDataCollection = document.data()
-                
-                    // 取得データを基に、課題データを作成
-                    let databaseTaskData = TaskData()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
-                }
-            }
-        }
-    }
     
     // Firebaseの課題データを更新するメソッド
     func updateTaskData() {
