@@ -299,8 +299,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             if let err = err {
                 print("Error updating document: \(err)")
             } else {
-                print("課題データを更新しました")
-                
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
                 

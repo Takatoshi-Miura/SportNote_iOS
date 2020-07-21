@@ -137,7 +137,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
             for indexPathList in sortedIndexPaths {
                 self.taskDataArray[indexPathList.row].setIsDeleted(true)
-                self.taskDataArray[indexPathList.row].updateTaskData()
+                self.updateTaskData(task: self.taskDataArray[indexPathList.row])
                 self.taskDataArray.remove(at: indexPathList.row) // 選択肢のindexPathから配列の要素を削除
             }
             
@@ -168,7 +168,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // OKボタンがタップされたときの処理
                 // 次回以降、この課題データを取得しないようにする
                 self.taskDataArray[indexPath.row].setIsDeleted(true)
-                self.taskDataArray[indexPath.row].updateTaskData()
+                self.updateTaskData(task: self.taskDataArray[indexPath.row])
                     
                 // taskDataArrayから削除
                 self.taskDataArray.remove(at:indexPath.row)
@@ -200,7 +200,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         let resolveAction = UIContextualAction(style: .normal,title: "解決済み",handler: { (action: UIContextualAction, view: UIView, completion: (Bool) -> Void) in
             // 解決済みにする
             self.taskDataArray[indexPath.row].changeAchievement()
-            self.taskDataArray[indexPath.row].updateTaskData()
+            self.updateTaskData(task: self.taskDataArray[indexPath.row])
             
             // taskDataArrayから削除
             self.taskDataArray.remove(at:indexPath.row)
@@ -276,6 +276,15 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.tableView.refreshControl?.endRefreshing()
     }
     
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
     // 課題データを取得するメソッド
     func loadTaskData() {
         // HUDで処理中を表示
@@ -327,6 +336,36 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
+    
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData(task taskData:TaskData) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 更新日時を現在時刻にする
+        taskData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(taskData.getTaskID())")
 
+        // 変更する可能性のあるデータのみ更新
+        database.updateData([
+            "taskTitle"      : taskData.getTaskTitle(),
+            "taskCause"      : taskData.getTaskCouse(),
+            "taskAchievement": taskData.getTaskAchievement(),
+            "isDeleted"      : taskData.getIsDeleted(),
+            "updated_at"     : taskData.getUpdated_at(),
+            "measuresData"   : taskData.getMeasuresData(),
+            "measuresPriority" : taskData.getMeasuresPriority()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
 
 }

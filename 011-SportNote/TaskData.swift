@@ -167,50 +167,7 @@ class TaskData {
     
     
     
-    //MARK:- データベース関連
-    
-    // Firebaseの課題データを更新するメソッド
-    func updateTaskData() {
-        // 更新日時を現在時刻にする
-        self.updated_at = getCurrentTime()
-        
-        // ユーザーUIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let taskData = db.collection("TaskData").document("\(userID)_\(self.taskID)")
-
-        // 変更する可能性のあるデータのみ更新
-        taskData.updateData([
-            "taskTitle"      : self.taskTitle,
-            "taskCause"      : self.taskCause,
-            "taskAchievement": self.taskAchievement,
-            "isDeleted"      : self.isDeleted,
-            "updated_at"     : self.updated_at,
-            "measuresData"   : self.measuresData,
-            "measuresPriority" : self.measuresPriority
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-            }
-        }
-    }
-    
-    
-    
     //MARK:- その他のメソッド
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
     
     // 対策を追加するメソッド（ノート追加時には使用しないメソッドのため、ノートIDは存在しない0番を設定）
     func addMeasures(title measuresTitle:String,effectiveness measuresEffectiveness:String) {

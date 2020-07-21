@@ -892,7 +892,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // チェックが入っていればTaskDataの有効性コメントに追加
                     if cell.checkBox.isSelected {
                         self.taskDataArray[num].addEffectiveness(title: measures, effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
-                        self.taskDataArray[num].updateTaskData()
+                        self.updateTaskData(task: self.taskDataArray[num])
                     }
                 }
             }
@@ -1012,6 +1012,37 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     }
                 }
             }
+    }
+    
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData(task taskData:TaskData) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 更新日時を現在時刻にする
+        taskData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(taskData.getTaskID())")
+
+        // 変更する可能性のあるデータのみ更新
+        database.updateData([
+            "taskTitle"      : taskData.getTaskTitle(),
+            "taskCause"      : taskData.getTaskCouse(),
+            "taskAchievement": taskData.getTaskAchievement(),
+            "isDeleted"      : taskData.getIsDeleted(),
+            "updated_at"     : taskData.getUpdated_at(),
+            "measuresData"   : taskData.getMeasuresData(),
+            "measuresPriority" : taskData.getMeasuresPriority()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
     }
     
     
