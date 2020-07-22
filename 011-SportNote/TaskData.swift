@@ -208,6 +208,16 @@ class TaskData {
         self.measuresData[getMeasuresTitleArray()[index]] = nil
     }
     
+    // 有効性を削除するメソッド
+    func deleteEffectiveness(measuresTitle title:String,effectivenessArray array:[[String:Int]],at index:Int) {
+        // 有効性データを削除
+        var effectiveness = array
+        effectiveness.remove(at: index)
+        
+        // データ更新
+        self.measuresData.updateValue(effectiveness, forKey: title)
+    }
+    
     // 解決、未解決を反転するメソッド
     func changeAchievement() {
         self.taskAchievement.toggle()

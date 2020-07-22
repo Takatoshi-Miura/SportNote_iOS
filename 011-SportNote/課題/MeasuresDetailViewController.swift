@@ -123,7 +123,11 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 有効性コメント数を返却
-        return self.taskData.getMeasuresEffectivenessArray(at: indexPath).count
+        if self.taskData.getMeasuresEffectivenessArray(at: indexPath).isEmpty {
+            return 0
+        } else {
+            return self.taskData.getMeasuresEffectivenessArray(at: indexPath).count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -169,6 +173,50 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             // ノートデータを取得
             loadNoteData(effectivenessArray[indexPath.row][comment]!)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // 解決済みの課題の場合の設定
+        if previousControllerName == "ResolvedTaskViewController" {
+            return false    // 編集不可能
+        } else {
+            return true     // 編集可能
+        }
+    }
+    
+    // セルを削除したときの処理（左スワイプ）
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // 削除処理かどうかの判定
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            // アラートダイアログを生成
+            let alertController = UIAlertController(title:"有効性コメントを削除",message:"コメントを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+            
+            // OKボタンを宣言
+            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+                // 有効性データを削除
+                let effectiveness = self.taskData.getMeasuresEffectivenessArray(at: self.indexPath)
+                let title = self.taskData.getMeasuresTitleArray()[self.indexPath]
+                self.taskData.deleteEffectiveness(measuresTitle: title, effectivenessArray: effectiveness, at: indexPath.row)
+                
+                // データを更新
+                self.updateTaskData()
+            }
+            //OKボタンを追加
+            alertController.addAction(okAction)
+            
+            //CANCELボタンを宣言
+            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            //CANCELボタンを追加
+            alertController.addAction(cancelButton)
+            
+            //アラートダイアログを表示
+            present(alertController,animated:true,completion:nil)
+        }
+    }
+    
+    // deleteの表示名を変更
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "削除"
     }
     
     
@@ -298,6 +346,9 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             if let err = err {
                 print("Error updating document: \(err)")
             } else {
+                // リロード
+                self.tableView.reloadData()
+                
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
             }

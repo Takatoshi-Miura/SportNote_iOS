@@ -383,10 +383,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // ユーザーUIDをセット
         freeNoteData.setUserID(Auth.auth().currentUser!.uid)
         
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
         // 現在のユーザーのフリーノートデータを取得する
+        let db = Firestore.firestore()
         db.collection("FreeNoteData")
             .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
             .getDocuments() { (querySnapshot, err) in
