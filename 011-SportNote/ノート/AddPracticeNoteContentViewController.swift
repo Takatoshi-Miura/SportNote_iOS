@@ -35,6 +35,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.tag    = 0
         weatherPicker.tag = 1
         
+        // 種別Pickerの宣言
+        typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
+        typePicker.backgroundColor = UIColor.systemGray5
+        
         // 日付Pickerの宣言
         datePicker = UIDatePicker()
         datePicker.date = Date()
@@ -468,10 +472,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューの初期化
         pickerView.removeFromSuperview()
         
-        // Pickerの宣言
-        typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
-        typePicker.backgroundColor = UIColor.systemGray5
-        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -631,10 +631,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // ノートデータのテキストをセットするメソッド
     func setTextData(noteData note:NoteData) {
-        self.physicalConditionTextView.text = self.practiceNoteData.getPhysicalCondition()
-        self.purposeTextView.text = self.practiceNoteData.getPurpose()
-        self.detailTextView.text = self.practiceNoteData.getDetail()
-        self.reflectionTextView.text = self.practiceNoteData.getReflection()
+        self.physicalConditionTextView.text = note.getPhysicalCondition()
+        self.purposeTextView.text = note.getPurpose()
+        self.detailTextView.text = note.getDetail()
+        self.reflectionTextView.text = note.getReflection()
     }
     
     // ノートの日付をDatePickerにセットするメソッド

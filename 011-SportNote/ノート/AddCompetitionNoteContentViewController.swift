@@ -27,6 +27,22 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         typePicker.tag    = 0
         weatherPicker.tag = 1
         
+        // 種別Pickerの宣言
+        typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
+        typePicker.backgroundColor = UIColor.systemGray5
+        
+        // 日付Pickerの宣言
+        datePicker = UIDatePicker()
+        datePicker.date = Date()
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ja")
+        datePicker.backgroundColor = UIColor.systemGray5
+        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
+        
+        // 天候Pickerの宣言
+        weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
+        weatherPicker.backgroundColor = UIColor.systemGray5
+        
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
         selectedDate = getCurrentPickerTime()
@@ -56,27 +72,13 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
             // 受け取ったノートデータを反映
             
             // 初期値の設定(受け取ったnoteDataに値に設定)
-            self.temperatureIndex = self.competitionNoteData.getTemperature() + 40
-            self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
-            if self.competitionNoteData.getWeather() == "くもり" {
-                self.weatherIndex = 1
-            } else if self.competitionNoteData.getWeather() == "雨" {
-                self.weatherIndex = 2
-            }
-            self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
+            setWeatherPicker(noteData: self.competitionNoteData)
             
             // テキストビューに値をセット
-            self.physicalConditionTextView.text = self.competitionNoteData.getPhysicalCondition()
-            self.targetTextView.text = self.competitionNoteData.getTarget()
-            self.consciousnessTextView.text = self.competitionNoteData.getConsciousness()
-            self.resultTextView.text = self.competitionNoteData.getResult()
-            self.reflectionTextView.text = self.competitionNoteData.getReflection()
+            setTextData(noteData: self.competitionNoteData)
             
             // 日付Pickerに値をセット
-            selectedDate = getPickerTime(year : self.competitionNoteData.getYear(),
-                                         month: self.competitionNoteData.getMonth(),
-                                         date : self.competitionNoteData.getDate(),
-                                         day  : self.competitionNoteData.getDay())
+            setDatePicker(noteData: self.competitionNoteData)
             
             // テーブルビューを更新
             self.tableView.reloadData()
@@ -379,10 +381,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // ビューの初期化
         pickerView.removeFromSuperview()
         
-        // Pickerの宣言
-        typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
-        typePicker.backgroundColor = UIColor.systemGray5
-        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -462,14 +460,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // ビューの初期化
         pickerView.removeFromSuperview()
         
-        // 設定
-        datePicker = UIDatePicker()
-        datePicker.date = Date()
-        datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ja")
-        datePicker.backgroundColor = UIColor.systemGray5
-        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
-        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -509,10 +499,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // ビューの初期化
         pickerView.removeFromSuperview()
         
-        // Pickerの宣言
-        weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
-        weatherPicker.backgroundColor = UIColor.systemGray5
-        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -551,6 +537,48 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     
     //MARK:- その他のメソッド
+    
+    // ノートデータのテキストをセットするメソッド
+    func setTextData(noteData note:NoteData) {
+        self.physicalConditionTextView.text = note.getPhysicalCondition()
+        self.targetTextView.text = note.getTarget()
+        self.consciousnessTextView.text = note.getConsciousness()
+        self.resultTextView.text = note.getResult()
+        self.reflectionTextView.text = note.getReflection()
+    }
+    
+    // ノートの日付をDatePickerにセットするメソッド
+    func setDatePicker(noteData note:NoteData) {
+        // 日付をセット
+        self.year  = note.getYear()
+        self.month = note.getMonth()
+        self.date  = note.getDate()
+        self.day   = note.getDay()
+        
+        // DatePickerに日付をセット
+        let dateFormater = DateFormatter()
+        dateFormater.locale = Locale(identifier: "ja_JP")
+        dateFormater.dateFormat = "yyyy/MM/dd"
+        let date = dateFormater.date(from: "\(self.year)/\(self.month)/\(self.date)")
+        datePicker.date = date!
+        
+        self.selectedDate = "\(self.year)年\(self.month)月\(self.date)日(\(self.day))"
+    }
+    
+    // 天候データをweatherPickerにセットするメソッド
+    func setWeatherPicker(noteData note:NoteData) {
+        // 気温をセット
+        self.temperatureIndex = note.getTemperature() + 40
+        self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
+        
+        // 天気をセット
+        if note.getWeather() == "くもり" {
+            self.weatherIndex = 1
+        } else if note.getWeather() == "雨" {
+            self.weatherIndex = 2
+        }
+        self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
+    }
     
     // 現在時刻をPickerにセットするメソッド
     func getCurrentPickerTime() -> String {
