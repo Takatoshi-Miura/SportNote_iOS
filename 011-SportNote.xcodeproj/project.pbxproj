@@ -173,10 +173,10 @@
 			isa = PBXGroup;
 			children = (
 				8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */,
+				8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */,
 				8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */,
 				8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */,
 				8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */,
-				8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */,
 			);
 			path = "課題";
 			sourceTree = "<group>";
@@ -195,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				8D01652F24AEEBD100F9D69F /* NoteViewController.swift */,
+				8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */,
 				8D6FB6A624B96130008ED809 /* NoteDetailViewController.swift */,
 				8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */,
 				8D01653524AF202F00F9D69F /* AddNoteViewController.swift */,
@@ -203,7 +204,6 @@
 				8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */,
 				8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */,
 				8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */,
-				8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */,
 				8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */,
 				8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */,
 				8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */,
