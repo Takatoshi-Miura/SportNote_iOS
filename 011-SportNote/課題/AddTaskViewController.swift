@@ -184,15 +184,15 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         // Firebaseにアクセス
         let db = Firestore.firestore()
         db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(taskData.getTaskID())").setData([
-            "taskID"         : taskData.getTaskID(),
-            "taskTitle"      : taskData.getTaskTitle(),
-            "taskCause"      : taskData.getTaskCouse(),
-            "taskAchievement": taskData.getTaskAchievement(),
-            "isDeleted"      : taskData.getIsDeleted(),
-            "userID"         : taskData.getUserID(),
-            "created_at"     : taskData.getCreated_at(),
-            "updated_at"     : taskData.getUpdated_at(),
-            "measuresData"   : taskData.getMeasuresData(),
+            "taskID"           : taskData.getTaskID(),
+            "taskTitle"        : taskData.getTaskTitle(),
+            "taskCause"        : taskData.getTaskCouse(),
+            "taskAchievement"  : taskData.getTaskAchievement(),
+            "isDeleted"        : taskData.getIsDeleted(),
+            "userID"           : taskData.getUserID(),
+            "created_at"       : taskData.getCreated_at(),
+            "updated_at"       : taskData.getUpdated_at(),
+            "measuresData"     : taskData.getMeasuresData(),
             "measuresPriority" : taskData.getMeasuresPriority()
         ]) { err in
             if let err = err {

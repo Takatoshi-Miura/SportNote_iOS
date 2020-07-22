@@ -416,11 +416,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     func loadTargetData() {
         // targetDataArrayを初期化
         targetDataArray = []
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
+
         // 現在のユーザーの目標データを取得する
+        let db = Firestore.firestore()
         db.collection("TargetData")
             .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
             .whereField("isDeleted", isEqualTo: false)
@@ -464,11 +462,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     func loadNoteData() {
         // noteDataArrayを初期化
         noteDataArray = []
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
+
         // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
         db.collection("NoteData")
             .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
             .whereField("isDeleted", isEqualTo: false)

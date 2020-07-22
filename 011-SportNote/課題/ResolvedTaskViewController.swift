@@ -109,15 +109,12 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         // 配列の初期化
         resolvedTaskDataArray = []
         
-        // ユーザーUIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
         // ユーザーの解決済み課題データ取得
         // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
         db.collection("TaskData")
-            .whereField("userID", isEqualTo: userID)
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
             .whereField("isDeleted", isEqualTo: false)
             .whereField("taskAchievement", isEqualTo: true)
             .order(by: "taskID", descending: true)
@@ -149,8 +146,6 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
                     
                     // HUDで処理中を非表示
                     SVProgressHUD.dismiss()
-                    
-                    print("課題データを取得しました")
                 }
             }
     }

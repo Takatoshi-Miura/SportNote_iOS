@@ -77,7 +77,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
         // 目標データを保存
-        saveTargetData(selectedMonth: selectedMonth,detail: targetTextField.text!)
+        saveTargetData(month: selectedMonth,comment: targetTextField.text!)
         
         // その月の年間目標データがなければ作成
         if self.targetDataArray.count == 0 {
@@ -85,7 +85,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                 // 年間目標データを保存したなら何もしない
             } else {
                 // 月間目標データを保存したなら年間目標データを作成
-                saveTargetData(selectedMonth: 13,detail: "")
+                saveTargetData(month: 13,comment: "")
             }
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
@@ -97,7 +97,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             }
             // 年間目標の登録がなければ、年間目標作成
             if monthArray.firstIndex(of: 13) == nil {
-                saveTargetData(selectedMonth: 13,detail: "")
+                saveTargetData(month: 13,comment: "")
             }
         }
     }
@@ -382,11 +382,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // targetDataArrayを初期化
         targetDataArray = []
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
+
         // 現在のユーザーの目標データを取得する
+        let db = Firestore.firestore()
         db.collection("TargetData")
             .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
             .whereField("isDeleted", isEqualTo: false)
@@ -420,7 +418,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
-    func saveTargetData(selectedMonth selectedMonth:Int,detail detail:String) {
+    func saveTargetData(month selectedMonth:Int,comment detail:String) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         

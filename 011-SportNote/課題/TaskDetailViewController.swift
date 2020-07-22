@@ -314,12 +314,12 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([
-            "taskTitle"      : taskData.getTaskTitle(),
-            "taskCause"      : taskData.getTaskCouse(),
-            "taskAchievement": taskData.getTaskAchievement(),
-            "isDeleted"      : taskData.getIsDeleted(),
-            "updated_at"     : taskData.getUpdated_at(),
-            "measuresData"   : taskData.getMeasuresData(),
+            "taskTitle"        : taskData.getTaskTitle(),
+            "taskCause"        : taskData.getTaskCouse(),
+            "taskAchievement"  : taskData.getTaskAchievement(),
+            "isDeleted"        : taskData.getIsDeleted(),
+            "updated_at"       : taskData.getUpdated_at(),
+            "measuresData"     : taskData.getMeasuresData(),
             "measuresPriority" : taskData.getMeasuresPriority()
         ]) { err in
             if let err = err {

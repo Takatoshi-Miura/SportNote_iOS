@@ -287,19 +287,17 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([
-            "taskTitle"      : taskData.getTaskTitle(),
-            "taskCause"      : taskData.getTaskCouse(),
-            "taskAchievement": taskData.getTaskAchievement(),
-            "isDeleted"      : taskData.getIsDeleted(),
-            "updated_at"     : taskData.getUpdated_at(),
-            "measuresData"   : taskData.getMeasuresData(),
+            "taskTitle"        : taskData.getTaskTitle(),
+            "taskCause"        : taskData.getTaskCouse(),
+            "taskAchievement"  : taskData.getTaskAchievement(),
+            "isDeleted"        : taskData.getIsDeleted(),
+            "updated_at"       : taskData.getUpdated_at(),
+            "measuresData"     : taskData.getMeasuresData(),
             "measuresPriority" : taskData.getMeasuresPriority()
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
             } else {
-                print("課題データを更新しました")
-                
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
             }
@@ -307,15 +305,12 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     }
     
     // Firebaseから指定したノートIDのデータを取得するメソッド
-    func loadNoteData(_ noteID:Int) {
-        
+    func loadNoteData(_ noteID:Int) {        
         // ユーザーUIDをセット
         noteData.setUserID(Auth.auth().currentUser!.uid)
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
+
         // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
         db.collection("NoteData")
             .whereField("userID", isEqualTo: noteData.getUserID())
             .whereField("noteID", isEqualTo: noteID)

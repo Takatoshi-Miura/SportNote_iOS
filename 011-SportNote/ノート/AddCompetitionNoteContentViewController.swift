@@ -643,10 +643,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // targetDataArrayを初期化
         targetDataArray = []
         
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
         // 現在のユーザーの目標データを取得する
+        let db = Firestore.firestore()
         db.collection("TargetData")
             .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
             .whereField("isDeleted", isEqualTo: false)
