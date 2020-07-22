@@ -37,6 +37,14 @@ class NoteData {
     
     
     
+    //MARK:- イニシャライザ
+    
+    init() {
+        
+    }
+    
+    
+    
     //MARK:- セッター
     func setNoteID(_ noteID:Int) {
         self.noteID = noteID

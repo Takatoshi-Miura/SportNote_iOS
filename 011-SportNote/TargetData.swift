@@ -19,6 +19,14 @@ class TargetData {
     
     
     
+    //MARK:- イニシャライザ
+    
+    init() {
+        
+    }
+    
+    
+    
     //MARK:- セッター
     func setYear(_ year:Int) {
         self.year = year

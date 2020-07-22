@@ -24,6 +24,14 @@ class TaskData {
     
     
     
+    //MARK:- イニシャライザ
+    
+    init() {
+        
+    }
+    
+    
+    
     //MARK:- セッター
     
     func setTaskID(_ taskID:Int) {

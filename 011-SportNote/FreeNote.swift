@@ -17,6 +17,14 @@ class FreeNote {
     
     
     
+    //MARK:- イニシャライザ
+    
+    init() {
+        
+    }
+    
+    
+    
     //MARK:- セッター
     func setTitle(_ title:String) {
         self.title = title
