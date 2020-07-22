@@ -238,27 +238,22 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // ビューを作成
         let view = UIView(frame: CGRect.zero)
+        
+        // セクションラベルの設定
+        let label = UILabel(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 30))
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.text = "   \(sectionTitle[section])"
+        label.textAlignment = NSTextAlignment.left
+        label.backgroundColor = UIColor.systemGray5
+        label.textColor =  UIColor.label
+        view.addSubview(label)
         
         if section == 0 {
             // フリーノートセクションは削除不可
-            // セクションラベルの設定
-            let label = UILabel(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 30))
-            label.text = "   \(sectionTitle[section])"
-            label.textAlignment = NSTextAlignment.left
-            label.backgroundColor = UIColor.systemGray5
-            label.textColor =  UIColor.black
-            view.addSubview(label)
         } else {
-            // セクションラベルの設定
-            let label = UILabel(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 30))
-            label.text = "   \(sectionTitle[section])"
-            label.textAlignment = NSTextAlignment.left
-            label.backgroundColor = UIColor.systemGray5
-            label.textColor =  UIColor.black
-            view.addSubview(label)
-            
-            // 編集時の表示
+            // 目標セクション編集時の表示
             if tableView.isEditing {
                 // セクションボタンの設定
                 let button = UIButton(frame: CGRect(x:self.view.frame.maxX - 50, y:0, width:50, height: 30))
