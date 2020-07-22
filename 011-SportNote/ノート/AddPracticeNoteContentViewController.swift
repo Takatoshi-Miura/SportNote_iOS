@@ -35,6 +35,18 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.tag    = 0
         weatherPicker.tag = 1
         
+        // 日付Pickerの宣言
+        datePicker = UIDatePicker()
+        datePicker.date = Date()
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ja")
+        datePicker.backgroundColor = UIColor.systemGray5
+        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
+        
+        // 天候Pickerの宣言
+        weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
+        weatherPicker.backgroundColor = UIColor.systemGray5
+        
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
         selectedDate = getCurrentPickerTime()
@@ -59,27 +71,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // NoteDetailViewControllerから遷移してきた場合
         if previousControllerName == "NoteDetailViewController" {
-            // 受け取ったノートデータを反映
-            
-            // 初期値の設定(受け取ったnoteDataに値に設定)
-            self.temperatureIndex = self.practiceNoteData.getTemperature() + 40
-            self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
-            if self.practiceNoteData.getWeather() == "くもり" {
-                self.weatherIndex = 1
-            } else if self.practiceNoteData.getWeather() == "雨" {
-                self.weatherIndex = 2
-            }
-            self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
-            
             // テキストビューに値をセット
-            self.physicalConditionTextView.text = self.practiceNoteData.getPhysicalCondition()
-            self.purposeTextView.text = self.practiceNoteData.getPurpose()
-            self.detailTextView.text = self.practiceNoteData.getDetail()
-            self.reflectionTextView.text = self.practiceNoteData.getReflection()
+            setTextData(noteData: self.practiceNoteData)
+            
+            // 日付Pickerにデータをセット
+            setDatePicker(noteData: self.practiceNoteData)
+            
+            // 天候Pickerにデータをセット
+            setWeatherPicker(noteData: self.practiceNoteData)
             
             // テーブルビューを更新
             self.tableView.reloadData()
-            
         } else {
             // データ取得
             loadTaskData()
@@ -88,9 +90,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             practiceNoteData.setNewNoteID()
         }
     }
-    
-
-
     
     
     
@@ -552,14 +551,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューの初期化
         pickerView.removeFromSuperview()
         
-        // 設定
-        datePicker = UIDatePicker()
-        datePicker.date = Date()
-        datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ja")
-        datePicker.backgroundColor = UIColor.systemGray5
-        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
-        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -598,10 +589,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     func weatherPickerInit() {
         // ビューの初期化
         pickerView.removeFromSuperview()
-        
-        // Pickerの宣言
-        weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
-        weatherPicker.backgroundColor = UIColor.systemGray5
         
         // ツールバーの宣言
         let toolbar = UIToolbar()
@@ -642,6 +629,56 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     //MARK:- その他のメソッド
     
+    // ノートデータのテキストをセットするメソッド
+    func setTextData(noteData note:NoteData) {
+        self.physicalConditionTextView.text = self.practiceNoteData.getPhysicalCondition()
+        self.purposeTextView.text = self.practiceNoteData.getPurpose()
+        self.detailTextView.text = self.practiceNoteData.getDetail()
+        self.reflectionTextView.text = self.practiceNoteData.getReflection()
+    }
+    
+    // ノートの日付をDatePickerにセットするメソッド
+    func setDatePicker(noteData note:NoteData) {
+        // 日付をセット
+        self.year  = note.getYear()
+        self.month = note.getMonth()
+        self.date  = note.getDate()
+        self.day   = note.getDay()
+        
+        // DatePickerに日付をセット
+        let dateFormater = DateFormatter()
+        dateFormater.locale = Locale(identifier: "ja_JP")
+        dateFormater.dateFormat = "yyyy/MM/dd"
+        let date = dateFormater.date(from: "\(self.year)/\(self.month)/\(self.date)")
+        datePicker.date = date!
+        
+        self.selectedDate = "\(self.year)年\(self.month)月\(self.date)日(\(self.day))"
+    }
+    
+    // 天候データをweatherPickerにセットするメソッド
+    func setWeatherPicker(noteData note:NoteData) {
+        // 気温をセット
+        self.temperatureIndex = note.getTemperature() + 40
+        self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
+        
+        // 天気をセット
+        if note.getWeather() == "くもり" {
+            self.weatherIndex = 1
+        } else if note.getWeather() == "雨" {
+            self.weatherIndex = 2
+        }
+        self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
     // 現在時刻を取得するメソッド
     func getCurrentPickerTime() -> String {
         let now = Date()
@@ -660,15 +697,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         day = String(dateFormatter.string(from: datePicker.date))
         
         return returnText
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
     
     // DatePickerの選択した日付を取得するメソッド

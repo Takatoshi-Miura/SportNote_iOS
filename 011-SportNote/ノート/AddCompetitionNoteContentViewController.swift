@@ -72,6 +72,12 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
             self.resultTextView.text = self.competitionNoteData.getResult()
             self.reflectionTextView.text = self.competitionNoteData.getReflection()
             
+            // 日付Pickerに値をセット
+            selectedDate = getPickerTime(year : self.competitionNoteData.getYear(),
+                                         month: self.competitionNoteData.getMonth(),
+                                         date : self.competitionNoteData.getDate(),
+                                         day  : self.competitionNoteData.getDay())
+            
             // テーブルビューを更新
             self.tableView.reloadData()
             
@@ -564,6 +570,16 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         day = String(dateFormatter.string(from: datePicker.date))
         
         return returnText
+    }
+    
+    // ノートの日付を取得するメソッド
+    func getPickerTime(year selectedYear:Int,month selectedMonth:Int,date selectedDate:Int,day selectedDay:String) -> String {
+        // 日付をセット
+        year = selectedYear
+        month = selectedMonth
+        date = selectedDate
+        day = selectedDay
+        return "\(selectedYear)年\(selectedMonth)月\(selectedDate)日(\(selectedDay))"
     }
     
     // DatePickerの選択した日付を取得するメソッド
