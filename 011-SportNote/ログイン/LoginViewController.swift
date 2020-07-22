@@ -44,10 +44,21 @@ class LoginViewController: UIViewController {
             
             // ログイン処理
             Auth.auth().signIn(withEmail: address, password: password) { authResult, error in
-                // エラーのハンドリング
-                if let error = error {
-                    SVProgressHUD.showError(withStatus: "ログインに失敗しました。入力を確認してください。")
-                    return
+                if error == nil {
+                    // エラーなし
+                } else {
+                    // エラーのハンドリング
+                    if let errorCode = AuthErrorCode(rawValue: error!._code) {
+                        switch errorCode {
+                            case .invalidEmail:
+                                SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
+                            case .wrongPassword:
+                                SVProgressHUD.showError(withStatus: "パスワードが間違っています。")
+                            default:
+                                SVProgressHUD.showError(withStatus: "ログインに失敗しました。入力を確認して下さい。")
+                        }
+                        return
+                    }
                 }
                 SVProgressHUD.showSuccess(withStatus: "ログインしました。")
                 
@@ -77,12 +88,24 @@ class LoginViewController: UIViewController {
             
             // アカウント作成処理
             Auth.auth().createUser(withEmail: mailAddressTextField.text!, password: passwordTextField.text!) { authResult, error in
-                // エラーのハンドリング
-                if let error = error  {
-                    SVProgressHUD.showError(withStatus: "アカウント作成に失敗しました。時間をおいて再度お試しください。")
-                    return
+                if error == nil {
+                    // エラーなし
+                } else {
+                    // エラーのハンドリング
+                    if let errorCode = AuthErrorCode(rawValue: error!._code) {
+                        switch errorCode {
+                            case .invalidEmail:
+                                SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
+                            case .emailAlreadyInUse:
+                                SVProgressHUD.showError(withStatus: "既にこのメールアドレスは使われています。")
+                            case .weakPassword:
+                                SVProgressHUD.showError(withStatus: "パスワードは6文字以上で入力してください。")
+                            default:
+                                SVProgressHUD.showError(withStatus: "エラーが起きました。しばらくしてから再度お試しください。")
+                        }
+                        return
+                    }
                 }
-                
                 // アカウントの登録を通知
                 SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました。")
                 
