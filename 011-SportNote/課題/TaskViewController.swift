@@ -57,7 +57,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // ナビゲーションバー用のボタン
     var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
+    var resolveButton:UIBarButtonItem!  // 解決済みボタン
     var addButton:UIBarButtonItem!      // 課題追加ボタン
+    
     
     
     
@@ -75,9 +77,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.editButtonItem.tintColor = UIColor.systemBlue
             
             // ナビゲーションバーのボタンを表示
-            deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-            addButton    = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-            self.navigationItem.rightBarButtonItems = [addButton,deleteButton]
+            deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+            resolveButton = UIBarButtonItem(image: UIImage(named: "check_on"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(resolveButtonTapped(_:)))
+            resolveButton.tintColor = UIColor.systemBlue
+            addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+            self.navigationItem.rightBarButtonItems = [addButton,deleteButton,resolveButton]
         } else {
             // 編集終了
             self.editButtonItem.title = "編集"
@@ -95,6 +99,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
         // 選択された課題を削除
         self.deleteRows()
+    }
+    
+    // 解決済みボタンの処理
+    @objc func resolveButtonTapped(_ sender: UIBarButtonItem) {
+        // 選択された課題を解決済みにする
+        self.resolveRows()
     }
     
     // 課題追加ボタンの処理
@@ -158,6 +168,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             // tableViewの行を削除
             self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
+            
+            // 編集状態を解除
+            self.setEditing(false, animated: true)
         }
         //OKボタンを追加
         alertController.addAction(okAction)
@@ -177,21 +190,24 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             return
         }
         // アラートダイアログを生成
-        let alertController = UIAlertController(title:"課題を削除",message:"選択された課題を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+        let alertController = UIAlertController(title:"課題を解決済みにする",message:"選択された課題を解決済みにします。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
         
         // OKボタンを宣言
-        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+        let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
             // OKボタンがタップされたときの処理
             // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
             let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
             for indexPathList in sortedIndexPaths {
-                self.taskDataArray[indexPathList.row].setIsDeleted(true)
+                self.taskDataArray[indexPathList.row].changeAchievement()
                 self.updateTaskData(task: self.taskDataArray[indexPathList.row])
                 self.taskDataArray.remove(at: indexPathList.row) // 選択肢のindexPathから配列の要素を削除
             }
             
             // tableViewの行を削除
             self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
+            
+            // 編集状態を解除
+            self.setEditing(false, animated: true)
         }
         //OKボタンを追加
         alertController.addAction(okAction)
