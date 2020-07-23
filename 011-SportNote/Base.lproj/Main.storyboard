@@ -560,18 +560,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tfI-Cw-7LL"/>
                     </view>
-                    <navigationItem key="navigationItem" title="課題" id="5Nx-Qs-1Of">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="ZbA-GM-5uC">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="U2q-yD-4ce">
-                                <rect key="frame" x="266" y="6" width="128" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="plus" catalog="system"/>
-                                <connections>
-                                    <action selector="addButton:" destination="eCK-mC-Vph" eventType="touchUpInside" id="OqQ-7r-MQK"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="課題" id="5Nx-Qs-1Of"/>
                     <connections>
                         <outlet property="tableView" destination="yvp-WN-9Hx" id="xEl-jH-huH"/>
                         <segue destination="wUj-cO-jPj" kind="modal" identifier="goAddTaskViewController" id="QWS-gO-IY5"/>
@@ -1829,13 +1818,12 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="qnV-Vp-RMg"/>
-        <segue reference="FjQ-4Y-Eao"/>
+        <segue reference="Yvf-Pz-j6e"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="book" catalog="system" width="128" height="101"/>
         <image name="check_off" width="26" height="26"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="list.bullet" catalog="system" width="128" height="88"/>
-        <image name="plus" catalog="system" width="128" height="113"/>
     </resources>
 </document>
