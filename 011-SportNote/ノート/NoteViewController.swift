@@ -23,7 +23,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
-        navigationItem.leftBarButtonItem = editButtonItem
+        
+        // ナビゲーションバーのボタンを追加
+        navigationItem.leftBarButtonItem  = editButtonItem
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
         
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
@@ -51,20 +54,16 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var sectionIndex:Int = 0
     var rowIndex:Int = 0
     
+    // ナビゲーションバー用のボタン
+    var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
+    var addButton:UIBarButtonItem!      // 追加ボタン
+    
     
     
     //MARK:- UIの設定
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
-    
-    // ＋ボタンの処理
-    @IBAction func addButton(_ sender: Any) {
-        // ノート追加画面に遷移
-        let storyboard: UIStoryboard = self.storyboard!
-        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
-        self.present(nextView, animated: true, completion: nil)
-    }
     
     // 編集ボタンの処理
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -74,15 +73,37 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集開始
             self.editButtonItem.title = "完了"
             self.editButtonItem.tintColor = UIColor.systemBlue
+            
+            // ナビゲーションバーのボタンを表示
+            deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+            addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+            self.navigationItem.rightBarButtonItems = [addButton,deleteButton]
         } else {
             // 編集終了
             self.editButtonItem.title = "編集"
             self.editButtonItem.tintColor = UIColor.systemBlue
-            self.deleteRows()
+            
+            // ナビゲーションバーのボタンを表示
+            addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+            self.navigationItem.rightBarButtonItems = [addButton]
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
         tableView.reloadData()
+    }
+    
+    // ゴミ箱ボタンの処理
+    @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
+        // 選択された課題を削除
+        self.deleteRows()
+    }
+    
+    // ノート追加ボタンの処理
+    @objc func addButtonTapped(_ sender: UIBarButtonItem) {
+        // ノート追加画面に遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
+        self.present(nextView, animated: true, completion: nil)
     }
     
     
@@ -127,13 +148,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // セルをタップしたときの処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 編集時の処理
         if tableView.isEditing {
-            // 選択肢にチェックが一つでも入ってたら「削除」を表示する。
-            if let _ = self.tableView.indexPathsForSelectedRows {
-                self.editButtonItem.title = "削除"
-                self.editButtonItem.tintColor = UIColor.systemRed
-            }
+            // 編集時の処理
         } else {
             // 通常時の処理
             // タップしたときの選択色を消去
@@ -161,7 +177,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // 複数のセルを削除
-    private func deleteRows() {
+    func deleteRows() {
         
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
@@ -172,8 +188,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // OKボタンがタップされたときの処理
-            
             // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
             self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
             
@@ -188,6 +202,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                     self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
                 }
             }
+            // 編集状態を解除
+            self.setEditing(false, animated: true)
         }
         //OKボタンを追加
         alertController.addAction(okAction)

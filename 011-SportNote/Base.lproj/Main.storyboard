@@ -139,14 +139,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wBa-Ec-7Xu"/>
                     </view>
-                    <navigationItem key="navigationItem" title="ノート" id="QFB-Dg-et7">
-                        <barButtonItem key="leftBarButtonItem" title="編集" id="02t-KW-jj5"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="5mI-Wg-Q79">
-                            <connections>
-                                <action selector="addButton:" destination="wxt-FW-UKR" id="gSx-Di-4Kh"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="ノート" id="QFB-Dg-et7"/>
                     <connections>
                         <outlet property="tableView" destination="NKo-mz-uVK" id="mu0-0U-6sd"/>
                         <segue destination="HCb-bV-yRs" kind="show" identifier="goFreeNoteViewController" id="p4p-t4-Yj4"/>
@@ -1817,7 +1810,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="qnV-Vp-RMg"/>
+        <segue reference="BGT-Xk-K49"/>
         <segue reference="Yvf-Pz-j6e"/>
     </inferredMetricsTieBreakers>
     <resources>
