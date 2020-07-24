@@ -167,7 +167,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // ノートセルがタップされたとき
                 if dataInSection[indexPath.section][indexPath.row].getNoteType() == "練習記録" {
                     // 練習ノートセル
-                    performSegue(withIdentifier: "goNoteDetailViewController", sender: nil)
+                    performSegue(withIdentifier: "goPracticeNoteDetailViewController", sender: nil)
                 } else {
                     // 大会ノートセル
                     performSegue(withIdentifier: "goCompetitionNoteDetailViewController", sender: nil)
@@ -325,9 +325,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 表示するデータを確認画面へ渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
             freeNoteViewController.freeNoteData = freeNoteData
-        } else if segue.identifier == "goNoteDetailViewController" {
+        } else if segue.identifier == "goPracticeNoteDetailViewController" {
             // 表示するデータを確認画面へ渡す
-            let noteDetailViewController = segue.destination as! NoteDetailViewController
+            let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
             noteDetailViewController.noteData = dataInSection[sectionIndex][rowIndex]
         } else if segue.identifier == "goCompetitionNoteDetailViewController" {
             // 表示するデータを確認画面へ渡す

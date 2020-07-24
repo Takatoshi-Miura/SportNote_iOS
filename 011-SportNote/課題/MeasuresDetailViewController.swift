@@ -233,9 +233,9 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // 画面遷移時に呼ばれる処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goNoteDetailView" {
+        if segue.identifier == "goToPracticeNoteDetailViewController" {
             // 表示するデータを確認画面へ渡す
-            let noteDetailViewController = segue.destination as! NoteDetailViewController
+            let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
             noteDetailViewController.noteData = self.noteData
         }
     }
@@ -399,7 +399,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
                 SVProgressHUD.dismiss()
                 
                 // ノート詳細確認画面へ遷移
-                self.performSegue(withIdentifier: "goNoteDetailView", sender: nil)
+                self.performSegue(withIdentifier: "goToPracticeNoteDetailViewController", sender: nil)
             }
         }
     }

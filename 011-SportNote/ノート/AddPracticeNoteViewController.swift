@@ -19,11 +19,11 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
         self.saveButton.isEnabled = false
         
         // NoteDetailViewControllerから遷移してきた場合
-        if previousControllerName == "NoteDetailViewController" {
+        if previousControllerName == "PracticeNoteDetailViewController" {
             // 子ビューにnoteDataを渡す
             let vc = children[0] as! AddPracticeNoteContentViewController
             vc.practiceNoteData = self.noteData
-            vc.previousControllerName = "NoteDetailViewController"
+            vc.previousControllerName = "PracticeNoteDetailViewController"
             
             // タイトル文字列の設定
             navigationBar.items![0].title = "ノートの編集"

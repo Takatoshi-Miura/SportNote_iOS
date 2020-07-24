@@ -28,13 +28,14 @@
 		8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D3A24A17D9A00441B32 /* LoginViewController.swift */; };
 		8D69FC9824B7085900DFECB3 /* TaskMeasuresTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */; };
 		8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */; };
-		8D6FB6A724B96130008ED809 /* NoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6FB6A624B96130008ED809 /* NoteDetailViewController.swift */; };
 		8D7853FE24A6FE0000CCA440 /* TaskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */; };
 		8D7BAB4D24A5AF5300BE196B /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4C24A5AF5300BE196B /* TaskData.swift */; };
 		8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */; };
 		8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */; };
 		8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA4121524B03077002FD67A /* AddTargetViewController.swift */; };
 		8DA4121824B06F0E002FD67A /* TargetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA4121724B06F0E002FD67A /* TargetData.swift */; };
+		8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5338B24CAA696000ADAFB /* PracticeNoteDetailViewController.swift */; };
+		8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5338D24CAA77E000ADAFB /* PracticeNoteContentViewController.swift */; };
 		8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */; };
 		8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6351324B47A1A00186358 /* TabBarController.swift */; };
 		8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */; };
@@ -73,13 +74,14 @@
 		8D665D3A24A17D9A00441B32 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMeasuresTableViewCell.swift; sourceTree = "<group>"; };
 		8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskMeasuresTableViewCell.xib; sourceTree = "<group>"; };
-		8D6FB6A624B96130008ED809 /* NoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailViewController.swift; sourceTree = "<group>"; };
 		8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
 		8D7BAB4C24A5AF5300BE196B /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
 		8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 		8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresDetailViewController.swift; sourceTree = "<group>"; };
 		8DA4121524B03077002FD67A /* AddTargetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTargetViewController.swift; sourceTree = "<group>"; };
 		8DA4121724B06F0E002FD67A /* TargetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetData.swift; sourceTree = "<group>"; };
+		8DA5338B24CAA696000ADAFB /* PracticeNoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNoteDetailViewController.swift; sourceTree = "<group>"; };
+		8DA5338D24CAA77E000ADAFB /* PracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteViewController.swift; sourceTree = "<group>"; };
 		8DA6351324B47A1A00186358 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionNoteDetailViewController.swift; sourceTree = "<group>"; };
@@ -196,7 +198,8 @@
 			children = (
 				8D01652F24AEEBD100F9D69F /* NoteViewController.swift */,
 				8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */,
-				8D6FB6A624B96130008ED809 /* NoteDetailViewController.swift */,
+				8DA5338B24CAA696000ADAFB /* PracticeNoteDetailViewController.swift */,
+				8DA5338D24CAA77E000ADAFB /* PracticeNoteContentViewController.swift */,
 				8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */,
 				8D01653524AF202F00F9D69F /* AddNoteViewController.swift */,
 				8DA4121524B03077002FD67A /* AddTargetViewController.swift */,
@@ -341,12 +344,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D6FB6A724B96130008ED809 /* NoteDetailViewController.swift in Sources */,
 				8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */,
 				8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */,
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
+				8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */,
 				8D01653224AEF14300F9D69F /* FreeNote.swift in Sources */,
+				8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */,
 				8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */,
 				8DA4121824B06F0E002FD67A /* TargetData.swift in Sources */,
 				8DC778A624B5F4200031DF66 /* NoteData.swift in Sources */,

@@ -73,8 +73,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // データ取得
         loadTargetData()
         
-        // NoteDetailViewControllerから遷移してきた場合
-        if previousControllerName == "NoteDetailViewController" {
+        // PracticeNoteDetailViewControllerから遷移してきた場合
+        if previousControllerName == "PracticeNoteDetailViewController" {
             // テキストビューに値をセット
             setTextData(noteData: self.practiceNoteData)
             
@@ -219,8 +219,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // NoteDetailViewControllerから遷移してきた場合
-        if previousControllerName == "NoteDetailViewController" {
+        // PracticeNoteDetailViewControllerから遷移してきた場合
+        if previousControllerName == "PracticeNoteDetailViewController" {
             if tableView.tag == 0 {
                 return 2    // 日付セル,天候セルの2つ
             } else {
@@ -243,8 +243,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // 0行目のセル
             if indexPath.row == 0 {
-                // NoteDetailViewControllerから遷移してきた場合
-                if previousControllerName == "NoteDetailViewController" {
+                // PracticeNoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "PracticeNoteDetailViewController" {
                     // 日付セルを返却
                     cell.textLabel!.text = "日付"
                     cell.detailTextLabel!.text = selectedDate
@@ -259,8 +259,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 }
             // 1行目のセル
             } else if indexPath.row == 1 {
-                // NoteDetailViewControllerから遷移してきた場合
-                if previousControllerName == "NoteDetailViewController" {
+                // PracticeNoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "PracticeNoteDetailViewController" {
                     // 天候セルを返却
                     cell.textLabel!.text = "天候"
                     cell.detailTextLabel!.text = "\(weather[weatherIndex]) \(temperature[temperatureIndex])℃"
@@ -286,8 +286,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
             cell.addTextViewBorder()
             cell.initCheckBox()
-            // NoteDetailViewControllerから遷移してきた場合
-            if previousControllerName == "NoteDetailViewController" {
+            // PracticeNoteDetailViewControllerから遷移してきた場合
+            if previousControllerName == "PracticeNoteDetailViewController" {
                 cell.printTaskData(noteData: practiceNoteData, at: indexPath.row)
             } else {
                 cell.printTaskData(taskData: taskDataArray[indexPath.row])
@@ -299,8 +299,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.tag == 0 {
             if indexPath.row == 0 {
-                // NoteDetailViewControllerから遷移してきた場合
-                if previousControllerName == "NoteDetailViewController" {
+                // PracticeNoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "PracticeNoteDetailViewController" {
                     // 日付セルがタップされた時
                     
                     // Pickerの初期化
@@ -326,8 +326,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     }
                 }
             } else if indexPath.row == 1 {
-                // NoteDetailViewControllerから遷移してきた場合
-                if previousControllerName == "NoteDetailViewController" {
+                // PracticeNoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "PracticeNoteDetailViewController" {
                     // 天候セルがタップされた時
                     
                     // Pickerの初期化
@@ -353,8 +353,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     }
                 }
             } else {
-                // NoteDetailViewControllerから遷移してきた場合
-                if previousControllerName == "NoteDetailViewController" {
+                // PracticeNoteDetailViewControllerから遷移してきた場合
+                if previousControllerName == "PracticeNoteDetailViewController" {
                     // タップしたときの選択色を消去
                     tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                 } else {
@@ -896,7 +896,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         var measuresTitle:[String] = []
         var measuresEffectiveness:[String] = []
         
-        if previousControllerName == "NoteDetailViewController" {
+        if previousControllerName == "PracticeNoteDetailViewController" {
             // 更新日時に現在時刻をセット
             practiceNoteData.setUpdated_at(getCurrentTime())
             
@@ -971,8 +971,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
                 
-                // NoteDetailViewControllerから遷移してきた場合
-                if self.previousControllerName == "NoteDetailViewController" {
+                // PracticeNoteDetailViewControllerから遷移してきた場合
+                if self.previousControllerName == "PracticeNoteDetailViewController" {
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
