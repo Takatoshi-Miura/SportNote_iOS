@@ -64,6 +64,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     // データ格納用
     var targetDataArray = [TargetData]()
     
+    // 終了フラグ
+    var saveFinished:Bool = false
+    
     
     
     //MARK:- UIの設定
@@ -76,15 +79,16 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 保存ボタンの処理
     @IBAction func saveButton(_ sender: Any) {
-        // 目標データを保存
-        saveTargetData(month: selectedMonth,comment: targetTextField.text!)
-        
         // その月の年間目標データがなければ作成
         if self.targetDataArray.count == 0 {
             if selectedMonth == 13 {
-                // 年間目標データを保存したなら何もしない
+                // 年間目標データを保存
+                self.saveFinished = true
+                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
             } else {
-                // 月間目標データを保存したなら年間目標データを作成
+                // 月間目標データを保存したなら年間目標データも作成
+                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+                self.saveFinished = true
                 saveTargetData(month: 13,comment: "")
             }
         } else {
@@ -96,8 +100,16 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                 }
             }
             // 年間目標の登録がなければ、年間目標作成
-            if monthArray.firstIndex(of: 13) == nil {
-                saveTargetData(month: 13,comment: "")
+            if monthArray.firstIndex(of: 13) == nil && selectedMonth == 13 {
+                self.saveFinished = true
+                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+            } else if monthArray.firstIndex(of: 13) == nil {
+                saveTargetData(month: 13, comment: "")
+                self.saveFinished = true
+                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+            } else {
+                self.saveFinished = true
+                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
             }
         }
     }
@@ -455,6 +467,16 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                 
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
+                
+                // 最後のデータ保存であればノート画面に遷移
+                if self.saveFinished == true {
+                    // ストーリーボードを取得
+                    let storyboard: UIStoryboard = self.storyboard!
+                    let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                    
+                    // ノート画面に遷移
+                    self.present(nextView, animated: false, completion: nil)
+                }
             }
         }
     }

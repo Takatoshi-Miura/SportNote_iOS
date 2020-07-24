@@ -1,20 +1,40 @@
 //
 //  ViewController.swift
-//  011-SportNote
+//  
 //
-//  Created by Takatoshi Miura on 2020/06/23.
-//  Copyright © 2020 Takatoshi Miura. All rights reserved.
+//  Created by Takatoshi Miura on 2020/07/23.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
 
+    //MARK:- ライフサイクルメソッド
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
+    
+    
+    
+    //MARK:- 変数の宣言
+    
+    
+    
+    //MARK:- UIの設定
+    
+    
+    
+    
+    //MARK:- 画面遷移
+    
+    
+    
+    //MARK:- その他のメソッド
 
 
 }
-

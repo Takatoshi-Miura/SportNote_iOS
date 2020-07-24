@@ -254,11 +254,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    // deleteの表示名を変更
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "削除"
-    }
-    
     // セルを解決済みにするときの処理（右スワイプ）
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         // アクションの定義
