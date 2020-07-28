@@ -26,7 +26,7 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
             vc.previousControllerName = "PracticeNoteDetailViewController"
             
             // タイトル文字列の設定
-            navigationBar.items![0].title = "ノートの編集"
+            navigationBar.items![0].title = "ノート編集"
             
             // 保存ボタンを有効にする
             self.saveButtonEnable()

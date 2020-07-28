@@ -23,7 +23,7 @@ class AddCompetitionNoteViewController: UIViewController {
             vc.previousControllerName = "CompetitionNoteDetailViewController"
             
             // タイトル文字列の設定
-            navigationBar.items![0].title = "ノートの編集"
+            navigationBar.items![0].title = "ノート編集"
         }
     }
  
