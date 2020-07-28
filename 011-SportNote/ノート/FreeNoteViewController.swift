@@ -30,7 +30,9 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
         detailTextView.layer.borderWidth = 1.0
         
         // キーボードでテキストフィールドが隠れない設定
-        self.configureObserver()
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
         // ツールバーを作成
         createToolBar()
@@ -42,12 +44,6 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     
     // フリーノートデータ格納用
     var freeNoteData = FreeNote()
-    
-    // キーボードでテキストフィールドが隠れないための設定用
-    var selectedTextField: UITextField?
-    var selectedTextView: UITextView?
-    let screenSize = UIScreen.main.bounds.size
-    var textHeight:CGFloat = 0.0
     
     
     
@@ -88,55 +84,22 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     }
     
     // キーボードを出したときの設定
-    func configureObserver() {
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.selectedTextField = textField
-        self.textHeight = textField.frame.maxY
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.selectedTextView = textView
-        self.textHeight = textView.frame.maxY
-    }
-        
-    @objc func keyboardWillShow(_ notification: Notification?) {
-            
-        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-            return
-        }
-                    
-        // サイズ取得
-        let screenHeight = screenSize.height
-        let keyboardHeight = rect.size.height
-        
-        // スクロールする高さを計算
-        let hiddenHeight = keyboardHeight + textHeight - screenHeight
-                
-        // スクロール処理
-        if hiddenHeight > 0 {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-            self.view.transform = transform
-            }
+    @objc func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            detailTextView.contentInset = .zero
         } else {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(0))
-            self.view.transform = transform
-            }
+            detailTextView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
         }
-    }
-        
-    @objc func keyboardWillHide(_ notification: Notification?)  {
-        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
-        UIView.animate(withDuration: duration) {
-            self.view.transform = CGAffineTransform.identity
-        }
+
+        detailTextView.scrollIndicatorInsets = detailTextView.contentInset
+
+        let selectedRange = detailTextView.selectedRange
+        detailTextView.scrollRangeToVisible(selectedRange)
     }
     
     // ツールバーを作成するメソッド
