@@ -277,6 +277,7 @@ PODS:
     - GoogleUtilities/Environment (~> 6.6)
     - GoogleUtilities/UserDefaults (~> 6.6)
     - PromisesObjC (~> 1.2)
+  - FSCalendar (2.8.1)
   - GoogleAppMeasurement (6.6.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -344,6 +345,7 @@ DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Auth
   - Firebase/Firestore
+  - FSCalendar
   - SVProgressHUD
 
 SPEC REPOS:
@@ -359,6 +361,7 @@ SPEC REPOS:
     - FirebaseCoreDiagnosticsInterop
     - FirebaseFirestore
     - FirebaseInstallations
+    - FSCalendar
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -383,6 +386,7 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
   FirebaseFirestore: 8c158bdde010fa397386333a74570eaef033e62d
   FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
+  FSCalendar: 5245140456fcbcac5824c203b98bd8068bdfee1a
   GoogleAppMeasurement: 67458367830514fb20fd9e233496f1eef9d90185
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
   GoogleDataTransportCCTSupport: d70a561f7d236af529fee598835caad5e25f6d3d
@@ -395,6 +399,6 @@ SPEC CHECKSUMS:
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: ff870042acf7e79d3e74dc6d8d2fc62e863e37b0
+PODFILE CHECKSUM: b16604206ff6b1915d8899990db3f23a61f425b0
 
 COCOAPODS: 1.9.3

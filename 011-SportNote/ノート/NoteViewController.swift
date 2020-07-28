@@ -24,9 +24,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
         
-        // ナビゲーションバーのボタンを追加
+        // ナビゲーションバーのボタンを宣言
         navigationItem.leftBarButtonItem  = editButtonItem
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
+        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+        navigationItem.rightBarButtonItems = [addButton,calendarButton]
         
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
@@ -57,6 +60,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // ナビゲーションバー用のボタン
     var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
     var addButton:UIBarButtonItem!      // 追加ボタン
+    var calendarButton:UIBarButtonItem! // カレンダーボタン
     
     
     
@@ -75,8 +79,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.editButtonItem.tintColor = UIColor.systemBlue
             
             // ナビゲーションバーのボタンを表示
-            deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-            addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
             self.navigationItem.rightBarButtonItems = [addButton,deleteButton]
         } else {
             // 編集終了
@@ -84,8 +86,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.editButtonItem.tintColor = UIColor.systemBlue
             
             // ナビゲーションバーのボタンを表示
-            addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-            self.navigationItem.rightBarButtonItems = [addButton]
+            self.navigationItem.rightBarButtonItems = [addButton,calendarButton]
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
@@ -104,6 +105,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         let storyboard: UIStoryboard = self.storyboard!
         let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
         self.present(nextView, animated: true, completion: nil)
+    }
+    
+    // カレンダーボタンの処理
+    @objc func calendarButtonTapped(_ sender: UIBarButtonItem) {
+        
     }
     
     
