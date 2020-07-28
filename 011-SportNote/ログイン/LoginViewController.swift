@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController,UITextFieldDelegate {
 
     //MARK:- ライフサイクルメソッド
     
@@ -22,9 +22,21 @@ class LoginViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // デリゲートの設定
+        mailAddressTextField.delegate = self
+        passwordTextField.delegate = self
+        
         // キーボードでテキストフィールドが隠れない設定
-        configureObserver()
+        self.configureObserver()
     }
+    
+    
+    
+    //MARK:- 変数の宣言
+    
+    // キーボードでテキストフィールドが隠れないための設定用
+    var selectedTextField: UITextField?
+    let screenSize = UIScreen.main.bounds.size
     
     
     
@@ -147,25 +159,44 @@ class LoginViewController: UIViewController {
     // キーボードを出したときの設定
     func configureObserver() {
         let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)),name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)),name: UIResponder.keyboardWillHideNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-
-    // キーボードが表示時に画面をずらす。
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.selectedTextField = textField
+    }
+        
     @objc func keyboardWillShow(_ notification: Notification?) {
-        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue,
-            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        UIView.animate(withDuration: duration) {
-            // キーボードが出ていない時は画面をずらす
-            if self.mailAddressTextField.isEditing == false || self.passwordTextField.isEditing == false {
-                let transform = CGAffineTransform(translationX: 0, y: -(rect.size.height))
-                self.view.transform = transform
+            
+        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+            return
+        }
+                    
+        // サイズ取得
+        let screenHeight = screenSize.height
+        let keyboardHeight = rect.size.height
+        let textUnderHeight: CGFloat = selectedTextField!.frame.maxY
+        
+        // スクロールする高さを計算
+        let hiddenHeight = keyboardHeight + textUnderHeight - screenHeight
+                
+        // スクロール処理
+        if hiddenHeight > 0 {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+            self.view.transform = transform
+            }
+        } else {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(0))
+            self.view.transform = transform
             }
         }
     }
-
-    // キーボードが降りたら画面を戻す
-    @objc func keyboardWillHide(_ notification: Notification?) {
+        
+    @objc func keyboardWillHide(_ notification: Notification?)  {
         guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
         UIView.animate(withDuration: duration) {
             self.view.transform = CGAffineTransform.identity

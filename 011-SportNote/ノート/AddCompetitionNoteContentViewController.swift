@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
+class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource,UITextViewDelegate {
     
     //MARK:- ライフサイクルメソッド
     
@@ -22,6 +22,11 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         typePicker.dataSource    = self
         weatherPicker.delegate   = self
         weatherPicker.dataSource = self
+        physicalConditionTextView.delegate = self
+        targetTextView.delegate = self
+        consciousnessTextView.delegate = self
+        resultTextView.delegate = self
+        reflectionTextView.delegate = self
         
         // Pickerのタグ付け
         typePicker.tag    = 0
@@ -58,6 +63,9 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         resultTextView.layer.borderWidth = 1.0
         reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
         reflectionTextView.layer.borderWidth = 1.0
+        
+        // キーボードでテキストフィールドが隠れない設定
+        self.configureObserver()
         
         // ツールバーを作成
         createToolBar()
@@ -126,6 +134,11 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     // ノート詳細確認画面からの遷移用
     var previousControllerName:String = ""  // 前のViewController名
     
+    // キーボードでテキストフィールドが隠れないための設定用
+    var selectedTextField: UITextField?
+    var selectedTextView: UITextView?
+    let screenSize = UIScreen.main.bounds.size
+    var textHeight:CGFloat = 0.0
     
     
     //MARK:- UIの設定
@@ -650,6 +663,58 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         }
     }
     
+    // キーボードを出したときの設定
+    func configureObserver() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.selectedTextField = textField
+        self.textHeight = textField.frame.maxY
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.selectedTextView = textView
+        self.textHeight = textView.frame.maxY
+    }
+        
+    @objc func keyboardWillShow(_ notification: Notification?) {
+            
+        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+            return
+        }
+                    
+        // サイズ取得
+        let screenHeight = screenSize.height
+        let keyboardHeight = rect.size.height
+        
+        // スクロールする高さを計算
+        let hiddenHeight = keyboardHeight + textHeight - screenHeight
+                
+        // スクロール処理
+        if hiddenHeight > 0 {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+            self.view.transform = transform
+            }
+        } else {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(0))
+            self.view.transform = transform
+            }
+        }
+    }
+        
+    @objc func keyboardWillHide(_ notification: Notification?)  {
+        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
+        UIView.animate(withDuration: duration) {
+            self.view.transform = CGAffineTransform.identity
+        }
+    }
+    
     // ツールバーを作成するメソッド
     func createToolBar() {
         // ツールバーのインスタンスを作成
@@ -841,13 +906,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
-                    // デフォルトでは下から上のアニメーションとなるため、それを上から下に変更  FIX:年月双方の目標が未設定のときOptional Valueでエラーになる
-//                    let transition = CATransition()
-//                    transition.duration = 0.15
-//                    transition.type = CATransitionType.push
-//                    transition.subtype = CATransitionSubtype.fromBottom
-//                    self.view.window!.layer.add(transition, forKey: kCATransition)
                     
                     // ノート画面に遷移
                     self.present(nextView, animated: false, completion: nil)

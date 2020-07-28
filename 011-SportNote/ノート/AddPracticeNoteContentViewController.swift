@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
+class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate,UITextViewDelegate {
     
     //MARK:- ライフサイクルメソッド
     
@@ -26,6 +26,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         tableView.dataSource     = self
         taskTableView.dataSource = self
         taskTableView.delegate   = self
+        physicalConditionTextView.delegate = self
+        purposeTextView.delegate = self
+        detailTextView.delegate = self
+        reflectionTextView.delegate = self
         navigationController?.delegate = self
         
         // セルの登録
@@ -64,6 +68,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         detailTextView.layer.borderWidth = 1.0
         reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
         reflectionTextView.layer.borderWidth = 1.0
+        
+        // キーボードでテキストフィールドが隠れない設定
+        self.configureObserver()
         
         // ツールバーを作成
         createToolBar()
@@ -132,6 +139,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // ノート詳細確認画面からの遷移用
     var previousControllerName:String = ""  // 前のViewController名
+    
+    // キーボードでテキストフィールドが隠れないための設定用
+    var selectedTextField: UITextField?
+    var selectedTextView: UITextView?
+    var textHeight: CGFloat = 0.0
+    let screenSize = UIApplication.shared.keyWindow?.bounds
     
     
     
@@ -728,6 +741,58 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             self.pickerView.removeFromSuperview()
+        }
+    }
+    
+    // キーボードを出したときの設定
+    func configureObserver() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.selectedTextField = textField
+        self.textHeight = textField.frame.maxY
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.selectedTextView = textView
+        self.textHeight = textView.frame.maxY
+    }
+        
+    @objc func keyboardWillShow(_ notification: Notification?) {
+            
+        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+            return
+        }
+                    
+        // サイズ取得
+        let screenHeight = UIScreen.main.bounds.size.height //screenSize.height
+        let keyboardHeight = rect.size.height
+                
+        // スクロールする高さを計算
+        let hiddenHeight = keyboardHeight + self.textHeight - screenHeight
+                
+        // スクロール処理
+        if hiddenHeight > 0 {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+            self.view.transform = transform
+            }
+        } else {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(0))
+            self.view.transform = transform
+            }
+        }
+    }
+        
+    @objc func keyboardWillHide(_ notification: Notification?)  {
+        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
+        UIView.animate(withDuration: duration) {
+            self.view.transform = CGAffineTransform.identity
         }
     }
     

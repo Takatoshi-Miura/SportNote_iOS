@@ -149,7 +149,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D7y-C0-dn4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7337.68115942029" y="791.51785714285711"/>
+            <point key="canvasLocation" x="5870" y="792"/>
         </scene>
         <!--Add Note View Controller-->
         <scene sceneID="CJx-E8-7FJ">
@@ -228,7 +228,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zKG-SY-DLq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="tQK-NN-CxH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="7338" y="3208"/>
+            <point key="canvasLocation" x="4977" y="3364"/>
         </scene>
         <!--Add Practice Note View Controller-->
         <scene sceneID="ncb-mx-cwU">
@@ -320,7 +320,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oHy-mv-5HH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="mmr-1S-Y1R" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="9293" y="3208"/>
+            <point key="canvasLocation" x="6932" y="3364"/>
         </scene>
         <!--Add Target View Controller-->
         <scene sceneID="DeH-CK-s0u">
@@ -425,7 +425,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zqx-GW-OGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="b7J-O9-BiP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="8329" y="3208"/>
+            <point key="canvasLocation" x="5968" y="3364"/>
         </scene>
         <!--Free Note View Controller-->
         <scene sceneID="dVe-sH-KbY">
@@ -477,7 +477,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lmk-DK-ahc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8213" y="792"/>
+            <point key="canvasLocation" x="6743" y="792"/>
         </scene>
         <!--課題-->
         <scene sceneID="ohu-sA-Us6">
@@ -1006,7 +1006,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="15829" y="792"/>
+            <point key="canvasLocation" x="12436" y="792"/>
         </scene>
         <!--アカウント-->
         <scene sceneID="obn-lU-ZMC">
@@ -1038,7 +1038,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LRQ-nF-RHo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Xyz-8C-kZw" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="15829" y="1582"/>
+            <point key="canvasLocation" x="12436" y="1582"/>
         </scene>
         <!--通知-->
         <scene sceneID="wIC-22-pEa">
@@ -1054,7 +1054,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QvU-Zb-Mre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="16732" y="1582"/>
+            <point key="canvasLocation" x="13339" y="1582"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">
@@ -1113,7 +1113,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4aB-hl-T0Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6446" y="792"/>
+            <point key="canvasLocation" x="4977" y="792"/>
         </scene>
         <!--設定-->
         <scene sceneID="o0a-tF-5P8">
@@ -1132,7 +1132,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YX-CG-YNj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="14916" y="792"/>
+            <point key="canvasLocation" x="11523" y="792"/>
         </scene>
         <!--Add Practice Note Content View Controller-->
         <scene sceneID="e8I-2C-rCq">
@@ -1333,7 +1333,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fIE-tp-2Yr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10087" y="3309"/>
+            <point key="canvasLocation" x="7726" y="3465"/>
         </scene>
         <!--Add Competition Note View Controller-->
         <scene sceneID="gHj-wc-cSr">
@@ -1423,7 +1423,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T0q-jo-hBT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="0ae-u6-csv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="11016" y="3208"/>
+            <point key="canvasLocation" x="8655" y="3364"/>
         </scene>
         <!--Add Competition Note Content View Controller-->
         <scene sceneID="fEl-kY-zr7">
@@ -1566,7 +1566,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mE4-Co-uji" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="11832" y="3309"/>
+            <point key="canvasLocation" x="9471" y="3465"/>
         </scene>
         <!--ノートの日付-->
         <scene sceneID="Uzc-da-LXQ">
@@ -1683,7 +1683,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="biA-6g-Zcp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="11016" y="2322"/>
+            <point key="canvasLocation" x="8655" y="2322"/>
         </scene>
         <!--Practice Note Detail View Controller-->
         <scene sceneID="93L-qS-h5G">
@@ -1749,7 +1749,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vEK-Oz-p1L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="9292.753623188406" y="2321.6517857142858"/>
+            <point key="canvasLocation" x="6932" y="2322"/>
         </scene>
         <!--Practice Note Content View Controller-->
         <scene sceneID="HDV-wk-HTq">
@@ -1895,7 +1895,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vOs-Hc-e2Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10086.956521739132" y="2422.7678571428569"/>
+            <point key="canvasLocation" x="7726" y="2423"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

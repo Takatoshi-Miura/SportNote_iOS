@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
+class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate {
     
     //MARK:- ライフサイクルメソッド
     
@@ -18,12 +18,13 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         super.viewDidLoad()
         
         // デリゲートとデータソースの指定
-        tableView.delegate      = self
-        tableView.dataSource    = self
-        typePicker.delegate     = self
-        typePicker.dataSource   = self
-        periodPicker.delegate   = self
-        periodPicker.dataSource = self
+        tableView.delegate       = self
+        tableView.dataSource     = self
+        typePicker.delegate      = self
+        typePicker.dataSource    = self
+        periodPicker.delegate    = self
+        periodPicker.dataSource  = self
+        targetTextField.delegate = self
         
         // Pickerのタグ付け
         typePicker.tag   = 0
@@ -37,6 +38,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // データ取得
         loadTargetData()
+        
+        // キーボードでテキストフィールドが隠れない設定
+        self.configureObserver()
         
         // ツールバーを作成
         createToolBar()
@@ -66,6 +70,12 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 終了フラグ
     var saveFinished:Bool = false
+    
+    // キーボードでテキストフィールドが隠れないための設定用
+    var selectedTextField: UITextField?
+    var selectedTextView: UITextView?
+    let screenSize = UIScreen.main.bounds.size
+    var textHeight:CGFloat = 0.0
     
     
     
@@ -351,6 +361,58 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     // テキストフィールド以外をタップでキーボードを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    // キーボードを出したときの設定
+    func configureObserver() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.selectedTextField = textField
+        self.textHeight = textField.frame.maxY
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.selectedTextView = textView
+        self.textHeight = textView.frame.maxY
+    }
+        
+    @objc func keyboardWillShow(_ notification: Notification?) {
+            
+        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+            return
+        }
+                    
+        // サイズ取得
+        let screenHeight = screenSize.height
+        let keyboardHeight = rect.size.height
+        
+        // スクロールする高さを計算
+        let hiddenHeight = keyboardHeight + textHeight - screenHeight
+                
+        // スクロール処理
+        if hiddenHeight > 0 {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+            self.view.transform = transform
+            }
+        } else {
+            UIView.animate(withDuration: duration) {
+            let transform = CGAffineTransform(translationX: 0, y: -(0))
+            self.view.transform = transform
+            }
+        }
+    }
+        
+    @objc func keyboardWillHide(_ notification: Notification?)  {
+        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
+        UIView.animate(withDuration: duration) {
+            self.view.transform = CGAffineTransform.identity
+        }
     }
     
     // ツールバーを作成するメソッド
