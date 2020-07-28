@@ -57,8 +57,8 @@ class PracticeNoteDetailViewController: UIViewController {
     // containerViewの高さをセットするメソッド
     func setContainerViewHeight(height containerViewHeight:CGFloat) {
         // デフォルトの高さより大きい場合、超過分をcontainerViewの高さにプラスする
-        if containerViewHeight - 260 > 0 {
-            self.containerViewHeight.constant = 1200 + containerViewHeight - 260
+        if containerViewHeight - 200 > 0 {
+            self.containerViewHeight.constant = 1200 + containerViewHeight - 200
         }
     }
     

@@ -135,7 +135,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     var previousControllerName:String = ""  // 前のViewController名
     
     // キーボードでテキストフィールドが隠れないための設定用
-    var selectedTextField: UITextField?
     var selectedTextView: UITextView?
     let screenSize = UIScreen.main.bounds.size
     var textHeight:CGFloat = 0.0
@@ -668,11 +667,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         let notification = NotificationCenter.default
         notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.selectedTextField = textField
-        self.textHeight = textField.frame.maxY
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {

@@ -93,6 +93,21 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // テーブルビューを更新
             self.tableView.reloadData()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.taskTableView?.reloadData()
+                
+                // 課題数によってテーブルビューの高さを設定
+                self.taskTableView?.layoutIfNeeded()
+                self.taskTableView?.updateConstraints()
+                self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
+                
+                // AddPracticeNoteViewControllerオブジェクトを取得
+                let obj = self.parent as! AddPracticeNoteViewController
+                
+                // containerViewの高さを設定
+                obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
+            }
         } else {
             // データ取得
             loadTaskData()
@@ -141,11 +156,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     var previousControllerName:String = ""  // 前のViewController名
     
     // キーボードでテキストフィールドが隠れないための設定用
-    var selectedTextField: UITextField?
     var selectedTextView: UITextView?
     var textHeight: CGFloat = 0.0
-    let screenSize = UIApplication.shared.keyWindow?.bounds
-    
+    let screenSize = UIScreen.main.bounds.size
+    var navBarHeight:CGFloat = 44.0
     
     
     //MARK:- UIの設定
@@ -751,11 +765,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.selectedTextField = textField
-        self.textHeight = textField.frame.maxY
-    }
-    
     func textViewDidBeginEditing(_ textView: UITextView) {
         self.selectedTextView = textView
         self.textHeight = textView.frame.maxY
@@ -769,22 +778,25 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
                     
         // サイズ取得
-        let screenHeight = UIScreen.main.bounds.size.height //screenSize.height
+        let screenHeight = screenSize.height
         let keyboardHeight = rect.size.height
-                
+        
         // スクロールする高さを計算
-        let hiddenHeight = keyboardHeight + self.textHeight - screenHeight
-                
+        var hiddenHeight = keyboardHeight + self.textHeight + navBarHeight - screenHeight
+        if selectedTextView == reflectionTextView {
+            hiddenHeight = keyboardHeight + self.textHeight - self.view.frame.size.height
+        }
+        
         // スクロール処理
         if hiddenHeight > 0 {
             UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-            self.view.transform = transform
+                let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+                self.view.transform = transform
             }
         } else {
             UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(0))
-            self.view.transform = transform
+                let transform = CGAffineTransform(translationX: 0, y: -(0))
+                self.view.transform = transform
             }
         }
     }
@@ -1092,13 +1104,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                         // ストーリーボードを取得
                         let storyboard: UIStoryboard = self.storyboard!
                         let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                        
-                        // デフォルトでは下から上のアニメーションとなるため、それを上から下に変更  FIX:年月双方の目標が未設定のときOptional Valueでエラーになる
-    //                    let transition = CATransition()
-    //                    transition.duration = 0.15
-    //                    transition.type = CATransitionType.push
-    //                    transition.subtype = CATransitionSubtype.fromBottom
-    //                    self.view.window!.layer.add(transition, forKey: kCATransition)
                         
                         // ノート画面に遷移
                         self.present(nextView, animated: false, completion: nil)

@@ -22,6 +22,21 @@ class PracticeNoteContentViewController: UIViewController,UITableViewDelegate,UI
     override func viewWillAppear(_ animated: Bool) {
         // データを表示
         printNoteData(noteData)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.tableView?.reloadData()
+            
+            // 課題数によってテーブルビューの高さを設定
+            self.tableView?.layoutIfNeeded()
+            self.tableView?.updateConstraints()
+            self.tableViewHeight.constant = CGFloat(self.tableView.contentSize.height)
+        
+            // PracticeNoteDetailViewControllerオブジェクトを取得
+            let obj = self.parent as! PracticeNoteDetailViewController
+            
+            // containerViewの高さを設定
+            obj.setContainerViewHeight(height: self.tableView.contentSize.height)
+        }
     }
     
     
@@ -100,17 +115,6 @@ class PracticeNoteContentViewController: UIViewController,UITableViewDelegate,UI
         purposeTextView.text = noteData.getPurpose()
         detailTextView.text = noteData.getDetail()
         reflectionTextView.text = noteData.getReflection()
-        
-        // 課題数によってテーブルビューの高さを設定
-        self.tableView?.layoutIfNeeded()
-        self.tableView?.updateConstraints()
-        self.tableViewHeight.constant = CGFloat(self.tableView.contentSize.height)
-        
-        // PracticeNoteDetailViewControllerオブジェクトを取得
-        let obj = self.parent as! PracticeNoteDetailViewController
-        
-        // containerViewの高さを設定
-        obj.setContainerViewHeight(height: self.tableView.contentSize.height)
     }
     
     
