@@ -249,6 +249,7 @@
                     <connections>
                         <outlet property="noteTableView" destination="dZe-Cm-91r" id="rqi-T7-leY"/>
                         <outlet property="tableView" destination="HpB-Za-42P" id="5Wf-eE-AWA"/>
+                        <segue destination="HCb-bV-yRs" kind="show" identifier="goFreeNoteView" id="bKu-Qs-3iF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NYi-Hf-0r5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2021,6 +2022,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="A5N-jC-0n4"/>
         <segue reference="Yvf-Pz-j6e"/>
+        <segue reference="bKu-Qs-3iF"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="book" catalog="system" width="128" height="101"/>

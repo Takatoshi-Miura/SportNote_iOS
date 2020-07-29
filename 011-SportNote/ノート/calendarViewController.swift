@@ -36,14 +36,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         navigationItem.rightBarButtonItems = [addButton,listButton]
         
         // セルの複数選択を許可
-        tableView.allowsMultipleSelectionDuringEditing = true
+        noteTableView.allowsMultipleSelectionDuringEditing = true
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
+        noteTableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        // データの読み込み
+        reloadData()
     }
     
     
@@ -56,9 +58,10 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
     
     // テーブル用
+    var freeNoteData = FreeNote()       // フリーノートデータ
     var noteDataArray:[NoteData] = []   // セルに表示するデータを格納する配列
+    var targetDataArray = [TargetData]()
     var sectionTitle:[String] = []      // セクションタイトル
-    var freeNoteData = FreeNote()
     
     
     
@@ -175,6 +178,10 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             
         } else {
             // 通常時の処理
+            if tableView.tag == 0 {
+                // フリーノート確認画面へ遷移
+                performSegue(withIdentifier: "goFreeNoteView", sender: nil)
+            }
             // タップしたときの選択色を消去
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         }
@@ -197,6 +204,14 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     //MARK:- 画面遷移
     
+    // 画面遷移時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goFreeNoteView" {
+            // フリーノートデータを渡す
+            let freeNoteViewController = segue.destination as! FreeNoteViewController
+            freeNoteViewController.freeNoteData = self.freeNoteData
+        }
+    }
     
     
     //MARK:- その他のメソッド
@@ -207,5 +222,143 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         userDefaults.set(self.noteDataArray,forKey:"dataArray")
         userDefaults.synchronize()
     }
+    
+    // データを取得するメソッド
+    func reloadData() {
+        // データ取得
+        loadFreeNoteData()
+        loadTargetData()
+        loadNoteData()
+    }
+    
+    // Firebaseからフリーノートデータを読み込むメソッド
+    func loadFreeNoteData() {
+        // ユーザーUIDをセット
+        freeNoteData.setUserID(Auth.auth().currentUser!.uid)
+        
+        // 現在のユーザーのフリーノートデータを取得する
+        let db = Firestore.firestore()
+        db.collection("FreeNoteData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let freeNoteDataCollection = document.data()
+                    
+                    // フリーノートデータを反映
+                    self.freeNoteData.setTitle(freeNoteDataCollection["title"] as! String)
+                    self.freeNoteData.setDetail(freeNoteDataCollection["detail"] as! String)
+                    self.freeNoteData.setUserID(freeNoteDataCollection["userID"] as! String)
+                    self.freeNoteData.setCreated_at(freeNoteDataCollection["created_at"] as! String)
+                    self.freeNoteData.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
+                }
+            }
+        }
+    }
+    
+    // Firebaseから目標データを取得するメソッド
+    func loadTargetData() {
+        // targetDataArrayを初期化
+        targetDataArray = []
+
+        // 現在のユーザーの目標データを取得する
+        let db = Firestore.firestore()
+        db.collection("TargetData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標オブジェクトを作成
+                    let target = TargetData()
+                    
+                    // 目標データを反映
+                    let targetDataCollection = document.data()
+                    target.setYear(targetDataCollection["year"] as! Int)
+                    target.setMonth(targetDataCollection["month"] as! Int)
+                    target.setDetail(targetDataCollection["detail"] as! String)
+                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                    target.setUserID(targetDataCollection["userID"] as! String)
+                    target.setCreated_at(targetDataCollection["created_at"] as! String)
+                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.targetDataArray.append(target)
+                }
+                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
+                // セクションデータを再構築
+                //self.reloadSectionData()
+                
+                // テーブルビューを更新
+                self.tableView?.reloadData()
+            }
+        }
+    }
+    
+    // Firebaseからデータを取得するメソッド
+    func loadNoteData() {
+        // noteDataArrayを初期化
+        noteDataArray = []
+
+        // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .order(by: "date", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // オブジェクトを作成
+                    let noteData = NoteData()
+                    
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    noteData.setNoteType(dataCollection["noteType"] as! String)
+                    noteData.setYear(dataCollection["year"] as! Int)
+                    noteData.setMonth(dataCollection["month"] as! Int)
+                    noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
+                    noteData.setWeather(dataCollection["weather"] as! String)
+                    noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    noteData.setPurpose(dataCollection["purpose"] as! String)
+                    noteData.setDetail(dataCollection["detail"] as! String)
+                    noteData.setTarget(dataCollection["target"] as! String)
+                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    noteData.setResult(dataCollection["result"] as! String)
+                    noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    noteData.setUserID(dataCollection["userID"] as! String)
+                    noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.noteDataArray.append(noteData)
+                }
+                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
+                // セクションデータを再構築
+                //self.reloadSectionData()
+                
+                // テーブルビューを更新
+                self.tableView?.reloadData()
+            }
+        }
+    }
+    
 
 }

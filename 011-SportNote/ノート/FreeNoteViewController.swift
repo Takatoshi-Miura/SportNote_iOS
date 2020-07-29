@@ -59,10 +59,8 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        if viewController is NoteViewController {
-            // フリーノートデータを更新
-            updateFreeNoteData(noteData: self.freeNoteData)
-        }
+        // フリーノートデータを更新
+        updateFreeNoteData(noteData: self.freeNoteData)
     }
     
     
