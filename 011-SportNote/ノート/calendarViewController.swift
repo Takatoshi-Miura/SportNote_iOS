@@ -17,8 +17,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // ナビゲーションバーのタイトル
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.font = UIFont.boldSystemFont(ofSize: 17.0)
+        label.textAlignment = .center
+        label.text = "ノート"
+        self.navigationItem.titleView = label
+        
         // ナビゲーションバーのボタンを宣言
-        listButton   = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(listButtonTapped(_:)))
+        listButton   = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style:UIBarButtonItem.Style.plain, target: self, action: #selector(listButtonTapped(_:)))
         addButton    = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
         deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
         editButtonItem.title = "編集"
@@ -48,7 +56,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
     
     // テーブル用
-    var dataArray:[String] = []         // セルに表示するデータを格納する配列
+    var noteDataArray:[NoteData] = []   // セルに表示するデータを格納する配列
     var sectionTitle:[String] = []      // セクションタイトル
     var freeNoteData = FreeNote()
     
@@ -82,37 +90,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // リストボタンの処理
     @objc func listButtonTapped(_ sender: UIBarButtonItem) {
-        
+        // ノート画面に遷移
+        self.navigationController?.popViewController(animated: false)
     }
     
-    // 課題追加ボタンの処理
+    // ノート追加ボタンの処理
     @objc func addButtonTapped(_ sender: UIBarButtonItem) {
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"データを追加",message:"入力してください",preferredStyle:UIAlertController.Style.alert)
-        
-        // テキストエリアを追加
-        alertController.addTextField(configurationHandler:nil)
-        
-        // OKボタンの宣言
-        let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            if let textField = alertController.textFields?.first {
-                // dataArrayとテーブルに追加
-                self.dataArray.insert(textField.text!,at:0)
-                self.tableView.insertRows(at:[IndexPath(row:0,section:0)],with:UITableView.RowAnimation.right)
-                
-                // データを保存
-                self.saveData()
-            }
-        }
-        // CANCELボタンの宣言
-        let cancelButton = UIAlertAction(title:"CANCEL",style:UIAlertAction.Style.cancel,handler:nil)
-        
-        // ボタンを追加
-        alertController.addAction(okAction)
-        alertController.addAction(cancelButton)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
+        // ノート追加画面に遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
+        self.present(nextView, animated: true, completion: nil)
     }
     
     // ゴミ箱ボタンの処理
@@ -125,7 +112,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         // Indexの大きいデータから順に削除
         for indexPathList in sortedIndexPaths {
-            self.dataArray.remove(at: indexPathList.row)
+            self.noteDataArray.remove(at: indexPathList.row)
             self.tableView.deleteRows(at: [indexPathList], with: UITableView.RowAnimation.right)
         }
         
@@ -145,7 +132,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if tableView.tag == 0 {
             return 1    // フリーノートセルのみ
         } else {
-            return self.dataArray.count     // 選択された日付に保存されているノート数
+            return self.noteDataArray.count     // 選択された日付に保存されているノート数
         }
     }
     
@@ -198,7 +185,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
             // dataArrayとテーブルから削除
-            self.dataArray.remove(at:indexPath.row)
+            self.noteDataArray.remove(at:indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.right)
             
             // データを保存
@@ -217,7 +204,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     // データをUserDefaultsに保存するメソッド
     func saveData() {
         let userDefaults = UserDefaults.standard
-        userDefaults.set(self.dataArray,forKey:"dataArray")
+        userDefaults.set(self.noteDataArray,forKey:"dataArray")
         userDefaults.synchronize()
     }
 

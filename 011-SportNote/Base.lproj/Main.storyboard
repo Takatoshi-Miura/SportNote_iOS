@@ -145,6 +145,7 @@
                         <segue destination="HCb-bV-yRs" kind="show" identifier="goFreeNoteViewController" id="p4p-t4-Yj4"/>
                         <segue destination="ZFp-5s-vSW" kind="show" identifier="goCompetitionNoteDetailViewController" id="ILr-mH-cA9"/>
                         <segue destination="1E4-5o-7MW" kind="show" identifier="goPracticeNoteDetailViewController" id="A5N-jC-0n4"/>
+                        <segue destination="Qkc-c1-UXU" kind="show" identifier="goCalendarViewController" animates="NO" id="xq0-LV-T6o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D7y-C0-dn4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -156,7 +157,7 @@
             <objects>
                 <viewController storyboardIdentifier="calendarViewController" modalPresentationStyle="fullScreen" id="Qkc-c1-UXU" customClass="calendarViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0a9-mN-2rU">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="emE-HG-YVo" customClass="FSCalendar">
@@ -252,7 +253,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NYi-Hf-0r5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5868.75" y="790.14084507042253"/>
+            <point key="canvasLocation" x="5869" y="791"/>
         </scene>
         <!--Add Note View Controller-->
         <scene sceneID="CJx-E8-7FJ">
@@ -1109,7 +1110,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="12436" y="792"/>
+            <point key="canvasLocation" x="13432.5" y="791.19718309859161"/>
         </scene>
         <!--アカウント-->
         <scene sceneID="obn-lU-ZMC">
@@ -1235,7 +1236,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YX-CG-YNj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="11523" y="792"/>
+            <point key="canvasLocation" x="12519.375" y="791.19718309859161"/>
         </scene>
         <!--Add Practice Note Content View Controller-->
         <scene sceneID="e8I-2C-rCq">

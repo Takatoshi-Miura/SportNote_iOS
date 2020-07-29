@@ -109,10 +109,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // カレンダーボタンの処理
     @objc func calendarButtonTapped(_ sender: UIBarButtonItem) {
-        // カレンダー画面に遷移
-        let storyboard: UIStoryboard = self.storyboard!
-        let nextView = storyboard.instantiateViewController(withIdentifier: "calendarViewController")
-        self.present(nextView, animated: false, completion: nil)
+        // カレンダー画面へ遷移
+        performSegue(withIdentifier: "goCalendarViewController", sender: nil)
     }
     
     
@@ -342,6 +340,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! CompetitionNoteDetailViewController
             noteDetailViewController.noteData = dataInSection[sectionIndex][rowIndex]
+        } else if segue.identifier == "goCalendarViewController" {
+            // データを遷移先に渡す
+            let calendarViewController = segue.destination as! calendarViewController
+            calendarViewController.freeNoteData  = self.freeNoteData
+            calendarViewController.noteDataArray = self.noteDataArray
         }
     }
     
