@@ -161,9 +161,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="emE-HG-YVo" customClass="FSCalendar">
-                                <rect key="frame" x="0.0" y="132" width="320" height="304"/>
+                                <rect key="frame" x="0.0" y="129" width="320" height="249"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="firstWeekday">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="headerHeight">
+                                        <real key="value" value="-1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="dataSource" destination="Qkc-c1-UXU" id="KMD-ac-g5g"/>
+                                    <outlet property="delegate" destination="Qkc-c1-UXU" id="hBj-XC-x6g"/>
+                                </connections>
                             </view>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ngm-Nu-a4t">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -173,7 +185,7 @@
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HpB-Za-42P">
-                                <rect key="frame" x="0.0" y="44" width="320" height="80"/>
+                                <rect key="frame" x="0.0" y="56" width="320" height="65"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
@@ -208,7 +220,7 @@
                                 </connections>
                             </tableView>
                             <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dZe-Cm-91r">
-                                <rect key="frame" x="0.0" y="444" width="320" height="80"/>
+                                <rect key="frame" x="0.0" y="386" width="320" height="113"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
@@ -247,6 +259,7 @@
                         <viewLayoutGuide key="safeArea" id="Kf7-BW-QTx"/>
                     </view>
                     <connections>
+                        <outlet property="calendar" destination="emE-HG-YVo" id="kcL-Bt-IjV"/>
                         <outlet property="noteTableView" destination="dZe-Cm-91r" id="rqi-T7-leY"/>
                         <outlet property="tableView" destination="HpB-Za-42P" id="5Wf-eE-AWA"/>
                         <segue destination="HCb-bV-yRs" kind="show" identifier="goFreeNoteView" id="bKu-Qs-3iF"/>
@@ -254,7 +267,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NYi-Hf-0r5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5869" y="791"/>
+            <point key="canvasLocation" x="5868.75" y="790.14084507042253"/>
         </scene>
         <!--Add Note View Controller-->
         <scene sceneID="CJx-E8-7FJ">

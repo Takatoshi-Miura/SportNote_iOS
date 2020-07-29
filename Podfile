@@ -12,6 +12,7 @@ pod 'Firebase/Auth'
 pod 'Firebase/Firestore'
 pod 'SVProgressHUD'
 pod 'FSCalendar'
+pod 'CalculateCalendarLogic' 
 
 
 end

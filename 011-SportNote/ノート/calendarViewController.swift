@@ -9,8 +9,9 @@
 import UIKit
 import Firebase
 import FSCalendar
+import CalculateCalendarLogic
 
-class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,FSCalendarDelegate,FSCalendarDataSource,FSCalendarDelegateAppearance {
 
     //MARK:- ライフサイクルメソッド
     
@@ -40,7 +41,6 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
-        noteTableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,7 +61,6 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     var freeNoteData = FreeNote()       // フリーノートデータ
     var noteDataArray:[NoteData] = []   // セルに表示するデータを格納する配列
     var targetDataArray = [TargetData]()
-    var sectionTitle:[String] = []      // セクションタイトル
     
     
     
@@ -70,6 +69,9 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noteTableView: UITableView!
+    
+    // カレンダー
+    @IBOutlet weak var calendar: FSCalendar!
     
     // 編集ボタンの処理
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -198,6 +200,62 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             // データを保存
             self.saveData()
         }
+    }
+    
+    
+    
+    //MARK:- カレンダーの設定
+    
+    // 祝日判定を行い結果を返すメソッド(True:祝日)
+    func judgeHoliday(_ date : Date) -> Bool {
+        let tmpCalendar = Calendar(identifier: .gregorian)
+        let year = tmpCalendar.component(.year, from: date)
+        let month = tmpCalendar.component(.month, from: date)
+        let day = tmpCalendar.component(.day, from: date)
+        let holiday = CalculateCalendarLogic()
+        return holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
+    }
+    
+    // date型 -> 年月日をIntで取得
+    func getDay(_ date:Date) -> (Int,Int,Int){
+        let tmpCalendar = Calendar(identifier: .gregorian)
+        let year = tmpCalendar.component(.year, from: date)
+        let month = tmpCalendar.component(.month, from: date)
+        let day = tmpCalendar.component(.day, from: date)
+        return (year,month,day)
+    }
+
+    // 曜日判定(日曜日:1 〜 土曜日:7)
+    func getWeekIdx(_ date: Date) -> Int{
+        let tmpCalendar = Calendar(identifier: .gregorian)
+        return tmpCalendar.component(.weekday, from: date)
+    }
+    
+    // 土日や祝日の日の文字色を変えるメソッド
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        //祝日判定をする（祝日は赤色で表示する）
+        if self.judgeHoliday(date){
+            return UIColor.red
+        }
+
+        //土日の判定を行う（土曜日は青色、日曜日は赤色で表示する）
+        let weekday = self.getWeekIdx(date)
+        if weekday == 1 {   //日曜日
+            return UIColor.red
+        }
+        else if weekday == 7 {  //土曜日
+            return UIColor.blue
+        }
+        
+        // ラベルの色を変更
+        calendar.calendarWeekdayView.weekdayLabels[0].textColor = UIColor.red       // 日曜日は赤
+        calendar.calendarWeekdayView.weekdayLabels[1].textColor = UIColor.black     // 平日は黒
+        calendar.calendarWeekdayView.weekdayLabels[2].textColor = UIColor.black
+        calendar.calendarWeekdayView.weekdayLabels[3].textColor = UIColor.black
+        calendar.calendarWeekdayView.weekdayLabels[4].textColor = UIColor.black
+        calendar.calendarWeekdayView.weekdayLabels[5].textColor = UIColor.black
+        
+        return nil
     }
     
     
