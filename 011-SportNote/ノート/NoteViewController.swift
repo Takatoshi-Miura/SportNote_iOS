@@ -109,7 +109,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // カレンダーボタンの処理
     @objc func calendarButtonTapped(_ sender: UIBarButtonItem) {
-        
+        // カレンダー画面に遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "calendarViewController")
+        self.present(nextView, animated: false, completion: nil)
     }
     
     
