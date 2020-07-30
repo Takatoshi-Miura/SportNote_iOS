@@ -22,6 +22,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.dataSource    = self
         weatherPicker.delegate   = self
         weatherPicker.dataSource = self
+        taskPicker.delegate      = self
+        taskPicker.dataSource    = self
         tableView.delegate       = self
         tableView.dataSource     = self
         taskTableView.dataSource = self
@@ -38,6 +40,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // Pickerのタグ付け
         typePicker.tag    = 0
         weatherPicker.tag = 1
+        taskPicker.tag    = 2
         
         // 種別Pickerの宣言
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
@@ -54,6 +57,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 天候Pickerの宣言
         weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
         weatherPicker.backgroundColor = UIColor.systemGray5
+        
+        // 課題Pickerの宣言
+        taskPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height)
+        taskPicker.backgroundColor = UIColor.systemGray5
         
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
@@ -144,6 +151,11 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     var weatherIndex:Int = 0
     var temperatureIndex:Int = 60
     
+    // 課題Picker
+    let taskPicker = UIPickerView()
+    var task = [TaskData]()
+    var taskIndex:Int = 0
+    
     // データ格納用
     var targetDataArray  = [TargetData]()
     var taskDataArray    = [TaskData]()
@@ -160,6 +172,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     var textHeight: CGFloat = 0.0
     let screenSize = UIScreen.main.bounds.size
     var navBarHeight:CGFloat = 44.0
+    
     
     
     //MARK:- UIの設定
@@ -238,6 +251,19 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 // ノート画面に遷移
                 self.present(nextView, animated: false, completion: nil)
             }
+        }
+    }
+    
+    // 追加ボタンの処理
+    @IBAction func addButton(_ sender: Any) {
+        // 課題Pickerの初期化
+        taskPickerInit()
+        
+        // 下からPickerを呼び出す
+        let screenSize = UIScreen.main.bounds.size
+        pickerView.frame.origin.y = screenSize.height
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
         }
     }
     
@@ -453,10 +479,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // Pickerの列数を返却
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        if pickerView.tag == 0 {
-            return 1    // 種別Pickerは1つ
-        } else {
+        if pickerView.tag == 1 {
             return 2    // 天候Pickerは天気,気温の2つ
+        } else {
+            return 1    // 種別、課題Pickerは1つ
         }
     }
     
@@ -473,7 +499,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 return 0
             }
         } else {
-            return 0
+            return task.count               // 課題数
         }
     }
     
@@ -485,12 +511,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             if component == 0 {
                 return "\(weather[row])"        // 天候Pickerの天気
             } else if component == 1 {
-                return "\(temperature[row])℃"    // 天候Pickerの気温
+                return "\(temperature[row])℃"   // 天候Pickerの気温
             } else {
                 return nil
             }
         } else {
-            return nil
+            return "\(task[row].getTaskTitle())" // 課題Pickerの項目
         }
     }
     
@@ -651,6 +677,62 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // テーブルビューを更新
         tableView.reloadData()
     }
+    
+    // 課題Pickerの初期化メソッド
+    func taskPickerInit() {
+        // ビューの初期化
+        pickerView.removeFromSuperview()
+        
+        // ツールバーの宣言
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.taskPickerDone))
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
+        
+        // ビューを追加
+        pickerView = UIView(frame: taskPicker.bounds)
+        pickerView.addSubview(taskPicker)
+        pickerView.addSubview(toolbar)
+        view.addSubview(pickerView)
+    }
+    
+    // 完了ボタンの処理
+    @objc func taskPickerDone() {
+        // 選択されたIndexを取得
+        taskIndex = taskPicker.selectedRow(inComponent: 0)
+        
+        // 課題タイトルの配列を作成
+        var taskDataTitleArray:[String] = []
+        if taskDataArray.isEmpty == false {
+            for num in 0...taskDataArray.count - 1 {
+                taskDataTitleArray.append(self.taskDataArray[num].getTaskTitle())
+            }
+        }
+        
+        // 既に表示している課題であれば追加しない
+        if taskDataTitleArray.firstIndex(of: task[taskIndex].getTaskTitle()) == nil {
+            // taskDataArrayに選択された課題を追加
+            self.taskDataArray.insert(task[taskIndex], at: 0)
+        } else {
+            SVProgressHUD.showError(withStatus: "既に追加されています。")
+        }
+        
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
+        }
+           
+        // テーブルビューを更新
+        taskTableView.reloadData()
+    }
+    
     
     
     
@@ -923,6 +1005,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
                 }
+                // 課題データを格納
+                self.task = self.taskDataArray
+                
                 // テーブルビューの更新
                 self.taskTableView?.reloadData()
                 
