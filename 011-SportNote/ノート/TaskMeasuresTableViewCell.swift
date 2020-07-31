@@ -42,6 +42,7 @@ class TaskMeasuresTableViewCell: UITableViewCell {
         } else {
             taskMeasuresTitleLabel.text = "対策：\(task.getMeasuresPriority())"
         }
+        
     }
     
     // 課題データをラベルに表示するメソッド

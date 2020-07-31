@@ -86,6 +86,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     override func viewWillAppear(_ animated: Bool) {
         // データ取得
         loadTargetData()
+        loadTaskData()
         
         // PracticeNoteDetailViewControllerから遷移してきた場合
         if previousControllerName == "PracticeNoteDetailViewController" {
@@ -100,6 +101,11 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // テーブルビューを更新
             self.tableView.reloadData()
+            
+            // 課題データ取得
+            for index in 0...self.practiceNoteData.getTaskTitle().count - 1 {
+                self.loadTaskData(taskTitle: self.practiceNoteData.getTaskTitle()[index])
+            }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.taskTableView?.reloadData()
@@ -116,9 +122,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
             }
         } else {
-            // データ取得
-            loadTaskData()
-            
             // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
             practiceNoteData.setNewNoteID()
         }
@@ -256,15 +259,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 追加ボタンの処理
     @IBAction func addButton(_ sender: Any) {
-        // 課題Pickerの初期化
+        // 課題Pickerの初期化＆呼び出し
         taskPickerInit()
-        
-        // 下からPickerを呼び出す
-        let screenSize = UIScreen.main.bounds.size
-        pickerView.frame.origin.y = screenSize.height
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-        }
     }
     
     
@@ -341,7 +337,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             cell.initCheckBox()
             // PracticeNoteDetailViewControllerから遷移してきた場合
             if previousControllerName == "PracticeNoteDetailViewController" {
-                cell.printTaskData(noteData: practiceNoteData, at: indexPath.row)
+                if self.taskDataArray.isEmpty == false {
+                    cell.printTaskData(taskData: taskDataArray[indexPath.row])
+                }
             } else {
                 cell.printTaskData(taskData: taskDataArray[indexPath.row])
             }
@@ -355,55 +353,35 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 // PracticeNoteDetailViewControllerから遷移してきた場合
                 if previousControllerName == "PracticeNoteDetailViewController" {
                     // 日付セルがタップされた時
+                    // タップしたときの選択色を消去
+                    tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化
+                    // Pickerの初期化＆呼び出し
                     datePickerInit()
-                    
-                    // 下からPickerを呼び出す
-                    let screenSize = UIScreen.main.bounds.size
-                    pickerView.frame.origin.y = screenSize.height
-                    UIView.animate(withDuration: 0.3) {
-                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                    }
                 } else {
                     // 種別セルがタップされた時
+                    // タップしたときの選択色を消去
+                    tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化
+                    // Pickerの初期化＆呼び出し
                     typeCellPickerInit()
-                    
-                    // 下からPickerを呼び出す
-                    let screenSize = UIScreen.main.bounds.size
-                    pickerView.frame.origin.y = screenSize.height
-                    UIView.animate(withDuration: 0.3) {
-                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                    }
                 }
             } else if indexPath.row == 1 {
                 // PracticeNoteDetailViewControllerから遷移してきた場合
                 if previousControllerName == "PracticeNoteDetailViewController" {
                     // 天候セルがタップされた時
+                    // タップしたときの選択色を消去
+                    tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化
+                    // Pickerの初期化＆呼び出し
                     weatherPickerInit()
-                    
-                    // 下からPickerを呼び出す
-                    let screenSize = UIScreen.main.bounds.size
-                    pickerView.frame.origin.y = screenSize.height
-                    UIView.animate(withDuration: 0.3) {
-                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                    }
                 } else {
                     // 日付セルがタップされた時
+                    // タップしたときの選択色を消去
+                    tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化
+                    // Pickerの初期化＆呼び出し
                     datePickerInit()
-                    
-                    // 下からPickerを呼び出す
-                    let screenSize = UIScreen.main.bounds.size
-                    pickerView.frame.origin.y = screenSize.height
-                    UIView.animate(withDuration: 0.3) {
-                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                    }
                 }
             } else {
                 // PracticeNoteDetailViewControllerから遷移してきた場合
@@ -415,21 +393,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // タップしたときの選択色を消去
                     tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化
+                    // Pickerの初期化＆呼び出し
                     weatherPickerInit()
-                    
-                    // 下からPickerを呼び出す
-                    let screenSize = UIScreen.main.bounds.size
-                    pickerView.frame.origin.y = screenSize.height
-                    UIView.animate(withDuration: 0.3) {
-                        self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                    }
                 }
             }
         } else {
             // 未解決の課題セルをタップしたときの処理
             // タップしたときの選択色を消去
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+            
+            // Pickerをしまう
+            closePicker()
         }
     }
     
@@ -466,11 +440,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // deleteの表示名を変更
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        if tableView.tag == 0 {
-            return "非表示"
-        } else {
-            return "非表示"
-        }
+        return "非表示"
     }
     
     
@@ -538,19 +508,23 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(typePicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+        
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let pickerPosition = obj.getPickerPosition()
+        
+        // 下からPickerを呼び出す
+        pickerView.frame.origin.y = pickerPosition
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+        }
     }
     
     // キャンセルボタンの処理
     @objc func typeCancel() {
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
         
         // テーブルビューを更新
         tableView.reloadData()
@@ -562,14 +536,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typeIndex = typePicker.selectedRow(inComponent: 0)
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
            
         // テーブルビューを更新
         tableView.reloadData()
@@ -617,6 +584,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(datePicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+        
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let pickerPosition = obj.getPickerPosition()
+        
+        // 下からPickerを呼び出す
+        pickerView.frame.origin.y = pickerPosition
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+        }
     }
     
     // 完了ボタンの処理
@@ -625,14 +603,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         selectedDate = getDatePickerDate()
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
            
         // テーブルビューを更新
         tableView.reloadData()
@@ -656,6 +627,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(weatherPicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+        
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let pickerPosition = obj.getPickerPosition()
+        
+        // 下からPickerを呼び出す
+        pickerView.frame.origin.y = pickerPosition
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+        }
     }
     
     // 完了ボタンの処理
@@ -665,14 +647,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         temperatureIndex = weatherPicker.selectedRow(inComponent: 1)
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
            
         // テーブルビューを更新
         tableView.reloadData()
@@ -696,6 +671,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(taskPicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+        
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let pickerPosition = obj.getPickerPosition()
+        
+        // 下からPickerを呼び出す
+        pickerView.frame.origin.y = pickerPosition
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+        }
     }
     
     // 完了ボタンの処理
@@ -715,22 +701,35 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         if taskDataTitleArray.firstIndex(of: task[taskIndex].getTaskTitle()) == nil {
             // taskDataArrayに選択された課題を追加
             self.taskDataArray.insert(task[taskIndex], at: 0)
+            
+            // テーブルを更新
+            self.taskTableView.reloadData()
         } else {
             SVProgressHUD.showError(withStatus: "既に追加されています。")
         }
         
         // Pickerをしまう
+        closePicker()
+           
+        // テーブルビューを更新
+        taskTableView.reloadData()
+    }
+    
+    // Pickerをしまうメソッド
+    func closePicker() {
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        
+        // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+            self.pickerView.frame.origin.y = scrollPotiton + self.pickerView.bounds.size.height
         }
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
         }
-           
-        // テーブルビューを更新
-        taskTableView.reloadData()
     }
     
     
@@ -831,13 +830,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // テキストフィールド以外をタップでキーボードとPickerを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+        
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
     }
     
     // キーボードを出したときの設定
@@ -970,15 +965,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 配列の初期化
         taskDataArray = []
         
-        // ユーザーUIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
         // ユーザーの未解決課題データ取得
         // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
         db.collection("TaskData")
-            .whereField("userID", isEqualTo: userID)
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
             .whereField("isDeleted", isEqualTo: false)
             .whereField("taskAchievement", isEqualTo: false)
             .order(by: "taskID", descending: true)
@@ -1008,6 +1000,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 // 課題データを格納
                 self.task = self.taskDataArray
                 
+                // PracticeNoteDetailViewControllerから遷移してきた場合
+                if self.previousControllerName == "PracticeNoteDetailViewController" {
+                    // taskDataArrayをリセット（後にpracticeNoteDataの課題をセットするため）
+                    self.taskDataArray = []
+                }
+                
                 // テーブルビューの更新
                 self.taskTableView?.reloadData()
                 
@@ -1024,6 +1022,48 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 
                 // 保存ボタンを有効にする
                 obj.saveButtonEnable()
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // 課題データを取得するメソッド
+    func loadTaskData(taskTitle title:String) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // practiceNoteDataが所有している課題データを取得
+        let db = Firestore.firestore()
+        db.collection("TaskData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("taskTitle", isEqualTo: title)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let taskDataCollection = document.data()
+                    
+                    // 取得データを基に、課題データを作成
+                    let databaseTaskData = TaskData()
+                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
+                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
+                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
+                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
+                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
+                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
+                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
+                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
+                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
+                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
+                    
+                    // 課題データを格納
+                    self.taskDataArray.append(databaseTaskData)
+                }
+                // テーブル更新
+                self.taskTableView.reloadData()
                 
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
