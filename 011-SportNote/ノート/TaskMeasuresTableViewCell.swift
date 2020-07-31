@@ -31,6 +31,12 @@ class TaskMeasuresTableViewCell: UITableViewCell {
     
     
     
+    //MARK:- 変数の宣言
+    
+    var previousControllerName:String = ""  // 前のViewController名
+    
+    
+    
     //MARK:- その他のメソッド
     
     // 課題データをラベルに表示するメソッド
@@ -42,7 +48,11 @@ class TaskMeasuresTableViewCell: UITableViewCell {
         } else {
             taskMeasuresTitleLabel.text = "対策：\(task.getMeasuresPriority())"
         }
-        
+        if previousControllerName == "PracticeNoteDetailViewController" {
+            if task.getMeasuresData().isEmpty == false {
+                effectivenessTextView.text = task.getMeasuresEffectiveness(at: 0)
+            }
+        }
     }
     
     // 課題データをラベルに表示するメソッド

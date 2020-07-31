@@ -104,7 +104,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // 課題データ取得
             for index in 0...self.practiceNoteData.getTaskTitle().count - 1 {
-                self.loadTaskData(taskTitle: self.practiceNoteData.getTaskTitle()[index])
+                self.loadTaskData(taskTitle: self.practiceNoteData.getTaskTitle()[index], measuresTitle: self.practiceNoteData.getMeasuresTitle()[index], measuresEffectiveness: self.practiceNoteData.getMeasuresEffectiveness()[index])
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -338,6 +338,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             // PracticeNoteDetailViewControllerから遷移してきた場合
             if previousControllerName == "PracticeNoteDetailViewController" {
                 if self.taskDataArray.isEmpty == false {
+                    cell.previousControllerName == "PracticeNoteDetailViewController"
                     cell.printTaskData(taskData: taskDataArray[indexPath.row])
                 }
             } else {
@@ -1031,7 +1032,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // 課題データを取得するメソッド
-    func loadTaskData(taskTitle title:String) {
+    func loadTaskData(taskTitle title:String,measuresTitle measure:String,measuresEffectiveness effectiveness:String) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -1047,17 +1048,20 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 for document in querySnapshot!.documents {
                     let taskDataCollection = document.data()
                     
+                    // measuresDataオブジェクトを作成
+                    let obj:[String:[[String:Int]]] = [measure:[[effectiveness:0]]]
+                    
                     // 取得データを基に、課題データを作成
                     let databaseTaskData = TaskData()
                     databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
+                    databaseTaskData.setTaskTitle(title)
                     databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
                     databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
                     databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
                     databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
                     databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
                     databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
+                    databaseTaskData.setMeasuresData(obj)
                     databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
                     
                     // 課題データを格納
