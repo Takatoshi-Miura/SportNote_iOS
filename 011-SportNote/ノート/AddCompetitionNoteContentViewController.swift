@@ -283,61 +283,41 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         if indexPath.row == 0 {
             // CompetitionNoteDetailViewControllerから遷移してきた場合
             if previousControllerName == "CompetitionNoteDetailViewController" {
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+                
                 // 日付Pickerの初期化
                 datePickerInit()
-                
-                // 下からPickerを呼び出す
-                let screenSize = UIScreen.main.bounds.size
-                pickerView.frame.origin.y = screenSize.height
-                UIView.animate(withDuration: 0.3) {
-                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                }
             } else {
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+                
                 // 種別Pickerの初期化
                 typeCellPickerInit()
-                
-                // 下からPickerを呼び出す
-                let screenSize = UIScreen.main.bounds.size
-                pickerView.frame.origin.y = screenSize.height
-                UIView.animate(withDuration: 0.3) {
-                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                }
             }
         // 1行目のセルがタップされた時
         } else if indexPath.row == 1 {
             // CompetitionNoteDetailViewControllerから遷移してきた場合
             if previousControllerName == "CompetitionNoteDetailViewController" {
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+                
                 // 天候Pickerの初期化
                 weatherPickerInit()
-                
-                // 下からPickerを呼び出す
-                let screenSize = UIScreen.main.bounds.size
-                pickerView.frame.origin.y = screenSize.height
-                UIView.animate(withDuration: 0.3) {
-                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                }
             } else {
+                // タップしたときの選択色を消去
+                tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+                
                 // 日付Pickerの初期化
                 datePickerInit()
-                
-                // 下からPickerを呼び出す
-                let screenSize = UIScreen.main.bounds.size
-                pickerView.frame.origin.y = screenSize.height
-                UIView.animate(withDuration: 0.3) {
-                    self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-                }
             }
         // 2行目のセルがタップされた時
         } else {
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+            
             // 天候Pickerの初期化
             weatherPickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height - 60
-            }
         }
     }
     
@@ -406,19 +386,23 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         pickerView.addSubview(typePicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+        
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddCompetitionNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let pickerPosition = obj.getPickerPosition()
+        
+        // 下からPickerを呼び出す
+        pickerView.frame.origin.y = pickerPosition
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+        }
     }
     
     // キャンセルボタンの処理
     @objc func typeCancel() {
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
         
         // テーブルビューを更新
         tableView.reloadData()
@@ -430,14 +414,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         typeIndex = typePicker.selectedRow(inComponent: 0)
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
            
         // テーブルビューを更新
         tableView.reloadData()
@@ -485,6 +462,17 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         pickerView.addSubview(datePicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+        
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddCompetitionNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let pickerPosition = obj.getPickerPosition()
+        
+        // 下からPickerを呼び出す
+        pickerView.frame.origin.y = pickerPosition
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+        }
     }
     
     // 完了ボタンの処理
@@ -493,14 +481,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         selectedDate = getDatePickerDate()
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
            
         // テーブルビューを更新
         tableView.reloadData()
@@ -524,6 +505,17 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         pickerView.addSubview(weatherPicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
+        
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddCompetitionNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let pickerPosition = obj.getPickerPosition()
+        
+        // 下からPickerを呼び出す
+        pickerView.frame.origin.y = pickerPosition
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+        }
     }
     
     // 完了ボタンの処理
@@ -533,17 +525,27 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         temperatureIndex = weatherPicker.selectedRow(inComponent: 1)
         
         // Pickerをしまう
+        closePicker()
+           
+        // テーブルビューを更新
+        tableView.reloadData()
+    }
+    
+    // Pickerをしまうメソッド
+    func closePicker() {
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddCompetitionNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        
+        // Pickerをしまう
         UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+            self.pickerView.frame.origin.y = scrollPotiton + self.pickerView.bounds.size.height
         }
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             // ビューの初期化
             self.pickerView.removeFromSuperview()
         }
-           
-        // テーブルビューを更新
-        tableView.reloadData()
     }
     
     
@@ -654,12 +656,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
     }
     
     // キーボードを出したときの設定

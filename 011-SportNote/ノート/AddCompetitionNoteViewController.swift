@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddCompetitionNoteViewController: UIViewController {
+class AddCompetitionNoteViewController: UIViewController,UIScrollViewDelegate {
     
     //MARK:- ライフサイクルメソッド
     
@@ -33,6 +33,7 @@ class AddCompetitionNoteViewController: UIViewController {
     
     var previousControllerName:String = ""  // 前のViewController名
     var noteData = NoteData()               // ノート詳細画面からの遷移用
+    var scrollPosition:CGFloat = 0          // スクロール位置
     
     
     
@@ -51,6 +52,25 @@ class AddCompetitionNoteViewController: UIViewController {
         
         // 大会ノートデータを保存する
         vc.saveButton()
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // 現在のスクロール位置(最下点)を取得するメソッド
+    func getScrollPosition() -> CGFloat {
+        return UIScreen.main.bounds.size.height + self.scrollPosition
+    }
+    
+    // Pickerのしまう位置を取得するメソッド
+    func getPickerPosition() -> CGFloat {
+        return UIScreen.main.bounds.size.height + self.scrollPosition + 300
+    }
+    
+    // スクロールするたびに呼ばれるメソッド
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.scrollPosition = scrollView.contentOffset.y
     }
     
 }
