@@ -838,8 +838,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // キーボードを出したときの設定
     func configureObserver() {
         let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -853,27 +853,28 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
             return
         }
-                    
-        // サイズ取得
-        let screenHeight = screenSize.height
+        
+        // 現在のスクロール位置（最下点）,キーボードの高さを取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
         let keyboardHeight = rect.size.height
         
-        // スクロールする高さを計算
-        var hiddenHeight = keyboardHeight + self.textHeight + navBarHeight - screenHeight
-        if selectedTextView == reflectionTextView {
-            hiddenHeight = keyboardHeight + self.textHeight - self.view.frame.size.height
-        }
-        
-        // スクロール処理
-        if hiddenHeight > 0 {
-            UIView.animate(withDuration: duration) {
-                let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-                self.view.transform = transform
-            }
-        } else {
-            UIView.animate(withDuration: duration) {
-                let transform = CGAffineTransform(translationX: 0, y: -(0))
-                self.view.transform = transform
+        // textViewDidBeginEditingが実行されるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // スクロールする高さを計算
+            let hiddenHeight = keyboardHeight + self.textHeight + self.navBarHeight - scrollPotiton
+            
+            // スクロール処理
+            if hiddenHeight > 0 {
+                UIView.animate(withDuration: duration) {
+                    let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+                    self.view.transform = transform
+                }
+            } else {
+                UIView.animate(withDuration: duration) {
+                    let transform = CGAffineTransform(translationX: 0, y: -(0))
+                    self.view.transform = transform
+                }
             }
         }
     }
