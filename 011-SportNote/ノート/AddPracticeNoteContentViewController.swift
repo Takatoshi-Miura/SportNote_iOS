@@ -273,7 +273,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             if tableView.tag == 0 {
                 return 2    // 日付セル,天候セルの2つ
             } else {
-                return self.practiceNoteData.getTaskTitle().count   // 課題数を返却
+                return taskDataArray.count     // 課題数を返却
             }
         } else {
             if tableView.tag == 0 {
@@ -338,7 +338,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             // PracticeNoteDetailViewControllerから遷移してきた場合
             if previousControllerName == "PracticeNoteDetailViewController" {
                 if self.taskDataArray.isEmpty == false {
-                    cell.previousControllerName == "PracticeNoteDetailViewController"
+                    cell.previousControllerName = "PracticeNoteDetailViewController"
                     cell.printTaskData(taskData: taskDataArray[indexPath.row])
                 }
             } else {
@@ -705,6 +705,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // テーブルを更新
             self.taskTableView.reloadData()
+            
+            // 課題数によってテーブルビューの高さを設定
+            self.taskTableView?.layoutIfNeeded()
+            self.taskTableView?.updateConstraints()
+            self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
+            
+            // AddPracticeNoteViewControllerオブジェクトを取得
+            let obj = self.parent as! AddPracticeNoteViewController
+            
+            // containerViewの高さを設定
+            obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
         } else {
             SVProgressHUD.showError(withStatus: "既に追加されています。")
         }
