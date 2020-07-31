@@ -138,6 +138,8 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     var selectedTextView: UITextView?
     let screenSize = UIScreen.main.bounds.size
     var textHeight:CGFloat = 0.0
+    var navBarHeight:CGFloat = 44.0
+    
     
     
     //MARK:- UIの設定
@@ -678,23 +680,27 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
             return
         }
                     
-        // サイズ取得
-        let screenHeight = screenSize.height
+        // 現在のスクロール位置（最下点）,キーボードの高さを取得
+        let obj = self.parent as! AddCompetitionNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
         let keyboardHeight = rect.size.height
         
-        // スクロールする高さを計算
-        let hiddenHeight = keyboardHeight + textHeight - screenHeight
-                
-        // スクロール処理
-        if hiddenHeight > 0 {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-            self.view.transform = transform
-            }
-        } else {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(0))
-            self.view.transform = transform
+        // textViewDidBeginEditingが実行されるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // スクロールする高さを計算
+            let hiddenHeight = keyboardHeight + self.textHeight + self.navBarHeight - scrollPotiton
+            
+            // スクロール処理
+            if hiddenHeight > 0 {
+                UIView.animate(withDuration: duration) {
+                    let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+                    self.view.transform = transform
+                }
+            } else {
+                UIView.animate(withDuration: duration) {
+                    let transform = CGAffineTransform(translationX: 0, y: -(0))
+                    self.view.transform = transform
+                }
             }
         }
     }
