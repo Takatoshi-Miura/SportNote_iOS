@@ -125,7 +125,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         }
         
         // データを保存
-        self.saveData()
+        
         
         // 編集状態を解除
         self.setEditing(false, animated: true)
@@ -216,7 +216,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.right)
             
             // データを保存
-            self.saveData()
+            
         }
     }
     
@@ -234,6 +234,25 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         // その日付のノートデータを取得し、cellDataに格納
         loadNoteData(year: year, month: month, date: day)
+    }
+    
+    // ノートデータが存在する日付のセルを色付けるメソッド
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/M/dd"
+        let da = formatter.string(from: date)
+        
+        // ノートデータがある日付のセルを色付け
+        for noteData in self.noteDataArray {
+            if da == "\(String(noteData.getYear()))/\(String(noteData.getMonth()))/\(String(noteData.getDate()))" {
+                if noteData.getNoteType() == "練習記録" {
+                    return UIColor.systemGreen
+                } else if noteData.getNoteType() == "大会記録" {
+                    return UIColor.systemRed
+                }
+            }
+        }
+        return nil
     }
     
     // 祝日判定を行い結果を返すメソッド(True:祝日)
@@ -263,12 +282,28 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // 土日や祝日の日の文字色を変えるメソッド
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-        //祝日判定をする（祝日は赤色で表示する）
+        // ノートデータがある日付の数値を色付け
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/M/dd"
+        let da = formatter.string(from: date)
+        for noteData in self.noteDataArray {
+            if da == "\(String(noteData.getYear()))/\(String(noteData.getMonth()))/\(String(noteData.getDate()))" {
+                return UIColor.white
+            }
+        }
+        
+        // 今日の日付
+        let now = Date()
+        if da == formatter.string(from: now) {
+            return UIColor.white
+        }
+        
+        // 祝日判定をする（祝日は赤色で表示する）
         if self.judgeHoliday(date){
             return UIColor.red
         }
-
-        //土日の判定を行う（土曜日は青色、日曜日は赤色で表示する）
+        
+        // 土日の判定を行う（土曜日は青色、日曜日は赤色で表示する）
         let weekday = self.getWeekIdx(date)
         if weekday == 1 {   //日曜日
             return UIColor.red
@@ -310,13 +345,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     
+    
     //MARK:- その他のメソッド
-
-    // データをUserDefaultsに保存するメソッド
-    func saveData() {
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(self.noteDataArray,forKey:"dataArray")
-        userDefaults.synchronize()
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
     }
     
     // データを取得するメソッド
