@@ -61,7 +61,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     // テーブル用
     var freeNoteData = FreeNote()       // フリーノートデータ
     var noteDataArray:[NoteData] = []   // ノートデータ
-    var cellDataArray:[NoteData] = []        // セルに表示するノートが格納される
+    var cellDataArray:[NoteData] = []   // セルに表示するノートが格納される
     var targetDataArray = [TargetData]()
     var selectIndex:Int = 0
     
@@ -224,6 +224,12 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     //MARK:- カレンダーの設定
     
+    // カレンダーをフリックした時の処理
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        // カレンダーのヘッダーに目標をセット
+        printTarget()
+    }
+    
     // 日付がタップされた時の処理
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         // 選択された日付を取得
@@ -321,6 +327,34 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         calendar.calendarWeekdayView.weekdayLabels[5].textColor = UIColor.black
         
         return nil
+    }
+    
+    // カレンダーのヘッダーに目標を表示するメソッド
+    func printTarget() {
+        // 文字列の宣言
+        var yearTarget:String  = ""
+        var monthTarget:String = ""
+        
+        // フォーマットの宣言
+        let monthFormatter = DateFormatter()
+        monthFormatter.dateFormat = "yyyy/M"
+        let yearFormatter = DateFormatter()
+        yearFormatter.dateFormat = "yyyy"
+        
+        // 目標データの存在確認
+        for targetData in targetDataArray {
+            if monthFormatter.string(from: calendar.currentPage) == targetData.getYearMonth() {
+                // 月間目標データがあれば文字列に登録
+                monthTarget = "\(targetData.getDetail())"
+            }
+            if yearFormatter.string(from: calendar.currentPage) == String(targetData.getYear()) && targetData.getMonth() == 13 {
+                // 年間目標データがあれば文字列に登録
+                yearTarget = "\(targetData.getDetail())"
+            }
+        }
+        
+        // カレンダーのヘッダーに目標データを表示
+        self.calendar.appearance.headerDateFormat = "YYYY年:\(yearTarget)\nM月:\(monthTarget)"
     }
     
     
@@ -425,12 +459,12 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                     // 取得データを格納
                     self.targetDataArray.append(target)
                 }
-                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
-                // セクションデータを再構築
-                //self.reloadSectionData()
+                // カレンダーのヘッダーに目標をセット
+                self.printTarget()
                 
                 // テーブルビューを更新
                 self.tableView?.reloadData()
+                self.calendar.reloadData()
             }
         }
     }

@@ -6,6 +6,8 @@
 //  Copyright © 2020 Takatoshi Miura. All rights reserved.
 //
 
+import UIKit
+
 class TargetData {
     
     //MARK:- 保持データ
@@ -85,6 +87,10 @@ class TargetData {
     
     func getUpdated_at() -> String {
         return self.updated_at
+    }
+    
+    func getYearMonth() -> String {
+        return "\(self.getYear())/\(self.getMonth())"
     }
     
 }
