@@ -320,13 +320,13 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         // ラベルの色を変更
         calendar.calendarWeekdayView.weekdayLabels[0].textColor = UIColor.red       // 日曜日は赤
-        calendar.calendarWeekdayView.weekdayLabels[1].textColor = UIColor.black     // 平日は黒
-        calendar.calendarWeekdayView.weekdayLabels[2].textColor = UIColor.black
-        calendar.calendarWeekdayView.weekdayLabels[3].textColor = UIColor.black
-        calendar.calendarWeekdayView.weekdayLabels[4].textColor = UIColor.black
-        calendar.calendarWeekdayView.weekdayLabels[5].textColor = UIColor.black
+        calendar.calendarWeekdayView.weekdayLabels[1].textColor = UIColor.label     // 平日は黒
+        calendar.calendarWeekdayView.weekdayLabels[2].textColor = UIColor.label
+        calendar.calendarWeekdayView.weekdayLabels[3].textColor = UIColor.label
+        calendar.calendarWeekdayView.weekdayLabels[4].textColor = UIColor.label
+        calendar.calendarWeekdayView.weekdayLabels[5].textColor = UIColor.label
         
-        return nil
+        return UIColor.label
     }
     
     // カレンダーのヘッダーに目標を表示するメソッド
