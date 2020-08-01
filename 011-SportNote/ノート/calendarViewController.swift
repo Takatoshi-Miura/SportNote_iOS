@@ -65,6 +65,9 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     var targetDataArray = [TargetData]()
     var selectIndex:Int = 0
     
+    // フラグ
+    var deleteFinished:Bool = false
+    
     
     
     //MARK:- UIの設定
@@ -93,7 +96,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             self.navigationItem.rightBarButtonItems = [addButton,listButton]
         }
         // 編集モード時のみ複数選択可能とする
-        tableView.isEditing = editing
+        noteTableView.isEditing = editing
     }
     
     // リストボタンの処理
@@ -112,23 +115,8 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // ゴミ箱ボタンの処理
     @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
-        // 選択要素のIndexを降順にソートする
-        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
-            return
-        }
-        let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-        
-        // Indexの大きいデータから順に削除
-        for indexPathList in sortedIndexPaths {
-            self.noteDataArray.remove(at: indexPathList.row)
-            self.tableView.deleteRows(at: [indexPathList], with: UITableView.RowAnimation.right)
-        }
-        
-        // データを保存
-        
-        
-        // 編集状態を解除
-        self.setEditing(false, animated: true)
+        // ノート削除
+        self.deleteRows()
     }
     
     
@@ -180,9 +168,13 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     // セルの編集可否設定
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if tableView.tag == 0 {
-            return false    // フリーノートは編集不可
+            return false        // フリーノートは編集不可
         } else {
-            return true     // ノートセルは編集可能
+            if cellDataArray.isEmpty {
+                return false    // ノートはありませんセルは編集不可
+            } else {
+                return true     // ノートセルは編集可能
+            }
         }
     }
     
@@ -221,13 +213,72 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // dataArrayとテーブルから削除
-            self.noteDataArray.remove(at:indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.right)
+            // アラートダイアログを生成
+            let alertController = UIAlertController(title:"ノートを削除",message:"\(self.noteDataArray[indexPath.row].getCellTitle())\nを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
             
-            // データを保存
+            // OKボタンを宣言
+            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+                // OKボタンがタップされたときの処理
+                // ノートデータを削除
+                self.deleteFinished = true
+                self.deleteNoteData(note: self.cellDataArray[indexPath.row])
+                self.cellDataArray.remove(at: indexPath.row)
+            }
+            //OKボタンを追加
+            alertController.addAction(okAction)
             
+            //CANCELボタンを宣言
+            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            //CANCELボタンを追加
+            alertController.addAction(cancelButton)
+            
+            //アラートダイアログを表示
+            present(alertController,animated:true,completion:nil)
         }
+    }
+    
+    // 複数のセルを削除
+    func deleteRows() {
+           
+        guard let selectedIndexPaths = self.noteTableView.indexPathsForSelectedRows else {
+            return
+        }
+           
+        // アラートダイアログを生成
+        let alertController = UIAlertController(title:"ノートを削除",message:"選択されたノートを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+           
+        // OKボタンを宣言
+        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
+            let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+               
+            for num in sortedIndexPaths {
+                // 最後の削除であればフラグをtrueにする
+                if num == sortedIndexPaths.last {
+                    self.deleteFinished = true
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.cellDataArray[num.row])
+                    self.cellDataArray.remove(at: num.row)
+                    
+                    // 編集状態を解除
+                    self.setEditing(false, animated: true)
+                } else {
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.cellDataArray[num.row])
+                    self.cellDataArray.remove(at: num.row)
+                }
+            }
+        }
+        //OKボタンを追加
+        alertController.addAction(okAction)
+           
+        //CANCELボタンを宣言
+        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        //CANCELボタンを追加
+        alertController.addAction(cancelButton)
+           
+        //アラートダイアログを表示
+        present(alertController,animated:true,completion:nil)
     }
     
     
@@ -528,9 +579,9 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                     // 取得データを格納
                     self.noteDataArray.append(noteData)
                 }
-                
                 // テーブルビューを更新
                 self.tableView?.reloadData()
+                self.noteTableView.reloadData()
                 self.calendar.reloadData()
             }
         }
@@ -585,12 +636,38 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                     // 取得データを格納
                     self.cellDataArray.append(noteData)
                 }
-                
                 // テーブルビューを更新
                 self.noteTableView?.reloadData()
             }
         }
     }
     
+    // ノートデータを削除するメソッド
+    func deleteNoteData(note noteData:NoteData) {
+        // isDeletedをセット
+        noteData.setIsDeleted(true)
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("NoteData").document("\(Auth.auth().currentUser!.uid)_\(noteData.getNoteID())")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "isDeleted"  : true,
+            "updated_at" : getCurrentTime()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+                
+                // 最後の削除であればリロード
+                if self.deleteFinished == true {
+                    self.deleteFinished = false
+                    self.reloadData()
+                }
+            }
+        }
+    }
 
 }
