@@ -140,7 +140,11 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if tableView.tag == 0 {
             return 1    // フリーノートセルのみ
         } else {
-            return self.cellDataArray.count     // 選択された日付に保存されているノート数
+            if cellDataArray.isEmpty == false {
+                return self.cellDataArray.count     // 選択された日付に保存されているノート数
+            } else {
+                return 1                            // ノートはありませんセル用
+            }
         }
     }
     
@@ -164,6 +168,10 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 } else {
                     cell.detailTextLabel?.textColor = UIColor.systemGreen
                 }
+            } else {
+                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath)
+                cell.textLabel?.text = "ノートはありません"
+                return cell
             }
             return cell
         }
@@ -192,16 +200,18 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 // フリーノート確認画面へ遷移
                 performSegue(withIdentifier: "goFreeNoteView", sender: nil)
             } else {
-                // indexを取得
-                self.selectIndex = indexPath.row
-                
-                // ノート確認画面へ遷移
-                if cellDataArray[indexPath.row].getNoteType() == "練習記録" {
-                    // 練習ノートセル
-                    performSegue(withIdentifier: "goPracticeNoteDetailView", sender: nil)
-                } else {
-                    // 大会ノートセル
-                    performSegue(withIdentifier: "goCompetitionNoteDetailView", sender: nil)
+                if cellDataArray.isEmpty == false {
+                    // indexを取得
+                    self.selectIndex = indexPath.row
+                    
+                    // ノート確認画面へ遷移
+                    if cellDataArray[indexPath.row].getNoteType() == "練習記録" {
+                        // 練習ノートセル
+                        performSegue(withIdentifier: "goPracticeNoteDetailView", sender: nil)
+                    } else {
+                        // 大会ノートセル
+                        performSegue(withIdentifier: "goCompetitionNoteDetailView", sender: nil)
+                    }
                 }
             }
         }
