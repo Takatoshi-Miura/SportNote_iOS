@@ -263,11 +263,13 @@
                         <outlet property="noteTableView" destination="dZe-Cm-91r" id="rqi-T7-leY"/>
                         <outlet property="tableView" destination="HpB-Za-42P" id="5Wf-eE-AWA"/>
                         <segue destination="HCb-bV-yRs" kind="show" identifier="goFreeNoteView" id="bKu-Qs-3iF"/>
+                        <segue destination="1E4-5o-7MW" kind="show" identifier="goPracticeNoteDetailView" id="9Au-jM-opu"/>
+                        <segue destination="ZFp-5s-vSW" kind="show" identifier="goCompetitionNoteDetailView" id="g5y-bG-FHW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NYi-Hf-0r5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5868.75" y="790.14084507042253"/>
+            <point key="canvasLocation" x="6789" y="1612"/>
         </scene>
         <!--Add Note View Controller-->
         <scene sceneID="CJx-E8-7FJ">
@@ -595,7 +597,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lmk-DK-ahc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6743" y="1612"/>
+            <point key="canvasLocation" x="7725" y="1612"/>
         </scene>
         <!--課題-->
         <scene sceneID="ohu-sA-Us6">
@@ -1295,7 +1297,7 @@
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="　課題と対策の有効性" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5p-c1-IuY">
-                                <rect key="frame" x="0.0" y="542" width="320" height="64"/>
+                                <rect key="frame" x="0.0" y="542" width="320" height="20.5"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -1362,7 +1364,7 @@
                                 </connections>
                             </textView>
                             <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xmx-r9-c5P">
-                                <rect key="frame" x="0.0" y="614" width="320" height="260"/>
+                                <rect key="frame" x="0.0" y="570.5" width="320" height="260"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="260" id="1ri-V5-K6z"/>
@@ -1373,7 +1375,7 @@
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="　反省・気づいたこと" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FM2-WX-yqz">
-                                <rect key="frame" x="0.0" y="882" width="320" height="30"/>
+                                <rect key="frame" x="0.0" y="838.5" width="320" height="30"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Wmg-fA-t5u"/>
@@ -1383,7 +1385,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="qP1-7i-lWU">
-                                <rect key="frame" x="16" y="920" width="288" height="100"/>
+                                <rect key="frame" x="16" y="876.5" width="288" height="100"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="lLF-h4-Tpw"/>
@@ -2041,7 +2043,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="A5N-jC-0n4"/>
+        <segue reference="9Au-jM-opu"/>
+        <segue reference="g5y-bG-FHW"/>
         <segue reference="Yvf-Pz-j6e"/>
         <segue reference="bKu-Qs-3iF"/>
     </inferredMetricsTieBreakers>

@@ -107,7 +107,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 self.loadTaskData(taskTitle: self.practiceNoteData.getTaskTitle()[index], measuresTitle: self.practiceNoteData.getMeasuresTitle()[index], measuresEffectiveness: self.practiceNoteData.getMeasuresEffectiveness()[index])
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            // Fix:複数の課題データを読み込めない
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 self.taskTableView?.reloadData()
                 
                 // 課題数によってテーブルビューの高さを設定
@@ -433,6 +434,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             if editingStyle == UITableViewCell.EditingStyle.delete {
                 // taskDataArrayから削除
                 self.taskDataArray.remove(at:indexPath.row)
+                
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
             }
@@ -1047,6 +1049,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // measuresDataオブジェクトを作成
+        let obj:[String:[[String:Int]]] = [measure:[[effectiveness:0]]]
+        
         // practiceNoteDataが所有している課題データを取得
         let db = Firestore.firestore()
         db.collection("TaskData")
@@ -1058,9 +1063,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             } else {
                 for document in querySnapshot!.documents {
                     let taskDataCollection = document.data()
-                    
-                    // measuresDataオブジェクトを作成
-                    let obj:[String:[[String:Int]]] = [measure:[[effectiveness:0]]]
                     
                     // 取得データを基に、課題データを作成
                     let databaseTaskData = TaskData()

@@ -41,6 +41,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
+        noteTableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,8 +60,10 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // テーブル用
     var freeNoteData = FreeNote()       // フリーノートデータ
-    var noteDataArray:[NoteData] = []   // セルに表示するデータを格納する配列
+    var noteDataArray:[NoteData] = []   // ノートデータ
+    var cellDataArray:[NoteData] = []        // セルに表示するノートが格納される
     var targetDataArray = [TargetData]()
+    var selectIndex:Int = 0
     
     
     
@@ -137,7 +140,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if tableView.tag == 0 {
             return 1    // フリーノートセルのみ
         } else {
-            return self.noteDataArray.count     // 選択された日付に保存されているノート数
+            return self.cellDataArray.count     // 選択された日付に保存されているノート数
         }
     }
     
@@ -152,14 +155,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             return cell
         } else {
             // ノートセルを返却
-            let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for:indexPath)
-            //cell.textLabel?.text       = dataInSection[indexPath.section][indexPath.row].getCellTitle()
-            //cell.detailTextLabel?.text = dataInSection[indexPath.section][indexPath.row].getNoteType()
-//            if dataInSection[indexPath.section][indexPath.row].getNoteType() == "練習記録" {
-//                cell.detailTextLabel?.textColor = UIColor.systemGreen
-//            } else {
-//                cell.detailTextLabel?.textColor = UIColor.systemRed
-//            }
+            let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath)
+            if cellDataArray.isEmpty == false {
+                cell.textLabel?.text       = cellDataArray[indexPath.row].getCellTitle()
+                cell.detailTextLabel?.text = cellDataArray[indexPath.row].getNoteType()
+                if cellDataArray[indexPath.row].getNoteType() == "大会記録" {
+                    cell.detailTextLabel?.textColor = UIColor.systemRed
+                } else {
+                    cell.detailTextLabel?.textColor = UIColor.systemGreen
+                }
+            }
             return cell
         }
     }
@@ -180,12 +185,25 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             
         } else {
             // 通常時の処理
+            // タップしたときの選択色を消去
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+            
             if tableView.tag == 0 {
                 // フリーノート確認画面へ遷移
                 performSegue(withIdentifier: "goFreeNoteView", sender: nil)
+            } else {
+                // indexを取得
+                self.selectIndex = indexPath.row
+                
+                // ノート確認画面へ遷移
+                if cellDataArray[indexPath.row].getNoteType() == "練習記録" {
+                    // 練習ノートセル
+                    performSegue(withIdentifier: "goPracticeNoteDetailView", sender: nil)
+                } else {
+                    // 大会ノートセル
+                    performSegue(withIdentifier: "goCompetitionNoteDetailView", sender: nil)
+                }
             }
-            // タップしたときの選択色を消去
-            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         }
     }
     
@@ -205,6 +223,18 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     
     //MARK:- カレンダーの設定
+    
+    // 日付がタップされた時の処理
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        // 選択された日付を取得
+        let tmpDate = Calendar(identifier: .gregorian)
+        let year = tmpDate.component(.year, from: date)
+        let month = tmpDate.component(.month, from: date)
+        let day = tmpDate.component(.day, from: date)
+        
+        // その日付のノートデータを取得し、cellDataに格納
+        loadNoteData(year: year, month: month, date: day)
+    }
     
     // 祝日判定を行い結果を返すメソッド(True:祝日)
     func judgeHoliday(_ date : Date) -> Bool {
@@ -268,6 +298,14 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             // フリーノートデータを渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
             freeNoteViewController.freeNoteData = self.freeNoteData
+        } else if segue.identifier == "goPracticeNoteDetailView" {
+            // 練習ノートデータを確認画面へ渡す
+            let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
+            noteDetailViewController.noteData = cellDataArray[selectIndex]
+        } else if segue.identifier == "goCompetitionNoteDetailView" {
+            // 大会ノートデータを確認画面へ渡す
+            let noteDetailViewController = segue.destination as! CompetitionNoteDetailViewController
+            noteDetailViewController.noteData = cellDataArray[selectIndex]
         }
     }
     
@@ -408,12 +446,65 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                     // 取得データを格納
                     self.noteDataArray.append(noteData)
                 }
-                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
-                // セクションデータを再構築
-                //self.reloadSectionData()
                 
                 // テーブルビューを更新
                 self.tableView?.reloadData()
+            }
+        }
+    }
+    
+    // Firebaseからデータを取得するメソッド
+    func loadNoteData(year selectYear:Int,month selectMonth:Int,date selectDate:Int) {
+        // cellDataArrayを初期化
+        cellDataArray = []
+
+        // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("isDeleted", isEqualTo: false)
+            .whereField("year", isEqualTo: selectYear)
+            .whereField("month", isEqualTo: selectMonth)
+            .whereField("date", isEqualTo: selectDate)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // オブジェクトを作成
+                    let noteData = NoteData()
+                    
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    noteData.setNoteType(dataCollection["noteType"] as! String)
+                    noteData.setYear(dataCollection["year"] as! Int)
+                    noteData.setMonth(dataCollection["month"] as! Int)
+                    noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
+                    noteData.setWeather(dataCollection["weather"] as! String)
+                    noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    noteData.setPurpose(dataCollection["purpose"] as! String)
+                    noteData.setDetail(dataCollection["detail"] as! String)
+                    noteData.setTarget(dataCollection["target"] as! String)
+                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    noteData.setResult(dataCollection["result"] as! String)
+                    noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    noteData.setUserID(dataCollection["userID"] as! String)
+                    noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.cellDataArray.append(noteData)
+                }
+                
+                // テーブルビューを更新
+                self.noteTableView?.reloadData()
             }
         }
     }
