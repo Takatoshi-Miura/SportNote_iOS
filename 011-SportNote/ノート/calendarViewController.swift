@@ -487,6 +487,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 
                 // テーブルビューを更新
                 self.tableView?.reloadData()
+                self.calendar.reloadData()
             }
         }
     }
