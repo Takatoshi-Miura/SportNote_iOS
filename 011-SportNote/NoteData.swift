@@ -266,4 +266,18 @@ class NoteData {
         return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日(\(self.day))"
     }
     
+    // 課題を追加するメソッド
+    func addTask(taskData task:TaskData) {
+        self.taskTitle.append(task.getTaskTitle())
+        self.measuresTitle.append(task.getMeasuresPriority())
+        self.measuresEffectiveness.append("")
+    }
+    
+    // 課題を削除するメソッド
+    func deleteTask(at index:Int) {
+        self.taskTitle.remove(at: index)
+        self.measuresTitle.remove(at: index)
+        self.measuresEffectiveness.remove(at: index)
+    }
+    
 }

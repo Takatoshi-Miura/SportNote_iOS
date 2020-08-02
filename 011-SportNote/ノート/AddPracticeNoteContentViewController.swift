@@ -102,26 +102,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             // テーブルビューを更新
             self.tableView.reloadData()
             
-            // 課題データ取得
-            for index in 0...self.practiceNoteData.getTaskTitle().count - 1 {
-                self.loadTaskData(taskTitle: self.practiceNoteData.getTaskTitle()[index], measuresTitle: self.practiceNoteData.getMeasuresTitle()[index], measuresEffectiveness: self.practiceNoteData.getMeasuresEffectiveness()[index])
-            }
-            
             // Fix:複数の課題データを読み込めない
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                self.taskTableView?.reloadData()
-                
-                // 課題数によってテーブルビューの高さを設定
-                self.taskTableView?.layoutIfNeeded()
-                self.taskTableView?.updateConstraints()
-                self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
-                
-                // AddPracticeNoteViewControllerオブジェクトを取得
-                let obj = self.parent as! AddPracticeNoteViewController
-                
-                // containerViewの高さを設定
-                obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
-            }
         } else {
             // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
             practiceNoteData.setNewNoteID()
@@ -157,7 +138,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 課題Picker
     let taskPicker = UIPickerView()
-    var task = [TaskData]()
     var taskIndex:Int = 0
     
     // データ格納用
@@ -274,13 +254,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             if tableView.tag == 0 {
                 return 2    // 日付セル,天候セルの2つ
             } else {
-                return taskDataArray.count     // 課題数を返却
+                return self.practiceNoteData.getTaskTitle().count     // 課題数を返却
             }
         } else {
             if tableView.tag == 0 {
                 return 3    // 種別セル,日付セル,天候セルの3つ
             } else {
-                return taskDataArray.count     // 未解決の課題の数
+                return self.practiceNoteData.getTaskTitle().count     // 課題数を返却
             }
         }
     }
@@ -336,15 +316,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
             cell.addTextViewBorder()
             cell.initCheckBox()
-            // PracticeNoteDetailViewControllerから遷移してきた場合
-            if previousControllerName == "PracticeNoteDetailViewController" {
-                if self.taskDataArray.isEmpty == false {
-                    cell.previousControllerName = "PracticeNoteDetailViewController"
-                    cell.printTaskData(taskData: taskDataArray[indexPath.row])
-                }
-            } else {
-                cell.printTaskData(taskData: taskDataArray[indexPath.row])
-            }
+            cell.printTaskData(noteData: self.practiceNoteData, at: indexPath.row)
             return cell
         }
     }
@@ -432,8 +404,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         if tableView.tag == 1 {
             // 削除処理かどうかの判定
             if editingStyle == UITableViewCell.EditingStyle.delete {
-                // taskDataArrayから削除
-                self.taskDataArray.remove(at:indexPath.row)
+                // practiceNoteDataから削除
+                self.practiceNoteData.deleteTask(at: indexPath.row)
                 
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
@@ -472,7 +444,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 return 0
             }
         } else {
-            return task.count               // 課題数
+            return taskDataArray.count      // 課題数
         }
     }
     
@@ -489,7 +461,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 return nil
             }
         } else {
-            return "\(task[row].getTaskTitle())" // 課題Pickerの項目
+            return "\(taskDataArray[row].getTaskTitle())" // 課題Pickerの項目
         }
     }
     
@@ -692,18 +664,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 選択されたIndexを取得
         taskIndex = taskPicker.selectedRow(inComponent: 0)
         
-        // 課題タイトルの配列を作成
-        var taskDataTitleArray:[String] = []
-        if taskDataArray.isEmpty == false {
-            for num in 0...taskDataArray.count - 1 {
-                taskDataTitleArray.append(self.taskDataArray[num].getTaskTitle())
-            }
-        }
-        
         // 既に表示している課題であれば追加しない
-        if taskDataTitleArray.firstIndex(of: task[taskIndex].getTaskTitle()) == nil {
-            // taskDataArrayに選択された課題を追加
-            self.taskDataArray.insert(task[taskIndex], at: 0)
+        if self.practiceNoteData.getTaskTitle().firstIndex(of: taskDataArray[taskIndex].getTaskTitle()) == nil {
+            // noteDataに追加
+            self.practiceNoteData.addTask(taskData: taskDataArray[taskIndex])
             
             // テーブルを更新
             self.taskTableView.reloadData()
@@ -1011,16 +975,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     
                     // 課題データを格納
                     self.taskDataArray.append(databaseTaskData)
+                    
+                    // practiceNoteDataに反映
+                    if self.previousControllerName == "PracticeNoteDetailViewController" {
+                    } else {
+                        self.practiceNoteData.addTask(taskData: databaseTaskData)
+                    }
                 }
-                // 課題データを格納
-                self.task = self.taskDataArray
-                
-                // PracticeNoteDetailViewControllerから遷移してきた場合
-                if self.previousControllerName == "PracticeNoteDetailViewController" {
-                    // taskDataArrayをリセット（後にpracticeNoteDataの課題をセットするため）
-                    self.taskDataArray = []
-                }
-                
                 // テーブルビューの更新
                 self.taskTableView?.reloadData()
                 
@@ -1044,57 +1005,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
     }
     
-    // 課題データを取得するメソッド
-    func loadTaskData(taskTitle title:String,measuresTitle measure:String,measuresEffectiveness effectiveness:String) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // measuresDataオブジェクトを作成
-        let obj:[String:[[String:Int]]] = [measure:[[effectiveness:0]]]
-        
-        // practiceNoteDataが所有している課題データを取得
-        let db = Firestore.firestore()
-        db.collection("TaskData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
-            .whereField("taskTitle", isEqualTo: title)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let taskDataCollection = document.data()
-                    
-                    // 取得データを基に、課題データを作成
-                    let databaseTaskData = TaskData()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(title)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(obj)
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
-                }
-                // テーブル更新
-                self.taskTableView.reloadData()
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
-    }
-    
     // Firebaseにノートデータを保存するメソッド
     func saveNoteData() {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
-        // 大会ノートデータを作成
+        // ノートタイプを指定
         practiceNoteData.setNoteType("練習記録")
         
         // Pickerの選択項目をセット
@@ -1111,50 +1027,54 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         practiceNoteData.setDetail(detailTextView.text!)
         practiceNoteData.setReflection(reflectionTextView.text!)
         
-        // 対策データをセット
-        var taskTitle:[String] = []
-        var measuresTitle:[String] = []
+        // 対策の有効性コメントをセット
         var measuresEffectiveness:[String] = []
         
+        if self.practiceNoteData.getTaskTitle().isEmpty {
+            // 何もしない
+        } else {
+            for num in 0...self.practiceNoteData.getTaskTitle().count - 1 {
+                // 対策の有効性コメントをセット
+                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+                measuresEffectiveness.append(cell.effectivenessTextView.text)
+                
+                // チェックが入っていればTaskDataの有効性コメントに追加
+                if cell.checkBox.isSelected {
+                    // 課題タイトルの配列を作成
+                    var taskTitleArray:[String] = []
+                    for num in 0...self.taskDataArray.count - 1 {
+                        taskTitleArray.append(self.taskDataArray[num].getTaskTitle())
+                    }
+                    
+                    // 該当する課題データが格納されているindexを取得
+                    var index:Int = 0
+                    for num in 0...taskTitleArray.count - 1 {
+                        if taskTitleArray[num] == cell.taskTitleLabel.text! {
+                            index = num
+                        }
+                    }
+                    
+                    // そのindexの課題データを更新
+                    self.taskDataArray[index].addEffectiveness(title: self.practiceNoteData.getMeasuresTitle()[num], effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
+                    
+                    // データ更新
+                    self.updateTaskData(task: self.taskDataArray[index])
+                }
+            }
+        }
+        practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
+        
+        // ノートを更新する場合
         if previousControllerName == "PracticeNoteDetailViewController" {
             // 更新日時に現在時刻をセット
             practiceNoteData.setUpdated_at(getCurrentTime())
-            
         } else {
-            // 課題を全て非表示にした際のエラー対策
-            if self.taskDataArray.isEmpty == true {
-                // 何もしない
-            } else {
-                for num in 0...self.taskDataArray.count - 1 {
-                    // 課題タイトル
-                    taskTitle.append(self.taskDataArray[num].getTaskTitle())
-                    
-                    // 対策タイトル
-                    let measures = self.taskDataArray[num].getMeasuresPriority()
-                    measuresTitle.append(measures)
-                    
-                    // 対策の有効性
-                    let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
-                    measuresEffectiveness.append(cell.effectivenessTextView.text)
-                    
-                    // チェックが入っていればTaskDataの有効性コメントに追加
-                    if cell.checkBox.isSelected {
-                        self.taskDataArray[num].addEffectiveness(title: measures, effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
-                        self.updateTaskData(task: self.taskDataArray[num])
-                    }
-                }
-            }
-            practiceNoteData.setTaskTitle(taskTitle)
-            practiceNoteData.setMeasuresTitle(measuresTitle)
-            practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
-            
             // ユーザーUIDをセット
             practiceNoteData.setUserID(Auth.auth().currentUser!.uid)
             
             // 現在時刻をセット
             practiceNoteData.setCreated_at(getCurrentTime())
             practiceNoteData.setUpdated_at(practiceNoteData.getCreated_at())
-        
         }
         
         // Firebaseにデータを保存

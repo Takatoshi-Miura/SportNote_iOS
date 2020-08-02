@@ -200,7 +200,7 @@ class TaskData {
     // 有効性コメントを追加するメソッド（ノート追加時に使用するメソッド）
     func addEffectiveness(title measuresTitle:String,effectiveness measuresEffectiveness:String,noteID:Int) {
         let obj = [measuresEffectiveness : noteID]
-        self.measuresData[measuresTitle]!.insert(obj, at: 0)
+        self.measuresData[measuresTitle]?.insert(obj, at: 0)
     }
     
     // 対策を削除するメソッド

@@ -28,38 +28,16 @@ class TaskMeasuresTableViewCell: UITableViewCell {
         // 選択状態を反転させる
         self.checkBox.isSelected = !self.checkBox.isSelected
     }
-    
-    
-    
-    //MARK:- 変数の宣言
-    
-    var previousControllerName:String = ""  // 前のViewController名
-    
+
     
     
     //MARK:- その他のメソッド
     
     // 課題データをラベルに表示するメソッド
-    func printTaskData(taskData task:TaskData) {
-        // ラベルに表示
-        taskTitleLabel.text = task.getTaskTitle()
-        if task.getMeasuresTitleArray().isEmpty == true {
-            taskMeasuresTitleLabel.text = "対策が未登録です"
-        } else {
-            taskMeasuresTitleLabel.text = "対策：\(task.getMeasuresPriority())"
-        }
-        if previousControllerName == "PracticeNoteDetailViewController" {
-            if task.getMeasuresData().isEmpty == false {
-                effectivenessTextView.text = task.getMeasuresEffectiveness(at: 0)
-            }
-        }
-    }
-    
-    // 課題データをラベルに表示するメソッド
     func printTaskData(noteData note:NoteData,at index:Int) {
         // ラベルに表示
         taskTitleLabel.text = note.getTaskTitle()[index]
-        taskMeasuresTitleLabel.text = note.getMeasuresTitle()[index]
+        taskMeasuresTitleLabel.text = "対策:\(note.getMeasuresTitle()[index])"
         effectivenessTextView.text  = note.getMeasuresEffectiveness()[index]
     }
     
