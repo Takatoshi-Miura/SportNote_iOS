@@ -101,8 +101,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // テーブルビューを更新
             self.tableView.reloadData()
-            
-            // Fix:複数の課題データを読み込めない
         } else {
             // 設定に時間がかかるため、ここでノートIDの設定もしておく。保存時にやるとID設定前にノートが保存されてしまう。
             practiceNoteData.setNewNoteID()
@@ -991,13 +989,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
                 
                 // AddPracticeNoteViewControllerオブジェクトを取得
-                let obj = self.parent as! AddPracticeNoteViewController
-                
-                // containerViewの高さを設定
-                obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
-                
-                // 保存ボタンを有効にする
-                obj.saveButtonEnable()
+                if let obj:AddPracticeNoteViewController = self.parent as? AddPracticeNoteViewController {
+                    // containerViewの高さを設定
+                    obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
+                    
+                    // 保存ボタンを有効にする
+                    obj.saveButtonEnable()
+                }
                 
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
