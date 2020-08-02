@@ -306,7 +306,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     // ノートデータが存在する日付のセルを色付けるメソッド
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/M/dd"
+        formatter.dateFormat = "yyyy/M/d"
         let da = formatter.string(from: date)
         
         // ノートデータがある日付のセルを色付け
@@ -351,7 +351,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         // ノートデータがある日付の数値を色付け
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/M/dd"
+        formatter.dateFormat = "yyyy/M/d"
         let da = formatter.string(from: date)
         for noteData in self.noteDataArray {
             if da == "\(String(noteData.getYear()))/\(String(noteData.getMonth()))/\(String(noteData.getDate()))" {
