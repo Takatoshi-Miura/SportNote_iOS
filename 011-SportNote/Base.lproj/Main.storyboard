@@ -1137,6 +1137,26 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="logoutCell" textLabel="ehK-nQ-E9a" style="IBUITableViewCellStyleDefault" id="UC5-WP-yeA">
+                                        <rect key="frame" x="0.0" y="71.5" width="320" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UC5-WP-yeA" id="0mm-5R-2NZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ehK-nQ-E9a">
+                                                    <rect key="frame" x="15" y="0.0" width="290" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="ezT-H4-YNN" kind="unwind" unwindAction="goToLoginWith_segue:" id="ZiZ-Qm-GCy"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="O30-iJ-LFF" id="hpt-wd-4Fo"/>
@@ -1156,45 +1176,13 @@
                     <navigationItem key="navigationItem" title="設定" id="1g3-if-Vzu"/>
                     <connections>
                         <outlet property="tableView" destination="dZI-0F-8v5" id="3r4-e7-Xpp"/>
-                        <segue destination="LRO-rx-LAj" kind="show" identifier="goSettingAccountViewController" id="kkU-75-gaj"/>
                         <segue destination="vcd-az-PRV" kind="show" identifier="goSettingNotificationViewController" id="L6c-RY-KeN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="ezT-H4-YNN" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="13432.5" y="791.19718309859161"/>
-        </scene>
-        <!--アカウント-->
-        <scene sceneID="obn-lU-ZMC">
-            <objects>
-                <viewController modalPresentationStyle="fullScreen" id="LRO-rx-LAj" customClass="SettingAccountViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ceu-2d-PIR">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="89V-xj-nc5">
-                                <rect key="frame" x="57" y="396" width="206" height="50"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="ログアウト">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="loginButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="07r-Ac-amh"/>
-                                    <action selector="logoutButton:" destination="LRO-rx-LAj" eventType="touchUpInside" id="RI3-DT-w1d"/>
-                                    <segue destination="Xyz-8C-kZw" kind="unwind" unwindAction="goToLoginWith_segue:" id="zr9-7W-30N"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="8qz-Nt-hDL"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="アカウント" id="GYE-O5-k77"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LRQ-nF-RHo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="Xyz-8C-kZw" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="12436" y="1582"/>
         </scene>
         <!--通知-->
         <scene sceneID="wIC-22-pEa">
@@ -1210,7 +1198,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QvU-Zb-Mre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="13339" y="1582"/>
+            <point key="canvasLocation" x="13433" y="1601"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">

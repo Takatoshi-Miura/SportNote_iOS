@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import SVProgressHUD
 
 class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
@@ -22,7 +24,7 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
     
     
     //MARK:- 変数の宣言
-    let cellTitle = ["アカウント","通知"]      // セルの中身
+    let cellTitle = ["通知","ログアウト"]      // セルの中身
     
     
     
@@ -41,12 +43,24 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         
         // タップしたセルによって遷移先を変える
-        if cellTitle[indexPath.row] == "アカウント" {
-            // アカウント設定画面へ遷移
-            performSegue(withIdentifier: "goSettingAccountViewController", sender: nil)
-        } else {
+        switch cellTitle[indexPath.row] {
+        case "通知":
             // 通知設定画面へ遷移
             performSegue(withIdentifier: "goSettingNotificationViewController", sender: nil)
+        case "ログアウト":
+            // ログアウト処理
+            let firebaseAuth = Auth.auth()
+            do {
+                try firebaseAuth.signOut()
+                SVProgressHUD.showSuccess(withStatus: "ログアウトしました。")
+            } catch let signOutError as NSError {
+                print ("Error signing out: %@", signOutError)
+                SVProgressHUD.showError(withStatus: "ログアウトに失敗しました。")
+            }
+            // ログイン画面へ遷移
+        default:
+            // 何もしない
+            print("")
         }
     }
     
@@ -61,6 +75,13 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath)
         // セルに表示する値を設定する
         cell.textLabel!.text = cellTitle[indexPath.row]
+        
+        if cellTitle[indexPath.row] == "ログアウト" {
+            let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "logoutCell", for: indexPath)
+            cell.textLabel!.text = cellTitle[indexPath.row]
+            cell.textLabel!.textColor = UIColor.systemRed
+            return cell
+        }
         return cell
     }
 
