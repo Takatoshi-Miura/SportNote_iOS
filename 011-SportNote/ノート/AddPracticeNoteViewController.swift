@@ -38,7 +38,6 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
         
         // safeareaInsetsを取得
         bottomPadding = self.view.safeAreaInsets.bottom
-        print(bottomPadding)
         
         // 子ビューにbottomPaddingを渡す
         let vc = children[0] as! AddPracticeNoteContentViewController

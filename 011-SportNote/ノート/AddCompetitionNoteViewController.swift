@@ -26,6 +26,17 @@ class AddCompetitionNoteViewController: UIViewController,UIScrollViewDelegate {
             navigationBar.items![0].title = "ノート編集"
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        // safeareaInsetsを取得
+        bottomPadding = self.view.safeAreaInsets.bottom
+        
+        // 子ビューにbottomPaddingを渡す
+        let vc = children[0] as! AddCompetitionNoteContentViewController
+        vc.bottomPadding = self.bottomPadding
+    }
  
     
     
@@ -34,6 +45,7 @@ class AddCompetitionNoteViewController: UIViewController,UIScrollViewDelegate {
     var previousControllerName:String = ""  // 前のViewController名
     var noteData = NoteData()               // ノート詳細画面からの遷移用
     var scrollPosition:CGFloat = 0          // スクロール位置
+    var bottomPadding:CGFloat = 0           // safearea下側の余白
     
     
     
@@ -63,14 +75,13 @@ class AddCompetitionNoteViewController: UIViewController,UIScrollViewDelegate {
         return UIScreen.main.bounds.size.height + self.scrollPosition
     }
     
-    // Pickerのしまう位置を取得するメソッド
-    func getPickerPosition() -> CGFloat {
-        return UIScreen.main.bounds.size.height + self.scrollPosition + 300
-    }
-    
     // スクロールするたびに呼ばれるメソッド
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.scrollPosition = scrollView.contentOffset.y
+        
+        // スクロールを検知したらPickerを閉じる
+        let obj = children[0] as! AddCompetitionNoteContentViewController
+        obj.closePicker()
     }
     
 }

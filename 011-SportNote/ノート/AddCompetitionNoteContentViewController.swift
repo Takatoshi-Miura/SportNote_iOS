@@ -103,6 +103,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // Picker用ビュー
     var pickerView = UIView()
+    var bottomPadding:CGFloat = 0
     
     // 種別Picker
     let typePicker = UIPickerView()
@@ -392,12 +393,11 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // 現在のスクロール位置（最下点）,Pickerの座標を取得
         let obj = self.parent as! AddCompetitionNoteViewController
         let scrollPotiton = obj.getScrollPosition()
-        let pickerPosition = obj.getPickerPosition()
         
         // 下からPickerを呼び出す
-        pickerView.frame.origin.y = pickerPosition
+        pickerView.frame.origin.y = scrollPotiton
         UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+            self.pickerView.frame.origin.y = scrollPotiton - self.datePicker.bounds.size.height - toolbar.bounds.size.height - self.bottomPadding
         }
     }
     
@@ -468,12 +468,11 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // 現在のスクロール位置（最下点）,Pickerの座標を取得
         let obj = self.parent as! AddCompetitionNoteViewController
         let scrollPotiton = obj.getScrollPosition()
-        let pickerPosition = obj.getPickerPosition()
         
         // 下からPickerを呼び出す
-        pickerView.frame.origin.y = pickerPosition
+        pickerView.frame.origin.y = scrollPotiton
         UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+            self.pickerView.frame.origin.y = scrollPotiton - self.datePicker.bounds.size.height - toolbar.bounds.size.height - self.bottomPadding
         }
     }
     
@@ -511,12 +510,11 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // 現在のスクロール位置（最下点）,Pickerの座標を取得
         let obj = self.parent as! AddCompetitionNoteViewController
         let scrollPotiton = obj.getScrollPosition()
-        let pickerPosition = obj.getPickerPosition()
         
         // 下からPickerを呼び出す
-        pickerView.frame.origin.y = pickerPosition
+        pickerView.frame.origin.y = scrollPotiton
         UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton - self.pickerView.bounds.size.height - 60
+            self.pickerView.frame.origin.y = scrollPotiton - self.datePicker.bounds.size.height - toolbar.bounds.size.height - self.bottomPadding
         }
     }
     
