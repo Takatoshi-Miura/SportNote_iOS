@@ -33,13 +33,26 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
         }
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        // safeareaInsetsを取得
+        bottomPadding = self.view.safeAreaInsets.bottom
+        print(bottomPadding)
+        
+        // 子ビューにbottomPaddingを渡す
+        let vc = children[0] as! AddPracticeNoteContentViewController
+        vc.bottomPadding = self.bottomPadding
+    }
+    
     
     
     //MARK:- 変数の宣言
     
     var previousControllerName:String = ""  // 前のViewController名
     var noteData = NoteData()               // ノート詳細画面からの遷移用
-    var scrollPosition:CGFloat = 0          // スクロール位置
+    var scrollPosition:CGFloat = 0          // スクロール位置(初期地点からの移動量)
+    var bottomPadding:CGFloat = 0           // safearea下側の余白
     
     
     
@@ -92,14 +105,13 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
         return UIScreen.main.bounds.size.height + self.scrollPosition
     }
     
-    // Pickerのしまう位置を取得するメソッド
-    func getPickerPosition() -> CGFloat {
-        return UIScreen.main.bounds.size.height + self.scrollPosition + 300
-    }
-    
     // スクロールするたびに呼ばれるメソッド
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.scrollPosition = scrollView.contentOffset.y
+        
+        // スクロールを検知したらPickerを閉じる
+        let obj = children[0] as! AddPracticeNoteContentViewController
+        obj.closePicker()
     }
 
 }

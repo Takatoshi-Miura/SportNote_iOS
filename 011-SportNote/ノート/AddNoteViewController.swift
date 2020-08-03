@@ -117,14 +117,7 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     
     @objc func cancel() {
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
         
         // Pickerにデフォルト値をセット
         index = 0
@@ -138,14 +131,7 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         index = picker.selectedRow(inComponent: 0)
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker()
         
         // テーブルビューを更新
         tableView.reloadData()
@@ -174,6 +160,19 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             break
         default:
             break
+        }
+    }
+    
+    // Pickerをしまうメソッド
+    func closePicker() {
+        // Pickerをしまう
+        UIView.animate(withDuration: 0.3) {
+            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            // ビューの初期化
+            self.pickerView.removeFromSuperview()
         }
     }
 
