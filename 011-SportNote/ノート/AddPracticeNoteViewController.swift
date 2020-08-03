@@ -47,6 +47,7 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
     
     // スクロールビュー
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
     
     // ナビゲーションバー
@@ -72,8 +73,13 @@ class AddPracticeNoteViewController: UIViewController, UINavigationControllerDel
     func setContainerViewHeight(height containerViewHeight:CGFloat) {
         // デフォルトの高さより大きい場合、超過分をcontainerViewの高さにプラスする
         if containerViewHeight - 260 > 0 {
-            self.containerViewHeight.constant = 1200 + containerViewHeight - 260
+            self.containerView.layoutIfNeeded()
+            self.containerView.updateConstraints()
+            self.containerViewHeight.constant = 1000 + containerViewHeight - 260
         }
+        self.scrollView.layoutIfNeeded()
+        self.scrollView.updateConstraints()
+        self.scrollView.contentSize.height = self.containerViewHeight.constant
     }
     
     // 保存ボタンを有効にするメソッド
