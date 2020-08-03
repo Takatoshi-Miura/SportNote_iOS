@@ -618,7 +618,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DAq-FN-di3">
-                                <rect key="frame" x="15" y="209" width="290" height="26"/>
+                                <rect key="frame" x="15" y="209" width="290" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Y79-rT-Z3c"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -2413,7 +2416,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="9Au-jM-opu"/>
+        <segue reference="kTC-B9-qgr"/>
         <segue reference="g5y-bG-FHW"/>
         <segue reference="FjQ-4Y-Eao"/>
         <segue reference="bKu-Qs-3iF"/>

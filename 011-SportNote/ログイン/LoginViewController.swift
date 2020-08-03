@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class LoginViewController: UIViewController,UITextFieldDelegate {
+class LoginViewController: UIViewController {
 
     //MARK:- ライフサイクルメソッド
     
@@ -20,12 +20,6 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // デリゲートの設定
-        mailAddressTextField.delegate = self
-        passwordTextField.delegate = self
-        
-        // キーボードでテキストフィールドが隠れない設定
-        self.configureObserver()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -200,58 +194,6 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     // キーボードを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    // キーボードを出したときの設定
-    func configureObserver() {
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.selectedTextField = textField
-    }
-        
-    @objc func keyboardWillShow(_ notification: Notification?) {
-            
-        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-            return
-        }
-                    
-        // サイズ取得
-        let screenHeight = screenSize.height
-        let keyboardHeight = rect.size.height
-        let textUnderHeight: CGFloat = selectedTextField!.frame.maxY
-        
-        // スクロールする高さを計算
-        let hiddenHeight = keyboardHeight + textUnderHeight - screenHeight
-                
-        // スクロール処理
-        if hiddenHeight > 0 {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-            self.view.transform = transform
-            }
-        } else {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(0))
-            self.view.transform = transform
-            }
-        }
-    }
-        
-    @objc func keyboardWillHide(_ notification: Notification?)  {
-        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
-        UIView.animate(withDuration: duration) {
-            self.view.transform = CGAffineTransform.identity
-        }
     }
     
     // 現在時刻を取得するメソッド
