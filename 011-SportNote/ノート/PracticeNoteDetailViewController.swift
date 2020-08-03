@@ -40,6 +40,7 @@ class PracticeNoteDetailViewController: UIViewController {
 
     // スクロールビュー
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
     
     // 編集ボタンの処理
@@ -58,8 +59,13 @@ class PracticeNoteDetailViewController: UIViewController {
     func setContainerViewHeight(height containerViewHeight:CGFloat) {
         // デフォルトの高さより大きい場合、超過分をcontainerViewの高さにプラスする
         if containerViewHeight - 200 > 0 {
-            self.containerViewHeight.constant = 1200 + containerViewHeight - 200
+            self.containerView.layoutIfNeeded()
+            self.containerView.updateConstraints()
+            self.containerViewHeight.constant = 800 + containerViewHeight - 200
         }
+        self.scrollView.layoutIfNeeded()
+        self.scrollView.updateConstraints()
+        self.scrollView.contentSize.height = self.containerViewHeight.constant
     }
     
 }

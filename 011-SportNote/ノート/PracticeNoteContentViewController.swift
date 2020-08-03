@@ -23,7 +23,7 @@ class PracticeNoteContentViewController: UIViewController,UITableViewDelegate,UI
         // データを表示
         printNoteData(noteData)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.tableView?.reloadData()
             
             // 課題数によってテーブルビューの高さを設定
