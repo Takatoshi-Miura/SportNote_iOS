@@ -415,7 +415,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         }
         
         // カレンダーのヘッダーに目標データを表示
-        self.calendar.appearance.headerDateFormat = "YYYY年:\(yearTarget)\nM月:\(monthTarget)"
+        self.calendar.appearance.headerDateFormat = "YYYY年 M月\n\(monthTarget)"
     }
     
     
