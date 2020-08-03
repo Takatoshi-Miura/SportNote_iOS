@@ -52,6 +52,13 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
             let firebaseAuth = Auth.auth()
             do {
                 try firebaseAuth.signOut()
+                
+                // UserDefaultsにユーザー情報を保存
+                let userDefaults = UserDefaults.standard
+                userDefaults.removeObject(forKey: "address")
+                userDefaults.removeObject(forKey: "password")
+                userDefaults.synchronize()
+                
                 SVProgressHUD.showSuccess(withStatus: "ログアウトしました。")
             } catch let signOutError as NSError {
                 print ("Error signing out: %@", signOutError)

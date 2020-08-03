@@ -28,6 +28,48 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         self.configureObserver()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+            
+        // ユーザー名が保存されてるなら自動ログイン
+        if let address = UserDefaults.standard.object(forKey: "address") as? String, let password = UserDefaults.standard.object(forKey: "password") as? String {
+            // テキストフィールドにセット
+            mailAddressTextField.text = address
+            passwordTextField.text = password
+            
+            // HUDで処理中を表示
+            SVProgressHUD.show(withStatus: "ログインしています")
+            
+            // ログイン処理
+            Auth.auth().signIn(withEmail: address, password: password) { authResult, error in
+                if error == nil {
+                    // エラーなし
+                } else {
+                    // エラーのハンドリング
+                    if let errorCode = AuthErrorCode(rawValue: error!._code) {
+                        switch errorCode {
+                            case .invalidEmail:
+                                SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
+                            case .wrongPassword:
+                                SVProgressHUD.showError(withStatus: "パスワードが間違っています。")
+                            default:
+                                SVProgressHUD.showError(withStatus: "ログインに失敗しました。入力を確認して下さい。")
+                        }
+                        return
+                    }
+                }
+                SVProgressHUD.showSuccess(withStatus: "ログインしました。")
+                
+                // タブ画面に遷移
+                // メッセージが隠れてしまうため、遅延処理を行う
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                    self.performSegue(withIdentifier: "goTabBarController", sender: nil)
+                }
+            }
+         }
+            
+    }
+    
     
     
     //MARK:- 変数の宣言
@@ -75,6 +117,12 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
                     }
                 }
                 SVProgressHUD.showSuccess(withStatus: "ログインしました。")
+                
+                // UserDefaultsにユーザー情報を保存
+                let userDefaults = UserDefaults.standard
+                userDefaults.set(address, forKey:"address")
+                userDefaults.set(password,forKey:"password")
+                userDefaults.synchronize()
                 
                 // タブ画面に遷移
                 // メッセージが隠れてしまうため、遅延処理を行う
