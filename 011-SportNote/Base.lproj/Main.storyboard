@@ -616,31 +616,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　タイトル" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6G8-31-gMM">
-                                <rect key="frame" x="0.0" y="63" width="320" height="30"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="　タイトル" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6G8-31-gMM">
+                                <rect key="frame" x="0.0" y="56" width="320" height="30"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="erf-Ye-qPd"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　内容" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Qd-p5-ENl">
-                                <rect key="frame" x="0.0" y="143" width="320" height="30"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="　内容" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Qd-p5-ENl">
+                                <rect key="frame" x="0.0" y="145" width="320" height="30"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="VL8-4d-ifV"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="タイトルを入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YQt-0S-EVZ">
-                                <rect key="frame" x="15" y="101" width="290" height="34"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="タイトルを入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YQt-0S-EVZ">
+                                <rect key="frame" x="15" y="101" width="290" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="常に最上位に表示されるノートです。" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="idN-Xg-QwJ">
-                                <rect key="frame" x="15" y="181" width="290" height="318"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="常に最上位に表示されるノートです。" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="idN-Xg-QwJ">
+                                <rect key="frame" x="15" y="185" width="290" height="304"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -648,6 +650,24 @@
                             </textView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="idN-Xg-QwJ" firstAttribute="top" secondItem="4Qd-p5-ENl" secondAttribute="bottom" constant="10" id="4dO-yw-pYM"/>
+                            <constraint firstItem="YQt-0S-EVZ" firstAttribute="leading" secondItem="NEu-H5-BXw" secondAttribute="leading" constant="15" id="50o-BH-989"/>
+                            <constraint firstItem="idN-Xg-QwJ" firstAttribute="top" secondItem="4Qd-p5-ENl" secondAttribute="bottom" constant="10" id="7cr-GF-4fl"/>
+                            <constraint firstItem="4Qd-p5-ENl" firstAttribute="top" secondItem="YQt-0S-EVZ" secondAttribute="bottom" constant="15" id="CyI-t9-aa1"/>
+                            <constraint firstItem="4Qd-p5-ENl" firstAttribute="top" secondItem="YQt-0S-EVZ" secondAttribute="bottom" constant="15" id="IFk-Uu-jIq"/>
+                            <constraint firstItem="idN-Xg-QwJ" firstAttribute="leading" secondItem="NEu-H5-BXw" secondAttribute="leading" constant="15" id="PXZ-FE-e8q"/>
+                            <constraint firstItem="NEu-H5-BXw" firstAttribute="trailing" secondItem="idN-Xg-QwJ" secondAttribute="trailing" constant="15" id="WZo-5T-klT"/>
+                            <constraint firstItem="4Qd-p5-ENl" firstAttribute="trailing" secondItem="NEu-H5-BXw" secondAttribute="trailing" id="XHb-rl-INR"/>
+                            <constraint firstItem="4Qd-p5-ENl" firstAttribute="leading" secondItem="NEu-H5-BXw" secondAttribute="leading" id="ZX5-J1-TD7"/>
+                            <constraint firstItem="idN-Xg-QwJ" firstAttribute="bottom" secondItem="NEu-H5-BXw" secondAttribute="bottom" constant="-10" id="ca2-P1-H0d"/>
+                            <constraint firstItem="6G8-31-gMM" firstAttribute="leading" secondItem="NEu-H5-BXw" secondAttribute="leading" id="dH0-Ad-J4I"/>
+                            <constraint firstItem="NEu-H5-BXw" firstAttribute="trailing" secondItem="YQt-0S-EVZ" secondAttribute="trailing" constant="15" id="eDm-mH-Wy4"/>
+                            <constraint firstItem="YQt-0S-EVZ" firstAttribute="top" secondItem="6G8-31-gMM" secondAttribute="bottom" constant="15" id="lTe-LP-iac"/>
+                            <constraint firstItem="YQt-0S-EVZ" firstAttribute="top" secondItem="6G8-31-gMM" secondAttribute="bottom" constant="15" id="qez-H1-lh8"/>
+                            <constraint firstItem="6G8-31-gMM" firstAttribute="top" secondItem="NEu-H5-BXw" secondAttribute="top" id="qo4-E2-Nd7"/>
+                            <constraint firstItem="6G8-31-gMM" firstAttribute="trailing" secondItem="NEu-H5-BXw" secondAttribute="trailing" id="veB-BW-fzE"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="NEu-H5-BXw"/>
                     </view>
                     <navigationItem key="navigationItem" id="epW-sN-xdr"/>
@@ -658,7 +678,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lmk-DK-ahc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7725" y="1612"/>
+            <point key="canvasLocation" x="7725" y="1611.9718309859154"/>
         </scene>
         <!--課題-->
         <scene sceneID="ohu-sA-Us6">
