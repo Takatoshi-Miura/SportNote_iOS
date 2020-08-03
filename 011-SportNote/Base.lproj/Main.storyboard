@@ -1036,23 +1036,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="対策の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fBP-LM-uWJ">
-                                <rect key="frame" x="15" y="102" width="290" height="34"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="対策の内容を入力して下さい" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fBP-LM-uWJ">
+                                <rect key="frame" x="15" y="101" width="290" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　対策の有効性" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UwF-Ia-l8E">
-                                <rect key="frame" x="0.0" y="202" width="320" height="30"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="　対策の有効性" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UwF-Ia-l8E">
+                                <rect key="frame" x="0.0" y="186" width="320" height="30"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="1Tx-Oe-bWc"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AgC-iD-23G">
-                                <rect key="frame" x="15" y="200" width="290" height="34"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AgC-iD-23G">
+                                <rect key="frame" x="268" y="186" width="37" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="kGc-ih-HQP"/>
+                                </constraints>
                                 <state key="normal" title="追加">
                                     <color key="titleColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -1061,9 +1064,8 @@
                                     <action selector="addMeasuresButton:" destination="zUd-kp-r5X" eventType="touchUpInside" id="kHb-36-z2y"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-x6-w2b">
-                                <rect key="frame" x="0.0" y="240" width="320" height="259"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-x6-w2b">
+                                <rect key="frame" x="0.0" y="216" width="320" height="283"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableViewCell" textLabel="faZ-YO-v2y" style="IBUITableViewCellStyleDefault" id="IEN-Vh-XWy">
@@ -1089,9 +1091,8 @@
                                     <outlet property="delegate" destination="YNk-XQ-KMM" id="ygh-9X-l61"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OK4-Ic-uvt">
-                                <rect key="frame" x="15" y="144" width="290" height="26"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OK4-Ic-uvt">
+                                <rect key="frame" x="15" y="145" width="290" height="26"/>
                                 <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="この対策を最有力にする" image="check_off">
                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1100,16 +1101,42 @@
                                     <action selector="checkButtonTap:" destination="YNk-XQ-KMM" eventType="touchUpInside" id="5l7-Ku-bGj"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="　タイトル" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wie-4e-cxv">
-                                <rect key="frame" x="0.0" y="64" width="320" height="30"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="　タイトル" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wie-4e-cxv">
+                                <rect key="frame" x="0.0" y="56" width="320" height="30"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="cNT-w0-Kfi"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="rKF-ge-Oqr" firstAttribute="trailing" secondItem="AgC-iD-23G" secondAttribute="trailing" constant="15" id="0IK-mZ-MAz"/>
+                            <constraint firstItem="wie-4e-cxv" firstAttribute="trailing" secondItem="rKF-ge-Oqr" secondAttribute="trailing" id="2zJ-4w-JLk"/>
+                            <constraint firstItem="UwF-Ia-l8E" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" id="5UM-Cf-n34"/>
+                            <constraint firstItem="dOm-x6-w2b" firstAttribute="trailing" secondItem="rKF-ge-Oqr" secondAttribute="trailing" id="6rr-JF-e6L"/>
+                            <constraint firstItem="UwF-Ia-l8E" firstAttribute="trailing" secondItem="rKF-ge-Oqr" secondAttribute="trailing" id="Bor-ei-3YT"/>
+                            <constraint firstItem="wie-4e-cxv" firstAttribute="top" secondItem="rKF-ge-Oqr" secondAttribute="top" id="DAr-Dc-1er"/>
+                            <constraint firstItem="dOm-x6-w2b" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" id="EpI-ze-8PP"/>
+                            <constraint firstItem="wie-4e-cxv" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" id="FUt-Lo-eGw"/>
+                            <constraint firstItem="dOm-x6-w2b" firstAttribute="bottom" secondItem="rKF-ge-Oqr" secondAttribute="bottom" id="ImL-Pi-BzS"/>
+                            <constraint firstItem="rKF-ge-Oqr" firstAttribute="trailing" secondItem="OK4-Ic-uvt" secondAttribute="trailing" constant="15" id="JIv-ux-hvd"/>
+                            <constraint firstItem="rKF-ge-Oqr" firstAttribute="trailing" secondItem="fBP-LM-uWJ" secondAttribute="trailing" constant="15" id="Nqe-07-bP5"/>
+                            <constraint firstItem="OK4-Ic-uvt" firstAttribute="top" secondItem="fBP-LM-uWJ" secondAttribute="bottom" constant="15" id="U9v-PF-9D2"/>
+                            <constraint firstItem="dOm-x6-w2b" firstAttribute="top" secondItem="UwF-Ia-l8E" secondAttribute="bottom" id="UQq-o9-Adv"/>
+                            <constraint firstItem="fBP-LM-uWJ" firstAttribute="top" secondItem="wie-4e-cxv" secondAttribute="bottom" constant="15" id="Vxf-z4-Gt2"/>
+                            <constraint firstItem="AgC-iD-23G" firstAttribute="top" secondItem="OK4-Ic-uvt" secondAttribute="bottom" constant="15" id="WyC-mS-EPE"/>
+                            <constraint firstItem="OK4-Ic-uvt" firstAttribute="top" secondItem="fBP-LM-uWJ" secondAttribute="bottom" constant="15" id="Zvb-XO-0Cq"/>
+                            <constraint firstItem="dOm-x6-w2b" firstAttribute="top" secondItem="UwF-Ia-l8E" secondAttribute="bottom" id="fPS-6E-dyK"/>
+                            <constraint firstItem="AgC-iD-23G" firstAttribute="top" secondItem="OK4-Ic-uvt" secondAttribute="bottom" constant="15" id="lXb-bK-hQc"/>
+                            <constraint firstItem="fBP-LM-uWJ" firstAttribute="top" secondItem="wie-4e-cxv" secondAttribute="bottom" constant="15" id="mPM-D6-iwE"/>
+                            <constraint firstItem="OK4-Ic-uvt" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" constant="15" id="oMy-EA-WLE"/>
+                            <constraint firstItem="fBP-LM-uWJ" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" constant="15" id="ozv-uG-Qdw"/>
+                            <constraint firstItem="UwF-Ia-l8E" firstAttribute="top" secondItem="OK4-Ic-uvt" secondAttribute="bottom" constant="15" id="xcP-cB-3hW"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="rKF-ge-Oqr"/>
                     </view>
                     <navigationItem key="navigationItem" title="対策の詳細" id="34d-Wo-hFs"/>
