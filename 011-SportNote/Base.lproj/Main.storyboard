@@ -214,6 +214,12 @@
                                     <userDefinedRuntimeAttribute type="color" keyPath="headerTitleColor">
                                         <color key="value" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="titleTextSize">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="headerTitleTextSize">
+                                        <real key="value" value="14"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="dataSource" destination="Qkc-c1-UXU" id="KMD-ac-g5g"/>
@@ -2416,7 +2422,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="kTC-B9-qgr"/>
+        <segue reference="9Au-jM-opu"/>
         <segue reference="g5y-bG-FHW"/>
         <segue reference="FjQ-4Y-Eao"/>
         <segue reference="bKu-Qs-3iF"/>
