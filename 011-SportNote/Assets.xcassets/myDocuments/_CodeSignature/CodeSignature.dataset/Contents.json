@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "CodeSignature",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

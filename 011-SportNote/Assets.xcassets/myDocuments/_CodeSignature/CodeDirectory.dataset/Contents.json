@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "CodeDirectory",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
