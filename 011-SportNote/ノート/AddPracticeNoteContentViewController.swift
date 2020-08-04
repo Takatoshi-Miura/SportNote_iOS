@@ -835,7 +835,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // textViewDidBeginEditingが実行されるまで時間待ち
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             // スクロールする高さを計算
-            let hiddenHeight = keyboardHeight + self.textHeight + self.navBarHeight - scrollPotiton
+            let hiddenHeight = keyboardHeight + self.textHeight + self.navBarHeight + 30 - scrollPotiton
             
             // スクロール処理
             if hiddenHeight > 0 {
