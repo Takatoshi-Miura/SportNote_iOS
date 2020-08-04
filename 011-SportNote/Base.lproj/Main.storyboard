@@ -665,7 +665,7 @@
         <!--Free Note View Controller-->
         <scene sceneID="dVe-sH-KbY">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="HCb-bV-yRs" customClass="FreeNoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="HCb-bV-yRs" customClass="FreeNoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NHh-PL-0xO">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -696,7 +696,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="常に最上位に表示されるノートです。" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="idN-Xg-QwJ">
-                                <rect key="frame" x="15" y="185" width="290" height="304"/>
+                                <rect key="frame" x="15" y="185" width="290" height="353"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2005,7 +2005,7 @@
         <!--ノートの日付-->
         <scene sceneID="Uzc-da-LXQ">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="ZFp-5s-vSW" customClass="CompetitionNoteDetailViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="ZFp-5s-vSW" customClass="CompetitionNoteDetailViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="btB-s0-m7y">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2101,7 +2101,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="H0B-f1-9o8">
-                                <rect key="frame" x="20" y="406" width="280" height="83"/>
+                                <rect key="frame" x="20" y="406" width="280" height="132"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2185,7 +2185,7 @@
         <!--Practice Note Detail View Controller-->
         <scene sceneID="93L-qS-h5G">
             <objects>
-                <viewController storyboardIdentifier="PracticeNoteDetailViewController" modalPresentationStyle="fullScreen" id="1E4-5o-7MW" customClass="PracticeNoteDetailViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PracticeNoteDetailViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="1E4-5o-7MW" customClass="PracticeNoteDetailViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="L0D-b2-sEZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
