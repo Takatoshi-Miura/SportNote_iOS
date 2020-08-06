@@ -520,13 +520,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 97L47TQF5Z;
+				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Takatoshi-Miura.-11-SportNote";
+				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.Takatoshi.Miura.SportsNoteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -548,7 +548,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Takatoshi-Miura.-11-SportNote";
+				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.SportsNoteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
