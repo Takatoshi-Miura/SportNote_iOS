@@ -24,7 +24,7 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
     
     
     //MARK:- 変数の宣言
-    let cellTitle = ["通知","ログアウト"]      // セルの中身
+    let cellTitle = ["このアプリの使い方","ログアウト"]      // セルの中身
     
     
     
@@ -44,9 +44,9 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         
         // タップしたセルによって遷移先を変える
         switch cellTitle[indexPath.row] {
-        case "通知":
-            // 通知設定画面へ遷移
-            performSegue(withIdentifier: "goSettingNotificationViewController", sender: nil)
+        case "このアプリの使い方":
+            // チュートリアルを表示
+            print("このアプリの使い方")
         case "ログアウト":
             // ログアウト処理
             let firebaseAuth = Auth.auth()

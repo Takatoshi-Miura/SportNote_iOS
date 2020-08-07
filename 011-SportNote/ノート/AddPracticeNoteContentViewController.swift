@@ -659,26 +659,31 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 選択されたIndexを取得
         taskIndex = taskPicker.selectedRow(inComponent: 0)
         
-        // 既に表示している課題であれば追加しない
-        if self.practiceNoteData.getTaskTitle().firstIndex(of: taskDataArray[taskIndex].getTaskTitle()) == nil {
-            // noteDataに追加
-            self.practiceNoteData.addTask(taskData: taskDataArray[taskIndex])
-            
-            // テーブルを更新
-            self.taskTableView.reloadData()
-            
-            // 課題数によってテーブルビューの高さを設定
-            self.taskTableView?.layoutIfNeeded()
-            self.taskTableView?.updateConstraints()
-            self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
-            
-            // AddPracticeNoteViewControllerオブジェクトを取得
-            let obj = self.parent as! AddPracticeNoteViewController
-            
-            // containerViewの高さを設定
-            obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
+        // 課題が未登録の場合は何もしない
+        if taskDataArray.isEmpty {
+            // 何もしない
         } else {
-            SVProgressHUD.showError(withStatus: "既に追加されています。")
+            // 既に表示している課題であれば追加しない
+            if self.practiceNoteData.getTaskTitle().firstIndex(of: taskDataArray[taskIndex].getTaskTitle()) == nil {
+                // noteDataに追加
+                self.practiceNoteData.addTask(taskData: taskDataArray[taskIndex])
+                
+                // テーブルを更新
+                self.taskTableView.reloadData()
+                
+                // 課題数によってテーブルビューの高さを設定
+                self.taskTableView?.layoutIfNeeded()
+                self.taskTableView?.updateConstraints()
+                self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
+                
+                // AddPracticeNoteViewControllerオブジェクトを取得
+                let obj = self.parent as! AddPracticeNoteViewController
+                
+                // containerViewの高さを設定
+                obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
+            } else {
+                SVProgressHUD.showError(withStatus: "既に追加されています。")
+            }
         }
         
         // Pickerをしまう
