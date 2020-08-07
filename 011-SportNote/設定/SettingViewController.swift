@@ -45,8 +45,10 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         // タップしたセルによって遷移先を変える
         switch cellTitle[indexPath.row] {
         case "このアプリの使い方":
-            // チュートリアルを表示
-            print("このアプリの使い方")
+            // チュートリアル画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController")
+            self.present(nextView, animated: true, completion: nil)
         case "ログアウト":
             // ログアウト処理
             let firebaseAuth = Auth.auth()

@@ -1376,29 +1376,12 @@
                     <navigationItem key="navigationItem" title="設定" id="1g3-if-Vzu"/>
                     <connections>
                         <outlet property="tableView" destination="dZI-0F-8v5" id="3r4-e7-Xpp"/>
-                        <segue destination="vcd-az-PRV" kind="show" identifier="goSettingNotificationViewController" id="L6c-RY-KeN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="ezT-H4-YNN" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="13432.5" y="791.19718309859161"/>
-        </scene>
-        <!--通知-->
-        <scene sceneID="wIC-22-pEa">
-            <objects>
-                <viewController id="vcd-az-PRV" customClass="SettingNotificationViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="5Ie-eG-mPb">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="l9j-U4-1FX"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="通知" id="tq1-MP-ova"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QvU-Zb-Mre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="13433" y="1601"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">
@@ -1477,6 +1460,89 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YX-CG-YNj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="12519.375" y="791.19718309859161"/>
+        </scene>
+        <!--Page View Controller-->
+        <scene sceneID="g6g-d3-wqm">
+            <objects>
+                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" modalPresentationStyle="fullScreen" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="yYf-d3-cGE" customClass="PageViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hQJ-tT-yI5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="13433" y="1612"/>
+        </scene>
+        <!--First View Controller-->
+        <scene sceneID="Uqj-is-EEa">
+            <objects>
+                <viewController storyboardIdentifier="FirstViewController" id="QP1-xu-P2w" customClass="FirstViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lvX-at-bkS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="①概要" translatesAutoresizingMaskIntoConstraints="NO" id="aJh-BX-Azx">
+                                <rect key="frame" x="0.0" y="131" width="320" height="397"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SportsNoteとは" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIW-ie-ZLY">
+                                <rect key="frame" x="0.0" y="30" width="320" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Zjq-NO-7OH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <color key="textColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題解決に特化したノートアプリです。課題の原因と対策を考え、あああああああああああああああああああああああああああ" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JJU-Xm-NC4">
+                                <rect key="frame" x="45" y="71" width="230" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="9SI-LF-E7o"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="sIW-ie-ZLY" firstAttribute="top" secondItem="3Iy-Jv-pnZ" secondAttribute="top" constant="30" id="57h-jl-yjB"/>
+                            <constraint firstItem="JJU-Xm-NC4" firstAttribute="leading" secondItem="3Iy-Jv-pnZ" secondAttribute="leading" constant="45" id="80U-9G-1iM"/>
+                            <constraint firstItem="JJU-Xm-NC4" firstAttribute="top" secondItem="sIW-ie-ZLY" secondAttribute="bottom" constant="20" id="GQx-uB-abB"/>
+                            <constraint firstAttribute="bottom" secondItem="aJh-BX-Azx" secondAttribute="bottom" constant="40" id="IEg-M3-VUH"/>
+                            <constraint firstItem="aJh-BX-Azx" firstAttribute="leading" secondItem="3Iy-Jv-pnZ" secondAttribute="leading" id="JyF-D6-VLH"/>
+                            <constraint firstItem="sIW-ie-ZLY" firstAttribute="leading" secondItem="3Iy-Jv-pnZ" secondAttribute="leading" id="O6u-5w-eoJ"/>
+                            <constraint firstItem="JJU-Xm-NC4" firstAttribute="top" secondItem="sIW-ie-ZLY" secondAttribute="bottom" constant="20" id="QzR-LP-woo"/>
+                            <constraint firstItem="sIW-ie-ZLY" firstAttribute="trailing" secondItem="3Iy-Jv-pnZ" secondAttribute="trailing" id="e5c-jU-B2N"/>
+                            <constraint firstItem="aJh-BX-Azx" firstAttribute="trailing" secondItem="3Iy-Jv-pnZ" secondAttribute="trailing" id="t65-us-9Kz"/>
+                            <constraint firstItem="aJh-BX-Azx" firstAttribute="top" secondItem="JJU-Xm-NC4" secondAttribute="bottom" constant="10" id="tP8-6i-vfh"/>
+                            <constraint firstItem="3Iy-Jv-pnZ" firstAttribute="trailing" secondItem="JJU-Xm-NC4" secondAttribute="trailing" constant="45" id="vkK-vy-jtX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3Iy-Jv-pnZ"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sj6-Qa-xgG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="14167.5" y="1611.9718309859154"/>
+        </scene>
+        <!--Second View Controller-->
+        <scene sceneID="sAX-UT-ESk">
+            <objects>
+                <viewController storyboardIdentifier="SecondViewController" id="CTH-YF-rSe" customClass="SecondViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="s8u-Ua-cdj">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="SportsNoteとは" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NTU-vu-aFo">
+                                <rect key="frame" x="0.0" y="43" width="320" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <color key="textColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="Aej-rk-AFo"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0dL-tI-Om8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="14906" y="1612"/>
         </scene>
         <!--Add Practice Note Content View Controller-->
         <scene sceneID="e8I-2C-rCq">
@@ -2433,5 +2499,6 @@
         <image name="check_off" width="26" height="26"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="list.bullet" catalog="system" width="128" height="88"/>
+        <image name="①概要" width="1242" height="2240"/>
     </resources>
 </document>
