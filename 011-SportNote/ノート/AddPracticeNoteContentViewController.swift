@@ -669,8 +669,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 // noteDataに追加
                 self.practiceNoteData.addTask(taskData: taskDataArray[taskIndex])
                 
-                // テーブルを更新
-                self.taskTableView.reloadData()
+                // セルを挿入
+                self.taskTableView.insertRows(at: [IndexPath(row: practiceNoteData.getTaskTitle().count - 1, section: 0)], with: .fade)
                 
                 // 課題数によってテーブルビューの高さを設定
                 self.taskTableView?.layoutIfNeeded()
@@ -686,12 +686,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 SVProgressHUD.showError(withStatus: "既に追加されています。")
             }
         }
-        
         // Pickerをしまう
         closePicker()
-           
-        // テーブルビューを更新
-        taskTableView.reloadData()
     }
     
     // Pickerをしまうメソッド
