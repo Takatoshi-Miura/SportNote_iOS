@@ -16,9 +16,14 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
         super.viewDidLoad()
         
         // ViewControllerを配列に登録
-        let firstVC = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        let secondVC = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        self.controllers = [firstVC,secondVC]
+        let VC1 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let VC2 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let VC3 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let VC4 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let VC5 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let VC6 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let VC7 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        self.controllers = [VC1,VC2,VC3,VC4,VC5,VC6,VC7]
         
         // 各画面にチュートリアルデータを渡す
         for num in 0...self.controllers.count - 1 {
@@ -45,12 +50,16 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
     var pageControl: UIPageControl!
     
     // チュートリアルデータ
-    var titleArray:[String]  = ["SportsNoteとは",
-                                "課題の管理"]
+    var titleArray:[String]  = ["SportsNoteとは","課題の管理①","課題の管理②","ノートを作成","課題データと連動①","課題データと連動②","目標を設定"]
     var detailArray:[String] = ["課題解決に特化したノートアプリです。\n原因と対策を考えて実践し、練習後の反省を通して、\n解決を目指すことができます。",
-                                "課題を一覧で管理できます。\n＋ボタンで課題を追加、右スワイプで解決済み、\n左スワイプで削除できます。"]
-    var imageArray:[UIImage?] = [UIImage(named: "①概要"),
-                                 UIImage(named: "②課題の管理")]
+                                "課題を一覧で管理できます。\n＋ボタンで課題を追加、右スワイプで解決済み、\n左スワイプで削除できます。",
+                                "課題ごとに原因と対策を登録できます。\n「最有力の対策」に設定した対策は\nノートに読み込まれるようになります。",
+                                "練習記録、大会記録を作成できます。\n作成したノートはノート一覧、\nまたはカレンダー画面で確認できます。",
+                                "練習記録には未解決の課題が読み込まれます。\n「最有力の対策」の有効性を練習後に記入しましょう\nコメントを課題データに追記することもできます。",
+                                "課題データに追記をした有効性コメントは\n課題データの対策画面に追加されます。\nタップで該当するノートを確認することもできます。",
+                                "年間目標、月間目標を作成できます。\n設定した目標はノート一覧、\nまたはカレンダー画面で確認できます。",]
+    var imageArray:[UIImage?] = [UIImage(named: "①概要"),UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理"),
+                                UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理")]
     
     
     
