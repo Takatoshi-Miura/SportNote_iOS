@@ -24,7 +24,9 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
     
     
     //MARK:- 変数の宣言
-    let cellTitle = ["このアプリの使い方","ログアウト"]      // セルの中身
+    
+    // セルのタイトル
+    let cellTitle = ["このアプリの使い方","ログアウト"]
     
     
     

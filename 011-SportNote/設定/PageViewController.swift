@@ -16,9 +16,17 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
         super.viewDidLoad()
         
         // ViewControllerを配列に登録
-        let firstVC = storyboard!.instantiateViewController(withIdentifier: "FirstViewController") as! FirstViewController
-        let secondVC = storyboard!.instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
+        let firstVC = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let secondVC = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
         self.controllers = [firstVC,secondVC]
+        
+        // 各画面にチュートリアルデータを渡す
+        for num in 0...self.controllers.count - 1 {
+            let VC = self.controllers[num] as! TutorialViewController
+            VC.titleText  = titleArray[num]
+            VC.detailText = detailArray[num]
+            VC.image = imageArray[num]!
+        }
         
         // PageViewController初期化メソッド
         self.initPageViewController()
@@ -31,9 +39,18 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
     
     //MARK:- 変数の宣言
     
-    var controllers: [UIViewController] = []    // ViewControllerを格納する配列
+    // PageViewController関連
+    var controllers: [UIViewController] = []
     var pageViewController: UIPageViewController!
     var pageControl: UIPageControl!
+    
+    // チュートリアルデータ
+    var titleArray:[String]  = ["SportsNoteとは",
+                                "課題の管理"]
+    var detailArray:[String] = ["課題解決に特化したノートアプリです。\n原因と対策を考えて実践し、練習後の反省を通して、\n解決を目指すことができます。",
+                                "課題を一覧で管理できます。\n＋ボタンで課題を追加、右スワイプで解決済み、\n左スワイプで削除できます。"]
+    var imageArray:[UIImage?] = [UIImage(named: "①概要"),
+                                 UIImage(named: "②課題の管理")]
     
     
     

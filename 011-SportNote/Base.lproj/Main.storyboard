@@ -1469,10 +1469,10 @@
             </objects>
             <point key="canvasLocation" x="13433" y="1612"/>
         </scene>
-        <!--First View Controller-->
+        <!--Tutorial View Controller-->
         <scene sceneID="Uqj-is-EEa">
             <objects>
-                <viewController storyboardIdentifier="FirstViewController" id="QP1-xu-P2w" customClass="FirstViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TutorialViewController" id="QP1-xu-P2w" customClass="TutorialViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lvX-at-bkS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1489,7 +1489,7 @@
                                 <color key="textColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題解決に特化したノートアプリです。課題の原因と対策を考え、あああああああああああああああああああああああああああ" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JJU-Xm-NC4">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題解決に特化したノートアプリです。課題の原因と対策を考え、あああああああああああああああああああああああああああ" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JJU-Xm-NC4">
                                 <rect key="frame" x="45" y="91" width="230" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="9SI-LF-E7o"/>
@@ -1515,63 +1515,15 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3Iy-Jv-pnZ"/>
                     </view>
+                    <connections>
+                        <outlet property="detailLabel" destination="JJU-Xm-NC4" id="z2u-sL-DyH"/>
+                        <outlet property="imageView" destination="aJh-BX-Azx" id="vDY-GF-gYK"/>
+                        <outlet property="titleLabel" destination="sIW-ie-ZLY" id="jKe-Ti-WnC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sj6-Qa-xgG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="14167.5" y="1611.9718309859154"/>
-        </scene>
-        <!--Second View Controller-->
-        <scene sceneID="sAX-UT-ESk">
-            <objects>
-                <viewController storyboardIdentifier="SecondViewController" id="CTH-YF-rSe" customClass="SecondViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="s8u-Ua-cdj">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="②課題の管理" translatesAutoresizingMaskIntoConstraints="NO" id="Psm-P0-XDe">
-                                <rect key="frame" x="0.0" y="151" width="320" height="357"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題を管理" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KXA-IO-G5X">
-                                <rect key="frame" x="0.0" y="50" width="320" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="Fh1-vW-EJ5"/>
-                                </constraints>
-                                <viewLayoutGuide key="safeArea" id="YQG-zY-dOY"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <color key="textColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題を一覧で管理できます。＋ボタンで課題を追加、右スワイプで解決済み、左スワイプで削除できます。" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQ3-ot-Ycy">
-                                <rect key="frame" x="45" y="91" width="230" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="vie-79-gV9"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="KXA-IO-G5X" firstAttribute="leading" secondItem="Aej-rk-AFo" secondAttribute="leading" id="8y5-d5-6SE"/>
-                            <constraint firstItem="FQ3-ot-Ycy" firstAttribute="top" secondItem="KXA-IO-G5X" secondAttribute="bottom" constant="20" id="CnI-kE-fZE"/>
-                            <constraint firstItem="FQ3-ot-Ycy" firstAttribute="top" secondItem="KXA-IO-G5X" secondAttribute="bottom" constant="20" id="D0h-Np-9Yq"/>
-                            <constraint firstAttribute="bottom" secondItem="Psm-P0-XDe" secondAttribute="bottom" constant="60" id="ERW-cw-f2X"/>
-                            <constraint firstItem="FQ3-ot-Ycy" firstAttribute="leading" secondItem="Aej-rk-AFo" secondAttribute="leading" constant="45" id="GcC-sJ-hpb"/>
-                            <constraint firstItem="FQ3-ot-Ycy" firstAttribute="top" secondItem="KXA-IO-G5X" secondAttribute="bottom" constant="20" id="IVD-hH-FO0"/>
-                            <constraint firstItem="Aej-rk-AFo" firstAttribute="trailing" secondItem="FQ3-ot-Ycy" secondAttribute="trailing" constant="45" id="MCr-NI-gdD"/>
-                            <constraint firstItem="Psm-P0-XDe" firstAttribute="trailing" secondItem="Aej-rk-AFo" secondAttribute="trailing" id="kZR-mX-wrn"/>
-                            <constraint firstItem="KXA-IO-G5X" firstAttribute="trailing" secondItem="Aej-rk-AFo" secondAttribute="trailing" id="kvW-r2-hzi"/>
-                            <constraint firstItem="Psm-P0-XDe" firstAttribute="top" secondItem="FQ3-ot-Ycy" secondAttribute="bottom" constant="10" id="ptc-7C-3sk"/>
-                            <constraint firstItem="Psm-P0-XDe" firstAttribute="leading" secondItem="Aej-rk-AFo" secondAttribute="leading" id="twW-oQ-HDV"/>
-                            <constraint firstItem="KXA-IO-G5X" firstAttribute="top" secondItem="Aej-rk-AFo" secondAttribute="top" constant="50" id="wkY-YM-Tqp"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="Aej-rk-AFo"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0dL-tI-Om8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="14906" y="1612"/>
         </scene>
         <!--Add Practice Note Content View Controller-->
         <scene sceneID="e8I-2C-rCq">
@@ -2529,6 +2481,5 @@
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="list.bullet" catalog="system" width="128" height="88"/>
         <image name="①概要" width="1242" height="2240"/>
-        <image name="②課題の管理" width="1242" height="2240"/>
     </resources>
 </document>
