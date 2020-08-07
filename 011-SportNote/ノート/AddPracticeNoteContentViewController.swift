@@ -316,6 +316,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             cell.addTextViewBorder()
             cell.initCheckBox()
             cell.printTaskData(noteData: self.practiceNoteData, at: indexPath.row)
+            cell.createToolBar()
             return cell
         }
     }
