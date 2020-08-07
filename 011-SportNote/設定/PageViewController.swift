@@ -57,7 +57,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
     // PageControlを追加するメソッド
     func addPageControl() {
         // PageControlの配置場所
-        self.pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 40, width: UIScreen.main.bounds.width,height: 40))
+        self.pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 60, width: UIScreen.main.bounds.width,height: 60))
         // 全ページ数
         self.pageControl.numberOfPages = self.controllers.count
         // 表示ページ
