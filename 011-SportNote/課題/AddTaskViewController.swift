@@ -181,7 +181,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         // 対策をセット
         measuresTitleArray.reverse()
         for measuresTitle in measuresTitleArray {
-            taskData.addMeasures(title: measuresTitle,effectiveness: "「課題データに追記する」にチェックしたノート")
+            taskData.addMeasures(title: measuresTitle,effectiveness: "課題データに追記したノートデータ")
         }
         
         // Firebaseにアクセス
