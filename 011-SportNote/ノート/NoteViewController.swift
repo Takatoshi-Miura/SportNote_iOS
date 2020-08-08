@@ -16,6 +16,18 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //初回起動判定
+        if UserDefaults.standard.bool(forKey: "firstLaunch") {
+            // 初回起動時の処理
+            // チュートリアル画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController")
+            self.present(nextView, animated: true, completion: nil)
+            
+            // 2回目以降の起動では「firstLaunch」のkeyをfalseに
+            UserDefaults.standard.set(false, forKey: "firstLaunch")
+        }
 
         // デリゲートとデータソースの指定
         tableView.delegate = self

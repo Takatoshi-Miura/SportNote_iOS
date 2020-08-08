@@ -163,13 +163,14 @@ class LoginViewController: UIViewController {
                 }
                 // アカウントの登録を通知
                 SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました。")
-                
+
                 // フリーノートデータを作成
                 self.createFreeNoteData()
                 
                 // タブ画面に遷移
                 // メッセージが隠れてしまうため、遅延処理を行う
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                    // ノート画面に遷移
                     self.performSegue(withIdentifier: "goTabBarController", sender: nil)
                 }
             }
