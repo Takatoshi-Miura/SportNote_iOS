@@ -1150,19 +1150,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AgC-iD-23G">
-                                <rect key="frame" x="268" y="186" width="37" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="kGc-ih-HQP"/>
-                                </constraints>
-                                <state key="normal" title="追加">
-                                    <color key="titleColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="addButton:" destination="YNk-XQ-KMM" eventType="touchUpInside" id="gKr-6p-u2o"/>
-                                    <action selector="addMeasuresButton:" destination="zUd-kp-r5X" eventType="touchUpInside" id="kHb-36-z2y"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dOm-x6-w2b">
                                 <rect key="frame" x="0.0" y="216" width="320" height="283"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -1213,7 +1200,6 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="rKF-ge-Oqr" firstAttribute="trailing" secondItem="AgC-iD-23G" secondAttribute="trailing" constant="15" id="0IK-mZ-MAz"/>
                             <constraint firstItem="wie-4e-cxv" firstAttribute="trailing" secondItem="rKF-ge-Oqr" secondAttribute="trailing" id="2zJ-4w-JLk"/>
                             <constraint firstItem="UwF-Ia-l8E" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" id="5UM-Cf-n34"/>
                             <constraint firstItem="dOm-x6-w2b" firstAttribute="trailing" secondItem="rKF-ge-Oqr" secondAttribute="trailing" id="6rr-JF-e6L"/>
@@ -1227,10 +1213,8 @@
                             <constraint firstItem="OK4-Ic-uvt" firstAttribute="top" secondItem="fBP-LM-uWJ" secondAttribute="bottom" constant="15" id="U9v-PF-9D2"/>
                             <constraint firstItem="dOm-x6-w2b" firstAttribute="top" secondItem="UwF-Ia-l8E" secondAttribute="bottom" id="UQq-o9-Adv"/>
                             <constraint firstItem="fBP-LM-uWJ" firstAttribute="top" secondItem="wie-4e-cxv" secondAttribute="bottom" constant="15" id="Vxf-z4-Gt2"/>
-                            <constraint firstItem="AgC-iD-23G" firstAttribute="top" secondItem="OK4-Ic-uvt" secondAttribute="bottom" constant="15" id="WyC-mS-EPE"/>
                             <constraint firstItem="OK4-Ic-uvt" firstAttribute="top" secondItem="fBP-LM-uWJ" secondAttribute="bottom" constant="15" id="Zvb-XO-0Cq"/>
                             <constraint firstItem="dOm-x6-w2b" firstAttribute="top" secondItem="UwF-Ia-l8E" secondAttribute="bottom" id="fPS-6E-dyK"/>
-                            <constraint firstItem="AgC-iD-23G" firstAttribute="top" secondItem="OK4-Ic-uvt" secondAttribute="bottom" constant="15" id="lXb-bK-hQc"/>
                             <constraint firstItem="fBP-LM-uWJ" firstAttribute="top" secondItem="wie-4e-cxv" secondAttribute="bottom" constant="15" id="mPM-D6-iwE"/>
                             <constraint firstItem="OK4-Ic-uvt" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" constant="15" id="oMy-EA-WLE"/>
                             <constraint firstItem="fBP-LM-uWJ" firstAttribute="leading" secondItem="rKF-ge-Oqr" secondAttribute="leading" constant="15" id="ozv-uG-Qdw"/>
@@ -1240,7 +1224,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="対策の詳細" id="34d-Wo-hFs"/>
                     <connections>
-                        <outlet property="addButton" destination="AgC-iD-23G" id="3zj-aJ-yh5"/>
                         <outlet property="checkButton" destination="OK4-Ic-uvt" id="b4e-h8-Znm"/>
                         <outlet property="measuresTitleTextField" destination="fBP-LM-uWJ" id="riN-Zz-ceo"/>
                         <outlet property="tableView" destination="dOm-x6-w2b" id="bju-4D-45j"/>
@@ -2469,7 +2452,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="A5N-jC-0n4"/>
+        <segue reference="kTC-B9-qgr"/>
         <segue reference="ILr-mH-cA9"/>
         <segue reference="Yvf-Pz-j6e"/>
         <segue reference="p4p-t4-Yj4"/>
