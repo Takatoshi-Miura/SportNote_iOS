@@ -32,10 +32,10 @@ class PracticeNoteContentViewController: UIViewController,UITableViewDelegate,UI
             self.tableViewHeight.constant = CGFloat(self.tableView.contentSize.height)
         
             // PracticeNoteDetailViewControllerオブジェクトを取得
-            let obj = self.parent as! PracticeNoteDetailViewController
-            
-            // containerViewの高さを設定
-            obj.setContainerViewHeight(height: self.tableView.contentSize.height)
+            if let obj = self.parent as? PracticeNoteDetailViewController {
+                // containerViewの高さを設定
+                obj.setContainerViewHeight(height: self.tableView.contentSize.height)
+            }
         }
     }
     
