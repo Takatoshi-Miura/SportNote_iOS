@@ -38,6 +38,9 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
 
         // PageControlを追加
         self.addPageControl()
+        
+        // Skipボタンを追加
+        self.addSkipButton()
     }
     
     
@@ -96,6 +99,32 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
         self.pageControl.currentPageIndicatorTintColor = .white
         self.view.addSubview(self.pageControl)
     }
+    
+    // Skipボタンを追加するメソッド
+    func addSkipButton() {
+        // UIButtonのインスタンスを作成する
+        let button = UIButton()
+
+        // ボタンを押した時に実行するメソッドを指定
+        button.addTarget(self, action: #selector(skipButtonEvent(_:)), for: UIControl.Event.touchUpInside)
+
+        // ラベルを設定
+        button.setTitle("Skip", for: UIControl.State.normal)
+        button.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        button.backgroundColor = UIColor.systemBlue
+
+        // 位置の設定
+        button.frame = CGRect(x: UIScreen.main.bounds.maxX - 80, y: UIScreen.main.bounds.maxY - 60, width: 80, height: 60)
+
+        // viewに追加
+        self.view.addSubview(button)
+    }
+    
+    // Skipボタンの処理
+    @objc func skipButtonEvent(_ sender: UIButton) {
+        // チュートリアル画面を閉じる
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 
@@ -110,18 +139,18 @@ extension PageViewController: UIPageViewControllerDataSource {
    
     // 左にスワイプ（進む）
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let index = self.controllers.firstIndex(of: viewController),
-            index < self.controllers.count - 1 {
+        if let index = self.controllers.firstIndex(of: viewController), index < self.controllers.count - 1 {
             return self.controllers[index + 1]
         } else {
+            // 全てのチュートリアルを読み切ったら画面を閉じる
+            self.dismiss(animated: true, completion: nil)
             return nil
         }
     }
 
     // 右にスワイプ （戻る）
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if let index = self.controllers.firstIndex(of: viewController),
-            index > 0 {
+        if let index = self.controllers.firstIndex(of: viewController), index > 0 {
             return self.controllers[index - 1]
         } else {
             return nil
