@@ -55,12 +55,12 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
     // チュートリアルデータ
     var titleArray:[String]  = ["SportsNoteとは","課題の管理①","課題の管理②","ノートを作成","課題データと連動①","課題データと連動②","目標を設定"]
     
-    var detailArray:[String] = ["課題解決に特化したノートアプリです。\n原因と対策を考えて実践し、練習後の反省を通して、\n解決を目指すことができます。",
-                                "課題を一覧で管理できます。\n＋ボタンで課題を追加、右スワイプで解決済み、\n左スワイプで削除できます。",
+    var detailArray:[String] = ["課題解決に特化したノートアプリです。\n原因と対策を考えて実践し、反省を通して、\n解決を目指すことができます。",
+                                "課題を一覧で管理できます。\n＋ボタンで課題を追加、左右のスワイプで\n解決済みや削除ができます。",
                                 "課題ごとに原因と対策を登録できます。\n「最有力の対策」に設定した対策は\nノートに読み込まれるようになります。",
                                 "練習記録、大会記録を作成できます。\n作成したノートはノート一覧、\nまたはカレンダー画面で確認できます。",
-                                "練習記録には未解決の課題が読み込まれます。\n「最有力の対策」の有効性を練習後に記入しましょう\nコメントを課題データに追記することもできます。",
-                                "課題データに追記をした有効性コメントは\n課題データの対策画面に追加されます。\nタップで該当するノートを確認することもできます。",
+                                "練習記録には未解決の課題が表示されます。\n「最有力の対策」の有効性を記録できます。\nコメントを課題データにも追記できます。",
+                                "課題データに追記した有効性コメントは\n課題の対策画面に追加されます。\nタップで該当するノートを確認できます。",
                                 "年間目標、月間目標を作成できます。\n設定した目標はノート一覧、\nまたはカレンダー画面で確認できます。",]
     
     var imageArray:[UIImage?] = [UIImage(named: "①概要"),UIImage(named: "②課題の管理"),UIImage(named: "③課題の管理"),
@@ -89,14 +89,23 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
     func addPageControl() {
         // PageControlの配置場所
         self.pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 60, width: UIScreen.main.bounds.width,height: 60))
+        
         // 全ページ数
         self.pageControl.numberOfPages = self.controllers.count
+        
         // 表示ページ
         self.pageControl.currentPage = 0
+        
         // インジケータの色
         self.pageControl.pageIndicatorTintColor = .gray
+        
         // 現在ページのインジケータの色
         self.pageControl.currentPageIndicatorTintColor = .white
+        
+        // タップ無効
+        self.pageControl.isUserInteractionEnabled = false
+        
+        // ビューに追加
         self.view.addSubview(self.pageControl)
     }
     
@@ -111,7 +120,6 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
         // ラベルを設定
         button.setTitle("閉じる", for: UIControl.State.normal)
         button.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        button.backgroundColor = UIColor.systemBlue
 
         // 位置の設定
         button.frame = CGRect(x: UIScreen.main.bounds.maxX - 80, y: UIScreen.main.bounds.maxY - 60, width: 80, height: 60)
