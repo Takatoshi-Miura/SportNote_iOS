@@ -109,7 +109,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
         button.addTarget(self, action: #selector(skipButtonEvent(_:)), for: UIControl.Event.touchUpInside)
 
         // ラベルを設定
-        button.setTitle("Skip", for: UIControl.State.normal)
+        button.setTitle("閉じる", for: UIControl.State.normal)
         button.setTitleColor(UIColor.white, for: UIControl.State.normal)
         button.backgroundColor = UIColor.systemBlue
 
@@ -142,8 +142,6 @@ extension PageViewController: UIPageViewControllerDataSource {
         if let index = self.controllers.firstIndex(of: viewController), index < self.controllers.count - 1 {
             return self.controllers[index + 1]
         } else {
-            // 全てのチュートリアルを読み切ったら画面を閉じる
-            self.dismiss(animated: true, completion: nil)
             return nil
         }
     }

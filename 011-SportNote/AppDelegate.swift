@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
-        // 初回起動判定
+        // 初回起動判定(初期値を登録)
         let dic = ["firstLaunch": true]
         UserDefaults.standard.register(defaults: dic)
         

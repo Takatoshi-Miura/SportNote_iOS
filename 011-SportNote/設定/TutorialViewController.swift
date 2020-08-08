@@ -17,6 +17,7 @@ class TutorialViewController: UIViewController {
         
         // チュートリアルデータを表示
         printData()
+        setTextColor()
     }
     
     
@@ -44,6 +45,12 @@ class TutorialViewController: UIViewController {
         self.titleLabel.text  = titleText
         self.detailLabel.text = detailText
         self.imageView.image  = image
+    }
+    
+    // 文字色を設定するメソッド
+    func setTextColor() {
+        self.titleLabel.textColor = UIColor.white
+        self.detailLabel.textColor = UIColor.white
     }
     
 }
