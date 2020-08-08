@@ -122,14 +122,14 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 // データベースの対策データを追加
                 self.taskData.addMeasures(title: textField.text!,effectiveness: "対策の有効性をコメントしましょう")
                 
+                // 最有力の対策に設定
+                self.taskData.setMeasuresPriority(textField.text!)
+                
                 // 対策タイトルの配列に入力値を挿入。先頭に挿入する
                 self.measuresTitleArray.insert(textField.text!,at:0)
                 
                 // テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
-                
-                // テーブルをリロード
-                self.tableView.reloadData()
             }
         }
         //OKボタンを追加
@@ -201,13 +201,14 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             // OKボタンを宣言
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // OKボタンがタップされたときの処理
+                
+                // 削除した対策が最有力だった場合、最有力を未設定にする
+                if self.taskData.getMeasuresTitleArray()[indexPath.row] == self.taskData.getMeasuresPriority() {
+                    self.taskData.setMeasuresPriority("")
+                }
+                
                 // 次回以降、この対策データを取得しないようにする
                 self.taskData.deleteMeasures(at: indexPath.row)
-                
-                // 削除した対策が最有力だった場合、他の対策を最有力にする
-                if self.taskData.getMeasuresTitleArray()[indexPath.row] == self.taskData.getMeasuresPriority() {
-                    self.taskData.setMeasuresPriority(self.taskData.getMeasuresTitleArray()[0])
-                }
                 
                 // データを更新
                 self.updateTaskData()

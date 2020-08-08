@@ -61,7 +61,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
                                 "練習記録、大会記録を作成できます。\n作成したノートはノート一覧、\nまたはカレンダー画面で確認できます。",
                                 "練習記録には未解決の課題が表示されます。\n「最有力の対策」の有効性を記録できます。\nコメントを課題データにも追記できます。",
                                 "課題データに追記した有効性コメントは\n課題の対策画面に追加されます。\nタップで該当するノートを確認できます。",
-                                "年間目標、月間目標を作成できます。\n設定した目標はノート一覧、\nまたはカレンダー画面で確認できます。",]
+                                "年間目標、月間目標を作成できます。\n設定した目標はノート一覧、\nまたはカレンダー画面で確認できます。"]
     
     var imageArray:[UIImage?] = [UIImage(named: "①概要"),UIImage(named: "②課題の管理"),UIImage(named: "③課題の管理"),
                                  UIImage(named: "④ノート追加"),UIImage(named: "⑤課題と連動"),UIImage(named: "⑥課題と連動"),UIImage(named: "⑦目標設定")]

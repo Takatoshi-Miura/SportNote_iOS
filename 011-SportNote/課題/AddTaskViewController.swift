@@ -67,6 +67,9 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
                 // 対策タイトルの配列に入力値を挿入。先頭に挿入する
                 self.measuresTitleArray.insert(textField.text!,at:0)
                 
+                // 最有力の対策に設定
+                self.taskData.setMeasuresPriority(textField.text!)
+                
                 //テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
             }
