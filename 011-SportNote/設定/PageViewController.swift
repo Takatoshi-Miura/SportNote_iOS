@@ -51,6 +51,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
     
     // チュートリアルデータ
     var titleArray:[String]  = ["SportsNoteとは","課題の管理①","課題の管理②","ノートを作成","課題データと連動①","課題データと連動②","目標を設定"]
+    
     var detailArray:[String] = ["課題解決に特化したノートアプリです。\n原因と対策を考えて実践し、練習後の反省を通して、\n解決を目指すことができます。",
                                 "課題を一覧で管理できます。\n＋ボタンで課題を追加、右スワイプで解決済み、\n左スワイプで削除できます。",
                                 "課題ごとに原因と対策を登録できます。\n「最有力の対策」に設定した対策は\nノートに読み込まれるようになります。",
@@ -58,8 +59,9 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
                                 "練習記録には未解決の課題が読み込まれます。\n「最有力の対策」の有効性を練習後に記入しましょう\nコメントを課題データに追記することもできます。",
                                 "課題データに追記をした有効性コメントは\n課題データの対策画面に追加されます。\nタップで該当するノートを確認することもできます。",
                                 "年間目標、月間目標を作成できます。\n設定した目標はノート一覧、\nまたはカレンダー画面で確認できます。",]
-    var imageArray:[UIImage?] = [UIImage(named: "①概要"),UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理"),
-                                UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理"),UIImage(named: "②課題の管理")]
+    
+    var imageArray:[UIImage?] = [UIImage(named: "①概要"),UIImage(named: "②課題の管理"),UIImage(named: "③課題の管理"),
+                                 UIImage(named: "④ノート追加"),UIImage(named: "⑤課題と連動"),UIImage(named: "⑥課題と連動"),UIImage(named: "⑦目標設定")]
     
     
     
