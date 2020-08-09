@@ -17,9 +17,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // デリゲートとデータソースの指定
-        tableView.delegate = self
-        tableView.dataSource = self
+        // デリゲートの指定
         navigationController?.delegate = self
 
         // 受け取った課題データを表示する
@@ -138,12 +136,11 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 self.tableView.reloadData()
             }
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-        
-        //CANCELボタンを宣言
+        // CANCELボタンを宣言
         let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
+        
+        // ボタンを追加
+        alertController.addAction(okAction)
         alertController.addAction(cancelButton)
         
         //アラートダイアログを表示
@@ -206,8 +203,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             
             // OKボタンを宣言
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-                // OKボタンがタップされたときの処理
-                
                 // 削除した対策が最有力だった場合、最有力を未設定にする
                 if self.taskData.getMeasuresTitleArray()[indexPath.row] == self.taskData.getMeasuresPriority() {
                     self.taskData.setMeasuresPriority("")
@@ -218,19 +213,18 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 
                 // データを更新
                 self.updateTaskData()
-                    
+                
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
                 
                 // リロード
                 tableView.reloadData()
             }
-            //OKボタンを追加
-            alertController.addAction(okAction)
-            
-            //CANCELボタンを宣言
+            // CANCELボタンを宣言
             let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            //CANCELボタンを追加
+            
+            // ボタンを追加
+            alertController.addAction(okAction)
             alertController.addAction(cancelButton)
             
             //アラートダイアログを表示
@@ -263,6 +257,51 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             measuresDetailViewController.taskData  = taskData
             measuresDetailViewController.indexPath = indexPath
             measuresDetailViewController.previousControllerName = self.previousControllerName
+        }
+    }
+    
+    
+    
+    //MARK:- データベース関連
+    
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 課題データを更新
+        taskData.setTaskTitle(taskTitleTextField.text!)
+        taskData.setTaskCause(taskCauseTextView.text!)
+        
+        // 更新日時を現在時刻にする
+        taskData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
+
+        // 変更する可能性のあるデータのみ更新
+        database.updateData([
+            "taskTitle"        : taskData.getTaskTitle(),
+            "taskCause"        : taskData.getTaskCouse(),
+            "taskAchievement"  : taskData.getTaskAchievement(),
+            "isDeleted"        : taskData.getIsDeleted(),
+            "updated_at"       : taskData.getUpdated_at(),
+            "measuresData"     : taskData.getMeasuresData(),
+            "measuresPriority" : taskData.getMeasuresPriority()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                
+                // 解決済みボタンをタップした場合
+                if self.resolvedButtonTap == true {
+                    // 前の画面に戻る
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
         }
     }
     
@@ -366,47 +405,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return dateFormatter.string(from: now)
-    }
-
-    // Firebaseの課題データを更新するメソッド
-    func updateTaskData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // 課題データを更新
-        taskData.setTaskTitle(taskTitleTextField.text!)
-        taskData.setTaskCause(taskCauseTextView.text!)
-        
-        // 更新日時を現在時刻にする
-        taskData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
-
-        // 変更する可能性のあるデータのみ更新
-        database.updateData([
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
-            "isDeleted"        : taskData.getIsDeleted(),
-            "updated_at"       : taskData.getUpdated_at(),
-            "measuresData"     : taskData.getMeasuresData(),
-            "measuresPriority" : taskData.getMeasuresPriority()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // 解決済みボタンをタップした場合
-                if self.resolvedButtonTap == true {
-                    // 前の画面に戻る
-                    self.navigationController?.popViewController(animated: true)
-                }
-            }
-        }
     }
     
 }

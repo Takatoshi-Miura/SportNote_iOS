@@ -18,8 +18,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         super.viewDidLoad()
         
         // デリゲートの指定
-        tableView.delegate   = self
-        tableView.dataSource = self
         measuresTitleTextField.delegate = self
         navigationController?.delegate = self
         
@@ -168,12 +166,11 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
                 // データを更新
                 self.updateTaskData()
             }
-            //OKボタンを追加
-            alertController.addAction(okAction)
-            
-            //CANCELボタンを宣言
+            // CANCELボタンを宣言
             let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            //CANCELボタンを追加
+            
+            // ボタンを追加
+            alertController.addAction(okAction)
             alertController.addAction(cancelButton)
             
             //アラートダイアログを表示
@@ -204,6 +201,120 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
             noteDetailViewController.noteData = self.noteData
+        }
+    }
+    
+    
+    
+    //MARK:- データベース関連
+    
+    // Firebaseの課題データを更新するメソッド
+    func updateTaskData() {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 同じ対策名の登録がないか確認
+        var measuresTitleCheck:Bool = false
+        for num in 0...taskData.getMeasuresTitleArray().count - 1 {
+            if num == indexPath {
+                // 判定しない
+            } else {
+                // 対策名被りのチェック
+                if measuresTitleTextField.text == taskData.getMeasuresTitleArray()[num] {
+                    measuresTitleCheck = true
+                }
+            }
+        }
+        
+        // 同じ対策名の登録があった場合
+        if measuresTitleCheck == true {
+            SVProgressHUD.showError(withStatus: "同じ対策名が存在します。\n別の名前にしてください。")
+            return
+        } else {
+            // 対策を更新
+            taskData.updateMeasuresTitle(newTitle: measuresTitleTextField.text!, at: indexPath)
+        }
+        
+        // チェックボックスが選択されている場合は、この対策を最有力にする
+        if self.checkButton.isSelected {
+            taskData.setMeasuresPriority(measuresTitleTextField.text!)
+        }
+        
+        // 更新日時を現在時刻にする
+        taskData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
+
+        // 変更する可能性のあるデータのみ更新
+        database.updateData([
+            "taskTitle"        : taskData.getTaskTitle(),
+            "taskCause"        : taskData.getTaskCouse(),
+            "taskAchievement"  : taskData.getTaskAchievement(),
+            "isDeleted"        : taskData.getIsDeleted(),
+            "updated_at"       : taskData.getUpdated_at(),
+            "measuresData"     : taskData.getMeasuresData(),
+            "measuresPriority" : taskData.getMeasuresPriority()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                // リロード
+                self.tableView.reloadData()
+                
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    // Firebaseから指定したノートIDのデータを取得するメソッド
+    func loadNoteData(_ noteID:Int) {
+        // ユーザーUIDをセット
+        noteData.setUserID(Auth.auth().currentUser!.uid)
+
+        // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: noteData.getUserID())
+            .whereField("noteID", isEqualTo: noteID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    self.noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    self.noteData.setNoteType(dataCollection["noteType"] as! String)
+                    self.noteData.setYear(dataCollection["year"] as! Int)
+                    self.noteData.setMonth(dataCollection["month"] as! Int)
+                    self.noteData.setDate(dataCollection["date"] as! Int)
+                    self.noteData.setDay(dataCollection["day"] as! String)
+                    self.noteData.setWeather(dataCollection["weather"] as! String)
+                    self.noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    self.noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    self.noteData.setPurpose(dataCollection["purpose"] as! String)
+                    self.noteData.setDetail(dataCollection["detail"] as! String)
+                    self.noteData.setTarget(dataCollection["target"] as! String)
+                    self.noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    self.noteData.setResult(dataCollection["result"] as! String)
+                    self.noteData.setReflection(dataCollection["reflection"] as! String)
+                    self.noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    self.noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    self.noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    self.noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    self.noteData.setUserID(dataCollection["userID"] as! String)
+                    self.noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    self.noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                
+                // ノート詳細確認画面へ遷移
+                self.performSegue(withIdentifier: "goToPracticeNoteDetailViewController", sender: nil)
+            }
         }
     }
     
@@ -306,116 +417,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return dateFormatter.string(from: now)
-    }
-
-    // Firebaseの課題データを更新するメソッド
-    func updateTaskData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // 同じ対策名の登録がないか確認
-        var measuresTitleCheck:Bool = false
-        for num in 0...taskData.getMeasuresTitleArray().count - 1 {
-            if num == indexPath {
-                // 判定しない
-            } else {
-                // 対策名被りのチェック
-                if measuresTitleTextField.text == taskData.getMeasuresTitleArray()[num] {
-                    measuresTitleCheck = true
-                }
-            }
-        }
-        
-        // 同じ対策名の登録があった場合
-        if measuresTitleCheck == true {
-            SVProgressHUD.showError(withStatus: "同じ対策名が存在します。\n別の名前にしてください。")
-            return
-        } else {
-            // 対策を更新
-            taskData.updateMeasuresTitle(newTitle: measuresTitleTextField.text!, at: indexPath)
-        }
-        
-        // チェックボックスが選択されている場合は、この対策を最有力にする
-        if self.checkButton.isSelected {
-            taskData.setMeasuresPriority(measuresTitleTextField.text!)
-        }
-        
-        // 更新日時を現在時刻にする
-        taskData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
-
-        // 変更する可能性のあるデータのみ更新
-        database.updateData([
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
-            "isDeleted"        : taskData.getIsDeleted(),
-            "updated_at"       : taskData.getUpdated_at(),
-            "measuresData"     : taskData.getMeasuresData(),
-            "measuresPriority" : taskData.getMeasuresPriority()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                // リロード
-                self.tableView.reloadData()
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
-    }
-    
-    // Firebaseから指定したノートIDのデータを取得するメソッド
-    func loadNoteData(_ noteID:Int) {        
-        // ユーザーUIDをセット
-        noteData.setUserID(Auth.auth().currentUser!.uid)
-
-        // 現在のユーザーのデータを取得する
-        let db = Firestore.firestore()
-        db.collection("NoteData")
-            .whereField("userID", isEqualTo: noteData.getUserID())
-            .whereField("noteID", isEqualTo: noteID)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標データを反映
-                    let dataCollection = document.data()
-                    self.noteData.setNoteID(dataCollection["noteID"] as! Int)
-                    self.noteData.setNoteType(dataCollection["noteType"] as! String)
-                    self.noteData.setYear(dataCollection["year"] as! Int)
-                    self.noteData.setMonth(dataCollection["month"] as! Int)
-                    self.noteData.setDate(dataCollection["date"] as! Int)
-                    self.noteData.setDay(dataCollection["day"] as! String)
-                    self.noteData.setWeather(dataCollection["weather"] as! String)
-                    self.noteData.setTemperature(dataCollection["temperature"] as! Int)
-                    self.noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
-                    self.noteData.setPurpose(dataCollection["purpose"] as! String)
-                    self.noteData.setDetail(dataCollection["detail"] as! String)
-                    self.noteData.setTarget(dataCollection["target"] as! String)
-                    self.noteData.setConsciousness(dataCollection["consciousness"] as! String)
-                    self.noteData.setResult(dataCollection["result"] as! String)
-                    self.noteData.setReflection(dataCollection["reflection"] as! String)
-                    self.noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
-                    self.noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
-                    self.noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
-                    self.noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
-                    self.noteData.setUserID(dataCollection["userID"] as! String)
-                    self.noteData.setCreated_at(dataCollection["created_at"] as! String)
-                    self.noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                }
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // ノート詳細確認画面へ遷移
-                self.performSegue(withIdentifier: "goToPracticeNoteDetailViewController", sender: nil)
-            }
-        }
     }
 
 }

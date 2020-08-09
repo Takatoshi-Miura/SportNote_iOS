@@ -17,10 +17,6 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // デリゲートとデータソースの指定
-        tableView.delegate = self
-        tableView.dataSource = self
-        
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
         
@@ -74,12 +70,11 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
             }
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-        
-        //CANCELボタンを宣言
+        // CANCELボタンを宣言
         let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
+        
+        // ボタンを追加
+        alertController.addAction(okAction)
         alertController.addAction(cancelButton)
         
         //アラートダイアログを表示
@@ -107,60 +102,17 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         return measuresTitleArray.count
     }
     
-    // テーブルの行ごとのセルを返却する
+    // セルを返却
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Storyboardで指定したtodoCell識別子を利用して再利用可能なセルを取得する
+        // 対策セルを返却
         let cell = tableView.dequeueReusableCell(withIdentifier: "measuresCell", for: indexPath)
-        
-        // 行番号に合った対策タイトルを表示
         cell.textLabel?.text = measuresTitleArray[indexPath.row]
-        
         return cell
     }
     
     
     
-    //MARK:- その他のメソッド
-    
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        taskTitleTextField.inputAccessoryView = toolBar
-        causeTextView.inputAccessoryView = toolBar
-    }
-    
-    // OKボタンの処理
-    @objc func tapOkButton(_ sender: UIButton){
-        // キーボードを閉じる
-        self.view.endEditing(true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
+    //MARK:- データベース関連
     
     // Firebaseにデータを保存するメソッド
     func saveTaskData() {
@@ -210,6 +162,50 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
                 self.dismiss(animated: true, completion: nil)
             }
         }
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // テキストフィールド以外をタップでキーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // ツールバーを作成するメソッド
+    func createToolBar() {
+        // ツールバーのインスタンスを作成
+        let toolBar = UIToolbar()
+
+        // ツールバーに配置するアイテムのインスタンスを作成
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
+
+        // アイテムを配置
+        toolBar.setItems([flexibleItem, okButton], animated: true)
+
+        // ツールバーのサイズを指定
+        toolBar.sizeToFit()
+        
+        // テキストフィールドにツールバーを設定
+        taskTitleTextField.inputAccessoryView = toolBar
+        causeTextView.inputAccessoryView = toolBar
+    }
+    
+    // OKボタンの処理
+    @objc func tapOkButton(_ sender: UIButton){
+        // キーボードを閉じる
+        self.view.endEditing(true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
     }
 
 }
