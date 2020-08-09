@@ -17,9 +17,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // デリゲートとデータソースの指定
-        tableView.delegate = self
-        tableView.dataSource = self
+        // ナビゲーションバーボタン作成
+        createNavigationBarButton()
+        
+        // ナビゲーションバーのボタンをセット
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton])
         
         // リフレッシュ機能の設定
         tableView.refreshControl = refreshCtl
@@ -27,10 +29,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
-        
-        // ナビゲーションバーのボタンを追加
-        navigationItem.leftBarButtonItem  = editButtonItem
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
@@ -53,13 +51,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // 行番号格納用
     var indexPath:Int = 0
-    var indexPathList:[Int] = []
     
-    // ナビゲーションバー用のボタン
+    // ナビゲーションバーのボタン
     var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
     var resolveButton:UIBarButtonItem!  // 解決済みボタン
     var addButton:UIBarButtonItem!      // 課題追加ボタン
-    
     
     
     
@@ -72,24 +68,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            // 編集開始
+            // 編集中：ナビゲーションバーのボタンをセット
+            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton,resolveButton])
             self.editButtonItem.title = "完了"
-            self.editButtonItem.tintColor = UIColor.systemBlue
-            
-            // ナビゲーションバーのボタンを表示
-            deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-            resolveButton = UIBarButtonItem(image: UIImage(named: "check_on"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(resolveButtonTapped(_:)))
-            resolveButton.tintColor = UIColor.systemBlue
-            addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-            self.navigationItem.rightBarButtonItems = [addButton,deleteButton,resolveButton]
         } else {
-            // 編集終了
-            self.editButtonItem.title = "編集"
-            self.editButtonItem.tintColor = UIColor.systemBlue
-            
-            // ナビゲーションバーのボタンを表示
-            addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-            self.navigationItem.rightBarButtonItems = [addButton]
+            // 編集完了：ナビゲーションバーのボタンをセット
+            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton])
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
@@ -125,7 +109,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // セルをタップした時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if tableView.isEditing {
             // 編集時の処理
         } else {
@@ -153,17 +136,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             return
         }
         // アラートダイアログを生成
-        let alertController = UIAlertController(title:"課題を削除",message:"選択された課題を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+        let alertController = UIAlertController(title:"課題を削除",message:"選択された課題を削除します。\nよろしいですか？",preferredStyle:UIAlertController.Style.alert)
         
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // OKボタンがタップされたときの処理
             // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
             let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+            
+            // 選択された課題を削除する
             for indexPathList in sortedIndexPaths {
                 self.taskDataArray[indexPathList.row].setIsDeleted(true)
                 self.updateTaskData(task: self.taskDataArray[indexPathList.row])
-                self.taskDataArray.remove(at: indexPathList.row) // 選択肢のindexPathから配列の要素を削除
+                self.taskDataArray.remove(at: indexPathList.row)
             }
             
             // tableViewの行を削除
@@ -172,15 +156,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-        
-        //CANCELボタンを宣言
+        // CANCELボタンを宣言
         let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
+        
+        // ボタンを追加
+        alertController.addAction(okAction)
         alertController.addAction(cancelButton)
         
-        //アラートダイアログを表示
+        // アラートダイアログを表示
         present(alertController,animated:true,completion:nil)
     }
     
@@ -194,13 +177,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // OKボタンがタップされたときの処理
             // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
             let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+            
+            // 選択された課題を解決済みにする
             for indexPathList in sortedIndexPaths {
                 self.taskDataArray[indexPathList.row].changeAchievement()
                 self.updateTaskData(task: self.taskDataArray[indexPathList.row])
-                self.taskDataArray.remove(at: indexPathList.row) // 選択肢のindexPathから配列の要素を削除
+                self.taskDataArray.remove(at: indexPathList.row)
             }
             
             // tableViewの行を削除
@@ -209,15 +193,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-        
-        //CANCELボタンを宣言
+        // CANCELボタンを宣言
         let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
+        
+        // ボタンを追加
+        alertController.addAction(okAction)
         alertController.addAction(cancelButton)
         
-        //アラートダイアログを表示
+        // アラートダイアログを表示
         present(alertController,animated:true,completion:nil)
     }
     
@@ -230,8 +213,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             // OKボタンを宣言
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-                // OKボタンがタップされたときの処理
-                // 次回以降、この課題データを取得しないようにする
+                // taskDataを更新
                 self.taskDataArray[indexPath.row].setIsDeleted(true)
                 self.updateTaskData(task: self.taskDataArray[indexPath.row])
                     
@@ -241,15 +223,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
             }
-            //OKボタンを追加
-            alertController.addAction(okAction)
-            
-            //CANCELボタンを宣言
+            // CANCELボタンを宣言
             let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            //CANCELボタンを追加
+            
+            // CANCELボタンを追加
+            alertController.addAction(okAction)
             alertController.addAction(cancelButton)
             
-            //アラートダイアログを表示
+            // アラートダイアログを表示
             present(alertController,animated:true,completion:nil)
         }
     }
@@ -281,25 +262,22 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return taskDataArray.count + 1
     }
     
-    // テーブルの行ごとのセルを返却する
+    // セルを返却する
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 最下位は解決済みの課題セル、それ以外は未解決の課題セル
         switch indexPath.row {
-            case taskDataArray.count:
-                // 解決済みの課題セルを取得
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "resolvedTaskCell", for: indexPath)
-                cell.textLabel!.text = "解決済みの課題一覧"
-                cell.textLabel!.textColor = UIColor.systemBlue
-                return cell
-            default:
-                // 未解決の課題セルを取得する
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
-                // 行番号に合った課題データをラベルに表示する
-                let taskData = taskDataArray[indexPath.row]
-                cell.textLabel!.text = taskData.getTaskTitle()
-                cell.detailTextLabel!.text = "原因：\(taskData.getTaskCouse())"
-                cell.detailTextLabel?.textColor = UIColor.systemGray
-                return cell
+        case taskDataArray.count:
+            // 最下位は解決済みの課題セルを返却
+            let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "resolvedTaskCell", for: indexPath)
+            cell.textLabel!.text = "解決済みの課題一覧"
+            cell.textLabel!.textColor = UIColor.systemBlue
+            return cell
+        default:
+            // 未解決の課題セルを取得する
+            let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
+            cell.textLabel!.text = taskDataArray[indexPath.row].getTaskTitle()
+            cell.detailTextLabel!.text = "原因：\(taskDataArray[indexPath.row].getTaskCouse())"
+            cell.detailTextLabel?.textColor = UIColor.systemGray
+            return cell
         }
     }
     
@@ -327,24 +305,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     
-    //MARK:- その他のメソッド
-    
-    // テーブルビューを下に下げたときの処理(リフレッシュ機能)
-    @objc func refresh(sender: UIRefreshControl) {
-        // ここが引っ張られるたびに呼び出される
-        loadTaskData()
-        // 通信終了後、ロードインジケーター終了
-        self.tableView.refreshControl?.endRefreshing()
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
+    //MARK:- データベース関連
     
     // 課題データを取得するメソッド
     func loadTaskData() {
@@ -424,6 +385,46 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 SVProgressHUD.dismiss()
             }
         }
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // ナビゲーションバーボタンの宣言
+    func createNavigationBarButton() {
+        // 課題追加ボタン
+        addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        
+        // ゴミ箱ボタン
+        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+        
+        // 解決済みボタン
+        resolveButton = UIBarButtonItem(image: UIImage(named: "check_on"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(resolveButtonTapped(_:)))
+    }
+    
+    // ナビゲーションバーボタンをセットするメソッド
+    func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
+        navigationItem.leftBarButtonItems  = leftBarItems
+        navigationItem.rightBarButtonItems = rightBarItems
+    }
+    
+    // テーブルビューを下に下げたときの処理(リフレッシュ機能)
+    @objc func refresh(sender: UIRefreshControl) {
+        // ここが引っ張られるたびに呼び出される
+        loadTaskData()
+        
+        // 通信終了後、ロードインジケーター終了
+        self.tableView.refreshControl?.endRefreshing()
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
     }
 
 }
