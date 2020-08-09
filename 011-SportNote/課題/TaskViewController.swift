@@ -173,7 +173,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             return
         }
         // アラートダイアログを生成
-        let alertController = UIAlertController(title:"課題を解決済みにする",message:"選択された課題を解決済みにします。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+        let alertController = UIAlertController(title:"課題を解決済みにする",message:"選択された課題を解決済みにします。\nよろしいですか？",preferredStyle:UIAlertController.Style.alert)
         
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
@@ -209,7 +209,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
             // アラートダイアログを生成
-            let alertController = UIAlertController(title:"課題を削除",message:"課題を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+            let alertController = UIAlertController(title:"課題を削除",message:"課題を削除します。\nよろしいですか？",preferredStyle:UIAlertController.Style.alert)
             
             // OKボタンを宣言
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in

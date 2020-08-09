@@ -35,9 +35,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // 解決済みの課題の場合の設定
         if previousControllerName == "ResolvedTaskViewController" {
-            // 追加ボタンを隠す
-            self.addButton.isHidden = true
-            
             // テキストを編集不可能にする
             self.measuresTitleTextField.isEnabled = false
         }
@@ -70,9 +67,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
-    
-    // ボタン
-    @IBOutlet weak var addButton: UIButton!
     
     // チェックボックス
     @IBOutlet weak var checkButton: UIButton!

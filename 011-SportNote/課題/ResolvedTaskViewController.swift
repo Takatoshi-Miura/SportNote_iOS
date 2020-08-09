@@ -16,11 +16,6 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // デリゲートとデータソースの指定
-        tableView.delegate = self
-        tableView.dataSource = self
-        
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
     }
@@ -33,6 +28,7 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     
     
     //MARK:- 変数の宣言
+    
     var resolvedTaskDataArray = [TaskData]()    // 解決済みのTaskDataを格納する配列
     var indexPath:Int = 0                       // 行番号格納用
     
@@ -66,15 +62,11 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     
     // テーブルの行ごとのセルを返却する
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 未解決の課題セルを取得する
+        // 未解決の課題セルを返却
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "resolvedTaskCell", for: indexPath)
-        
-        // 行番号に合った課題データをラベルに表示する
-        let resolvedTaskData = resolvedTaskDataArray[indexPath.row]
-        cell.textLabel!.text = resolvedTaskData.getTaskTitle()
-        cell.detailTextLabel!.text = "原因：\(resolvedTaskData.getTaskCouse())"
+        cell.textLabel!.text = resolvedTaskDataArray[indexPath.row].getTaskTitle()
+        cell.detailTextLabel!.text = "原因：\(resolvedTaskDataArray[indexPath.row].getTaskCouse())"
         cell.detailTextLabel?.textColor = UIColor.systemGray
-        
         return cell
     }
     
@@ -94,7 +86,6 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     
     // ResolvedTaskViewControllerに戻ったときの処理
     @IBAction func goToResolvedTaskViewController(_segue:UIStoryboardSegue) {
-        
     }
     
     
