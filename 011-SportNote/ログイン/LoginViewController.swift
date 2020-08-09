@@ -18,10 +18,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
             
@@ -31,46 +27,10 @@ class LoginViewController: UIViewController {
             mailAddressTextField.text = address
             passwordTextField.text = password
             
-            // HUDで処理中を表示
-            SVProgressHUD.show(withStatus: "ログインしています")
-            
             // ログイン処理
-            Auth.auth().signIn(withEmail: address, password: password) { authResult, error in
-                if error == nil {
-                    // エラーなし
-                } else {
-                    // エラーのハンドリング
-                    if let errorCode = AuthErrorCode(rawValue: error!._code) {
-                        switch errorCode {
-                            case .invalidEmail:
-                                SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
-                            case .wrongPassword:
-                                SVProgressHUD.showError(withStatus: "パスワードが間違っています。")
-                            default:
-                                SVProgressHUD.showError(withStatus: "ログインに失敗しました。入力を確認して下さい。")
-                        }
-                        return
-                    }
-                }
-                SVProgressHUD.showSuccess(withStatus: "ログインしました。")
-                
-                // タブ画面に遷移
-                // メッセージが隠れてしまうため、遅延処理を行う
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                    self.performSegue(withIdentifier: "goTabBarController", sender: nil)
-                }
-            }
+            self.login(mail: address, password: password)
          }
-            
     }
-    
-    
-    
-    //MARK:- 変数の宣言
-    
-    // キーボードでテキストフィールドが隠れないための設定用
-    var selectedTextField: UITextField?
-    let screenSize = UIScreen.main.bounds.size
     
     
     
@@ -89,41 +49,8 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            // HUDで処理中を表示
-            SVProgressHUD.show()
-            
             // ログイン処理
-            Auth.auth().signIn(withEmail: address, password: password) { authResult, error in
-                if error == nil {
-                    // エラーなし
-                } else {
-                    // エラーのハンドリング
-                    if let errorCode = AuthErrorCode(rawValue: error!._code) {
-                        switch errorCode {
-                            case .invalidEmail:
-                                SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
-                            case .wrongPassword:
-                                SVProgressHUD.showError(withStatus: "パスワードが間違っています。")
-                            default:
-                                SVProgressHUD.showError(withStatus: "ログインに失敗しました。入力を確認して下さい。")
-                        }
-                        return
-                    }
-                }
-                SVProgressHUD.showSuccess(withStatus: "ログインしました。")
-                
-                // UserDefaultsにユーザー情報を保存
-                let userDefaults = UserDefaults.standard
-                userDefaults.set(address, forKey:"address")
-                userDefaults.set(password,forKey:"password")
-                userDefaults.synchronize()
-                
-                // タブ画面に遷移
-                // メッセージが隠れてしまうため、遅延処理を行う
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                    self.performSegue(withIdentifier: "goTabBarController", sender: nil)
-                }
-            }
+            self.login(mail: address, password: password)
         }
     }
     
@@ -138,42 +65,8 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            // HUDで処理中を表示
-            SVProgressHUD.show()
-            
             // アカウント作成処理
-            Auth.auth().createUser(withEmail: mailAddressTextField.text!, password: passwordTextField.text!) { authResult, error in
-                if error == nil {
-                    // エラーなし
-                } else {
-                    // エラーのハンドリング
-                    if let errorCode = AuthErrorCode(rawValue: error!._code) {
-                        switch errorCode {
-                            case .invalidEmail:
-                                SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
-                            case .emailAlreadyInUse:
-                                SVProgressHUD.showError(withStatus: "既にこのメールアドレスは使われています。")
-                            case .weakPassword:
-                                SVProgressHUD.showError(withStatus: "パスワードは6文字以上で入力してください。")
-                            default:
-                                SVProgressHUD.showError(withStatus: "エラーが起きました。しばらくしてから再度お試しください。")
-                        }
-                        return
-                    }
-                }
-                // アカウントの登録を通知
-                SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました。")
-
-                // フリーノートデータを作成
-                self.createFreeNoteData()
-                
-                // タブ画面に遷移
-                // メッセージが隠れてしまうため、遅延処理を行う
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                    // ノート画面に遷移
-                    self.performSegue(withIdentifier: "goTabBarController", sender: nil)
-                }
-            }
+            self.createAccount(mail: address, password: password)
         }
     }
     
@@ -188,25 +81,92 @@ class LoginViewController: UIViewController {
         passwordTextField.text    = ""
     }
     
-    
-    
-    //MARK:- その他のメソッド
-    
-    // キーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+    // ノート画面に遷移する時の処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goTabBarController" {
+            // UserDefaultsにユーザー情報を保存
+            self.saveUserInfo(mail: mailAddressTextField.text!, password: passwordTextField.text!)
+        }
     }
     
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
+    
+    
+    //MARK:- データベース関連
+    
+    // ログインするメソッド
+    func login(mail address:String,password pass:String) {
+        // HUDで処理中を表示
+        SVProgressHUD.show(withStatus: "ログインしています")
+        
+        // ログイン処理
+        Auth.auth().signIn(withEmail: address, password: pass) { authResult, error in
+            if error == nil {
+                // エラーなし
+            } else {
+                // エラーのハンドリング
+                if let errorCode = AuthErrorCode(rawValue: error!._code) {
+                    switch errorCode {
+                        case .invalidEmail:
+                            SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
+                        case .wrongPassword:
+                            SVProgressHUD.showError(withStatus: "パスワードが間違っています。")
+                        default:
+                            SVProgressHUD.showError(withStatus: "ログインに失敗しました。入力を確認して下さい。")
+                    }
+                    return
+                }
+            }
+            // ログイン成功を通知
+            SVProgressHUD.showSuccess(withStatus: "ログインしました。")
+            
+            // メッセージが隠れてしまうため、遅延処理を行う
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                // ノート画面に遷移
+                self.performSegue(withIdentifier: "goTabBarController", sender: nil)
+            }
+        }
     }
     
-    // Firebaseにデータを作成するメソッド(アカウント作成時のみ実行)
+    // アカウントを作成するメソッド
+    func createAccount(mail address:String,password pass:String) {
+        // HUDで処理中を表示
+        SVProgressHUD.show(withStatus: "アカウントを作成しています")
+        
+        // アカウント作成処理
+        Auth.auth().createUser(withEmail: address, password: pass) { authResult, error in
+            if error == nil {
+                // エラーなし
+            } else {
+                // エラーのハンドリング
+                if let errorCode = AuthErrorCode(rawValue: error!._code) {
+                    switch errorCode {
+                        case .invalidEmail:
+                            SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
+                        case .emailAlreadyInUse:
+                            SVProgressHUD.showError(withStatus: "既にこのメールアドレスは使われています。")
+                        case .weakPassword:
+                            SVProgressHUD.showError(withStatus: "パスワードは6文字以上で入力してください。")
+                        default:
+                            SVProgressHUD.showError(withStatus: "エラーが起きました。しばらくしてから再度お試しください。")
+                    }
+                    return
+                }
+            }
+            // アカウントの登録を通知
+            SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました。")
+
+            // フリーノートデータを作成
+            self.createFreeNoteData()
+            
+            // メッセージが隠れてしまうため、遅延処理を行う
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                // ノート画面に遷移
+                self.performSegue(withIdentifier: "goTabBarController", sender: nil)
+            }
+        }
+    }
+    
+    // Firebaseにフリーノートデータを作成するメソッド(アカウント作成時のみ実行)
     func createFreeNoteData() {
         // フリーノートデータを作成
         let freeNote = FreeNote()
@@ -234,5 +194,33 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // キーボードを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // UserDefaultsにユーザー情報を保存するメソッド
+    func saveUserInfo(mail address:String,password pass:String) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(address, forKey:"address")
+        userDefaults.set(pass,forKey:"password")
+        userDefaults.synchronize()
+    }
+    
+    
     
 }
