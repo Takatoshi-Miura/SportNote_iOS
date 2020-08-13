@@ -27,14 +27,10 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         self.navigationItem.titleView = label
         
         // ナビゲーションバーのボタンを宣言
-        listButton   = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style:UIBarButtonItem.Style.plain, target: self, action: #selector(listButtonTapped(_:)))
-        addButton    = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-        editButtonItem.title = "編集"
+        createNavigationBarButton()
         
         // ナビゲーションバーのボタンを追加
-        navigationItem.leftBarButtonItem   = editButtonItem
-        navigationItem.rightBarButtonItems = [addButton,listButton]
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,listButton])
         
         // セルの複数選択を許可
         noteTableView.allowsMultipleSelectionDuringEditing = true
@@ -87,13 +83,13 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             self.editButtonItem.title = "完了"
             
             // ナビゲーションバーに追加ボタン,ゴミ箱ボタンを表示
-            self.navigationItem.rightBarButtonItems = [addButton,deleteButton]
+            setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton])
         } else {
             // 編集終了
             self.editButtonItem.title = "編集"
             
             // ナビゲーションバーに追加ボタンを表示
-            self.navigationItem.rightBarButtonItems = [addButton,listButton]
+            setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,listButton])
         }
         // 編集モード時のみ複数選択可能とする
         noteTableView.isEditing = editing
@@ -224,12 +220,11 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 self.deleteNoteData(note: self.cellDataArray[indexPath.row])
                 self.cellDataArray.remove(at: indexPath.row)
             }
-            //OKボタンを追加
-            alertController.addAction(okAction)
-            
-            //CANCELボタンを宣言
+            // CANCELボタンを宣言
             let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            //CANCELボタンを追加
+            
+            // ボタンを追加
+            alertController.addAction(okAction)
             alertController.addAction(cancelButton)
             
             //アラートダイアログを表示
@@ -239,13 +234,12 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // 複数のセルを削除
     func deleteRows() {
-           
         guard let selectedIndexPaths = self.noteTableView.indexPathsForSelectedRows else {
             return
         }
            
         // アラートダイアログを生成
-        let alertController = UIAlertController(title:"ノートを削除",message:"選択されたノートを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
+        let alertController = UIAlertController(title:"ノートを削除",message:"選択されたノートを削除します。\nよろしいですか？",preferredStyle:UIAlertController.Style.alert)
            
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
@@ -269,12 +263,11 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 }
             }
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-           
-        //CANCELボタンを宣言
+        // CANCELボタンを宣言
         let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
+        
+        // ボタンを追加
+        alertController.addAction(okAction)
         alertController.addAction(cancelButton)
            
         //アラートダイアログを表示
@@ -441,16 +434,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     
     
-    //MARK:- その他のメソッド
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
+    //MARK:- データベース関連
     
     // データを取得するメソッド
     func reloadData() {
@@ -668,6 +652,32 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
                 }
             }
         }
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // ナビゲーションバーボタンを宣言
+    func createNavigationBarButton() {
+        listButton   = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style:UIBarButtonItem.Style.plain, target: self, action: #selector(listButtonTapped(_:)))
+        addButton    = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+    }
+    
+    // ナビゲーションバーボタンをセットするメソッド
+    func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
+        navigationItem.leftBarButtonItems  = leftBarItems
+        navigationItem.rightBarButtonItems = rightBarItems
     }
 
 }
