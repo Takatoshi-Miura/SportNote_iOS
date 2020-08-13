@@ -14,14 +14,7 @@ class PracticeNoteDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // タイトル文字列の設定
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.numberOfLines = 2
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
-        label.textAlignment = .center
-        label.textColor = .systemGreen
-        label.text = "\(noteData.getNavigationTitle())\n\(noteData.getNoteType())"
-        self.navigationItem.titleView = label
+        setNavigationTitle(title: "\(noteData.getNavigationTitle())\n\(noteData.getNoteType())")
         
         // 子ビューにnoteDataを渡す
         let vc = children[0] as! PracticeNoteContentViewController
@@ -66,6 +59,18 @@ class PracticeNoteDetailViewController: UIViewController {
         self.scrollView.layoutIfNeeded()
         self.scrollView.updateConstraints()
         self.scrollView.contentSize.height = self.containerViewHeight.constant
+    }
+    
+    // ナビゲーションタイトルをセット
+    func setNavigationTitle(title titleText:String) {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.numberOfLines = 2
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
+        label.textAlignment = .center
+        label.textColor = .systemGreen
+        label.text = titleText
+        self.navigationItem.titleView = label
     }
     
 }

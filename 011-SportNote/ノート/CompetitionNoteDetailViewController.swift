@@ -16,14 +16,7 @@ class CompetitionNoteDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // タイトル文字列の設定
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.numberOfLines = 2
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
-        label.textAlignment = .center
-        label.textColor = .systemRed
-        label.text = "\(noteData.getNavigationTitle())\n\(noteData.getNoteType())"
-        self.navigationItem.titleView = label
+        setNavigationTitle(title: "\(noteData.getNavigationTitle())\n\(noteData.getNoteType())")
         
         // データを表示
         printNoteData(noteData)
@@ -81,5 +74,16 @@ class CompetitionNoteDetailViewController: UIViewController {
         reflectionTextView.text = noteData.getReflection()
     }
     
+    // ナビゲーションタイトルをセット
+    func setNavigationTitle(title titleText:String) {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.numberOfLines = 2
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
+        label.textAlignment = .center
+        label.textColor = .systemRed
+        label.text = titleText
+        self.navigationItem.titleView = label
+    }
 
 }

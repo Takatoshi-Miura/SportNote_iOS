@@ -18,13 +18,8 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // ナビゲーションバーのタイトル
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.font = UIFont.boldSystemFont(ofSize: 17.0)
-        label.textAlignment = .center
-        label.text = "ノート"
-        self.navigationItem.titleView = label
+        // ナビゲーションバーのタイトルをセット
+        setNavigationTitle(title: "ノート")
         
         // ナビゲーションバーのボタンを宣言
         createNavigationBarButton()
@@ -665,6 +660,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return dateFormatter.string(from: now)
+    }
+    
+    // ナビゲーションタイトルをセット
+    func setNavigationTitle(title titleText:String) {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.font = UIFont.boldSystemFont(ofSize: 17.0)
+        label.textAlignment = .center
+        label.text = titleText
+        self.navigationItem.titleView = label
     }
     
     // ナビゲーションバーボタンを宣言
