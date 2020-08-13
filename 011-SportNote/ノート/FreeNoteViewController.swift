@@ -22,8 +22,7 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
         navigationController?.delegate = self
         
         // 受け取ったフリーノートデータの文字列を表示
-        printTitle()
-        printDetail()
+        printText()
         
         // テキストビューの枠線付け
         detailTextView.layer.borderColor = UIColor.systemGray.cgColor
@@ -60,7 +59,38 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         // フリーノートデータを更新
-        updateFreeNoteData(noteData: self.freeNoteData)
+        updateFreeNoteData()
+    }
+    
+    
+    
+    //MARK:- データベース関連
+    
+    // Firebaseのデータを更新するメソッド
+    func updateFreeNoteData() {
+        // テキストデータをセット
+        freeNoteData.setTitle(titleTextField.text!)
+        freeNoteData.setDetail(detailTextView.text!)
+        
+        // 更新日時を現在時刻にする
+        freeNoteData.setUpdated_at(getCurrentTime())
+        
+        // 更新したいデータを取得
+        let db = Firestore.firestore()
+        let data = db.collection("FreeNoteData").document("\(Auth.auth().currentUser!.uid)")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "title"      : freeNoteData.getTitle(),
+            "detail"     : freeNoteData.getDetail(),
+            "updated_at" : freeNoteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
     }
     
     
@@ -68,11 +98,8 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     //MARK:- その他のメソッド
     
     // 文字列表示メソッド
-    func printTitle() {
+    func printText() {
         titleTextField.text = freeNoteData.getTitle()
-    }
-    
-    func printDetail() {
         detailTextView.text = freeNoteData.getDetail()
     }
     
@@ -133,33 +160,6 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return dateFormatter.string(from: now)
-    }
-    
-    // Firebaseのデータを更新するメソッド
-    func updateFreeNoteData(noteData freeNoteData:FreeNote) {
-        // テキストデータをセット
-        freeNoteData.setTitle(titleTextField.text!)
-        freeNoteData.setDetail(detailTextView.text!)
-        
-        // 更新日時を現在時刻にする
-        freeNoteData.setUpdated_at(getCurrentTime())
-        
-        // 更新したいデータを取得
-        let db = Firestore.firestore()
-        let data = db.collection("FreeNoteData").document("\(Auth.auth().currentUser!.uid)")
-
-        // 変更する可能性のあるデータのみ更新
-        data.updateData([
-            "title"      : freeNoteData.getTitle(),
-            "detail"     : freeNoteData.getDetail(),
-            "updated_at" : freeNoteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-            }
-        }
     }
 
 }
