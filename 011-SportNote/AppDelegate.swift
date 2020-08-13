@@ -22,6 +22,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let dic = ["firstLaunch": true]
         UserDefaults.standard.register(defaults: dic)
         
+        // アプデ以降の新規ユーザー
+        // ここでユーザーIDを作成し、そのユーザーIDでデータ作成＆保存
+        
+        // 既にアカウントを作成しているユーザー
+        // UserDefaultsにデータが保存し、
+        
+        // アカウント認証した人しかデータの読み書きできないから
+        // ルールを変えないとダメかも。
+        
         return true
     }
 

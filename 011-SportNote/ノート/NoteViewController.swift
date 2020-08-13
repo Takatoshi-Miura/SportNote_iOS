@@ -28,20 +28,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
             UserDefaults.standard.set(false, forKey: "firstLaunch")
         }
-
-        // デリゲートとデータソースの指定
-        tableView.delegate = self
-        tableView.dataSource = self
     
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
         
         // ナビゲーションバーのボタンを宣言
-        navigationItem.leftBarButtonItem  = editButtonItem
-        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-        navigationItem.rightBarButtonItems = [addButton,calendarButton]
+        createNavigationBarButton()
+        
+        // ネビゲーションボタンをセット
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
         
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
@@ -88,17 +83,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         if editing {
             // 編集開始
             self.editButtonItem.title = "完了"
-            self.editButtonItem.tintColor = UIColor.systemBlue
             
-            // ナビゲーションバーのボタンを表示
-            self.navigationItem.rightBarButtonItems = [addButton,deleteButton]
+            // ナビゲーションバーのボタンをセット
+            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton])
         } else {
             // 編集終了
             self.editButtonItem.title = "編集"
-            self.editButtonItem.tintColor = UIColor.systemBlue
             
             // ナビゲーションバーのボタンを表示
-            self.navigationItem.rightBarButtonItems = [addButton,calendarButton]
+            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
@@ -197,7 +190,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // 複数のセルを削除
     func deleteRows() {
-        
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
         }
@@ -224,13 +216,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-        
-        //CANCELボタンを宣言
+        // CANCELボタンを宣言
         let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
+        
+        // ボタンを追加
         alertController.addAction(cancelButton)
+        alertController.addAction(okAction)
         
         //アラートダイアログを表示
         present(alertController,animated:true,completion:nil)
@@ -366,57 +357,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     
-    //MARK:- その他のメソッド
-    
-    // 初期化sectionTitle
-    func sectionTitleInit() {
-        self.sectionTitle = ["フリーノート"]
-    }
-    
-    // 初期化dataInSection
-    func dataInSectionInit() {
-        // フリーノート用に0番目にはダミーデータを入れる
-        let dummyNoteData = NoteData()
-        self.dataInSection = [[]]
-        self.dataInSection[0].append(dummyNoteData)
-    }
-    
-    // sectionTitleとdataInSectionを再構成するメソッド
-    func reloadSectionData() {
-        // データ初期化
-        self.sectionTitleInit()
-        self.dataInSectionInit()
-        
-        // targetDataArrayが空の時は更新しない（エラー対策）
-        if self.targetDataArray.isEmpty == false {
-            // テーブルデータ更新
-            for index in 0...(self.targetDataArray.count - 1) {
-                // 年間目標と月間目標の区別
-                if self.targetDataArray[index].getMonth() == 13 {
-                    // 年間目標セクション追加
-                    self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
-                    self.dataInSection.append([])
-                } else {
-                    // 月間目標セクション追加
-                    self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
-                    
-                    // ノートデータ追加
-                    var noteArray:[NoteData] = []
-                    // noteDataArrayが空の時は更新しない（エラー対策）
-                    if self.noteDataArray.isEmpty == false {
-                        // 年,月が合致するノート数だけappendする。
-                        for count in 0...(self.noteDataArray.count - 1) {
-                            if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
-                                && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
-                                noteArray.append(self.noteDataArray[count])
-                            }
-                        }
-                    }
-                    self.dataInSection.append(noteArray)
-                }
-            }
-        }
-    }
+    //MARK:- データベース関連
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
@@ -564,15 +505,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         loadNoteData()
     }
     
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
-    
     // ノートデータを削除するメソッド
     func deleteNoteData(note noteData:NoteData) {
         // isDeletedをセット
@@ -625,6 +557,82 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.reloadData()
             }
         }
+    }
+    
+    
+    
+    //MARK:- その他のメソッド
+    
+    // ナビゲーションバーボタンの宣言
+    func createNavigationBarButton() {
+        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
+        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+    }
+    
+    // ナビゲーションバーボタンをセットするメソッド
+    func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
+        navigationItem.leftBarButtonItems  = leftBarItems
+        navigationItem.rightBarButtonItems = rightBarItems
+    }
+    
+    // 初期化sectionTitle
+    func sectionTitleInit() {
+        self.sectionTitle = ["フリーノート"]
+    }
+    
+    // 初期化dataInSection
+    func dataInSectionInit() {
+        // フリーノート用に0番目にはダミーデータを入れる
+        let dummyNoteData = NoteData()
+        self.dataInSection = [[]]
+        self.dataInSection[0].append(dummyNoteData)
+    }
+    
+    // sectionTitleとdataInSectionを再構成するメソッド
+    func reloadSectionData() {
+        // データ初期化
+        self.sectionTitleInit()
+        self.dataInSectionInit()
+        
+        // targetDataArrayが空の時は更新しない（エラー対策）
+        if self.targetDataArray.isEmpty == false {
+            // テーブルデータ更新
+            for index in 0...(self.targetDataArray.count - 1) {
+                // 年間目標と月間目標の区別
+                if self.targetDataArray[index].getMonth() == 13 {
+                    // 年間目標セクション追加
+                    self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
+                    self.dataInSection.append([])
+                } else {
+                    // 月間目標セクション追加
+                    self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
+                    
+                    // ノートデータ追加
+                    var noteArray:[NoteData] = []
+                    // noteDataArrayが空の時は更新しない（エラー対策）
+                    if self.noteDataArray.isEmpty == false {
+                        // 年,月が合致するノート数だけappendする。
+                        for count in 0...(self.noteDataArray.count - 1) {
+                            if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
+                                && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
+                                noteArray.append(self.noteDataArray[count])
+                            }
+                        }
+                    }
+                    self.dataInSection.append(noteArray)
+                }
+            }
+        }
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
     }
     
 }
