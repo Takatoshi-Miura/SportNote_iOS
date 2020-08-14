@@ -24,10 +24,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         weatherPicker.dataSource = self
         taskPicker.delegate      = self
         taskPicker.dataSource    = self
-        tableView.delegate       = self
-        tableView.dataSource     = self
-        taskTableView.dataSource = self
-        taskTableView.delegate   = self
         physicalConditionTextView.delegate = self
         purposeTextView.delegate = self
         detailTextView.delegate = self
@@ -42,42 +38,15 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         weatherPicker.tag = 1
         taskPicker.tag    = 2
         
-        // 種別Pickerの宣言
-        typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
-        typePicker.backgroundColor = UIColor.systemGray5
-        
-        // 日付Pickerの宣言
-        datePicker = UIDatePicker()
-        datePicker.date = Date()
-        datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ja")
-        datePicker.backgroundColor = UIColor.systemGray5
-        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
-        
-        // 天候Pickerの宣言
-        weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
-        weatherPicker.backgroundColor = UIColor.systemGray5
-        
-        // 課題Pickerの宣言
-        taskPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height)
-        taskPicker.backgroundColor = UIColor.systemGray5
-        
         // 初期値の設定(気温20度に設定)
         weatherPicker.selectRow(60, inComponent: 1, animated: true)
         selectedDate = getCurrentPickerTime()
         
         // テキストビューの枠線付け
-        physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
-        physicalConditionTextView.layer.borderWidth = 1.0
-        purposeTextView.layer.borderColor = UIColor.systemGray.cgColor
-        purposeTextView.layer.borderWidth = 1.0
-        detailTextView.layer.borderColor = UIColor.systemGray.cgColor
-        detailTextView.layer.borderWidth = 1.0
-        reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
-        reflectionTextView.layer.borderWidth = 1.0
+        addTextViewBordar()
         
         // キーボードでテキストフィールドが隠れない設定
-        self.configureObserver()
+        configureObserver()
         
         // ツールバーを作成
         createToolBar()
@@ -114,6 +83,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // Picker用ビュー
     var pickerView = UIView()
     var bottomPadding:CGFloat = 0
+    var toolbarHeight:CGFloat = 44
     
     // 種別Picker
     let typePicker = UIPickerView()
@@ -239,8 +209,11 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 追加ボタンの処理
     @IBAction func addButton(_ sender: Any) {
-        // 課題Pickerの初期化＆呼び出し
+        // 課題Pickerの初期化
         taskPickerInit()
+        
+        // 下からPickerを出す
+        openPicker(pickerView: pickerView)
     }
     
     
@@ -330,15 +303,21 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // タップしたときの選択色を消去
                     tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化＆呼び出し
+                    // Pickerの初期化
                     datePickerInit()
+                    
+                    // 下からPickerを出す
+                    openPicker(pickerView: pickerView)
                 } else {
                     // 種別セルがタップされた時
                     // タップしたときの選択色を消去
                     tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化＆呼び出し
+                    // Pickerの初期化
                     typeCellPickerInit()
+                    
+                    // 下からPickerを出す
+                    openPicker(pickerView: pickerView)
                 }
             } else if indexPath.row == 1 {
                 // PracticeNoteDetailViewControllerから遷移してきた場合
@@ -347,15 +326,21 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // タップしたときの選択色を消去
                     tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化＆呼び出し
+                    // Pickerの初期化
                     weatherPickerInit()
+                    
+                    // 下からPickerを出す
+                    openPicker(pickerView: pickerView)
                 } else {
                     // 日付セルがタップされた時
                     // タップしたときの選択色を消去
                     tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化＆呼び出し
+                    // Pickerの初期化
                     datePickerInit()
+                    
+                    // 下からPickerを出す
+                    openPicker(pickerView: pickerView)
                 }
             } else {
                 // PracticeNoteDetailViewControllerから遷移してきた場合
@@ -367,8 +352,11 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // タップしたときの選択色を消去
                     tableView.deselectRow(at: indexPath as IndexPath, animated: true)
                     
-                    // Pickerの初期化＆呼び出し
+                    // Pickerの初期化
                     weatherPickerInit()
+                    
+                    // 下からPickerを出す
+                    openPicker(pickerView: pickerView)
                 }
             }
         } else {
@@ -470,6 +458,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューの初期化
         pickerView.removeFromSuperview()
         
+        // 種別Pickerの宣言
+        typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
+        typePicker.backgroundColor = UIColor.systemGray5
+        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -483,16 +475,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(typePicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
-        
-        // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddPracticeNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        
-        // 下からPickerを呼び出す
-        pickerView.frame.origin.y = scrollPotiton
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton - self.datePicker.bounds.size.height - toolbar.bounds.size.height - self.bottomPadding
-        }
     }
     
     // キャンセルボタンの処理
@@ -545,6 +527,14 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューの初期化
         pickerView.removeFromSuperview()
         
+        // 日付Pickerの宣言
+        datePicker = UIDatePicker()
+        datePicker.date = Date()
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ja")
+        datePicker.backgroundColor = UIColor.systemGray5
+        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
+        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -558,16 +548,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(datePicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
-        
-        // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddPracticeNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        
-        // 下からPickerを呼び出す
-        pickerView.frame.origin.y = scrollPotiton
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton - self.datePicker.bounds.size.height - toolbar.bounds.size.height - self.bottomPadding
-        }
     }
     
     // 完了ボタンの処理
@@ -587,6 +567,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューの初期化
         pickerView.removeFromSuperview()
         
+        // 天候Pickerの宣言
+        weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
+        weatherPicker.backgroundColor = UIColor.systemGray5
+        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -600,16 +584,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(weatherPicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
-        
-        // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddPracticeNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        
-        // 下からPickerを呼び出す
-        pickerView.frame.origin.y = scrollPotiton
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton - self.datePicker.bounds.size.height - toolbar.bounds.size.height - self.bottomPadding
-        }
     }
     
     // 完了ボタンの処理
@@ -630,6 +604,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューの初期化
         pickerView.removeFromSuperview()
         
+        // 課題Pickerの宣言
+        taskPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height)
+        taskPicker.backgroundColor = UIColor.systemGray5
+        
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -643,16 +621,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         pickerView.addSubview(taskPicker)
         pickerView.addSubview(toolbar)
         view.addSubview(pickerView)
-        
-        // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddPracticeNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        
-        // 下からPickerを呼び出す
-        pickerView.frame.origin.y = scrollPotiton
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton - self.datePicker.bounds.size.height - toolbar.bounds.size.height - self.bottomPadding
-        }
     }
     
     // 完了ボタンの処理
@@ -688,6 +656,19 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
         // Pickerをしまう
         closePicker()
+    }
+    
+    // Pickerを画面下から開くメソッド
+    func openPicker(pickerView picker:UIView) {
+        // 現在のスクロール位置（最下点）,Pickerの座標を取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        picker.frame.origin.y = scrollPotiton
+        
+        // 下からPickerを出す
+        UIView.animate(withDuration: 0.3) {
+            picker.frame.origin.y = scrollPotiton - picker.bounds.size.height - self.toolbarHeight - self.bottomPadding
+        }
     }
     
     // Pickerをしまうメソッド
@@ -800,6 +781,18 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         print("\(year)/\(month)/\(date)/\(day)")
         
         return returnText
+    }
+    
+    // テキストビューに枠線を追加するメソッド
+    func addTextViewBordar() {
+        physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        physicalConditionTextView.layer.borderWidth = 1.0
+        purposeTextView.layer.borderColor = UIColor.systemGray.cgColor
+        purposeTextView.layer.borderWidth = 1.0
+        detailTextView.layer.borderColor = UIColor.systemGray.cgColor
+        detailTextView.layer.borderWidth = 1.0
+        reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        reflectionTextView.layer.borderWidth = 1.0
     }
     
     // テキストフィールド以外をタップでキーボードとPickerを下げる設定
