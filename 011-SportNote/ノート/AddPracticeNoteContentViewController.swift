@@ -43,7 +43,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         selectedDate = getCurrentPickerTime()
         
         // テキストビューの枠線付け
-        addTextViewBordar()
+        addTextViewBorder()
         
         // キーボードでテキストフィールドが隠れない設定
         configureObserver()
@@ -690,197 +690,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     
     
-    
-    //MARK:- その他のメソッド
-    
-    // ノートデータのテキストをセットするメソッド
-    func setTextData(noteData note:NoteData) {
-        self.physicalConditionTextView.text = note.getPhysicalCondition()
-        self.purposeTextView.text = note.getPurpose()
-        self.detailTextView.text = note.getDetail()
-        self.reflectionTextView.text = note.getReflection()
-    }
-    
-    // ノートの日付をDatePickerにセットするメソッド
-    func setDatePicker(noteData note:NoteData) {
-        // 日付をセット
-        self.year  = note.getYear()
-        self.month = note.getMonth()
-        self.date  = note.getDate()
-        self.day   = note.getDay()
-        
-        // DatePickerに日付をセット
-        let dateFormater = DateFormatter()
-        dateFormater.locale = Locale(identifier: "ja_JP")
-        dateFormater.dateFormat = "yyyy/MM/dd"
-        let date = dateFormater.date(from: "\(self.year)/\(self.month)/\(self.date)")
-        datePicker.date = date!
-        
-        self.selectedDate = "\(self.year)年\(self.month)月\(self.date)日(\(self.day))"
-    }
-    
-    // 天候データをweatherPickerにセットするメソッド
-    func setWeatherPicker(noteData note:NoteData) {
-        // 気温をセット
-        self.temperatureIndex = note.getTemperature() + 40
-        self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
-        
-        // 天気をセット
-        if note.getWeather() == "くもり" {
-            self.weatherIndex = 1
-        } else if note.getWeather() == "雨" {
-            self.weatherIndex = 2
-        }
-        self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentPickerTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "y年M月d日(E)"
-        let returnText = "\(dateFormatter.string(from: now))"
-        
-        dateFormatter.dateFormat = "y"
-        year = Int("\(dateFormatter.string(from: now))")!
-        dateFormatter.dateFormat = "M"
-        month = Int("\(dateFormatter.string(from: now))")!
-        dateFormatter.dateFormat = "d"
-        date = Int("\(dateFormatter.string(from: now))")!
-        dateFormatter.dateFormat = "E"
-        day = String(dateFormatter.string(from: datePicker.date))
-        
-        return returnText
-    }
-    
-    // DatePickerの選択した日付を取得するメソッド
-    func getDatePickerDate() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "y年M月d日(E)"
-        let returnText = "\(dateFormatter.string(from: datePicker.date))"
-        
-        dateFormatter.dateFormat = "y"
-        year = Int("\(dateFormatter.string(from: datePicker.date))")!
-        dateFormatter.dateFormat = "M"
-        month = Int("\(dateFormatter.string(from: datePicker.date))")!
-        dateFormatter.dateFormat = "d"
-        date = Int("\(dateFormatter.string(from: datePicker.date))")!
-        dateFormatter.dateFormat = "E"
-        day = String(dateFormatter.string(from: datePicker.date))
-        print("\(year)/\(month)/\(date)/\(day)")
-        
-        return returnText
-    }
-    
-    // テキストビューに枠線を追加するメソッド
-    func addTextViewBordar() {
-        physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
-        physicalConditionTextView.layer.borderWidth = 1.0
-        purposeTextView.layer.borderColor = UIColor.systemGray.cgColor
-        purposeTextView.layer.borderWidth = 1.0
-        detailTextView.layer.borderColor = UIColor.systemGray.cgColor
-        detailTextView.layer.borderWidth = 1.0
-        reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
-        reflectionTextView.layer.borderWidth = 1.0
-    }
-    
-    // テキストフィールド以外をタップでキーボードとPickerを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        
-        // Pickerをしまう
-        closePicker()
-    }
-    
-    // キーボードを出したときの設定
-    func configureObserver() {
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.selectedTextView = textView
-        self.textHeight = textView.frame.maxY
-    }
-        
-    @objc func keyboardWillShow(_ notification: Notification?) {
-            
-        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-            return
-        }
-        
-        // 現在のスクロール位置（最下点）,キーボードの高さを取得
-        let obj = self.parent as! AddPracticeNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        let keyboardHeight = rect.size.height
-        
-        // textViewDidBeginEditingが実行されるまで時間待ち
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // スクロールする高さを計算
-            let hiddenHeight = keyboardHeight + self.textHeight + self.navBarHeight + 30 - scrollPotiton
-            
-            // スクロール処理
-            if hiddenHeight > 0 {
-                UIView.animate(withDuration: duration) {
-                    let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-                    self.view.transform = transform
-                }
-            } else {
-                UIView.animate(withDuration: duration) {
-                    let transform = CGAffineTransform(translationX: 0, y: -(0))
-                    self.view.transform = transform
-                }
-            }
-        }
-    }
-        
-    @objc func keyboardWillHide(_ notification: Notification?)  {
-        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
-        UIView.animate(withDuration: duration) {
-            self.view.transform = CGAffineTransform.identity
-        }
-    }
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        physicalConditionTextView.inputAccessoryView = toolBar
-        purposeTextView.inputAccessoryView = toolBar
-        detailTextView.inputAccessoryView = toolBar
-        reflectionTextView.inputAccessoryView = toolBar
-    }
-    
-    // OKボタンの処理
-    @objc func tapOkButton(_ sender: UIButton){
-        // キーボードを閉じる
-        self.view.endEditing(true)
-    }
+    //MARK:- データベース関連
     
     // Firebaseから目標データを取得するメソッド
     func loadTargetData() {
@@ -1197,6 +1007,197 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     
+    
+    //MARK:- その他のメソッド
+    
+    // ノートデータのテキストをセットするメソッド
+    func setTextData(noteData note:NoteData) {
+        self.physicalConditionTextView.text = note.getPhysicalCondition()
+        self.purposeTextView.text = note.getPurpose()
+        self.detailTextView.text = note.getDetail()
+        self.reflectionTextView.text = note.getReflection()
+    }
+    
+    // ノートの日付をDatePickerにセットするメソッド
+    func setDatePicker(noteData note:NoteData) {
+        // 日付をセット
+        self.year  = note.getYear()
+        self.month = note.getMonth()
+        self.date  = note.getDate()
+        self.day   = note.getDay()
+        
+        // DatePickerに日付をセット
+        let dateFormater = DateFormatter()
+        dateFormater.locale = Locale(identifier: "ja_JP")
+        dateFormater.dateFormat = "yyyy/MM/dd"
+        let date = dateFormater.date(from: "\(self.year)/\(self.month)/\(self.date)")
+        datePicker.date = date!
+        
+        self.selectedDate = "\(self.year)年\(self.month)月\(self.date)日(\(self.day))"
+    }
+    
+    // 天候データをweatherPickerにセットするメソッド
+    func setWeatherPicker(noteData note:NoteData) {
+        // 気温をセット
+        self.temperatureIndex = note.getTemperature() + 40
+        self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)
+        
+        // 天気をセット
+        if note.getWeather() == "くもり" {
+            self.weatherIndex = 1
+        } else if note.getWeather() == "雨" {
+            self.weatherIndex = 2
+        }
+        self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateFormatter.string(from: now)
+    }
+    
+    // 現在時刻を取得するメソッド
+    func getCurrentPickerTime() -> String {
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "y年M月d日(E)"
+        let returnText = "\(dateFormatter.string(from: now))"
+        
+        dateFormatter.dateFormat = "y"
+        year = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "M"
+        month = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "d"
+        date = Int("\(dateFormatter.string(from: now))")!
+        dateFormatter.dateFormat = "E"
+        day = String(dateFormatter.string(from: datePicker.date))
+        
+        return returnText
+    }
+    
+    // DatePickerの選択した日付を取得するメソッド
+    func getDatePickerDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "y年M月d日(E)"
+        let returnText = "\(dateFormatter.string(from: datePicker.date))"
+        
+        dateFormatter.dateFormat = "y"
+        year = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "M"
+        month = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "d"
+        date = Int("\(dateFormatter.string(from: datePicker.date))")!
+        dateFormatter.dateFormat = "E"
+        day = String(dateFormatter.string(from: datePicker.date))
+        print("\(year)/\(month)/\(date)/\(day)")
+        
+        return returnText
+    }
+    
+    // テキストビューに枠線を追加するメソッド
+    func addTextViewBorder() {
+        physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        physicalConditionTextView.layer.borderWidth = 1.0
+        purposeTextView.layer.borderColor = UIColor.systemGray.cgColor
+        purposeTextView.layer.borderWidth = 1.0
+        detailTextView.layer.borderColor = UIColor.systemGray.cgColor
+        detailTextView.layer.borderWidth = 1.0
+        reflectionTextView.layer.borderColor = UIColor.systemGray.cgColor
+        reflectionTextView.layer.borderWidth = 1.0
+    }
+    
+    // テキストフィールド以外をタップでキーボードとPickerを下げる設定
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        
+        // Pickerをしまう
+        closePicker()
+    }
+    
+    // キーボードを出したときの設定
+    func configureObserver() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.selectedTextView = textView
+        self.textHeight = textView.frame.maxY
+    }
+        
+    @objc func keyboardWillShow(_ notification: Notification?) {
+            
+        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
+            return
+        }
+        
+        // 現在のスクロール位置（最下点）,キーボードの高さを取得
+        let obj = self.parent as! AddPracticeNoteViewController
+        let scrollPotiton = obj.getScrollPosition()
+        let keyboardHeight = rect.size.height
+        
+        // textViewDidBeginEditingが実行されるまで時間待ち
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // スクロールする高さを計算
+            let hiddenHeight = keyboardHeight + self.textHeight + self.navBarHeight + 30 - scrollPotiton
+            
+            // スクロール処理
+            if hiddenHeight > 0 {
+                UIView.animate(withDuration: duration) {
+                    let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+                    self.view.transform = transform
+                }
+            } else {
+                UIView.animate(withDuration: duration) {
+                    let transform = CGAffineTransform(translationX: 0, y: -(0))
+                    self.view.transform = transform
+                }
+            }
+        }
+    }
+        
+    @objc func keyboardWillHide(_ notification: Notification?)  {
+        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
+        UIView.animate(withDuration: duration) {
+            self.view.transform = CGAffineTransform.identity
+        }
+    }
+    
+    // ツールバーを作成するメソッド
+    func createToolBar() {
+        // ツールバーのインスタンスを作成
+        let toolBar = UIToolbar()
 
+        // ツールバーに配置するアイテムのインスタンスを作成
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
+
+        // アイテムを配置
+        toolBar.setItems([flexibleItem, okButton], animated: true)
+
+        // ツールバーのサイズを指定
+        toolBar.sizeToFit()
+        
+        // テキストフィールドにツールバーを設定
+        physicalConditionTextView.inputAccessoryView = toolBar
+        purposeTextView.inputAccessoryView = toolBar
+        detailTextView.inputAccessoryView = toolBar
+        reflectionTextView.inputAccessoryView = toolBar
+    }
+    
+    // OKボタンの処理
+    @objc func tapOkButton(_ sender: UIButton){
+        // キーボードを閉じる
+        self.view.endEditing(true)
+    }
+    
 }
 
