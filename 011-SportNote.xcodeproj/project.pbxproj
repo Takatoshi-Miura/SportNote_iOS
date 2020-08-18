@@ -13,6 +13,7 @@
 		8D01653424AEFC2000F9D69F /* FreeNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */; };
 		8D01653624AF202F00F9D69F /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01653524AF202F00F9D69F /* AddNoteViewController.swift */; };
 		8D05F54924EBD18800842CD5 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D05F54824EBD18800842CD5 /* PasswordResetViewController.swift */; };
+		8D05F54B24EBEFAB00842CD5 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D05F54A24EBEFAB00842CD5 /* CreateAccountViewController.swift */; };
 		8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D06D5DC24A834A4004D5307 /* SettingViewController.swift */; };
 		8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
@@ -57,6 +58,7 @@
 		8D01653324AEFC2000F9D69F /* FreeNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNoteViewController.swift; sourceTree = "<group>"; };
 		8D01653524AF202F00F9D69F /* AddNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		8D05F54824EBD18800842CD5 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
+		8D05F54A24EBEFAB00842CD5 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		8D06D5DC24A834A4004D5307 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedTaskViewController.swift; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			children = (
 				8D665D3A24A17D9A00441B32 /* LoginViewController.swift */,
 				8D05F54824EBD18800842CD5 /* PasswordResetViewController.swift */,
+				8D05F54A24EBEFAB00842CD5 /* CreateAccountViewController.swift */,
 			);
 			path = "ログイン";
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */,
 				8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */,
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
+				8D05F54B24EBEFAB00842CD5 /* CreateAccountViewController.swift in Sources */,
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */,
 				8D01653224AEF14300F9D69F /* FreeNote.swift in Sources */,
@@ -530,7 +534,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -554,7 +558,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "011-SportNote/011-SportNoteRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (

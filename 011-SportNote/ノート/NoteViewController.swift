@@ -365,7 +365,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //MARK:- データベース関連
     
-    // Firebaseにフリーノートデータを作成するメソッド(アカウント作成時のみ実行)
+    // Firebaseにフリーノートデータを作成するメソッド(初回起動時のみ実行)
     func createFreeNoteData() {
         // フリーノートデータを作成
         let freeNote = FreeNote()

@@ -51,17 +51,11 @@ class LoginViewController: UIViewController {
     
     // アカウント作成ボタンの処理
     @IBAction func createAccountButton(_ sender: Any) {
-        // アドレス,パスワード名,アカウント名の入力を確認
-        if let address = mailAddressTextField.text, let password = passwordTextField.text {
-            // アドレス,パスワード名のいずれかでも入力されていない時は何もしない
-            if address.isEmpty || password.isEmpty {
-                SVProgressHUD.showError(withStatus: "必要項目を入力して下さい")
-                return
-            }
-            
-            // アカウント作成処理
-            self.createAccount(mail: address, password: password)
-        }
+        // アカウント作成画面に遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "CreateAccountViewController")
+        setTransitionAnimation(direction: "Right")
+        present(nextView, animated: false, completion: nil)
     }
     
     
@@ -127,42 +121,6 @@ class LoginViewController: UIViewController {
             }
             // ログイン成功を通知
             SVProgressHUD.showSuccess(withStatus: "ログインしました。")
-            
-            // メッセージが隠れてしまうため、遅延処理を行う
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                // ノート画面に遷移
-                self.performSegue(withIdentifier: "goTabBarController", sender: nil)
-            }
-        }
-    }
-    
-    // アカウントを作成するメソッド
-    func createAccount(mail address:String,password pass:String) {
-        // HUDで処理中を表示
-        SVProgressHUD.show(withStatus: "アカウントを作成しています")
-        
-        // アカウント作成処理
-        Auth.auth().createUser(withEmail: address, password: pass) { authResult, error in
-            if error == nil {
-                // エラーなし
-            } else {
-                // エラーのハンドリング
-                if let errorCode = AuthErrorCode(rawValue: error!._code) {
-                    switch errorCode {
-                        case .invalidEmail:
-                            SVProgressHUD.showError(withStatus: "メールアドレスの形式が違います。")
-                        case .emailAlreadyInUse:
-                            SVProgressHUD.showError(withStatus: "既にこのメールアドレスは使われています。")
-                        case .weakPassword:
-                            SVProgressHUD.showError(withStatus: "パスワードは6文字以上で入力してください。")
-                        default:
-                            SVProgressHUD.showError(withStatus: "エラーが起きました。しばらくしてから再度お試しください。")
-                    }
-                    return
-                }
-            }
-            // アカウントの登録を通知
-            SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました。")
             
             // メッセージが隠れてしまうため、遅延処理を行う
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
