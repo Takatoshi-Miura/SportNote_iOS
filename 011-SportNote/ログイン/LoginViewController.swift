@@ -18,20 +18,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-            
-        // ユーザー名が保存されてるなら自動ログイン
-        if let address = UserDefaults.standard.object(forKey: "address") as? String, let password = UserDefaults.standard.object(forKey: "password") as? String {
-            // テキストフィールドにセット
-            mailAddressTextField.text = address
-            passwordTextField.text = password
-            
-            // ログイン処理
-            self.login(mail: address, password: password)
-         }
-    }
-    
     
     
     //MARK:- UIの設定
@@ -53,7 +39,6 @@ class LoginViewController: UIViewController {
             self.login(mail: address, password: password)
         }
     }
-    
     
     // アカウント作成ボタンの処理
     @IBAction func createAccountButton(_ sender: Any) {
@@ -154,43 +139,11 @@ class LoginViewController: UIViewController {
             }
             // アカウントの登録を通知
             SVProgressHUD.showSuccess(withStatus: "アカウントを作成しました。")
-
-            // フリーノートデータを作成
-            self.createFreeNoteData()
             
             // メッセージが隠れてしまうため、遅延処理を行う
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                 // ノート画面に遷移
                 self.performSegue(withIdentifier: "goTabBarController", sender: nil)
-            }
-        }
-    }
-    
-    // Firebaseにフリーノートデータを作成するメソッド(アカウント作成時のみ実行)
-    func createFreeNoteData() {
-        // フリーノートデータを作成
-        let freeNote = FreeNote()
-        
-        // ユーザーUIDをセット
-        freeNote.setUserID(Auth.auth().currentUser!.uid)
-        
-        // 現在時刻をセット
-        freeNote.setCreated_at(getCurrentTime())
-        freeNote.setUpdated_at(freeNote.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("FreeNoteData").document("\(freeNote.getUserID())").setData([
-            "title"      : freeNote.getTitle(),
-            "detail"     : freeNote.getDetail(),
-            "userID"     : freeNote.getUserID(),
-            "created_at" : freeNote.getCreated_at(),
-            "updated_at" : freeNote.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
             }
         }
     }
@@ -216,6 +169,7 @@ class LoginViewController: UIViewController {
     // UserDefaultsにユーザー情報を保存するメソッド
     func saveUserInfo(mail address:String,password pass:String) {
         let userDefaults = UserDefaults.standard
+        userDefaults.set(Auth.auth().currentUser!.uid, forKey: "userID")
         userDefaults.set(address, forKey:"address")
         userDefaults.set(pass,forKey:"password")
         userDefaults.synchronize()

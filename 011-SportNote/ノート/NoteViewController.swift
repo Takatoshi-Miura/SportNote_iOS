@@ -20,16 +20,19 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         //初回起動判定
         if UserDefaults.standard.bool(forKey: "firstLaunch") {
             // 初回起動時の処理
-            // チュートリアル画面に遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController")
-            self.present(nextView, animated: true, completion: nil)
-            
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
             UserDefaults.standard.set(false, forKey: "firstLaunch")
             
             // 2回目以降の起動では「userID」を今回生成したIDで固定(アカウント持ちならFirebaseIDで固定)
             UserDefaults.standard.set(UserDefaults.standard.object(forKey: "userID") as! String, forKey: "userID")
+            
+            // フリーノートデータ作成
+            createFreeNoteData()
+            
+            // チュートリアル画面に遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController")
+            self.present(nextView, animated: true, completion: nil)
         }
     
         // 編集ボタンの設定(複数選択可能)
@@ -361,6 +364,38 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     //MARK:- データベース関連
+    
+    // Firebaseにフリーノートデータを作成するメソッド(アカウント作成時のみ実行)
+    func createFreeNoteData() {
+        // フリーノートデータを作成
+        let freeNote = FreeNote()
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // ユーザーUIDをセット
+        freeNote.setUserID(userID)
+        
+        // 現在時刻をセット
+        freeNote.setCreated_at(getCurrentTime())
+        freeNote.setUpdated_at(freeNote.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("FreeNoteData").document("\(freeNote.getUserID())").setData([
+            "title"      : freeNote.getTitle(),
+            "detail"     : freeNote.getDetail(),
+            "userID"     : freeNote.getUserID(),
+            "created_at" : freeNote.getCreated_at(),
+            "updated_at" : freeNote.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
