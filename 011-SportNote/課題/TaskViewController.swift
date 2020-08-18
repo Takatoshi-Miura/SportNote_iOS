@@ -315,12 +315,15 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         // 配列の初期化
         taskDataArray = []
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // ユーザーの未解決課題データ取得
         // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
         db.collection("TaskData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .whereField("taskAchievement", isEqualTo: false)
             .order(by: "taskID", descending: true)
@@ -361,21 +364,24 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 更新日時を現在時刻にする
         taskData.setUpdated_at(getCurrentTime())
         
         // 更新したい課題データを取得
         let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(taskData.getTaskID())")
+        let database = db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())")
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([
-            "taskTitle"      : taskData.getTaskTitle(),
-            "taskCause"      : taskData.getTaskCouse(),
-            "taskAchievement": taskData.getTaskAchievement(),
-            "isDeleted"      : taskData.getIsDeleted(),
-            "updated_at"     : taskData.getUpdated_at(),
-            "measuresData"   : taskData.getMeasuresData(),
+            "taskTitle"        : taskData.getTaskTitle(),
+            "taskCause"        : taskData.getTaskCouse(),
+            "taskAchievement"  : taskData.getTaskAchievement(),
+            "isDeleted"        : taskData.getIsDeleted(),
+            "updated_at"       : taskData.getUpdated_at(),
+            "measuresData"     : taskData.getMeasuresData(),
             "measuresPriority" : taskData.getMeasuresPriority()
         ]) { err in
             if let err = err {

@@ -136,8 +136,11 @@ class NoteData {
     
     // 新規ノートのIDを設定するメソッド
     func setNewNoteID() {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // ユーザーUIDをセット
-        setUserID(Auth.auth().currentUser!.uid)
+        setUserID(userID)
             
         // Firebaseにアクセス
         let db = Firestore.firestore()

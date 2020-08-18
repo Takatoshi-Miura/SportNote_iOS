@@ -119,8 +119,11 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // ユーザーUIDをセット
-        taskData.setUserID(Auth.auth().currentUser!.uid)
+        taskData.setUserID(userID)
         
         // 入力されたテキストをTaskDataにセット
         taskData.setTaskTitle(taskTitleTextField.text!)
@@ -138,7 +141,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         
         // Firebaseにアクセス
         let db = Firestore.firestore()
-        db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(taskData.getTaskID())").setData([
+        db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())").setData([
             "taskID"           : taskData.getTaskID(),
             "taskTitle"        : taskData.getTaskTitle(),
             "taskCause"        : taskData.getTaskCouse(),

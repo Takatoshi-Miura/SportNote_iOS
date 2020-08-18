@@ -441,13 +441,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // ユーザーUIDをセット
-        freeNoteData.setUserID(Auth.auth().currentUser!.uid)
+        freeNoteData.setUserID(userID)
         
         // 現在のユーザーのフリーノートデータを取得する
         let db = Firestore.firestore()
         db.collection("FreeNoteData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
@@ -470,11 +473,14 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     func loadTargetData() {
         // targetDataArrayを初期化
         targetDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
 
         // 現在のユーザーの目標データを取得する
         let db = Firestore.firestore()
         db.collection("TargetData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .order(by: "year", descending: true)
             .order(by: "month", descending: true)
@@ -513,11 +519,14 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     func loadNoteData() {
         // noteDataArrayを初期化
         noteDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
 
         // 現在のユーザーのデータを取得する
         let db = Firestore.firestore()
         db.collection("NoteData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .order(by: "year", descending: true)
             .order(by: "month", descending: true)
@@ -570,11 +579,14 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     func loadNoteData(year selectYear:Int,month selectMonth:Int,date selectDate:Int) {
         // cellDataArrayを初期化
         cellDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
 
         // 現在のユーザーのデータを取得する
         let db = Firestore.firestore()
         db.collection("NoteData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .whereField("year", isEqualTo: selectYear)
             .whereField("month", isEqualTo: selectMonth)
@@ -626,9 +638,12 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         // isDeletedをセット
         noteData.setIsDeleted(true)
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 更新したい課題データを取得
         let db = Firestore.firestore()
-        let data = db.collection("NoteData").document("\(Auth.auth().currentUser!.uid)_\(noteData.getNoteID())")
+        let data = db.collection("NoteData").document("\(userID)_\(noteData.getNoteID())")
 
         // 変更する可能性のあるデータのみ更新
         data.updateData([

@@ -401,11 +401,14 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // targetDataArrayを初期化
         targetDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
 
         // 現在のユーザーの目標データを取得する
         let db = Firestore.firestore()
         db.collection("TargetData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .order(by: "year", descending: true)
             .order(by: "month", descending: true)
@@ -441,6 +444,9 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 目標データを作成
         let targetData = TargetData()
         
@@ -450,7 +456,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         targetData.setDetail(detail)
         
         // ユーザーUIDをセット
-        targetData.setUserID(Auth.auth().currentUser!.uid)
+        targetData.setUserID(userID)
         
         // 現在時刻をセット
         targetData.setCreated_at(getCurrentTime())
@@ -458,7 +464,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // Firebaseにデータを保存
         let db = Firestore.firestore()
-        db.collection("TargetData").document("\(Auth.auth().currentUser!.uid)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
             "year"       : targetData.getYear(),
             "month"      : targetData.getMonth(),
             "detail"     : targetData.getDetail(),

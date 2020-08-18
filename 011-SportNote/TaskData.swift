@@ -76,8 +76,8 @@ class TaskData {
     
     // 新規課題用の課題IDを設定するメソッド
     func setNewTaskID() {
-        // ユーザーUIDを取得
-        let userID = Auth.auth().currentUser!.uid
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
         // ユーザーの課題データを取得
         let db = Firestore.firestore()

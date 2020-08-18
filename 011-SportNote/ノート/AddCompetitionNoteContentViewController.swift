@@ -550,10 +550,13 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // targetDataArrayを初期化
         targetDataArray = []
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 現在のユーザーの目標データを取得する
         let db = Firestore.firestore()
         db.collection("TargetData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .order(by: "year", descending: true)
             .order(by: "month", descending: true)
@@ -589,6 +592,9 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 大会ノートデータを作成
         competitionNoteData.setNoteType("大会記録")
         
@@ -608,7 +614,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         competitionNoteData.setReflection(reflectionTextView.text!)
         
         // ユーザーUIDをセット
-        competitionNoteData.setUserID(Auth.auth().currentUser!.uid)
+        competitionNoteData.setUserID(userID)
         
         // 現在時刻をセット
         competitionNoteData.setCreated_at(getCurrentTime())
@@ -666,6 +672,9 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 目標データを作成
         let targetData = TargetData()
         
@@ -674,7 +683,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         targetData.setMonth(selectedMonth)
         
         // ユーザーUIDをセット
-        targetData.setUserID(Auth.auth().currentUser!.uid)
+        targetData.setUserID(userID)
         
         // 現在時刻をセット
         targetData.setCreated_at(getCurrentTime())
@@ -682,7 +691,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         
         // Firebaseにデータを保存
         let db = Firestore.firestore()
-        db.collection("TargetData").document("\(Auth.auth().currentUser!.uid)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
             "year"       : targetData.getYear(),
             "month"      : targetData.getMonth(),
             "detail"     : targetData.getDetail(),

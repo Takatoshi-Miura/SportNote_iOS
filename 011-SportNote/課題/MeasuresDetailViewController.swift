@@ -213,6 +213,9 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 同じ対策名の登録がないか確認
         var measuresTitleCheck:Bool = false
         for num in 0...taskData.getMeasuresTitleArray().count - 1 {
@@ -245,7 +248,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // 更新したい課題データを取得
         let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
+        let database = db.collection("TaskData").document("\(userID)_\(self.taskData.getTaskID())")
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([
@@ -271,8 +274,11 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // Firebaseから指定したノートIDのデータを取得するメソッド
     func loadNoteData(_ noteID:Int) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // ユーザーUIDをセット
-        noteData.setUserID(Auth.auth().currentUser!.uid)
+        noteData.setUserID(userID)
 
         // 現在のユーザーのデータを取得する
         let db = Firestore.firestore()

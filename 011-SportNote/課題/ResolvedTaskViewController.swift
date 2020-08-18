@@ -90,7 +90,7 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     
     
     
-    //MARK:- その他のメソッド
+    //MARK:- データベース関連
     
     // 課題データを取得するメソッド
     func reloadTaskData() {
@@ -100,12 +100,15 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         // 配列の初期化
         resolvedTaskDataArray = []
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // ユーザーの解決済み課題データ取得
         // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
         db.collection("TaskData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .whereField("taskAchievement", isEqualTo: true)
             .order(by: "taskID", descending: true)

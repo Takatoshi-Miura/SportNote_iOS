@@ -68,6 +68,9 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     
     // Firebaseのデータを更新するメソッド
     func updateFreeNoteData() {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // テキストデータをセット
         freeNoteData.setTitle(titleTextField.text!)
         freeNoteData.setDetail(detailTextView.text!)
@@ -77,7 +80,7 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
         
         // 更新したいデータを取得
         let db = Firestore.firestore()
-        let data = db.collection("FreeNoteData").document("\(Auth.auth().currentUser!.uid)")
+        let data = db.collection("FreeNoteData").document("\(userID)")
 
         // 変更する可能性のあるデータのみ更新
         data.updateData([

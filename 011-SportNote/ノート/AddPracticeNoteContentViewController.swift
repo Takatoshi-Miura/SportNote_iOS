@@ -700,12 +700,15 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // targetDataArrayを初期化
         targetDataArray = []
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // Firebaseにアクセス
         let db = Firestore.firestore()
         
         // 現在のユーザーの目標データを取得する
         db.collection("TargetData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .order(by: "year", descending: true)
             .order(by: "month", descending: true)
@@ -744,12 +747,15 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 配列の初期化
         taskDataArray = []
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // ユーザーの未解決課題データ取得
         // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
         // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
         let db = Firestore.firestore()
         db.collection("TaskData")
-            .whereField("userID", isEqualTo: Auth.auth().currentUser!.uid)
+            .whereField("userID", isEqualTo: userID)
             .whereField("isDeleted", isEqualTo: false)
             .whereField("taskAchievement", isEqualTo: false)
             .order(by: "taskID", descending: true)
@@ -809,6 +815,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     func saveNoteData() {
         // HUDで処理中を表示
         SVProgressHUD.show()
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
         // ノートタイプを指定
         practiceNoteData.setNoteType("練習記録")
@@ -870,7 +879,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             practiceNoteData.setUpdated_at(getCurrentTime())
         } else {
             // ユーザーUIDをセット
-            practiceNoteData.setUserID(Auth.auth().currentUser!.uid)
+            practiceNoteData.setUserID(userID)
             
             // 現在時刻をセット
             practiceNoteData.setCreated_at(getCurrentTime())
@@ -928,6 +937,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     func saveTargetData(year selectedYear:Int,month selectedMonth:Int) {
         // HUDで処理中を表示
         SVProgressHUD.show()
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
             
         // 目標データを作成
         let targetData = TargetData()
@@ -937,7 +949,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         targetData.setMonth(selectedMonth)
             
         // ユーザーUIDをセット
-        targetData.setUserID(Auth.auth().currentUser!.uid)
+        targetData.setUserID(userID)
         
         // 現在時刻をセット
         targetData.setCreated_at(getCurrentTime())
@@ -945,7 +957,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
         // Firebaseにデータを保存
         let db = Firestore.firestore()
-        db.collection("TargetData").document("\(Auth.auth().currentUser!.uid)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
                 "year"       : targetData.getYear(),
                 "month"      : targetData.getMonth(),
                 "detail"     : targetData.getDetail(),
@@ -980,12 +992,15 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 更新日時を現在時刻にする
         taskData.setUpdated_at(getCurrentTime())
         
         // 更新したい課題データを取得
         let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(taskData.getTaskID())")
+        let database = db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())")
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([

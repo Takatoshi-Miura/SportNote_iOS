@@ -269,6 +269,9 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         // HUDで処理中を表示
         SVProgressHUD.show()
         
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
         // 課題データを更新
         taskData.setTaskTitle(taskTitleTextField.text!)
         taskData.setTaskCause(taskCauseTextView.text!)
@@ -278,7 +281,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         // 更新したい課題データを取得
         let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(Auth.auth().currentUser!.uid)_\(self.taskData.getTaskID())")
+        let database = db.collection("TaskData").document("\(userID)_\(self.taskData.getTaskID())")
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([
