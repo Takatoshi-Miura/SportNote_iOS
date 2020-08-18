@@ -141,6 +141,79 @@
             </objects>
             <point key="canvasLocation" x="802.5" y="-869.36619718309862"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="RBf-98-Wjx">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="Syk-8j-C1D" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="73S-G2-pRB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="パスワードをリセットする" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Re2-xW-Czd">
+                                <rect key="frame" x="30" y="40" width="260" height="26"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="26" id="9fO-8z-Yt7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SportsNoteアカウントで使用しているメールアドレスを入力してください。" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dQD-Af-XSw">
+                                <rect key="frame" x="50" y="91" width="220" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="hYk-dA-BSp"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="メールアドレス" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SAU-2O-3WL">
+                                <rect key="frame" x="50" y="161" width="220" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="lDV-VQ-BFQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" textContentType="email"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftV-ce-5IG">
+                                <rect key="frame" x="50" y="205" width="220" height="40"/>
+                                <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="IEZ-y5-NC0"/>
+                                </constraints>
+                                <state key="normal" title="リセットメールを送信">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="U2R-Bk-FRa"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Re2-xW-Czd" firstAttribute="leading" secondItem="g7o-5d-u8B" secondAttribute="leading" constant="30" id="4vV-I2-2p7"/>
+                            <constraint firstItem="dQD-Af-XSw" firstAttribute="top" secondItem="Re2-xW-Czd" secondAttribute="bottom" constant="25" id="BcC-fN-F1s"/>
+                            <constraint firstItem="ftV-ce-5IG" firstAttribute="leading" secondItem="g7o-5d-u8B" secondAttribute="leading" constant="50" id="Ih7-lJ-Y2p"/>
+                            <constraint firstItem="SAU-2O-3WL" firstAttribute="top" secondItem="dQD-Af-XSw" secondAttribute="bottom" constant="10" id="P92-Bt-1Ff"/>
+                            <constraint firstItem="g7o-5d-u8B" firstAttribute="trailing" secondItem="SAU-2O-3WL" secondAttribute="trailing" constant="50" id="Pzz-yu-Pnc"/>
+                            <constraint firstItem="Re2-xW-Czd" firstAttribute="top" secondItem="g7o-5d-u8B" secondAttribute="top" constant="40" id="TDr-RM-M7I"/>
+                            <constraint firstItem="g7o-5d-u8B" firstAttribute="trailing" secondItem="dQD-Af-XSw" secondAttribute="trailing" constant="50" id="U0X-16-Kws"/>
+                            <constraint firstItem="g7o-5d-u8B" firstAttribute="trailing" secondItem="Re2-xW-Czd" secondAttribute="trailing" constant="30" id="UV1-YR-KIf"/>
+                            <constraint firstItem="SAU-2O-3WL" firstAttribute="leading" secondItem="g7o-5d-u8B" secondAttribute="leading" constant="50" id="Wej-10-cH1"/>
+                            <constraint firstItem="dQD-Af-XSw" firstAttribute="top" secondItem="Re2-xW-Czd" secondAttribute="bottom" constant="25" id="XvC-hh-aZk"/>
+                            <constraint firstItem="ftV-ce-5IG" firstAttribute="top" secondItem="SAU-2O-3WL" secondAttribute="bottom" constant="10" id="Y0a-BT-d5C"/>
+                            <constraint firstItem="SAU-2O-3WL" firstAttribute="top" secondItem="dQD-Af-XSw" secondAttribute="bottom" constant="10" id="fVl-KJ-1es"/>
+                            <constraint firstItem="g7o-5d-u8B" firstAttribute="trailing" secondItem="ftV-ce-5IG" secondAttribute="trailing" constant="50" id="lMT-Wp-Om2"/>
+                            <constraint firstItem="dQD-Af-XSw" firstAttribute="leading" secondItem="g7o-5d-u8B" secondAttribute="leading" constant="50" id="pwj-Sl-ZMB"/>
+                            <constraint firstItem="ftV-ce-5IG" firstAttribute="top" secondItem="SAU-2O-3WL" secondAttribute="bottom" constant="10" id="q8T-Fo-7Hj"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="g7o-5d-u8B"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NOh-T0-GfK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1644.375" y="-869.36619718309862"/>
+        </scene>
         <!--ノート-->
         <scene sceneID="35a-o8-3VX">
             <objects>
@@ -1413,7 +1486,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzk-nq-KIe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="ezT-H4-YNN" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="13432.5" y="791.19718309859161"/>
+            <point key="canvasLocation" x="12159" y="791"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Rhf-eV-gO4">
@@ -1491,7 +1564,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YX-CG-YNj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="12519.375" y="791.19718309859161"/>
+            <point key="canvasLocation" x="11246" y="791"/>
         </scene>
         <!--Page View Controller-->
         <scene sceneID="g6g-d3-wqm">
@@ -1499,7 +1572,7 @@
                 <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" modalPresentationStyle="fullScreen" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="yYf-d3-cGE" customClass="PageViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hQJ-tT-yI5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="13433" y="1612"/>
+            <point key="canvasLocation" x="12159" y="1612"/>
         </scene>
         <!--Tutorial View Controller-->
         <scene sceneID="Uqj-is-EEa">
@@ -1555,7 +1628,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sj6-Qa-xgG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="14167.5" y="1611.9718309859154"/>
+            <point key="canvasLocation" x="12894" y="1612"/>
         </scene>
         <!--Add Practice Note Content View Controller-->
         <scene sceneID="e8I-2C-rCq">
