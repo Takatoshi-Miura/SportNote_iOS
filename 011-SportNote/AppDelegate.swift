@@ -19,20 +19,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         // 初回起動判定(初期値を登録)
-        let dic = ["firstLaunch": true]
-        UserDefaults.standard.register(defaults: dic)
+        UserDefaults.standard.register(defaults: ["firstLaunch": true])
         
-        // アプデ以降の新規ユーザー
-        // ここでユーザーIDを作成し、そのユーザーIDでデータ作成＆保存
+        // ユーザーIDを作成(初期値を登録)
+        let uuid = NSUUID().uuidString
+        print("uuid: \(uuid)")
+        UserDefaults.standard.register(defaults: ["userID":uuid])
+        print(UserDefaults.standard.object(forKey: "userID") as! String)
         
-        // 既にアカウントを作成しているユーザー
-        // UserDefaultsにデータが保存し、
+        // アカウント持ちならFirebaseのユーザーIDを使用
+        if let address = UserDefaults.standard.object(forKey: "address") as? String, let password = UserDefaults.standard.object(forKey: "password") as? String {
+            // ログイン処理
+            Auth.auth().signIn(withEmail: address, password: password) { authResult, error in
+                if error == nil {
+                    // エラーなし
+                } else {
+                    // エラーのハンドリング
+                    if AuthErrorCode(rawValue: error!._code) != nil {
+                        return
+                    }
+                }
+                // ログイン成功時の処理
+                // FirebaseのユーザーIDを使用
+                UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "userID")
+            }
+        }
         
-        // アカウント認証した人しかデータの読み書きできないから
-        // ルールを変えないとダメかも。
+        // アカウント認証した人しかデータの読み書きできないからルールを変えないとダメかも。
         
         return true
     }
+    
+    
+    
+    
+    
 
     // MARK: UISceneSession Lifecycle
 

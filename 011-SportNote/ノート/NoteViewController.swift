@@ -27,6 +27,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
             UserDefaults.standard.set(false, forKey: "firstLaunch")
+            
+            // 2回目以降の起動では「userID」を今回生成したIDで固定(アカウント持ちならFirebaseIDで固定)
+            UserDefaults.standard.set(UserDefaults.standard.object(forKey: "userID") as! String, forKey: "userID")
         }
     
         // 編集ボタンの設定(複数選択可能)
