@@ -39,9 +39,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // ツールバーを作成
         createToolBar()
-        
-        // キーボードでテキストフィールドが隠れない設定
-        self.configureObserver()
     }
     
     
@@ -51,10 +48,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     var indexPath = 0                       // 行番号格納用
     let noteData = NoteData()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
     var previousControllerName:String = ""  // 前のViewController名
-    
-    // キーボードでテキストフィールドが隠れないための設定用
-    var selectedTextField: UITextField?
-    let screenSize = UIScreen.main.bounds.size
     
     
     
@@ -342,53 +335,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     // テキストフィールド以外をタップでキーボードを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-    }
-    
-    // キーボードを出したときの設定
-    func configureObserver() {
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.selectedTextField = textField
-    }
-        
-    @objc func keyboardWillShow(_ notification: Notification?) {
-            
-        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-            let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
-            return
-        }
-                    
-        // サイズ取得
-        let screenHeight = screenSize.height
-        let keyboardHeight = rect.size.height
-        let textUnderHeight: CGFloat = selectedTextField!.frame.maxY
-        
-        // スクロールする高さを計算
-        let hiddenHeight = keyboardHeight + textUnderHeight - screenHeight
-                
-        // スクロール処理
-        if hiddenHeight > 0 {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-            self.view.transform = transform
-            }
-        } else {
-            UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(0))
-            self.view.transform = transform
-            }
-        }
-    }
-        
-    @objc func keyboardWillHide(_ notification: Notification?)  {
-        guard let duration = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? TimeInterval else { return }
-        UIView.animate(withDuration: duration) {
-            self.view.transform = CGAffineTransform.identity
-        }
     }
     
     // ツールバーを作成するメソッド
