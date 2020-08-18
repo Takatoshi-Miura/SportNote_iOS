@@ -26,7 +26,7 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
     //MARK:- 変数の宣言
     
     // セルのタイトル
-    let cellTitle = ["このアプリの使い方","ログアウト"]
+    let cellTitle = ["このアプリの使い方","データの引継ぎ"]
     
     
     
@@ -51,24 +51,11 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
             let storyboard: UIStoryboard = self.storyboard!
             let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController")
             self.present(nextView, animated: true, completion: nil)
-        case "ログアウト":
-            // ログアウト処理
-            let firebaseAuth = Auth.auth()
-            do {
-                try firebaseAuth.signOut()
-                
-                // UserDefaultsにユーザー情報を保存
-                let userDefaults = UserDefaults.standard
-                userDefaults.removeObject(forKey: "address")
-                userDefaults.removeObject(forKey: "password")
-                userDefaults.synchronize()
-                
-                SVProgressHUD.showSuccess(withStatus: "ログアウトしました。")
-            } catch let signOutError as NSError {
-                print ("Error signing out: %@", signOutError)
-                SVProgressHUD.showError(withStatus: "ログアウトに失敗しました。")
-            }
+        case "データの引継ぎ":
             // ログイン画面へ遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+            self.present(nextView, animated: true, completion: nil)
         default:
             // 何もしない
             print("")
@@ -80,20 +67,36 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         return cellTitle.count
     }
     
-    // テーブルの行ごとのセルを返却する
+    // セルを返却
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // セルを取得する
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "SettingCell", for: indexPath)
-        // セルに表示する値を設定する
         cell.textLabel!.text = cellTitle[indexPath.row]
-        
-        if cellTitle[indexPath.row] == "ログアウト" {
-            let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "logoutCell", for: indexPath)
-            cell.textLabel!.text = cellTitle[indexPath.row]
-            cell.textLabel!.textColor = UIColor.systemRed
-            return cell
-        }
         return cell
     }
+    
+    
+    
+    //MARK:- その他の処理
+    
+    func logout() {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+            
+            // UserDefaultsにユーザー情報を保存
+            let userDefaults = UserDefaults.standard
+            userDefaults.removeObject(forKey: "address")
+            userDefaults.removeObject(forKey: "password")
+            userDefaults.synchronize()
+            
+            SVProgressHUD.showSuccess(withStatus: "ログアウトしました。")
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+            SVProgressHUD.showError(withStatus: "ログアウトに失敗しました。")
+        }
+    }
+    
+    
 
 }
