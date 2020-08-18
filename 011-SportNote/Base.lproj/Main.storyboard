@@ -69,7 +69,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="6UU-Pe-ZDm"/>
+                                    <action selector="forgotPassword:" destination="yfr-GP-gMM" eventType="touchUpInside" id="rzi-WI-9uT"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="初めての方" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lpa-xf-gzj">
@@ -141,15 +141,15 @@
             </objects>
             <point key="canvasLocation" x="802.5" y="-869.36619718309862"/>
         </scene>
-        <!--View Controller-->
+        <!--Password Reset View Controller-->
         <scene sceneID="RBf-98-Wjx">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="Syk-8j-C1D" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PasswordResetViewController" modalPresentationStyle="fullScreen" id="Syk-8j-C1D" customClass="PasswordResetViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="73S-G2-pRB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="パスワードをリセットする" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Re2-xW-Czd">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="パスワードをリセットする" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Re2-xW-Czd">
                                 <rect key="frame" x="30" y="40" width="260" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="26" id="9fO-8z-Yt7"/>
@@ -185,7 +185,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="U2R-Bk-FRa"/>
+                                    <action selector="passwordResetButton:" destination="Syk-8j-C1D" eventType="touchUpInside" id="Xbx-r2-wkT"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -209,6 +209,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="g7o-5d-u8B"/>
                     </view>
+                    <connections>
+                        <outlet property="mailAddressTextField" destination="SAU-2O-3WL" id="goC-pr-m74"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NOh-T0-GfK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

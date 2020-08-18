@@ -40,6 +40,15 @@ class LoginViewController: UIViewController {
         }
     }
     
+    // パスワードを忘れた場合ボタンの処理
+    @IBAction func forgotPassword(_ sender: Any) {
+        // パスワードリセット画面に遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "PasswordResetViewController")
+        setTransitionAnimation(direction: "Right")
+        present(nextView, animated: false, completion: nil)
+    }
+    
     // アカウント作成ボタンの処理
     @IBAction func createAccountButton(_ sender: Any) {
         // アドレス,パスワード名,アカウント名の入力を確認
@@ -72,6 +81,21 @@ class LoginViewController: UIViewController {
             // UserDefaultsにユーザー情報を保存
             self.saveUserInfo(mail: mailAddressTextField.text!, password: passwordTextField.text!)
         }
+    }
+    
+    // 画面遷移のアニメーションを設定するメソッド
+    func setTransitionAnimation(direction:String) {
+        let transition = CATransition()
+        transition.duration = 0.2
+        transition.type = CATransitionType.push
+        
+        // 方向を設定
+        if direction == "Right" {
+            transition.subtype = CATransitionSubtype.fromRight
+        } else {
+            transition.subtype = CATransitionSubtype.fromLeft
+        }
+        view.window!.layer.add(transition, forKey: kCATransition)
     }
     
     
