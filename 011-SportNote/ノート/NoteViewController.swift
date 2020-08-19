@@ -34,6 +34,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController")
             self.present(nextView, animated: true, completion: nil)
         }
+        
+        // 同意していないなら利用規約を表示
+        if UserDefaults.standard.bool(forKey: "ver1.1") == false {
+            displayAgreement()
+        }
     
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -74,6 +79,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
     var addButton:UIBarButtonItem!      // 追加ボタン
     var calendarButton:UIBarButtonItem! // カレンダーボタン
+    
+    // 利用規約同意判定
     
     
     
@@ -627,6 +634,36 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
         navigationItem.leftBarButtonItems  = leftBarItems
         navigationItem.rightBarButtonItems = rightBarItems
+    }
+    
+    // 利用規約表示メソッド
+    func displayAgreement() {
+        // アラートダイアログを生成
+        let alertController = UIAlertController(title:"利用規約の更新",message:"本アプリの利用規約とプライバシーポリシーに同意します。",preferredStyle:UIAlertController.Style.alert)
+        
+        // 同意ボタンを宣言
+        let agreeAction = UIAlertAction(title:"同意する",style:UIAlertAction.Style.default){(action:UIAlertAction)in
+            // 同意ボタンがタップされたときの処理
+            // 次回以降、利用規約を表示しないようにする
+            UserDefaults.standard.set(true, forKey: "ver1.1")
+        }
+        
+        // 利用規約ボタンを宣言
+        let termsAction = UIAlertAction(title:"利用規約を読む",style:UIAlertAction.Style.default){(action:UIAlertAction)in
+            // 利用規約ボタンがタップされたときの処理
+            let url = URL(string: "https://sportnote-b2c92.web.app/")
+            UIApplication.shared.open(url!)
+            
+            // アラートが消えるため再度表示
+            self.displayAgreement()
+        }
+        
+        // ボタンを追加
+        alertController.addAction(termsAction)
+        alertController.addAction(agreeAction)
+        
+        //アラートダイアログを表示
+        present(alertController,animated:true,completion:nil)
     }
     
     // 初期化sectionTitle
