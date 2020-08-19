@@ -73,7 +73,7 @@ class TutorialViewController: UIViewController {
         // 利用規約ボタンを宣言
         let termsAction = UIAlertAction(title:"利用規約を読む",style:UIAlertAction.Style.default){(action:UIAlertAction)in
             // 利用規約ボタンがタップされたときの処理
-            let url = URL(string: "https://sportnote-b2c92.web.app/")
+            let url = URL(string: "https://sportnote-b2c92.firebaseapp.com/")
             UIApplication.shared.open(url!)
             
             // アラートが消えるため再度表示
