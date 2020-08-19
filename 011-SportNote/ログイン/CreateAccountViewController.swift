@@ -46,6 +46,12 @@ class CreateAccountViewController: UIViewController {
         }
     }
     
+    // 閉じるボタンの処理
+    @IBAction func closeButton(_ sender: Any) {
+        // モーダルを閉じる
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     
     
     //MARK:- 変数の宣言
@@ -55,25 +61,6 @@ class CreateAccountViewController: UIViewController {
     var targetDataArray = [TargetData]()
     var noteDataArray = [NoteData]()
     var taskDataArray = [TaskData]()
-    
-    
-    
-    //MARK:- 画面遷移
-    
-    // 画面遷移のアニメーションを設定するメソッド
-    func setTransitionAnimation(direction:String) {
-        let transition = CATransition()
-        transition.duration = 0.2
-        transition.type = CATransitionType.push
-        
-        // 方向を設定
-        if direction == "Right" {
-            transition.subtype = CATransitionSubtype.fromRight
-        } else {
-            transition.subtype = CATransitionSubtype.fromLeft
-        }
-        view.window!.layer.add(transition, forKey: kCATransition)
-    }
     
     
     
@@ -139,8 +126,7 @@ class CreateAccountViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5.0) {
             let storyboard: UIStoryboard = self.storyboard!
             let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
-            self.setTransitionAnimation(direction: "Left")
-            self.present(nextView, animated: false, completion: nil)
+            self.present(nextView, animated: true, completion: nil)
         }
     }
     
@@ -271,10 +257,7 @@ class CreateAccountViewController: UIViewController {
     }
     
     // 課題データを取得するメソッド
-    func loadTaskData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
+    func loadTaskData() {        
         // 配列の初期化
         taskDataArray = []
         

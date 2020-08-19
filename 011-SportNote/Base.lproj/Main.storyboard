@@ -203,11 +203,26 @@
                                     <action selector="passwordResetButton:" destination="Syk-8j-C1D" eventType="touchUpInside" id="Xbx-r2-wkT"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P53-3z-1xH">
+                                <rect key="frame" x="258" y="538" width="62" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="62" id="ORd-5U-dF2"/>
+                                    <constraint firstAttribute="height" constant="30" id="qgL-sF-MNf"/>
+                                </constraints>
+                                <state key="normal" title="閉じる">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeButton:" destination="Syk-8j-C1D" eventType="touchUpInside" id="Fab-Yz-SzC"/>
+                                    <action selector="closeButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="rLZ-Fb-iBo"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Re2-xW-Czd" firstAttribute="leading" secondItem="g7o-5d-u8B" secondAttribute="leading" constant="30" id="4vV-I2-2p7"/>
                             <constraint firstItem="dQD-Af-XSw" firstAttribute="top" secondItem="Re2-xW-Czd" secondAttribute="bottom" constant="25" id="BcC-fN-F1s"/>
+                            <constraint firstItem="P53-3z-1xH" firstAttribute="bottom" secondItem="g7o-5d-u8B" secondAttribute="bottom" id="BiL-cG-63j"/>
                             <constraint firstItem="ftV-ce-5IG" firstAttribute="leading" secondItem="g7o-5d-u8B" secondAttribute="leading" constant="50" id="Ih7-lJ-Y2p"/>
                             <constraint firstItem="SAU-2O-3WL" firstAttribute="top" secondItem="dQD-Af-XSw" secondAttribute="bottom" constant="10" id="P92-Bt-1Ff"/>
                             <constraint firstItem="g7o-5d-u8B" firstAttribute="trailing" secondItem="SAU-2O-3WL" secondAttribute="trailing" constant="50" id="Pzz-yu-Pnc"/>
@@ -221,6 +236,7 @@
                             <constraint firstItem="g7o-5d-u8B" firstAttribute="trailing" secondItem="ftV-ce-5IG" secondAttribute="trailing" constant="50" id="lMT-Wp-Om2"/>
                             <constraint firstItem="dQD-Af-XSw" firstAttribute="leading" secondItem="g7o-5d-u8B" secondAttribute="leading" constant="50" id="pwj-Sl-ZMB"/>
                             <constraint firstItem="ftV-ce-5IG" firstAttribute="top" secondItem="SAU-2O-3WL" secondAttribute="bottom" constant="10" id="q8T-Fo-7Hj"/>
+                            <constraint firstItem="P53-3z-1xH" firstAttribute="trailing" secondItem="g7o-5d-u8B" secondAttribute="trailing" id="u7A-Tj-U64"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="g7o-5d-u8B"/>
                     </view>
@@ -265,7 +281,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="メールアドレスとパスワードを入力してSportsNoteアカウントを作成してください。" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ias-xl-Mee">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="アカウントを作成し、ログインするとデータを引き継ぐことができます。" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ias-xl-Mee">
                                 <rect key="frame" x="50" y="91" width="220" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Qc6-QB-nrH"/>
@@ -287,12 +303,28 @@
                                     <action selector="createAccountButton:" destination="MAK-yD-WT2" eventType="touchUpInside" id="wHv-mF-yHV"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xOG-J5-UXu">
+                                <rect key="frame" x="258" y="538" width="62" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="62" id="9u4-e8-XPh"/>
+                                    <constraint firstAttribute="height" constant="30" id="fds-aH-EXt"/>
+                                </constraints>
+                                <state key="normal" title="閉じる">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="elY-Ia-ZUR"/>
+                                    <action selector="closeButton:" destination="MAK-yD-WT2" eventType="touchUpInside" id="n4G-3C-Gi4"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="pa6-gW-fX2" firstAttribute="leading" secondItem="ceu-PL-mdO" secondAttribute="leading" constant="50" id="0bt-dO-srG"/>
+                            <constraint firstItem="xOG-J5-UXu" firstAttribute="trailing" secondItem="ceu-PL-mdO" secondAttribute="trailing" id="1KH-SA-WTF"/>
                             <constraint firstItem="ceu-PL-mdO" firstAttribute="trailing" secondItem="tT0-04-f70" secondAttribute="trailing" constant="30" id="DnW-6I-z6Y"/>
                             <constraint firstItem="pa6-gW-fX2" firstAttribute="top" secondItem="Ias-xl-Mee" secondAttribute="bottom" constant="10" id="Gqy-Ar-p4u"/>
+                            <constraint firstItem="xOG-J5-UXu" firstAttribute="bottom" secondItem="ceu-PL-mdO" secondAttribute="bottom" id="L2F-ak-e4F"/>
                             <constraint firstAttribute="trailing" secondItem="Ias-xl-Mee" secondAttribute="trailing" constant="50" id="LdD-Kg-jdo"/>
                             <constraint firstItem="Ias-xl-Mee" firstAttribute="top" secondItem="tT0-04-f70" secondAttribute="bottom" constant="25" id="Qbe-gU-Tz1"/>
                             <constraint firstItem="gWd-fL-Iqa" firstAttribute="top" secondItem="YW9-38-mEl" secondAttribute="bottom" constant="10" id="R9F-cA-vbm"/>

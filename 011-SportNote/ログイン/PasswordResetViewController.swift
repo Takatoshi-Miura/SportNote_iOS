@@ -37,23 +37,10 @@ class PasswordResetViewController: UIViewController {
         }
     }
     
-    
-    
-    //MARK:- 画面遷移
-    
-    // 画面遷移のアニメーションを設定するメソッド
-    func setTransitionAnimation(direction:String) {
-        let transition = CATransition()
-        transition.duration = 0.2
-        transition.type = CATransitionType.push
-        
-        // 方向を設定
-        if direction == "Right" {
-            transition.subtype = CATransitionSubtype.fromRight
-        } else {
-            transition.subtype = CATransitionSubtype.fromLeft
-        }
-        view.window!.layer.add(transition, forKey: kCATransition)
+    // 閉じるボタンの処理
+    @IBAction func closeButton(_ sender: Any) {
+        // モーダルを閉じる
+        self.dismiss(animated: true, completion: nil)
     }
     
     
@@ -71,8 +58,7 @@ class PasswordResetViewController: UIViewController {
                     // ログイン画面に遷移
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
-                    self.setTransitionAnimation(direction: "Left")
-                    self.present(nextView, animated: false, completion: nil)
+                    self.present(nextView, animated: true, completion: nil)
                 }
             } else {
                 // エラーを通知
