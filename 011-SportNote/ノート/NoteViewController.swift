@@ -31,7 +31,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             // チュートリアル画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController")
+            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
             self.present(nextView, animated: true, completion: nil)
         }
         

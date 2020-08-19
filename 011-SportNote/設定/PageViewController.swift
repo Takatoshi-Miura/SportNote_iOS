@@ -134,6 +134,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
         // チュートリアル画面を閉じる
         self.dismiss(animated: true, completion: nil)
     }
+    
 }
 
 
