@@ -94,6 +94,19 @@
                                     <action selector="createAccountButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="51s-4G-175"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="35l-iD-CC6">
+                                <rect key="frame" x="258" y="538" width="62" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="KXo-mw-HD8"/>
+                                    <constraint firstAttribute="width" constant="62" id="lVe-uS-BIT"/>
+                                </constraints>
+                                <state key="normal" title="閉じる">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeButton:" destination="yfr-GP-gMM" eventType="touchUpInside" id="icv-DM-0H5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -107,6 +120,7 @@
                             <constraint firstItem="r1T-H3-kBZ" firstAttribute="trailing" secondItem="acP-1J-4XK" secondAttribute="trailing" constant="50" id="BRX-7w-pqy"/>
                             <constraint firstItem="r1T-H3-kBZ" firstAttribute="trailing" secondItem="qVB-W8-vTb" secondAttribute="trailing" constant="50" id="DzZ-nT-VHN"/>
                             <constraint firstItem="Lpa-xf-gzj" firstAttribute="top" secondItem="acP-1J-4XK" secondAttribute="bottom" constant="25" id="FgF-SC-KhI"/>
+                            <constraint firstItem="35l-iD-CC6" firstAttribute="bottom" secondItem="r1T-H3-kBZ" secondAttribute="bottom" id="KbO-vp-MNb"/>
                             <constraint firstItem="r1T-H3-kBZ" firstAttribute="trailing" secondItem="c2Q-en-uRn" secondAttribute="trailing" constant="50" id="Ll6-W8-2ql"/>
                             <constraint firstItem="Wsn-s7-pAm" firstAttribute="top" secondItem="jmh-Qh-7iw" secondAttribute="bottom" constant="40" id="OBN-je-AKm"/>
                             <constraint firstItem="r1T-H3-kBZ" firstAttribute="trailing" secondItem="Lpa-xf-gzj" secondAttribute="trailing" constant="50" id="TlL-zc-38d"/>
@@ -126,6 +140,7 @@
                             <constraint firstItem="r1T-H3-kBZ" firstAttribute="trailing" secondItem="TR3-Ge-Hfz" secondAttribute="trailing" constant="50" id="nl1-7v-0pX"/>
                             <constraint firstItem="qVB-W8-vTb" firstAttribute="top" secondItem="Lpa-xf-gzj" secondAttribute="bottom" constant="8" id="pFT-Z8-MnT"/>
                             <constraint firstItem="c2Q-en-uRn" firstAttribute="top" secondItem="TR3-Ge-Hfz" secondAttribute="bottom" constant="10" id="qnQ-aM-SYx"/>
+                            <constraint firstItem="35l-iD-CC6" firstAttribute="trailing" secondItem="r1T-H3-kBZ" secondAttribute="trailing" id="rS4-SZ-yiD"/>
                             <constraint firstItem="Lpa-xf-gzj" firstAttribute="leading" secondItem="r1T-H3-kBZ" secondAttribute="leading" constant="50" id="slB-bJ-2qt"/>
                             <constraint firstItem="TR3-Ge-Hfz" firstAttribute="top" secondItem="HrZ-FU-ZWy" secondAttribute="bottom" constant="8" id="vaZ-TB-C0o"/>
                         </constraints>

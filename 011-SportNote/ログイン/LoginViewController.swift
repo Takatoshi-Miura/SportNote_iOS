@@ -58,6 +58,12 @@ class LoginViewController: UIViewController {
         present(nextView, animated: false, completion: nil)
     }
     
+    // 閉じるボタンの処理
+    @IBAction func closeButton(_ sender: Any) {
+        // モーダルを閉じる
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     
 
     //MARK:- 画面遷移
