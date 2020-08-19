@@ -123,7 +123,7 @@ class CreateAccountViewController: UIViewController {
         }
         
         // ログイン画面へ遷移
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5.0) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10.0) {
             let storyboard: UIStoryboard = self.storyboard!
             let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
             self.present(nextView, animated: true, completion: nil)

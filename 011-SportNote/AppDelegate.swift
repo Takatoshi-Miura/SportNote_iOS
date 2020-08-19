@@ -52,9 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    
-    
-    
 
     // MARK: UISceneSession Lifecycle
 
