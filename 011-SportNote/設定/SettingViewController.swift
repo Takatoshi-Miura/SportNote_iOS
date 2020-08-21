@@ -74,29 +74,5 @@ class SettingViewController: UIViewController,UITableViewDelegate, UITableViewDa
         cell.textLabel!.text = cellTitle[indexPath.row]
         return cell
     }
-    
-    
-    
-    //MARK:- その他の処理
-    
-    func logout() {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-            
-            // UserDefaultsにユーザー情報を保存
-            let userDefaults = UserDefaults.standard
-            userDefaults.removeObject(forKey: "address")
-            userDefaults.removeObject(forKey: "password")
-            userDefaults.synchronize()
-            
-            SVProgressHUD.showSuccess(withStatus: "ログアウトしました。")
-        } catch let signOutError as NSError {
-            print ("Error signing out: %@", signOutError)
-            SVProgressHUD.showError(withStatus: "ログアウトに失敗しました。")
-        }
-    }
-    
-    
 
 }
