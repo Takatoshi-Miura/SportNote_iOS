@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.register(defaults: ["firstLaunch": true])
         
         // 利用規約同意判定(trueなら同意)
-        UserDefaults.standard.register(defaults: ["ver1.1":false])
+        UserDefaults.standard.register(defaults: ["ver1.2":false])
         
         // ユーザーIDを作成(初期値を登録)
         let uuid = NSUUID().uuidString

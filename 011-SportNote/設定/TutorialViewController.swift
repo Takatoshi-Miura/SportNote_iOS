@@ -20,7 +20,7 @@ class TutorialViewController: UIViewController {
         setTextColor()
         
         // 同意していないなら利用規約を表示
-        if UserDefaults.standard.bool(forKey: "ver1.1") == false {
+        if UserDefaults.standard.bool(forKey: "ver1.2") == false {
             displayAgreement()
         }
     }
