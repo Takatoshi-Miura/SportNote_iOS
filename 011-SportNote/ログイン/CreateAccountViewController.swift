@@ -124,9 +124,11 @@ class CreateAccountViewController: UIViewController {
         
         // ログイン画面へ遷移
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10.0) {
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
-            self.present(nextView, animated: true, completion: nil)
+            // ログインを促す表示
+            SVProgressHUD.showInfo(withStatus: "ログインしてください")
+            
+            // モーダルを閉じる
+            self.dismiss(animated: true, completion: nil)
         }
     }
     

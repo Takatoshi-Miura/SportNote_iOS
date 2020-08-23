@@ -80,8 +80,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var addButton:UIBarButtonItem!      // 追加ボタン
     var calendarButton:UIBarButtonItem! // カレンダーボタン
     
-    // 利用規約同意判定
-    
     
     
     //MARK:- UIの設定
@@ -645,7 +643,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         let agreeAction = UIAlertAction(title:"同意する",style:UIAlertAction.Style.default){(action:UIAlertAction)in
             // 同意ボタンがタップされたときの処理
             // 次回以降、利用規約を表示しないようにする
-            UserDefaults.standard.set(true, forKey: "ver1.1")
+            UserDefaults.standard.set(true, forKey: "ver1.2")
         }
         
         // 利用規約ボタンを宣言
