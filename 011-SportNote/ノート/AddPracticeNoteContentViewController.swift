@@ -611,7 +611,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ツールバーの宣言
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.taskPickerDone))
+        let doneItem = UIBarButtonItem(title: "追加", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.taskPickerDone))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
