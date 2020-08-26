@@ -147,6 +147,8 @@
                         <viewLayoutGuide key="safeArea" id="r1T-H3-kBZ"/>
                     </view>
                     <connections>
+                        <outlet property="loginButton" destination="c2Q-en-uRn" id="Eab-yU-e81"/>
+                        <outlet property="loginLabel" destination="Wsn-s7-pAm" id="CKd-BC-4T6"/>
                         <outlet property="mailAddressTextField" destination="HrZ-FU-ZWy" id="b5N-GJ-MZF"/>
                         <outlet property="passwordTextField" destination="TR3-Ge-Hfz" id="qv2-Fc-GnC"/>
                         <segue destination="iTx-Cd-gKZ" kind="show" identifier="goTabBarController" id="CH5-J5-UsU"/>

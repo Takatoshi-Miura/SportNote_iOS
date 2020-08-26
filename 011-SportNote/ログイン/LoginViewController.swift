@@ -16,15 +16,27 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // ログインしてるならログインボタンをログアウトボタンに変更
+        setloginButton()
+        
+        // ログインしているなら情報をテキストフィールドに表示
+        printUserInfo()
     }
     
     
     
     //MARK:- UIの設定
     
+    // ラベル
+    @IBOutlet weak var loginLabel: UILabel!
+    
     // テキストフィールド
     @IBOutlet weak var mailAddressTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    
+    // ボタン
+    @IBOutlet weak var loginButton: UIButton!
     
     // ログインボタンの処理
     @IBAction func loginButton(_ sender: Any) {
@@ -35,8 +47,14 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            // ログイン処理
-            self.login(mail: address, password: password)
+            // ログイン状態チェック
+            if (Auth.auth().currentUser?.uid) != nil {
+                // ログアウト処理
+                self.logout()
+            } else {
+                // ログイン処理
+                self.login(mail: address, password: password)
+            }
         }
     }
     
@@ -66,19 +84,8 @@ class LoginViewController: UIViewController {
 
     //MARK:- 画面遷移
     
-    // ログイン画面に戻ってくるときに呼び出される処理
-    @IBAction func goToLogin(_segue:UIStoryboardSegue){
-        // テキストフィールドをクリア
-        mailAddressTextField.text = ""
-        passwordTextField.text    = ""
-    }
-    
     // ノート画面に遷移する時の処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goTabBarController" {
-            // UserDefaultsにユーザー情報を保存
-            self.saveUserInfo(mail: mailAddressTextField.text!, password: passwordTextField.text!)
-        }
     }
     
     
@@ -111,11 +118,45 @@ class LoginViewController: UIViewController {
             // ログイン成功を通知
             SVProgressHUD.showSuccess(withStatus: "ログインしました。")
             
+            // UserDefaultsにユーザー情報を保存
+            self.saveUserInfo(mail: address, password: pass)
+            
             // メッセージが隠れてしまうため、遅延処理を行う
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                 // ノート画面に遷移
                 self.performSegue(withIdentifier: "goTabBarController", sender: nil)
             }
+        }
+    }
+    
+    // ログアウトするメソッド
+    func logout() {
+        do {
+            try Auth.auth().signOut()
+
+            // ログアウト成功を通知
+            SVProgressHUD.showSuccess(withStatus: "ログアウトしました。")
+            
+            // UserDefaultsのユーザー情報を削除
+            removeUserInfo()
+            
+            // テキストフィールドをクリア
+            mailAddressTextField.text = ""
+            passwordTextField.text = ""
+            
+            // ユーザーIDを作成(初期値を登録)
+            let uuid = NSUUID().uuidString
+            UserDefaults.standard.register(defaults: ["userID":uuid])
+            UserDefaults.standard.set(uuid, forKey: "userID")
+            
+            // メッセージが隠れてしまうため、遅延処理を行う
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                // ノート画面に遷移
+                self.performSegue(withIdentifier: "goTabBarController", sender: nil)
+            }
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+            SVProgressHUD.showError(withStatus: "ログアウトに失敗しました。")
         }
     }
     
@@ -143,7 +184,38 @@ class LoginViewController: UIViewController {
         userDefaults.set(Auth.auth().currentUser!.uid, forKey: "userID")
         userDefaults.set(address, forKey:"address")
         userDefaults.set(pass,forKey:"password")
-        userDefaults.synchronize()
+    }
+    
+    // UserDefaultsからユーザー情報を削除するメソッド
+    func removeUserInfo() {
+        let userDefaults = UserDefaults.standard
+        userDefaults.removeObject(forKey: "userID")
+        userDefaults.removeObject(forKey: "address")
+        userDefaults.removeObject(forKey: "password")
+    }
+    
+    // ログインボタン/ログアウトボタンの設定
+    func setloginButton() {
+        // ログインチェック
+        if (Auth.auth().currentUser?.uid) != nil {
+            // UIをログアウトボタンにセット
+            loginButton.backgroundColor = UIColor.systemRed
+            loginButton.setTitle("ログアウト", for: .normal)
+        } else {
+            // UIをログインボタンにセット
+            loginButton.backgroundColor = UIColor.systemTeal
+            loginButton.setTitle("ログイン", for: .normal)
+        }
+    }
+    
+    // ログイン情報をテキストフィールドに表示するメソッド
+    func printUserInfo() {
+        // ログインしていればUserDefaultsにデータが存在するはず
+        if let address = UserDefaults.standard.object(forKey: "address") as? String, let password = UserDefaults.standard.object(forKey: "password") as? String {
+            mailAddressTextField.text = address
+            passwordTextField.text = password
+            loginLabel.text = "下記アカウントでログイン済みです"
+        }
     }
     
 }

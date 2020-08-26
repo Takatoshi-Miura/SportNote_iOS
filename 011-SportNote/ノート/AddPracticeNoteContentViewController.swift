@@ -453,6 +453,15 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
     }
     
+    // 表示されている課題にチェックマークを付与
+//    func pickerView(_ pickerView: UIPickerView,viewForRow row: Int,forComponent component: Int,reusing view: UIView?) -> UIView {
+//        if pickerView.tag == 2 {
+//            return
+//        } else {
+//            return
+//        }
+//    }
+    
     // 種別セル初期化メソッド
     func typeCellPickerInit() {
         // ビューの初期化
