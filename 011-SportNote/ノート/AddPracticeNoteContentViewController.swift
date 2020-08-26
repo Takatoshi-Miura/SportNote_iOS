@@ -50,6 +50,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // ツールバーを作成
         createToolBar()
+        
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,6 +70,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             
             // 天候Pickerにデータをセット
             setWeatherPicker(noteData: self.practiceNoteData)
+            
+            // テーブルビューの高さ調整
+            self.tableViewHeight.constant = 100
             
             // テーブルビューを更新
             self.tableView.reloadData()
@@ -132,6 +138,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
     @IBOutlet weak var taskTableView: UITableView!
     @IBOutlet weak var taskTableViewHeight: NSLayoutConstraint!
     

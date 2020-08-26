@@ -44,6 +44,9 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         
         // ツールバーを作成
         createToolBar()
+        
+        // データのないセルを非表示
+        tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,6 +65,9 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
             
             // 日付Pickerに値をセット
             setDatePicker(noteData: self.competitionNoteData)
+            
+            // テーブルビューの高さ調整
+            self.tableViewHeight.constant = 100
             
             // テーブルビューを更新
             self.tableView.reloadData()
@@ -123,6 +129,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
     
     // テキストビュー
     @IBOutlet weak var physicalConditionTextView: UITextView!

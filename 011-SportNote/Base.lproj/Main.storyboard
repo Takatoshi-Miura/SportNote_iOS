@@ -2024,6 +2024,7 @@
                         <outlet property="purposeTextView" destination="oEc-L0-amh" id="6n6-WC-NLV"/>
                         <outlet property="reflectionTextView" destination="qP1-7i-lWU" id="sXR-k7-rrl"/>
                         <outlet property="tableView" destination="9c0-Xc-DkN" id="aUv-rE-DzZ"/>
+                        <outlet property="tableViewHeight" destination="umC-au-ihN" id="epU-4Z-Twe"/>
                         <outlet property="taskTableView" destination="xmx-r9-c5P" id="Lep-8J-ZPa"/>
                         <outlet property="taskTableViewHeight" destination="1ri-V5-K6z" id="9fI-Dw-IdU"/>
                     </connections>
@@ -2333,6 +2334,7 @@
                         <outlet property="reflectionTextView" destination="Esk-dg-vN8" id="OoR-6X-TOp"/>
                         <outlet property="resultTextView" destination="G7C-qp-Zr9" id="m2Z-jp-H4V"/>
                         <outlet property="tableView" destination="kWI-As-cQs" id="2RY-zm-gwc"/>
+                        <outlet property="tableViewHeight" destination="DFN-cd-1lv" id="rQd-Yn-whj"/>
                         <outlet property="targetTextView" destination="D9x-Gd-R6k" id="DuD-qP-bjI"/>
                     </connections>
                 </viewController>
