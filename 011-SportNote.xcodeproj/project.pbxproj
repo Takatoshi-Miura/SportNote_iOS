@@ -47,6 +47,7 @@
 		8DCF350824F6554900055093 /* TargetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350424F6554900055093 /* TargetData.swift */; };
 		8DCF350924F6554900055093 /* FreeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350524F6554900055093 /* FreeNote.swift */; };
 		8DCF350A24F6554900055093 /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350624F6554900055093 /* TaskData.swift */; };
+		8DCF350C24F67E8700055093 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350B24F67E8700055093 /* UserData.swift */; };
 		8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */; };
 		8DF91CB724B3051500FFE201 /* AddPracticeNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */; };
 /* End PBXBuildFile section */
@@ -97,6 +98,7 @@
 		8DCF350424F6554900055093 /* TargetData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetData.swift; sourceTree = "<group>"; };
 		8DCF350524F6554900055093 /* FreeNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeNote.swift; sourceTree = "<group>"; };
 		8DCF350624F6554900055093 /* TaskData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
+		8DCF350B24F67E8700055093 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		8DF91CB624B3051500FFE201 /* AddPracticeNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteViewController.swift; sourceTree = "<group>"; };
 		C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,6 +173,7 @@
 		8DCF350224F6554900055093 /* モデル */ = {
 			isa = PBXGroup;
 			children = (
+				8DCF350B24F67E8700055093 /* UserData.swift */,
 				8DCF350324F6554900055093 /* NoteData.swift */,
 				8DCF350424F6554900055093 /* TargetData.swift */,
 				8DCF350524F6554900055093 /* FreeNote.swift */,
@@ -393,6 +396,7 @@
 				8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */,
 				8D01653624AF202F00F9D69F /* AddNoteViewController.swift in Sources */,
 				8DCF350824F6554900055093 /* TargetData.swift in Sources */,
+				8DCF350C24F67E8700055093 /* UserData.swift in Sources */,
 				8D7C676224DD045C005599AD /* TutorialViewController.swift in Sources */,
 				8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */,
 				8D01653424AEFC2000F9D69F /* FreeNoteViewController.swift in Sources */,
