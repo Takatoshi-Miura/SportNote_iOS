@@ -46,6 +46,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
+        // アプリのアップデートでUserDefaultsのユーザー情報が削除されてもログインできるように。
+        // 端末情報に一致するデータがFirebaseにあれば、Firebase経由でユーザーIDをセット
+        let userData = UserData()
+        
+        
+        
         return true
     }
     

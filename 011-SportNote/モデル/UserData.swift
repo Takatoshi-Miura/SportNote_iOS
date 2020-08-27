@@ -11,7 +11,7 @@ class UserData {
     //MARK:- 保持データ
     
     private var userID:String = ""          // ユーザーUID
-    private var IPAddress:String = ""       // IPアドレス
+    
     private var created_at:String = ""      // 作成日
     private var updated_at:String = ""      // 更新日
     

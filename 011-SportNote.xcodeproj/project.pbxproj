@@ -149,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				8DB9E58924DEBDFC0042A7A2 /* 011-SportNoteRelease.entitlements */,
+				8D57AFD624A47F7D007450BF /* 011-SportNote-Bridging-Header.h */,
 				8D665D2624A17CD300441B32 /* AppDelegate.swift */,
 				8D665D2824A17CD300441B32 /* SceneDelegate.swift */,
 				8D665D2C24A17CD300441B32 /* Main.storyboard */,
@@ -165,7 +166,6 @@
 				8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */,
 				8D57AFD824A47F7E007450BF /* SVProgressHUD.h */,
 				8D57AFD724A47F7E007450BF /* SVProgressHUD.m */,
-				8D57AFD624A47F7D007450BF /* 011-SportNote-Bridging-Header.h */,
 			);
 			path = "011-SportNote";
 			sourceTree = "<group>";
@@ -547,6 +547,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -572,6 +573,7 @@
 				CODE_SIGN_ENTITLEMENTS = "011-SportNote/011-SportNoteRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
