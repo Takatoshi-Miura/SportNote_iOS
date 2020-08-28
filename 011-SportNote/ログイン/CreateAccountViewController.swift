@@ -97,6 +97,8 @@ class CreateAccountViewController: UIViewController {
             
             // FirebaseのユーザーIDをセット
             UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "userID")
+            UserDefaults.standard.set(address, forKey:"address")
+            UserDefaults.standard.set(pass,forKey:"password")
             
             // データの引継ぎを通知
             SVProgressHUD.show(withStatus: "データの引継ぎをしています")
@@ -130,13 +132,12 @@ class CreateAccountViewController: UIViewController {
         let userData = UserData()
         userData.createUserData()
         
-        // ログイン画面へ遷移
+        // ノート画面へ遷移
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10.0) {
-            // ログインを促す表示
-            SVProgressHUD.showInfo(withStatus: "ログインしてください")
-            
-            // モーダルを閉じる
-            self.dismiss(animated: true, completion: nil)
+            // ノート画面へ遷移
+            let storyboard: UIStoryboard = self.storyboard!
+            let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+            self.present(nextView, animated: true, completion: nil)
         }
     }
     
