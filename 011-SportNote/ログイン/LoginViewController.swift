@@ -118,6 +118,10 @@ class LoginViewController: UIViewController {
             // ログイン成功を通知
             SVProgressHUD.showSuccess(withStatus: "ログインしました。")
             
+            // ユーザーデータを削除
+            let userData = UserData()
+            userData.removeUserData()
+            
             // UserDefaultsにユーザー情報を保存
             self.saveUserInfo(mail: address, password: pass)
             

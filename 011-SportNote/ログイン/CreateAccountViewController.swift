@@ -91,6 +91,10 @@ class CreateAccountViewController: UIViewController {
                     return
                 }
             }
+            // ユーザーデータを削除
+            let userData = UserData()
+            userData.removeUserData()
+            
             // FirebaseのユーザーIDをセット
             UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "userID")
             

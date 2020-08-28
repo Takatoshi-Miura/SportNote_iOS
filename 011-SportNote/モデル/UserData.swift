@@ -109,11 +109,9 @@ class UserData {
         // 更新時間に現在時刻をセット
         self.setUpdated_at(self.getCurrentTime())
         
-        // 更新したい課題データを取得
+        // 変更する可能性のあるデータのみ更新
         let db = Firestore.firestore()
         let database = db.collection("UserData").document("\(userID)")
-
-        // 変更する可能性のあるデータのみ更新
         database.updateData([
             "updated_at" : self.getUpdated_at()
         ]) { err in
@@ -121,6 +119,28 @@ class UserData {
                 print("Error updating document: \(err)")
             } else {
                 print("UserDataを更新しました")
+            }
+        }
+    }
+    
+    // UserDataを削除するメソッド
+    func removeUserData() {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // データを削除
+        let db = Firestore.firestore()
+        let database = db.collection("UserData").document("\(userID)")
+        database.updateData([
+            "userID"     : FieldValue.delete(),
+            "mail"       : FieldValue.delete(),
+            "created_at" : FieldValue.delete(),
+            "updated_at" : FieldValue.delete()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("UserDataを削除しました")
             }
         }
     }
