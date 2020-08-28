@@ -43,6 +43,7 @@
 		8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */; };
 		8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */; };
 		8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */; };
+		8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCC058924F8E40300744A61 /* MessageUI.framework */; };
 		8DCF350724F6554900055093 /* NoteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350324F6554900055093 /* NoteData.swift */; };
 		8DCF350824F6554900055093 /* TargetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350424F6554900055093 /* TargetData.swift */; };
 		8DCF350924F6554900055093 /* FreeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350524F6554900055093 /* FreeNote.swift */; };
@@ -94,6 +95,7 @@
 		8DB9E58924DEBDFC0042A7A2 /* 011-SportNoteRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "011-SportNoteRelease.entitlements"; sourceTree = "<group>"; };
 		8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteContentViewController.swift; sourceTree = "<group>"; };
+		8DCC058924F8E40300744A61 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8DCF350324F6554900055093 /* NoteData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteData.swift; sourceTree = "<group>"; };
 		8DCF350424F6554900055093 /* TargetData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetData.swift; sourceTree = "<group>"; };
 		8DCF350524F6554900055093 /* FreeNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeNote.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */,
 				8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */,
 				3DEAE45CE9BB67CBC455FA77 /* Pods_011_SportNote.framework in Frameworks */,
 			);
@@ -240,6 +243,7 @@
 		C286C2B0EED91BEBB760A936 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8DCC058924F8E40300744A61 /* MessageUI.framework */,
 				8D57AFDC24A47FAB007450BF /* QuartzCore.framework */,
 				C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */,
 			);
