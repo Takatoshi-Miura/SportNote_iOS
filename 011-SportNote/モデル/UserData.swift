@@ -14,6 +14,7 @@ class UserData {
     //MARK:- 保持データ
     
     private var userID:String = ""          // ユーザーUID
+    private var mail:String = ""            // メールアドレス
     private var created_at:String = ""      // 作成日
     private var updated_at:String = ""      // 更新日
     
@@ -33,6 +34,10 @@ class UserData {
         self.userID = userID
     }
     
+    func setMail(_ address:String) {
+        self.mail = address
+    }
+    
     func setCreated_at(_ created_at:String) {
         self.created_at = created_at
     }
@@ -49,6 +54,10 @@ class UserData {
         return self.userID
     }
     
+    func getMail() -> String {
+        return self.mail
+    }
+    
     func getCreated_at() -> String {
         return self.created_at
     }
@@ -63,11 +72,14 @@ class UserData {
     
     // UserDataを作成するメソッド
     func createUserData() {
-        // ユーザーIDを取得
+        // ユーザーIDを取得＆セット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーIDをセット
         self.setUserID(userID)
+        
+        // メールアドレスを取得＆セット
+        if let address = UserDefaults.standard.object(forKey: "address") as? String {
+            self.setMail(address)
+        }
         
         // 現在時刻をセット
         self.setCreated_at(self.getCurrentTime())
@@ -77,6 +89,7 @@ class UserData {
         let db = Firestore.firestore()
         db.collection("UserData").document("\(userID)").setData([
             "userID"     : self.getUserID(),
+            "mail"       : self.getMail(),
             "created_at" : self.getCreated_at(),
             "updated_at" : self.getUpdated_at()
         ]) { err in
