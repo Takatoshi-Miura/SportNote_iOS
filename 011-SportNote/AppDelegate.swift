@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 初回起動判定(初期値を登録)
         UserDefaults.standard.register(defaults: ["firstLaunch": true])
         
-        // 利用規約同意判定(trueなら同意)
-        UserDefaults.standard.register(defaults: ["ver1.1":false])
+        // 新規バージョンでの初回起動判定
+        UserDefaults.standard.register(defaults: ["ver1.2":false])
         
         // ユーザーIDを作成(初期値を登録)
         let uuid = NSUUID().uuidString
@@ -45,12 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "userID")
             }
         }
-        
-        // アプリのアップデートでUserDefaultsのユーザー情報が削除されてもログインできるように。
-        // 端末情報に一致するデータがFirebaseにあれば、Firebase経由でユーザーIDをセット
-        let userData = UserData()
-        
-        
         
         return true
     }

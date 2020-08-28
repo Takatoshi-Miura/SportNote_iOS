@@ -17,7 +17,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //初回起動判定
+        // ユーザーデータの更新(利用状況の把握)
+        let userData = UserData()
+        userData.updateUserData()
+        
+        // 初回起動判定
         if UserDefaults.standard.bool(forKey: "firstLaunch") {
             // 初回起動時の処理
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
@@ -35,8 +39,13 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.present(nextView, animated: true, completion: nil)
         }
         
-        // 同意していないなら利用規約を表示
-        if UserDefaults.standard.bool(forKey: "ver1.1") == false {
+        // 新規バージョンでの初回起動判定
+        if UserDefaults.standard.bool(forKey: "ver1.2") == false {
+            // ユーザーデータを作成
+            let userData = UserData()
+            userData.createUserData()
+            
+            // 利用規約を表示
             displayAgreement()
         }
     

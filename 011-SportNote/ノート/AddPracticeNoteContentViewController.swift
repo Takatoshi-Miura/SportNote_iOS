@@ -463,9 +463,15 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // 表示されている課題にチェックマークを付与
 //    func pickerView(_ pickerView: UIPickerView,viewForRow row: Int,forComponent component: Int,reusing view: UIView?) -> UIView {
 //        if pickerView.tag == 2 {
-//            return
+//            // 表示するラベルを生成する
+//            let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50))
+//            label.textAlignment = .center
+//            label.text = taskDataArray[row].getTaskTitle()
+//            label.textColor = .red
+//            return label
 //        } else {
-//            return
+//            let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50))
+//            return label
 //        }
 //    }
     
