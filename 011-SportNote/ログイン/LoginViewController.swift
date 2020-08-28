@@ -48,7 +48,7 @@ class LoginViewController: UIViewController {
             }
             
             // ログイン状態チェック
-            if (Auth.auth().currentUser?.uid) != nil {
+            if let _ = UserDefaults.standard.object(forKey: "address") as? String, let _ = UserDefaults.standard.object(forKey: "password") as? String {
                 // ログアウト処理
                 self.logout()
             } else {
@@ -120,6 +120,10 @@ class LoginViewController: UIViewController {
             
             // UserDefaultsにユーザー情報を保存
             self.saveUserInfo(mail: address, password: pass)
+            
+            // ユーザーデータを更新
+            let userData = UserData()
+            userData.createUserData()
             
             // メッセージが隠れてしまうため、遅延処理を行う
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
@@ -197,7 +201,7 @@ class LoginViewController: UIViewController {
     // ログインボタン/ログアウトボタンの設定
     func setloginButton() {
         // ログインチェック
-        if (Auth.auth().currentUser?.uid) != nil {
+        if let _ = UserDefaults.standard.object(forKey: "address") as? String, let _ = UserDefaults.standard.object(forKey: "password") as? String {
             // UIをログアウトボタンにセット
             loginButton.backgroundColor = UIColor.systemRed
             loginButton.setTitle("ログアウト", for: .normal)
@@ -214,7 +218,7 @@ class LoginViewController: UIViewController {
         if let address = UserDefaults.standard.object(forKey: "address") as? String, let password = UserDefaults.standard.object(forKey: "password") as? String {
             mailAddressTextField.text = address
             passwordTextField.text = password
-            loginLabel.text = "下記アカウントでログイン済みです"
+            loginLabel.text = "下記アカウントでログイン済み"
         }
     }
     

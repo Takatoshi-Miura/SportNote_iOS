@@ -48,6 +48,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 利用規約を表示
             displayAgreement()
         }
+        
+        // デバック用
+        //UserDefaults.standard.removeObject(forKey: "ver1.2")
     
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true

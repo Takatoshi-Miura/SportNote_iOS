@@ -122,6 +122,10 @@ class CreateAccountViewController: UIViewController {
             createTaskData(data: taskData)
         }
         
+        // ユーザーデータを作成
+        let userData = UserData()
+        userData.createUserData()
+        
         // ログイン画面へ遷移
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10.0) {
             // ログインを促す表示
