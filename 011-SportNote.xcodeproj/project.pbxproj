@@ -158,10 +158,10 @@
 				8D665D2C24A17CD300441B32 /* Main.storyboard */,
 				8D665D3124A17CD400441B32 /* LaunchScreen.storyboard */,
 				8DA6351324B47A1A00186358 /* TabBarController.swift */,
-				8DE8B1E924B1C28000E1195B /* ログイン */,
-				8DE8B1EA24B1C31900E1195B /* 課題 */,
 				8DE8B1EC24B1C53A00E1195B /* ノート */,
+				8DE8B1EA24B1C31900E1195B /* 課題 */,
 				8DE8B1EB24B1C4D200E1195B /* 設定 */,
+				8DE8B1E924B1C28000E1195B /* ログイン */,
 				8DCF350224F6554900055093 /* モデル */,
 				8D665D2F24A17CD400441B32 /* Assets.xcassets */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
@@ -550,7 +550,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
@@ -558,7 +558,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.Takatoshi.Miura.SportsNoteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";
@@ -576,7 +576,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "011-SportNote/011-SportNoteRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				INFOPLIST_FILE = "011-SportNote/Info.plist";
@@ -584,7 +584,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.Takatoshi.Miura.SportsNoteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";
