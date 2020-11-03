@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import SVProgressHUD
+import GoogleMobileAds
 
 class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -63,6 +64,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
+        
+        // 広告表示
+        self.displayAdMob()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,6 +95,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
     var addButton:UIBarButtonItem!      // 追加ボタン
     var calendarButton:UIBarButtonItem! // カレンダーボタン
+    
+    // 広告用
+    let AdMobTest:Bool = true           // 広告テストモード
+    let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
+    let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
     
     
     
@@ -674,6 +683,29 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //アラートダイアログを表示
         present(alertController,animated:true,completion:nil)
+    }
+    
+    // 広告表示を行うメソッド
+    func displayAdMob() {
+        // バナー広告を宣言
+        var admobView = GADBannerView()
+        admobView = GADBannerView(adSize:kGADAdSizeBanner)
+        
+        // レイアウト調整(画面下部に設置)
+        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
+        admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
+        
+        // テストモードの検出
+        if AdMobTest {
+            admobView.adUnitID = TEST_ID
+        } else {
+            admobView.adUnitID = AdMobID
+        }
+         
+        admobView.rootViewController = self
+        admobView.load(GADRequest())
+         
+        self.view.addSubview(admobView)
     }
     
     // 初期化sectionTitle
