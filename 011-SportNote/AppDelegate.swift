@@ -18,6 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
+        // Admob広告を追加
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        
         // 初回起動判定(初期値を登録)
         UserDefaults.standard.register(defaults: ["firstLaunch": true])
         
