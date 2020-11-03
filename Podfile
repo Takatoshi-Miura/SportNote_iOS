@@ -13,6 +13,6 @@ pod 'Firebase/Firestore'
 pod 'SVProgressHUD'
 pod 'FSCalendar'
 pod 'CalculateCalendarLogic' 
-
+pod 'Firebase/AdMob'
 
 end
