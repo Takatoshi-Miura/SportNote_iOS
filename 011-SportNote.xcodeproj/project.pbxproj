@@ -32,6 +32,8 @@
 		8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */; };
 		8D7C676024DD03F6005599AD /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7C675F24DD03F6005599AD /* PageViewController.swift */; };
 		8D7C676224DD045C005599AD /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7C676124DD045C005599AD /* TutorialViewController.swift */; };
+		8D941CC42552188400B3A472 /* NoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D941CC22552188400B3A472 /* NoteViewCell.swift */; };
+		8D941CC52552188400B3A472 /* NoteViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D941CC32552188400B3A472 /* NoteViewCell.xib */; };
 		8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */; };
 		8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA4121524B03077002FD67A /* AddTargetViewController.swift */; };
 		8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5338B24CAA696000ADAFB /* PracticeNoteDetailViewController.swift */; };
@@ -83,6 +85,8 @@
 		8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 		8D7C675F24DD03F6005599AD /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		8D7C676124DD045C005599AD /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		8D941CC22552188400B3A472 /* NoteViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewCell.swift; sourceTree = "<group>"; };
+		8D941CC32552188400B3A472 /* NoteViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteViewCell.xib; sourceTree = "<group>"; };
 		8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresDetailViewController.swift; sourceTree = "<group>"; };
 		8DA4121524B03077002FD67A /* AddTargetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTargetViewController.swift; sourceTree = "<group>"; };
 		8DA5338B24CAA696000ADAFB /* PracticeNoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNoteDetailViewController.swift; sourceTree = "<group>"; };
@@ -236,6 +240,8 @@
 				8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */,
 				8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */,
 				8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */,
+				8D941CC22552188400B3A472 /* NoteViewCell.swift */,
+				8D941CC32552188400B3A472 /* NoteViewCell.xib */,
 			);
 			path = "ノート";
 			sourceTree = "<group>";
@@ -313,6 +319,7 @@
 			files = (
 				8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */,
 				8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */,
+				8D941CC52552188400B3A472 /* NoteViewCell.xib in Resources */,
 				8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */,
 				8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */,
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
@@ -382,6 +389,7 @@
 				8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */,
 				8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */,
 				8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */,
+				8D941CC42552188400B3A472 /* NoteViewCell.swift in Sources */,
 				8D7C676024DD03F6005599AD /* PageViewController.swift in Sources */,
 				8D69FC9824B7085900DFECB3 /* TaskMeasuresTableViewCell.swift in Sources */,
 				8DCF350A24F6554900055093 /* TaskData.swift in Sources */,
