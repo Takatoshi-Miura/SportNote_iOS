@@ -43,6 +43,12 @@
                 </subviews>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="noteDateLabel" destination="zVI-C0-VPr" id="1bS-Ir-brw"/>
+                <outlet property="noteDetailLabel" destination="WRg-3V-y9e" id="gi3-IT-Na6"/>
+                <outlet property="noteTypeImageView" destination="Ge7-KY-zU3" id="uh1-La-ttt"/>
+                <outlet property="weatherImageView" destination="HTk-mg-WtC" id="nWP-wS-akt"/>
+            </connections>
             <point key="canvasLocation" x="-81.159420289855078" y="0.0"/>
         </tableViewCell>
     </objects>
