@@ -184,7 +184,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         case 0:
             return 44   // セルのデフォルト高さ
         default:
-            return 50  // カスタムセルの高さ
+            return 60  // カスタムセルの高さ
         }
     }
     

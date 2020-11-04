@@ -19,53 +19,54 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ge7-KY-zU3">
-                        <rect key="frame" x="20" y="5" width="50" height="50"/>
+                        <rect key="frame" x="10" y="10" width="40" height="40"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="50" id="G05-Ai-D7r"/>
-                            <constraint firstAttribute="width" constant="50" id="Lof-bj-HEe"/>
+                            <constraint firstAttribute="width" constant="40" id="UGg-MR-VDZ"/>
+                            <constraint firstAttribute="height" constant="40" id="yHf-Ly-cGS"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="11月4日（水）" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zVI-C0-VPr">
-                        <rect key="frame" x="78" y="0.0" width="272" height="30"/>
+                        <rect key="frame" x="60" y="0.0" width="113" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="30" id="vsJ-L0-s78"/>
+                            <constraint firstAttribute="height" constant="30" id="b5b-WR-bLb"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HTk-mg-WtC">
-                        <rect key="frame" x="360" y="5" width="50" height="50"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WRg-3V-y9e">
+                        <rect key="frame" x="60" y="30" width="350" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="8ue-hl-VZy"/>
-                            <constraint firstAttribute="height" constant="50" id="ZCy-hE-Jnb"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="YGP-GL-N5g"/>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="30" id="Zxf-Mh-mJ3"/>
+                            <constraint firstAttribute="height" constant="30" id="wZX-bW-q6t"/>
                         </constraints>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="練習内容" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WRg-3V-y9e">
-                        <rect key="frame" x="78" y="30" width="272" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="30" id="JJf-lh-QyU"/>
-                        </constraints>
+                        <string key="text">練習内容
+練習内容</string>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" systemColor="systemGrayColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HTk-mg-WtC">
+                        <rect key="frame" x="385" y="3" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="25" id="uxh-Qg-fy9"/>
+                            <constraint firstAttribute="height" constant="25" id="wkv-fJ-Rlz"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="HTk-mg-WtC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="93e-5E-Brc"/>
-                    <constraint firstAttribute="bottom" secondItem="HTk-mg-WtC" secondAttribute="bottom" constant="5" id="9Iu-Ra-ANx"/>
-                    <constraint firstItem="HTk-mg-WtC" firstAttribute="leading" secondItem="zVI-C0-VPr" secondAttribute="trailing" constant="10" id="DyM-gB-d5g"/>
-                    <constraint firstAttribute="bottom" secondItem="WRg-3V-y9e" secondAttribute="bottom" id="KhJ-Pa-oxd"/>
-                    <constraint firstItem="HTk-mg-WtC" firstAttribute="leading" secondItem="WRg-3V-y9e" secondAttribute="trailing" constant="10" id="OLs-GJ-0N3"/>
-                    <constraint firstAttribute="bottom" secondItem="Ge7-KY-zU3" secondAttribute="bottom" constant="5" id="Ont-fg-Z14"/>
-                    <constraint firstItem="WRg-3V-y9e" firstAttribute="leading" secondItem="Ge7-KY-zU3" secondAttribute="trailing" constant="8" symbolic="YES" id="Q5S-EY-1S9"/>
-                    <constraint firstItem="WRg-3V-y9e" firstAttribute="top" secondItem="zVI-C0-VPr" secondAttribute="bottom" id="QaP-59-M09"/>
-                    <constraint firstItem="Ge7-KY-zU3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="R5i-He-kIF"/>
-                    <constraint firstItem="WRg-3V-y9e" firstAttribute="top" secondItem="zVI-C0-VPr" secondAttribute="bottom" id="aMC-RP-V8g"/>
-                    <constraint firstItem="zVI-C0-VPr" firstAttribute="leading" secondItem="Ge7-KY-zU3" secondAttribute="trailing" constant="8" symbolic="YES" id="eRJ-Gd-UVG"/>
-                    <constraint firstItem="zVI-C0-VPr" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="hea-Kh-Su9"/>
-                    <constraint firstItem="Ge7-KY-zU3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" symbolic="YES" id="scF-U2-0K9"/>
-                    <constraint firstAttribute="trailing" secondItem="HTk-mg-WtC" secondAttribute="trailing" constant="10" id="x7S-6B-hRw"/>
+                    <constraint firstItem="Ge7-KY-zU3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="7Hu-hE-Cqu"/>
+                    <constraint firstItem="HTk-mg-WtC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="3" id="Nem-OM-zs4"/>
+                    <constraint firstItem="WRg-3V-y9e" firstAttribute="top" secondItem="zVI-C0-VPr" secondAttribute="bottom" id="SNO-hV-IZi"/>
+                    <constraint firstAttribute="bottom" secondItem="Ge7-KY-zU3" secondAttribute="bottom" constant="10" id="St1-g7-fEs"/>
+                    <constraint firstItem="zVI-C0-VPr" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="WPh-7Y-IxM"/>
+                    <constraint firstAttribute="trailing" secondItem="HTk-mg-WtC" secondAttribute="trailing" constant="10" id="a4N-cU-uNj"/>
+                    <constraint firstAttribute="trailing" secondItem="WRg-3V-y9e" secondAttribute="trailing" constant="10" id="eFj-DJ-ch2"/>
+                    <constraint firstItem="WRg-3V-y9e" firstAttribute="leading" secondItem="Ge7-KY-zU3" secondAttribute="trailing" constant="10" id="hxE-j7-j13"/>
+                    <constraint firstAttribute="bottom" secondItem="WRg-3V-y9e" secondAttribute="bottom" id="jWM-G0-N8R"/>
+                    <constraint firstItem="Ge7-KY-zU3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="pL0-zy-tpJ"/>
+                    <constraint firstItem="zVI-C0-VPr" firstAttribute="leading" secondItem="Ge7-KY-zU3" secondAttribute="trailing" constant="10" id="r2t-IN-ST1"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -75,7 +76,7 @@
                 <outlet property="noteTypeImageView" destination="Ge7-KY-zU3" id="uh1-La-ttt"/>
                 <outlet property="weatherImageView" destination="HTk-mg-WtC" id="nWP-wS-akt"/>
             </connections>
-            <point key="canvasLocation" x="-81.159420289855078" y="-6.0267857142857144"/>
+            <point key="canvasLocation" x="94" y="-9"/>
         </tableViewCell>
     </objects>
     <resources>

@@ -26,6 +26,7 @@ class NoteViewCell: UITableViewCell {
         noteDateLabel.text = noteData.getCellTitle()
         
         // 内容
+        noteDetailLabel.numberOfLines = 0
         if noteData.getNoteType() == "練習記録" {
             noteDetailLabel.text = noteData.getDetail()
         } else {
