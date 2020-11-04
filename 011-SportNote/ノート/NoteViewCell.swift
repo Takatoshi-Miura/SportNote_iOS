@@ -21,15 +21,15 @@ class NoteViewCell: UITableViewCell {
     //MARK:- その他のメソッド
     
     // ラベルに表示するメソッド
-    func printNoteData(_ noteData:NoteData,_ index:Int) {
+    func printNoteData(_ noteData:NoteData) {
         // 日付
         noteDateLabel.text = noteData.getCellTitle()
         
         // 内容
         if noteData.getNoteType() == "練習記録" {
-            noteDateLabel.text = noteData.getDetail()
+            noteDetailLabel.text = noteData.getDetail()
         } else {
-            
+            noteDetailLabel.text = noteData.getResult()
         }
         
         // 天気アイコン

@@ -62,6 +62,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // ネビゲーションボタンをセット
         setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
         
+        // カスタムセルを登録
+        tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
+        
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
         
@@ -170,15 +173,18 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 return cell
             default:
                 // ノートセルを返却
-                let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for:indexPath)
-                cell.textLabel?.text       = dataInSection[indexPath.section][indexPath.row].getCellTitle()
-                cell.detailTextLabel?.text = dataInSection[indexPath.section][indexPath.row].getNoteType()
-                if dataInSection[indexPath.section][indexPath.row].getNoteType() == "練習記録" {
-                    cell.detailTextLabel?.textColor = UIColor.systemGreen
-                } else {
-                    cell.detailTextLabel?.textColor = UIColor.systemRed
-                }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "noteViewCell", for: indexPath) as! NoteViewCell
+                cell.printNoteData(dataInSection[indexPath.section][indexPath.row])
                 return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            return 44   // セルのデフォルト高さ
+        default:
+            return 50  // カスタムセルの高さ
         }
     }
     
