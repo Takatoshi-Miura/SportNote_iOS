@@ -701,6 +701,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
         admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
         
+        // safeAreaの値を取得
+        let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets.bottom
+        if(safeAreaInsets! >= 44.0){
+            admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 80)
+        }
+        
         // テストモードの検出
         if AdMobTest {
             admobView.adUnitID = TEST_ID

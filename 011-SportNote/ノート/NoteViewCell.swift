@@ -23,6 +23,13 @@ class NoteViewCell: UITableViewCell {
     
     // ラベルに表示するメソッド
     func printNoteData(_ noteData:NoteData) {
+        // ノートタイプアイコン
+        if noteData.getNoteType() == "練習記録" {
+            noteTypeImageView.image = UIImage(named: "practice")
+        } else {
+            noteTypeImageView.image = UIImage(named: "cup")
+        }
+        
         // 日付
         noteDateLabel.text = noteData.getCellTitle()
         
