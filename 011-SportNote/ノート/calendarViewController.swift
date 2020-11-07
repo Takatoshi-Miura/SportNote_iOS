@@ -30,6 +30,9 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         // セルの複数選択を許可
         noteTableView.allowsMultipleSelectionDuringEditing = true
         
+        // カスタムセルを登録
+        noteTableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
+        
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
         noteTableView.tableFooterView = UIView()
@@ -138,21 +141,16 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
             return cell
         } else {
             // ノートセルを返却
-            let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath)
             if cellDataArray.isEmpty == false {
-                cell.textLabel?.text       = cellDataArray[indexPath.row].getCellTitle()
-                cell.detailTextLabel?.text = cellDataArray[indexPath.row].getNoteType()
-                if cellDataArray[indexPath.row].getNoteType() == "大会記録" {
-                    cell.detailTextLabel?.textColor = UIColor.systemRed
-                } else {
-                    cell.detailTextLabel?.textColor = UIColor.systemGreen
-                }
+                // ノートセルを返却
+                let cell = tableView.dequeueReusableCell(withIdentifier: "noteViewCell", for: indexPath) as! NoteViewCell
+                cell.printNoteData(cellDataArray[indexPath.row])
+                return cell
             } else {
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath)
                 cell.textLabel?.text = "ノートはありません"
                 return cell
             }
-            return cell
         }
     }
     
