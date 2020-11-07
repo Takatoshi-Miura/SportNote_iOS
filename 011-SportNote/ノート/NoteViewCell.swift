@@ -16,6 +16,7 @@ class NoteViewCell: UITableViewCell {
     @IBOutlet weak var noteDateLabel: UILabel!
     @IBOutlet weak var noteDetailLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
+    @IBOutlet weak var temperatureLabel: UILabel!
     
     
     //MARK:- その他のメソッド
@@ -44,5 +45,8 @@ class NoteViewCell: UITableViewCell {
         default:
             break
         }
+        
+        // 気温
+        temperatureLabel.text = "\(noteData.getTemperature())℃"
     }
 }

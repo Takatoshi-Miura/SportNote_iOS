@@ -261,7 +261,7 @@ class NoteData {
     
     // ノートセルに表示させるタイトルを取得するメソッド
     func getCellTitle() -> String {
-        return "\(self.getMonth())月\(self.getDate())日(\(self.day))"
+        return "\(self.getYear())年\(self.getMonth())月\(self.getDate())日(\(self.day))"
     }
     
     // ナビゲーションバーに表示させるタイトルを取得するメソッド
