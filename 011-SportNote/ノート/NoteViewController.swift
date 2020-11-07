@@ -100,7 +100,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var calendarButton:UIBarButtonItem! // カレンダーボタン
     
     // 広告用
-    let AdMobTest:Bool = true           // 広告テストモード
+    let AdMobTest:Bool = false           // 広告テストモード
     let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
     let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
     
@@ -703,7 +703,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // safeAreaの値を取得
         let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets.bottom
-        if(safeAreaInsets! >= 44.0){
+        if(safeAreaInsets! >= 30.0){
             admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 80)
         }
         
