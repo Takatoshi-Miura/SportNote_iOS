@@ -20,7 +20,7 @@ class TutorialViewController: UIViewController {
         setTextColor()
         
         // 同意していないなら利用規約を表示
-        if UserDefaults.standard.bool(forKey: "ver1.3") == false {
+        if UserDefaults.standard.bool(forKey: "ver1.4") == false {
             displayAgreement()
         }
     }
@@ -67,7 +67,7 @@ class TutorialViewController: UIViewController {
         let agreeAction = UIAlertAction(title:"同意する",style:UIAlertAction.Style.default){(action:UIAlertAction)in
             // 同意ボタンがタップされたときの処理
             // 次回以降、利用規約を表示しないようにする
-            UserDefaults.standard.set(true, forKey: "ver1.3")
+            UserDefaults.standard.set(true, forKey: "ver1.4")
         }
         
         // 利用規約ボタンを宣言

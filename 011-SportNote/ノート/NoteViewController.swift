@@ -41,7 +41,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         // 新規バージョンでの初回起動判定
-        if UserDefaults.standard.bool(forKey: "ver1.3") == false {
+        if UserDefaults.standard.bool(forKey: "ver1.4") == false {
             // ユーザーデータを作成
             let userData = UserData()
             userData.createUserData()
@@ -51,7 +51,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         // デバック用
-        //UserDefaults.standard.removeObject(forKey: "ver1.3")
+        //UserDefaults.standard.removeObject(forKey: "ver1.4")
     
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -670,7 +670,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         let agreeAction = UIAlertAction(title:"同意する",style:UIAlertAction.Style.default){(action:UIAlertAction)in
             // 同意ボタンがタップされたときの処理
             // 次回以降、利用規約を表示しないようにする
-            UserDefaults.standard.set(true, forKey: "ver1.3")
+            UserDefaults.standard.set(true, forKey: "ver1.4")
         }
         
         // 利用規約ボタンを宣言

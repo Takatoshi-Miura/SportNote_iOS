@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.register(defaults: ["firstLaunch": true])
         
         // 新規バージョンでの初回起動判定
-        UserDefaults.standard.register(defaults: ["ver1.3":false])
+        UserDefaults.standard.register(defaults: ["ver1.4":false])
         
         // ユーザーIDを作成(初期値を登録)
         let uuid = NSUUID().uuidString
