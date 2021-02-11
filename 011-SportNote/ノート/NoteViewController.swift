@@ -24,7 +24,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // 初回起動判定
         if UserDefaults.standard.bool(forKey: "firstLaunch") {
-            // 初回起動時の処理
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
             UserDefaults.standard.set(false, forKey: "firstLaunch")
             
@@ -59,7 +58,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // ナビゲーションバーのボタンを宣言
         createNavigationBarButton()
         
-        // ネビゲーションボタンをセット
+        // ナビゲーションボタンをセット
         setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
         
         // カスタムセルを登録
@@ -76,7 +75,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // データ取得
         reloadData()
     }
-    
     
     
     //MARK:- 変数の宣言
@@ -105,7 +103,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
     
     
-    
     //MARK:- UIの設定
     
     // テーブルビュー
@@ -114,18 +111,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // 編集ボタンの処理
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        
+        // 編集モード
         if editing {
-            // 編集開始
             self.editButtonItem.title = "完了"
-            
-            // ナビゲーションバーのボタンをセット
             self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton])
         } else {
-            // 編集終了
             self.editButtonItem.title = "編集"
-            
-            // ナビゲーションバーのボタンを表示
             self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
         }
         // 編集モード時のみ複数選択可能とする
@@ -135,7 +126,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // ゴミ箱ボタンの処理
     @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
-        // 選択された課題を削除
+        // 選択されたノートを削除
         self.deleteRows()
     }
     
@@ -162,7 +153,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 最上位はフリーノートセル、それ以外はノートセル
         switch indexPath.section {
             case 0:
                 // フリーノートセルを返却
@@ -196,7 +186,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         return sectionTitle.count       //セクションの個数を返す
     }
     
-    // セルをタップしたときの処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
             // 編集時の処理
@@ -254,6 +243,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
+        
         // CANCELボタンを宣言
         let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
         
