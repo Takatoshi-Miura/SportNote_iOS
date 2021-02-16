@@ -198,9 +198,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // アラートダイアログを生成
-            let alertController = UIAlertController(title:"対策を削除",message:"対策を削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-            
             // OKボタンを宣言
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // 削除した対策が最有力だった場合、最有力を未設定にする
@@ -221,14 +218,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 tableView.reloadData()
             }
             // CANCELボタンを宣言
-            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            
-            // ボタンを追加
-            alertController.addAction(okAction)
-            alertController.addAction(cancelButton)
-            
-            //アラートダイアログを表示
-            present(alertController,animated:true,completion:nil)
+            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            showAlert(title: "対策を削除", message: "対策を削除します。よろしいですか？", actions: [okAction,cancelAction])
         }
     }
     

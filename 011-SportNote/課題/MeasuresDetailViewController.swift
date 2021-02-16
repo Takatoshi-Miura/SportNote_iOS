@@ -146,28 +146,18 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // アラートダイアログを生成
-            let alertController = UIAlertController(title:"有効性コメントを削除",message:"コメントを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-            
-            // OKボタンを宣言
+            // OKボタン
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // 有効性データを削除
                 let effectiveness = self.taskData.getMeasuresEffectivenessArray(at: self.indexPath)
                 let title = self.taskData.getMeasuresTitleArray()[self.indexPath]
                 self.taskData.deleteEffectiveness(measuresTitle: title, effectivenessArray: effectiveness, at: indexPath.row)
-                
                 // データを更新
                 self.updateTaskData()
             }
-            // CANCELボタンを宣言
-            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            
-            // ボタンを追加
-            alertController.addAction(okAction)
-            alertController.addAction(cancelButton)
-            
-            //アラートダイアログを表示
-            present(alertController,animated:true,completion:nil)
+            // CANCELボタン
+            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            showAlert(title: "有効性コメントを削除", message: "コメントを削除します。よろしいですか？", actions: [okAction,cancelAction])
         }
     }
     

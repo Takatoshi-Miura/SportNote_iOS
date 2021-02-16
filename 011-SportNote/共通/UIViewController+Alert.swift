@@ -26,6 +26,20 @@ public extension UIViewController {
     }
     
     /**
+     テキストエリア付きアラートを表示
+     - Parameters:
+      - title: タイトル
+      - message: 説明文
+      - actions: [okAction、cancelAction]等
+     */
+    func showTextAlert(title: String, message: String, actions: [UIAlertAction]) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addTextField(configurationHandler: nil)
+        actions.forEach { alert.addAction($0) }
+        present(alert, animated: true)
+    }
+    
+    /**
      利用規約アラートを表示
      */
     func displayAgreement() {

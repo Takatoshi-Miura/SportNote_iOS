@@ -217,11 +217,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
         }
-        
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"ノートを削除",message:"選択されたノートを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-        
-        // OKボタンを宣言
+        // OKボタン
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
             // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
             self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
@@ -240,16 +236,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
-        
-        // CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        
-        // ボタンを追加
-        alertController.addAction(cancelButton)
-        alertController.addAction(okAction)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
+        // CANCELボタン
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
     // セルの編集可否の設定
@@ -265,26 +254,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // アラートダイアログを生成
-            let alertController = UIAlertController(title:"ノートを削除",message:"\(dataInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-            
-            // OKボタンを宣言
+            // OKボタン
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-                // OKボタンがタップされたときの処理
                 // ノートデータを削除
                 self.deleteFinished = true
                 self.deleteNoteData(note: self.dataInSection[indexPath.section][indexPath.row])
             }
-            //OKボタンを追加
-            alertController.addAction(okAction)
-            
-            //CANCELボタンを宣言
-            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            //CANCELボタンを追加
-            alertController.addAction(cancelButton)
-            
-            //アラートダイアログを表示
-            present(alertController,animated:true,completion:nil)
+            // CANCELボタン
+            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            showAlert(title: "ノートを削除", message: "\(dataInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？", actions: [okAction,cancelAction])
         }
     }
     
@@ -320,13 +298,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc func buttonTapped(sender:UIButton){
         sectionIndex = sender.tag
-        
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"目標を削除",message:"\(self.sectionTitle[self.sectionIndex])\nを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-        
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // OKボタンがタップされたときの処理
             // ノートデータがない月のセクションであればセクションごと削除する
             if self.dataInSection[self.sectionIndex].isEmpty == true {
                 self.dataInSection[self.sectionIndex - 1].removeAll()
@@ -337,16 +310,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             self.updateTargetData(target: self.targetDataArray[self.sectionIndex - 1])
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-        
         //CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
-        alertController.addAction(cancelButton)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        showAlert(title: "目標を削除", message: "\(self.sectionTitle[self.sectionIndex])\nを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
     

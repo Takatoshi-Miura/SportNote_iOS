@@ -135,36 +135,24 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
         }
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"課題を削除",message:"選択された課題を削除します。\nよろしいですか？",preferredStyle:UIAlertController.Style.alert)
-        
-        // OKボタンを宣言
+        // OKボタン
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
             // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
             let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-            
             // 選択された課題を削除する
             for indexPathList in sortedIndexPaths {
                 self.taskDataArray[indexPathList.row].setIsDeleted(true)
                 self.updateTaskData(task: self.taskDataArray[indexPathList.row])
                 self.taskDataArray.remove(at: indexPathList.row)
             }
-            
             // tableViewの行を削除
             self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
-            
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
-        // CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        
-        // ボタンを追加
-        alertController.addAction(okAction)
-        alertController.addAction(cancelButton)
-        
-        // アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
+        // CANCELボタン
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        showAlert(title: "課題を削除", message: "選択された課題を削除します。\nよろしいですか？", actions: [okAction,cancelAction])
     }
     
     // 複数のセルを解決済みにする
@@ -172,9 +160,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
         }
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"課題を解決済みにする",message:"選択された課題を解決済みにします。\nよろしいですか？",preferredStyle:UIAlertController.Style.alert)
-        
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
             // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
@@ -193,25 +178,16 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
-        // CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        
-        // ボタンを追加
-        alertController.addAction(okAction)
-        alertController.addAction(cancelButton)
-        
-        // アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
+        // CANCELボタン
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        showAlert(title: "課題を解決済みにする", message: "選択された課題を解決済みにします。\nよろしいですか？", actions: [okAction,cancelAction])
     }
     
     // セルを削除したときの処理（左スワイプ）
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // アラートダイアログを生成
-            let alertController = UIAlertController(title:"課題を削除",message:"課題を削除します。\nよろしいですか？",preferredStyle:UIAlertController.Style.alert)
-            
-            // OKボタンを宣言
+            // OKボタン
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // taskDataを更新
                 self.taskDataArray[indexPath.row].setIsDeleted(true)
@@ -223,15 +199,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
             }
-            // CANCELボタンを宣言
-            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            
-            // CANCELボタンを追加
-            alertController.addAction(okAction)
-            alertController.addAction(cancelButton)
-            
-            // アラートダイアログを表示
-            present(alertController,animated:true,completion:nil)
+            // CANCELボタン
+            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            showAlert(title: "課題を削除", message: "課題を削除します。\nよろしいですか？", actions: [okAction,cancelAction])
         }
     }
     
