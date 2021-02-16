@@ -14,6 +14,7 @@
 		8D05F54924EBD18800842CD5 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D05F54824EBD18800842CD5 /* PasswordResetViewController.swift */; };
 		8D05F54B24EBEFAB00842CD5 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D05F54A24EBEFAB00842CD5 /* CreateAccountViewController.swift */; };
 		8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D06D5DC24A834A4004D5307 /* SettingViewController.swift */; };
+		8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */; };
 		8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
@@ -63,6 +64,7 @@
 		8D05F54824EBD18800842CD5 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		8D05F54A24EBEFAB00842CD5 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		8D06D5DC24A834A4004D5307 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+Alert.swift"; path = "011-SportNote/共通/UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedTaskViewController.swift; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -134,6 +136,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		8D2A345725DBC5DE00ADE6C6 /* 共通 */ = {
+			isa = PBXGroup;
+			children = (
+				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,
+			);
+			name = "共通";
+			path = ..;
+			sourceTree = "<group>";
+		};
 		8D665D1A24A17CD300441B32 = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +178,7 @@
 				8DE8B1EB24B1C4D200E1195B /* 設定 */,
 				8DE8B1E924B1C28000E1195B /* ログイン */,
 				8DCF350224F6554900055093 /* モデル */,
+				8D2A345725DBC5DE00ADE6C6 /* 共通 */,
 				8D665D2F24A17CD400441B32 /* Assets.xcassets */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
 				8D665D3424A17CD400441B32 /* Info.plist */,
@@ -404,6 +416,7 @@
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,
 				8D665D2924A17CD300441B32 /* SceneDelegate.swift in Sources */,
 				8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */,
+				8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */,
 				8D7853FE24A6FE0000CCA440 /* TaskDetailViewController.swift in Sources */,
 				8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */,
 				8D01653624AF202F00F9D69F /* AddNoteViewController.swift in Sources */,
