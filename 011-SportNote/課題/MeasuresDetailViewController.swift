@@ -44,6 +44,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     
     //MARK:- 変数の宣言
+    
     var taskData = TaskData()               // 課題データ格納用
     var indexPath = 0                       // 行番号格納用
     let noteData = NoteData()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
@@ -193,12 +194,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // Firebaseの課題データを更新するメソッド
     func updateTaskData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
         // 同じ対策名の登録がないか確認
         var measuresTitleCheck:Bool = false
         for num in 0...taskData.getMeasuresTitleArray().count - 1 {
@@ -226,33 +221,11 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             taskData.setMeasuresPriority(measuresTitleTextField.text!)
         }
         
-        // 更新日時を現在時刻にする
-        taskData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(userID)_\(self.taskData.getTaskID())")
-
-        // 変更する可能性のあるデータのみ更新
-        database.updateData([
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
-            "isDeleted"        : taskData.getIsDeleted(),
-            "updated_at"       : taskData.getUpdated_at(),
-            "measuresData"     : taskData.getMeasuresData(),
-            "measuresPriority" : taskData.getMeasuresPriority()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                // リロード
-                self.tableView.reloadData()
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        // データを更新
+        let dataManager = DataManager()
+        dataManager.updateTaskData(task: self.taskData, {
+            self.tableView.reloadData()
+        })
     }
     
     // Firebaseから指定したノートIDのデータを取得するメソッド

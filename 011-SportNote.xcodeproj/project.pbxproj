@@ -44,6 +44,7 @@
 		8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */; };
 		8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */; };
 		8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */; };
+		8DB5371F25E4FCD400CB426F /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB5371E25E4FCD400CB426F /* DataManager.swift */; };
 		8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */; };
 		8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */; };
 		8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCC058924F8E40300744A61 /* MessageUI.framework */; };
@@ -98,6 +99,7 @@
 		8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionNoteDetailViewController.swift; sourceTree = "<group>"; };
 		8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
+		8DB5371E25E4FCD400CB426F /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		8DB9E58924DEBDFC0042A7A2 /* 011-SportNoteRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "011-SportNoteRelease.entitlements"; sourceTree = "<group>"; };
 		8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteContentViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 		8DCF350224F6554900055093 /* モデル */ = {
 			isa = PBXGroup;
 			children = (
+				8DB5371E25E4FCD400CB426F /* DataManager.swift */,
 				8DCF350B24F67E8700055093 /* UserData.swift */,
 				8DCF350324F6554900055093 /* NoteData.swift */,
 				8DCF350424F6554900055093 /* TargetData.swift */,
@@ -414,6 +417,7 @@
 				8D01653024AEEBD100F9D69F /* NoteViewController.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,
+				8DB5371F25E4FCD400CB426F /* DataManager.swift in Sources */,
 				8D665D2924A17CD300441B32 /* SceneDelegate.swift in Sources */,
 				8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */,
 				8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */,

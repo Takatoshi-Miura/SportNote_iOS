@@ -75,7 +75,7 @@ class TaskData {
     }
     
     // 新規課題用の課題IDを設定するメソッド
-    func setNewTaskID() {
+    func setNewTaskID(_ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
@@ -98,10 +98,11 @@ class TaskData {
                 // 課題IDは課題IDの最大値＋１で設定
                 TaskData.taskCount += 1
                 self.taskID = TaskData.taskCount
+                // 完了処理
+                completion()
             }
         }
     }
-    
     
     
     //MARK:- ゲッター

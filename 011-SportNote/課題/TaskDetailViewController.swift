@@ -66,6 +66,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     
     //MARK:- 変数の宣言
+    
+    var dataManager = DataManager()
     var taskData = TaskData()               // 課題データの格納用
     var measuresTitleArray:[String] = []    // 対策タイトルの格納用
     var indexPath:Int = 0                   // 行番号格納用
@@ -102,7 +104,15 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         taskData.changeAchievement()
         
         // データ更新
-        updateTaskData()
+        taskData.setTaskTitle(taskTitleTextField.text!)
+        taskData.setTaskCause(taskCauseTextView.text!)
+        dataManager.updateTaskData(task: taskData, {
+            // 解決済みボタンをタップした場合
+            if self.resolvedButtonTap == true {
+                // 前の画面に戻る
+                self.navigationController?.popViewController(animated: true)
+            }
+        })
     }
     
     // 追加ボタンの処理
@@ -127,7 +137,10 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 self.measuresTitleArray.insert(textField.text!,at:0)
                 
                 // データ更新
-                self.updateTaskData()
+                self.taskData.setTaskTitle(self.taskTitleTextField.text!)
+                self.taskData.setTaskCause(self.taskCauseTextView.text!)
+                self.dataManager.updateTaskData(task: self.taskData, {
+                })
                 
                 // テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
@@ -209,7 +222,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 self.taskData.deleteMeasures(at: indexPath.row)
                 
                 // データを更新
-                self.updateTaskData()
+                self.dataManager.updateTaskData(task: self.taskData, {
+                })
                 
                 // セルを削除
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
@@ -236,7 +250,10 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskViewController {
             // 課題データを更新
-            updateTaskData()
+            taskData.setTaskTitle(taskTitleTextField.text!)
+            taskData.setTaskCause(taskCauseTextView.text!)
+            dataManager.updateTaskData(task: taskData, {
+            })
         }
     }
     
@@ -250,55 +267,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             measuresDetailViewController.previousControllerName = self.previousControllerName
         }
     }
-    
-    
-    
-    //MARK:- データベース関連
-    
-    // Firebaseの課題データを更新するメソッド
-    func updateTaskData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 課題データを更新
-        taskData.setTaskTitle(taskTitleTextField.text!)
-        taskData.setTaskCause(taskCauseTextView.text!)
-        
-        // 更新日時を現在時刻にする
-        taskData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(userID)_\(self.taskData.getTaskID())")
-
-        // 変更する可能性のあるデータのみ更新
-        database.updateData([
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
-            "isDeleted"        : taskData.getIsDeleted(),
-            "updated_at"       : taskData.getUpdated_at(),
-            "measuresData"     : taskData.getMeasuresData(),
-            "measuresPriority" : taskData.getMeasuresPriority()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // 解決済みボタンをタップした場合
-                if self.resolvedButtonTap == true {
-                    // 前の画面に戻る
-                    self.navigationController?.popViewController(animated: true)
-                }
-            }
-        }
-    }
-    
     
     
     //MARK:- その他のメソッド
@@ -390,15 +358,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
     
 }
