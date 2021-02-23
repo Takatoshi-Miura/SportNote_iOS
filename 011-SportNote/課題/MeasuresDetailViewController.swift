@@ -28,8 +28,13 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
 
-        // 受け取った対策データを表示
-        printMeasuresData(taskData)
+        // 対策データの表示
+        measuresTitleTextField.text = taskData.getMeasuresTitleArray()[indexPath]
+        
+        // 最有力の対策ならチェックボックスを選択済みにする
+        if taskData.getMeasuresPriority() == taskData.getMeasuresTitleArray()[indexPath] {
+            self.checkButton.isSelected = !self.checkButton.isSelected
+        }
         
         // 解決済みの課題の場合の設定
         if previousControllerName == "ResolvedTaskViewController" {
@@ -284,17 +289,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     //MARK:- その他のメソッド
     
-    // データを表示するメソッド
-    func printMeasuresData(_ taskData:TaskData) {
-        // テキストの表示
-        measuresTitleTextField.text = taskData.getMeasuresTitleArray()[indexPath]
-        
-        // 最有力の対策ならチェックボックスを選択済みにする
-        if taskData.getMeasuresPriority() == taskData.getMeasuresTitleArray()[indexPath] {
-            self.checkButton.isSelected = !self.checkButton.isSelected
-        }
-    }
-    
     // テキストフィールド以外をタップでキーボードを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -323,15 +317,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
 
 }

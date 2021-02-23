@@ -21,7 +21,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         navigationController?.delegate = self
 
         // 受け取った課題データを表示する
-        printTaskData(taskData)
+        taskTitleTextField.text = taskData.getTaskTitle()
+        taskCauseTextView.text  = taskData.getTaskCouse()
         
         // TaskViewControllerから受け取った課題データの対策を取得
         measuresTitleArray = taskData.getMeasuresTitleArray()
@@ -270,12 +271,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     
     //MARK:- その他のメソッド
-    
-    // セルの内容を表示するメソッド
-    func printTaskData(_ taskData:TaskData) {
-        taskTitleTextField.text = taskData.getTaskTitle()
-        taskCauseTextView.text  = taskData.getTaskCouse()
-    }
     
     // テキストフィールド以外をタップでキーボードを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
