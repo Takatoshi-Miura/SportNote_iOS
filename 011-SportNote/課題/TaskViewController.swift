@@ -18,7 +18,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         
         // ナビゲーションバーボタン作成
-        createNavigationBarButton()
+        addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+        resolveButton = UIBarButtonItem(image: UIImage(named: "check_on"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(resolveButtonTapped(_:)))
         
         // ナビゲーションバーのボタンをセット
         setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton])
@@ -40,7 +42,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    
     //MARK:- 変数の宣言
     
     // TaskDataを格納する配列
@@ -58,7 +59,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     var addButton:UIBarButtonItem!      // 課題追加ボタン
     
     
-    
     //MARK:- UIの設定
     
     // テーブルビュー
@@ -68,11 +68,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            // 編集中：ナビゲーションバーのボタンをセット
+            // 編集中
             self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton,resolveButton])
             self.editButtonItem.title = "完了"
         } else {
-            // 編集完了：ナビゲーションバーのボタンをセット
+            // 編集完了
             self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton])
         }
         // 編集モード時のみ複数選択可能とする
@@ -120,7 +120,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.indexPath = indexPath.row
             
             // 課題詳細確認画面へ遷移
-            if self.indexPath == taskDataArray.count {
+            if indexPath.row == taskDataArray.count {
                 // 解決済みの課題セルがタップされたとき
                 performSegue(withIdentifier: "goResolvedTaskViewController", sender: nil)
             } else {
@@ -366,18 +366,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     //MARK:- その他のメソッド
-    
-    // ナビゲーションバーボタンの宣言
-    func createNavigationBarButton() {
-        // 課題追加ボタン
-        addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        
-        // ゴミ箱ボタン
-        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-        
-        // 解決済みボタン
-        resolveButton = UIBarButtonItem(image: UIImage(named: "check_on"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(resolveButtonTapped(_:)))
-    }
     
     // ナビゲーションバーボタンをセットするメソッド
     func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {

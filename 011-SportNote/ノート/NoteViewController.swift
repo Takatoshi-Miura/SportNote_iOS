@@ -316,8 +316,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    
-    
     //MARK:- 画面遷移
     
     // 画面遷移時に呼ばれる処理
@@ -643,11 +641,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.view.addSubview(admobView)
     }
     
-    // 初期化sectionTitle
-    func sectionTitleInit() {
-        self.sectionTitle = ["フリーノート"]
-    }
-    
     // 初期化dataInSection
     func dataInSectionInit() {
         // フリーノート用に0番目にはダミーデータを入れる
@@ -659,7 +652,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // sectionTitleとdataInSectionを再構成するメソッド
     func reloadSectionData() {
         // データ初期化
-        self.sectionTitleInit()
+        self.sectionTitle = ["フリーノート"]
         self.dataInSectionInit()
         
         // targetDataArrayが空の時は更新しない（エラー対策）
