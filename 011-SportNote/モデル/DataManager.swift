@@ -22,6 +22,132 @@ class DataManager {
     
     //MARK:- ノートデータ
     
+    /**
+     ノートデータを取得
+     - Parameters:
+      - completion: データ取得後に実行する処理
+     */
+    func getNoteData(_ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show(withStatus: "ノート情報を取得しています。")
+        
+        // 配列の初期化
+        noteDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+
+        // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .order(by: "date", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    let noteData = NoteData()
+                    noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    noteData.setNoteType(dataCollection["noteType"] as! String)
+                    noteData.setYear(dataCollection["year"] as! Int)
+                    noteData.setMonth(dataCollection["month"] as! Int)
+                    noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
+                    noteData.setWeather(dataCollection["weather"] as! String)
+                    noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    noteData.setPurpose(dataCollection["purpose"] as! String)
+                    noteData.setDetail(dataCollection["detail"] as! String)
+                    noteData.setTarget(dataCollection["target"] as! String)
+                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    noteData.setResult(dataCollection["result"] as! String)
+                    noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    noteData.setUserID(dataCollection["userID"] as! String)
+                    noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                    // ノートデータを格納
+                    self.noteDataArray.append(noteData)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     ノートデータを取得(ID指定)
+     - Parameters:
+      - noteID: ノートID
+      - completion: データ取得後に実行する処理
+     */
+    func getNoteData(_ noteID:Int, _ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show(withStatus: "ノート情報を取得しています。")
+        
+        // 配列の初期化
+        noteDataArray = []
+        
+        // ユーザーIDを取得
+        let noteData = NoteData()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+
+        // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("noteID", isEqualTo: noteID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    noteData.setNoteType(dataCollection["noteType"] as! String)
+                    noteData.setYear(dataCollection["year"] as! Int)
+                    noteData.setMonth(dataCollection["month"] as! Int)
+                    noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
+                    noteData.setWeather(dataCollection["weather"] as! String)
+                    noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    noteData.setPurpose(dataCollection["purpose"] as! String)
+                    noteData.setDetail(dataCollection["detail"] as! String)
+                    noteData.setTarget(dataCollection["target"] as! String)
+                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    noteData.setResult(dataCollection["result"] as! String)
+                    noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    noteData.setUserID(dataCollection["userID"] as! String)
+                    noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                    // ノートデータを格納
+                    self.noteDataArray.append(noteData)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
     
     //MARK:- フリーノートデータ
     

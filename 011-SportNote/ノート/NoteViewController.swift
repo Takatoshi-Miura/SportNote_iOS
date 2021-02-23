@@ -77,9 +77,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK:- 変数の宣言
     
     // データ格納用
+    var dataManager = DataManager()
     var freeNoteData = FreeNote()
     var targetDataArray = [TargetData]()
-    var noteDataArray = [NoteData]()
     
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
@@ -336,7 +336,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // データを遷移先に渡す
             let calendarViewController = segue.destination as! calendarViewController
             calendarViewController.freeNoteData  = self.freeNoteData
-            calendarViewController.noteDataArray = self.noteDataArray
+            calendarViewController.dataManager.noteDataArray = self.dataManager.noteDataArray
         }
     }
     
@@ -461,74 +461,16 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // Firebaseからデータを取得するメソッド
     func loadNoteData() {
-        // noteDataArrayを初期化
-        noteDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーのデータを取得する
-        let db = Firestore.firestore()
-        db.collection("NoteData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .order(by: "date", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // オブジェクトを作成
-                    let noteData = NoteData()
-                    
-                    // 目標データを反映
-                    let dataCollection = document.data()
-                    noteData.setNoteID(dataCollection["noteID"] as! Int)
-                    noteData.setNoteType(dataCollection["noteType"] as! String)
-                    noteData.setYear(dataCollection["year"] as! Int)
-                    noteData.setMonth(dataCollection["month"] as! Int)
-                    noteData.setDate(dataCollection["date"] as! Int)
-                    noteData.setDay(dataCollection["day"] as! String)
-                    noteData.setWeather(dataCollection["weather"] as! String)
-                    noteData.setTemperature(dataCollection["temperature"] as! Int)
-                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
-                    noteData.setPurpose(dataCollection["purpose"] as! String)
-                    noteData.setDetail(dataCollection["detail"] as! String)
-                    noteData.setTarget(dataCollection["target"] as! String)
-                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
-                    noteData.setResult(dataCollection["result"] as! String)
-                    noteData.setReflection(dataCollection["reflection"] as! String)
-                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
-                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
-                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
-                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
-                    noteData.setUserID(dataCollection["userID"] as! String)
-                    noteData.setCreated_at(dataCollection["created_at"] as! String)
-                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.noteDataArray.append(noteData)
-                }
-                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
-                // セクションデータを再構築
-                self.reloadSectionData()
-                
-                // テーブルビューを更新
-                self.tableView?.reloadData()
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.getNoteData({
+            // セクションデータを再構築
+            self.reloadSectionData()
+            // テーブルビューを更新
+            self.tableView?.reloadData()
+        })
     }
     
     // データを取得するメソッド
     func reloadData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
         // データ取得
         loadFreeNoteData()
         loadTargetData()
@@ -671,12 +613,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                     // ノートデータ追加
                     var noteArray:[NoteData] = []
                     // noteDataArrayが空の時は更新しない（エラー対策）
-                    if self.noteDataArray.isEmpty == false {
+                    if self.dataManager.noteDataArray.isEmpty == false {
                         // 年,月が合致するノート数だけappendする。
-                        for count in 0...(self.noteDataArray.count - 1) {
-                            if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
-                                && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
-                                noteArray.append(self.noteDataArray[count])
+                        for count in 0...(self.dataManager.noteDataArray.count - 1) {
+                            if self.dataManager.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
+                                && self.dataManager.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
+                                noteArray.append(self.dataManager.noteDataArray[count])
                             }
                         }
                     }

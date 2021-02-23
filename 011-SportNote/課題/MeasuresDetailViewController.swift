@@ -52,7 +52,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     var taskData = TaskData()               // 課題データ格納用
     var indexPath = 0                       // 行番号格納用
-    let noteData = NoteData()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
+    var noteData = NoteData()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
     var previousControllerName:String = ""  // 前のViewController名
     
     
@@ -132,8 +132,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         if effectivenessArray[indexPath.row][comment] == 0 {
             // ノートIDがゼロなら何もしない
         } else {
-            SVProgressHUD.showSuccess(withStatus: "ノート情報を取得しました。")
-            
             // ノートデータを取得
             loadNoteData(effectivenessArray[indexPath.row][comment]!)
         }
@@ -235,54 +233,13 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // Firebaseから指定したノートIDのデータを取得するメソッド
     func loadNoteData(_ noteID:Int) {
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーUIDをセット
-        noteData.setUserID(userID)
-
-        // 現在のユーザーのデータを取得する
-        let db = Firestore.firestore()
-        db.collection("NoteData")
-            .whereField("userID", isEqualTo: noteData.getUserID())
-            .whereField("noteID", isEqualTo: noteID)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標データを反映
-                    let dataCollection = document.data()
-                    self.noteData.setNoteID(dataCollection["noteID"] as! Int)
-                    self.noteData.setNoteType(dataCollection["noteType"] as! String)
-                    self.noteData.setYear(dataCollection["year"] as! Int)
-                    self.noteData.setMonth(dataCollection["month"] as! Int)
-                    self.noteData.setDate(dataCollection["date"] as! Int)
-                    self.noteData.setDay(dataCollection["day"] as! String)
-                    self.noteData.setWeather(dataCollection["weather"] as! String)
-                    self.noteData.setTemperature(dataCollection["temperature"] as! Int)
-                    self.noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
-                    self.noteData.setPurpose(dataCollection["purpose"] as! String)
-                    self.noteData.setDetail(dataCollection["detail"] as! String)
-                    self.noteData.setTarget(dataCollection["target"] as! String)
-                    self.noteData.setConsciousness(dataCollection["consciousness"] as! String)
-                    self.noteData.setResult(dataCollection["result"] as! String)
-                    self.noteData.setReflection(dataCollection["reflection"] as! String)
-                    self.noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
-                    self.noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
-                    self.noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
-                    self.noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
-                    self.noteData.setUserID(dataCollection["userID"] as! String)
-                    self.noteData.setCreated_at(dataCollection["created_at"] as! String)
-                    self.noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                }
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // ノート詳細確認画面へ遷移
-                self.performSegue(withIdentifier: "goToPracticeNoteDetailViewController", sender: nil)
-            }
-        }
+        let dataManager = DataManager()
+        dataManager.getNoteData(noteID, {
+            // ノートデータ取得
+            self.noteData = dataManager.noteDataArray[0]
+            // ノート詳細確認画面へ遷移
+            self.performSegue(withIdentifier: "goToPracticeNoteDetailViewController", sender: nil)
+        })
     }
     
     
