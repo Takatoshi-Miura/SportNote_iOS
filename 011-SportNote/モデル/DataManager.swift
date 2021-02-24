@@ -15,7 +15,7 @@ class DataManager {
     //MARK:- データ配列
     
     var noteDataArray = [NoteData]()
-    var freeNoteArray = [FreeNote]()
+    var freeNote = FreeNote()
     var taskDataArray = [TaskData]()
     var targetDataArray = [TargetData]()
     
@@ -181,6 +181,38 @@ class DataManager {
                 print("Error writing document: \(err)")
             } else {
                 print("フリーノートを作成しました")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     フリーノートデータを取得
+     - Parameters:
+      - completion: データ取得後に実行する処理
+     */
+    func getFreeNoteData(_ completion: @escaping () -> ()) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // 現在のユーザーのフリーノートデータを取得する
+        let db = Firestore.firestore()
+        db.collection("FreeNoteData")
+            .whereField("userID", isEqualTo: userID)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // フリーノートデータを反映
+                    let freeNoteDataCollection = document.data()
+                    self.freeNote.setTitle(freeNoteDataCollection["title"] as! String)
+                    self.freeNote.setDetail(freeNoteDataCollection["detail"] as! String)
+                    self.freeNote.setUserID(freeNoteDataCollection["userID"] as! String)
+                    self.freeNote.setCreated_at(freeNoteDataCollection["created_at"] as! String)
+                    self.freeNote.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
+                }
                 // 完了処理
                 completion()
             }

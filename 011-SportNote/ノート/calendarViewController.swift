@@ -419,32 +419,9 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーUIDをセット
-        freeNoteData.setUserID(userID)
-        
-        // 現在のユーザーのフリーノートデータを取得する
-        let db = Firestore.firestore()
-        db.collection("FreeNoteData")
-            .whereField("userID", isEqualTo: userID)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let freeNoteDataCollection = document.data()
-                    
-                    // フリーノートデータを反映
-                    self.freeNoteData.setTitle(freeNoteDataCollection["title"] as! String)
-                    self.freeNoteData.setDetail(freeNoteDataCollection["detail"] as! String)
-                    self.freeNoteData.setUserID(freeNoteDataCollection["userID"] as! String)
-                    self.freeNoteData.setCreated_at(freeNoteDataCollection["created_at"] as! String)
-                    self.freeNoteData.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
-                }
-            }
-        }
+        dataManager.getFreeNoteData({
+            self.freeNoteData = self.dataManager.freeNote
+        })
     }
     
     // Firebaseから目標データを取得するメソッド
