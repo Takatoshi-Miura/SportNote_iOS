@@ -31,7 +31,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             UserDefaults.standard.set(UserDefaults.standard.object(forKey: "userID") as! String, forKey: "userID")
             
             // フリーノートデータ作成
-            createFreeNoteData()
+            dataManager.createFreeNoteData({})
             
             // チュートリアル画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
@@ -347,38 +347,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     //MARK:- データベース関連
-    
-    // Firebaseにフリーノートデータを作成するメソッド(初回起動時のみ実行)
-    func createFreeNoteData() {
-        // フリーノートデータを作成
-        let freeNote = FreeNote()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーUIDをセット
-        freeNote.setUserID(userID)
-        
-        // 現在時刻をセット
-        freeNote.setCreated_at(getCurrentTime())
-        freeNote.setUpdated_at(freeNote.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("FreeNoteData").document("\(freeNote.getUserID())").setData([
-            "title"      : freeNote.getTitle(),
-            "detail"     : freeNote.getDetail(),
-            "userID"     : freeNote.getUserID(),
-            "created_at" : freeNote.getCreated_at(),
-            "updated_at" : freeNote.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {

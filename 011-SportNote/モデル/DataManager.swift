@@ -151,6 +151,42 @@ class DataManager {
     
     //MARK:- フリーノートデータ
     
+    /**
+     フリーノートデータを新規作成(初回のみ実行)
+     - Parameters:
+      - completion: データ取得後に実行する処理
+     */
+    func createFreeNoteData(_ completion: @escaping () -> ()) {
+        // フリーノートデータを作成
+        let freeNote = FreeNote()
+        
+        // ユーザーUIDをセット
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        freeNote.setUserID(userID)
+        
+        // 現在時刻をセット
+        freeNote.setCreated_at(getCurrentTime())
+        freeNote.setUpdated_at(freeNote.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("FreeNoteData").document("\(freeNote.getUserID())").setData([
+            "title"      : freeNote.getTitle(),
+            "detail"     : freeNote.getDetail(),
+            "userID"     : freeNote.getUserID(),
+            "created_at" : freeNote.getCreated_at(),
+            "updated_at" : freeNote.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("フリーノートを作成しました")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
     
     //MARK:- 課題データ
     
