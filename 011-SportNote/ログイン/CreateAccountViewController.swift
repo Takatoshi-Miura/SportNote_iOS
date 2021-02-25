@@ -24,7 +24,6 @@ class CreateAccountViewController: UIViewController {
     }
     
 
-    
     //MARK:- UIの設定
     
     // テキストフィールド
@@ -53,16 +52,13 @@ class CreateAccountViewController: UIViewController {
     }
     
     
-    
     //MARK:- 変数の宣言
     
     // データ格納用
     var dataManager = DataManager()
     var freeNoteData = FreeNote()
     var targetDataArray = [TargetData]()
-    var noteDataArray = [NoteData]()
     var taskDataArray = [TaskData]()
-    
     
     
     //MARK:- データベース関連
@@ -120,7 +116,7 @@ class CreateAccountViewController: UIViewController {
         }
         
         // ノートデータを複製
-        for noteData in noteDataArray {
+        for noteData in dataManager.noteDataArray {
             createNoteData(data: noteData)
         }
         
@@ -191,58 +187,7 @@ class CreateAccountViewController: UIViewController {
     
     // Firebaseからデータを取得するメソッド
     func loadNoteData() {
-        // noteDataArrayを初期化
-        noteDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーのデータを取得する
-        let db = Firestore.firestore()
-        db.collection("NoteData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .order(by: "date", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // オブジェクトを作成
-                    let noteData = NoteData()
-                    
-                    // 目標データを反映
-                    let dataCollection = document.data()
-                    noteData.setNoteID(dataCollection["noteID"] as! Int)
-                    noteData.setNoteType(dataCollection["noteType"] as! String)
-                    noteData.setYear(dataCollection["year"] as! Int)
-                    noteData.setMonth(dataCollection["month"] as! Int)
-                    noteData.setDate(dataCollection["date"] as! Int)
-                    noteData.setDay(dataCollection["day"] as! String)
-                    noteData.setWeather(dataCollection["weather"] as! String)
-                    noteData.setTemperature(dataCollection["temperature"] as! Int)
-                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
-                    noteData.setPurpose(dataCollection["purpose"] as! String)
-                    noteData.setDetail(dataCollection["detail"] as! String)
-                    noteData.setTarget(dataCollection["target"] as! String)
-                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
-                    noteData.setResult(dataCollection["result"] as! String)
-                    noteData.setReflection(dataCollection["reflection"] as! String)
-                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
-                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
-                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
-                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
-                    noteData.setUserID(dataCollection["userID"] as! String)
-                    noteData.setCreated_at(dataCollection["created_at"] as! String)
-                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.noteDataArray.append(noteData)
-                }
-            }
-        }
+        dataManager.getNoteData({})
     }
     
     // 課題データを取得するメソッド
