@@ -439,60 +439,10 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // Firebaseからデータを取得するメソッド
     func loadNoteData(year selectYear:Int,month selectMonth:Int,date selectDate:Int) {
-        // cellDataArrayを初期化
-        cellDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーのデータを取得する
-        let db = Firestore.firestore()
-        db.collection("NoteData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .whereField("year", isEqualTo: selectYear)
-            .whereField("month", isEqualTo: selectMonth)
-            .whereField("date", isEqualTo: selectDate)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // オブジェクトを作成
-                    let noteData = NoteData()
-                    
-                    // 目標データを反映
-                    let dataCollection = document.data()
-                    noteData.setNoteID(dataCollection["noteID"] as! Int)
-                    noteData.setNoteType(dataCollection["noteType"] as! String)
-                    noteData.setYear(dataCollection["year"] as! Int)
-                    noteData.setMonth(dataCollection["month"] as! Int)
-                    noteData.setDate(dataCollection["date"] as! Int)
-                    noteData.setDay(dataCollection["day"] as! String)
-                    noteData.setWeather(dataCollection["weather"] as! String)
-                    noteData.setTemperature(dataCollection["temperature"] as! Int)
-                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
-                    noteData.setPurpose(dataCollection["purpose"] as! String)
-                    noteData.setDetail(dataCollection["detail"] as! String)
-                    noteData.setTarget(dataCollection["target"] as! String)
-                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
-                    noteData.setResult(dataCollection["result"] as! String)
-                    noteData.setReflection(dataCollection["reflection"] as! String)
-                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
-                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
-                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
-                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
-                    noteData.setUserID(dataCollection["userID"] as! String)
-                    noteData.setCreated_at(dataCollection["created_at"] as! String)
-                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.cellDataArray.append(noteData)
-                }
-                // テーブルビューを更新
-                self.noteTableView?.reloadData()
-            }
-        }
+        dataManager.getNoteData(selectYear, selectMonth, selectDate, {
+            self.cellDataArray = self.dataManager.noteDataArray
+            self.noteTableView?.reloadData()
+        })
     }
     
     // ノートデータを削除するメソッド
