@@ -416,31 +416,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // Firebaseのデータを更新するメソッド
     func updateTargetData(target targetData:TargetData) {
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 更新日時を現在時刻にする
-        targetData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let data = db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())")
-
-        // 変更する可能性のあるデータのみ更新
-        data.updateData([
-            "detail"     : targetData.getDetail(),
-            "isDeleted"  : targetData.getIsDeleted(),
-            "updated_at" : targetData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-                
-                // リロード
-                self.reloadData()
-            }
-        }
+        dataManager.updateTargetData(targetData, {
+            self.reloadData()
+        })
     }
     
     

@@ -474,6 +474,40 @@ class DataManager {
         }
     }
     
+    /**
+     目標データを更新
+     - Parameters:
+      - targetData: 目標データ
+      - completion: データ取得後に実行する処理
+     */
+    func updateTargetData(_ targetData:TargetData, _ completion: @escaping () -> ()) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // 更新日時を現在時刻にする
+        targetData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    
     //MARK:- その他
     
     // 現在時刻を取得するメソッド
