@@ -448,6 +448,9 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         datePicker.date = Date()
         datePicker.datePickerMode = .date
         datePicker.locale = Locale(identifier: "ja")
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
         datePicker.backgroundColor = UIColor.systemGray5
         datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         

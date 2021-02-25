@@ -554,6 +554,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         datePicker.date = Date()
         datePicker.datePickerMode = .date
         datePicker.locale = Locale(identifier: "ja")
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
         datePicker.backgroundColor = UIColor.systemGray5
         datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         
@@ -576,10 +579,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     @objc func datePickerDone() {
         // 選択された日付を取得
         selectedDate = getDatePickerDate()
-        
         // Pickerをしまう
         closePicker()
-           
         // テーブルビューを更新
         tableView.reloadData()
     }
