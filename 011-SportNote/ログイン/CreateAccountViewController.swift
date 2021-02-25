@@ -57,7 +57,6 @@ class CreateAccountViewController: UIViewController {
     // データ格納用
     var dataManager = DataManager()
     var freeNoteData = FreeNote()
-    var targetDataArray = [TargetData]()
     var taskDataArray = [TaskData]()
     
     
@@ -111,7 +110,7 @@ class CreateAccountViewController: UIViewController {
         createFreeNoteData()
         
         // 目標データを複製
-        for targetData in targetDataArray {
+        for targetData in dataManager.targetDataArray {
             createTargetData(data: targetData)
         }
         
@@ -147,42 +146,7 @@ class CreateAccountViewController: UIViewController {
     
     // Firebaseから目標データを取得するメソッド
     func loadTargetData() {
-        // targetDataArrayを初期化
-        targetDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーの目標データを取得する
-        let db = Firestore.firestore()
-        db.collection("TargetData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標オブジェクトを作成
-                    let target = TargetData()
-                    
-                    // 目標データを反映
-                    let targetDataCollection = document.data()
-                    target.setYear(targetDataCollection["year"] as! Int)
-                    target.setMonth(targetDataCollection["month"] as! Int)
-                    target.setDetail(targetDataCollection["detail"] as! String)
-                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
-                    target.setUserID(targetDataCollection["userID"] as! String)
-                    target.setCreated_at(targetDataCollection["created_at"] as! String)
-                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.targetDataArray.append(target)
-                }
-            }
-        }
+        dataManager.getTargetData({})
     }
     
     // Firebaseからデータを取得するメソッド

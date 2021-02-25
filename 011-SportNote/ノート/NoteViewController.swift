@@ -79,7 +79,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // データ格納用
     var dataManager = DataManager()
     var freeNoteData = FreeNote()
-    var targetDataArray = [TargetData]()
     
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
@@ -303,12 +302,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // ノートデータがない月のセクションであればセクションごと削除する
             if self.dataInSection[self.sectionIndex].isEmpty == true {
                 self.dataInSection[self.sectionIndex - 1].removeAll()
-                self.targetDataArray[self.sectionIndex - 1].setIsDeleted(true)
+                self.dataManager.targetDataArray[self.sectionIndex - 1].setIsDeleted(true)
             } else {
                 // ノートがある場合は目標テキストをクリア
-                self.targetDataArray[self.sectionIndex - 1].setDetail("")
+                self.dataManager.targetDataArray[self.sectionIndex - 1].setDetail("")
             }
-            self.updateTargetData(target: self.targetDataArray[self.sectionIndex - 1])
+            self.updateTargetData(target: self.dataManager.targetDataArray[self.sectionIndex - 1])
         }
         //CANCELボタンを宣言
         let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
@@ -357,51 +356,13 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // Firebaseから目標データを取得するメソッド
     func loadTargetData() {
-        // targetDataArrayを初期化
-        targetDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーの目標データを取得する
-        let db = Firestore.firestore()
-        db.collection("TargetData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標オブジェクトを作成
-                    let target = TargetData()
-                    
-                    // 目標データを反映
-                    let targetDataCollection = document.data()
-                    target.setYear(targetDataCollection["year"] as! Int)
-                    target.setMonth(targetDataCollection["month"] as! Int)
-                    target.setDetail(targetDataCollection["detail"] as! String)
-                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
-                    target.setUserID(targetDataCollection["userID"] as! String)
-                    target.setCreated_at(targetDataCollection["created_at"] as! String)
-                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.targetDataArray.append(target)
-                }
-                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
-                // セクションデータを再構築
-                self.reloadSectionData()
-                
-                // テーブルビューを更新
-                self.tableView?.reloadData()
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.getTargetData({
+            // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
+            // セクションデータを再構築
+            self.reloadSectionData()
+            // テーブルビューを更新
+            self.tableView?.reloadData()
+        })
     }
     
     // Firebaseからデータを取得するメソッド
@@ -543,17 +504,17 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dataInSectionInit()
         
         // targetDataArrayが空の時は更新しない（エラー対策）
-        if self.targetDataArray.isEmpty == false {
+        if self.dataManager.targetDataArray.isEmpty == false {
             // テーブルデータ更新
-            for index in 0...(self.targetDataArray.count - 1) {
+            for index in 0...(self.dataManager.targetDataArray.count - 1) {
                 // 年間目標と月間目標の区別
-                if self.targetDataArray[index].getMonth() == 13 {
+                if self.dataManager.targetDataArray[index].getMonth() == 13 {
                     // 年間目標セクション追加
-                    self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
+                    self.sectionTitle.append("\(self.dataManager.targetDataArray[index].getYear())年:\(self.dataManager.targetDataArray[index].getDetail())")
                     self.dataInSection.append([])
                 } else {
                     // 月間目標セクション追加
-                    self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
+                    self.sectionTitle.append("\(self.dataManager.targetDataArray[index].getMonth())月:\(self.dataManager.targetDataArray[index].getDetail())")
                     
                     // ノートデータ追加
                     var noteArray:[NoteData] = []
@@ -561,8 +522,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                     if self.dataManager.noteDataArray.isEmpty == false {
                         // 年,月が合致するノート数だけappendする。
                         for count in 0...(self.dataManager.noteDataArray.count - 1) {
-                            if self.dataManager.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
-                                && self.dataManager.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
+                            if self.dataManager.noteDataArray[count].getYear() == self.dataManager.targetDataArray[index].getYear()
+                                && self.dataManager.noteDataArray[count].getMonth() == self.dataManager.targetDataArray[index].getMonth() {
                                 noteArray.append(self.dataManager.noteDataArray[count])
                             }
                         }

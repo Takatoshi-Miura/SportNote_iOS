@@ -429,6 +429,50 @@ class DataManager {
     
     //MARK:- 目標データ
     
+    /**
+     目標データを取得
+     - Parameters:
+      - completion: データ取得後に実行する処理
+     */
+    func getTargetData(_ completion: @escaping () -> ()) {
+        // targetDataArrayを初期化
+        targetDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+
+        // 現在のユーザーの目標データを取得する
+        let db = Firestore.firestore()
+        db.collection("TargetData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .order(by: "year", descending: true)
+            .order(by: "month", descending: true)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 目標データを反映
+                    let targetDataCollection = document.data()
+                    let target = TargetData()
+                    target.setYear(targetDataCollection["year"] as! Int)
+                    target.setMonth(targetDataCollection["month"] as! Int)
+                    target.setDetail(targetDataCollection["detail"] as! String)
+                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                    target.setUserID(targetDataCollection["userID"] as! String)
+                    target.setCreated_at(targetDataCollection["created_at"] as! String)
+                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                    // 取得データを格納
+                    self.targetDataArray.append(target)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
     
     //MARK:- その他
     

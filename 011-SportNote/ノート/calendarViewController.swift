@@ -44,7 +44,6 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     
-    
     //MARK:- 変数の宣言
     
     // ナビゲーションバー用のボタン
@@ -56,12 +55,10 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     var dataManager = DataManager()
     var freeNoteData = FreeNote()       // フリーノートデータ
     var cellDataArray:[NoteData] = []   // セルに表示するノートが格納される
-    var targetDataArray = [TargetData]()
     var selectIndex:Int = 0
     
     // フラグ
     var deleteFinished:Bool = false
-    
     
     
     //MARK:- UIの設定
@@ -369,7 +366,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         yearFormatter.dateFormat = "yyyy"
         
         // 目標データの存在確認
-        for targetData in targetDataArray {
+        for targetData in dataManager.targetDataArray {
             if monthFormatter.string(from: calendar.currentPage) == targetData.getYearMonth() {
                 // 月間目標データがあれば文字列に登録
                 monthTarget = "\(targetData.getDetail())"
@@ -383,7 +380,6 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         // カレンダーのヘッダーに目標データを表示
         self.calendar.appearance.headerDateFormat = "YYYY年 M月\n\(monthTarget)"
     }
-    
     
     
     //MARK:- 画面遷移
@@ -406,7 +402,6 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     
-    
     //MARK:- データベース関連
     
     // データを取得するメソッド
@@ -426,48 +421,13 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // Firebaseから目標データを取得するメソッド
     func loadTargetData() {
-        // targetDataArrayを初期化
-        targetDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーの目標データを取得する
-        let db = Firestore.firestore()
-        db.collection("TargetData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標オブジェクトを作成
-                    let target = TargetData()
-                    
-                    // 目標データを反映
-                    let targetDataCollection = document.data()
-                    target.setYear(targetDataCollection["year"] as! Int)
-                    target.setMonth(targetDataCollection["month"] as! Int)
-                    target.setDetail(targetDataCollection["detail"] as! String)
-                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
-                    target.setUserID(targetDataCollection["userID"] as! String)
-                    target.setCreated_at(targetDataCollection["created_at"] as! String)
-                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.targetDataArray.append(target)
-                }
-                // カレンダーのヘッダーに目標をセット
-                self.printTarget()
-                
-                // テーブルビューを更新
-                self.tableView?.reloadData()
-                self.calendar.reloadData()
-            }
-        }
+        dataManager.getTargetData({
+            // カレンダーのヘッダーに目標をセット
+            self.printTarget()
+            // テーブルビューを更新
+            self.tableView?.reloadData()
+            self.calendar.reloadData()
+        })
     }
     
     // Firebaseからデータを取得するメソッド
