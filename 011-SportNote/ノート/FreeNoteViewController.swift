@@ -42,8 +42,7 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     //MARK:- 変数の宣言
     
     // フリーノートデータ格納用
-    var freeNoteData = FreeNote()
-    
+    var dataManager = DataManager()
     
     
     //MARK:- UIの設定
@@ -51,7 +50,6 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     // テキスト
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var detailTextView: UITextView!
-    
     
     
     //MARK:- 画面遷移
@@ -63,47 +61,20 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     }
     
     
-    
     //MARK:- データベース関連
     
     // Firebaseのデータを更新するメソッド
     func updateFreeNoteData() {
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // テキストデータをセット
-        freeNoteData.setTitle(titleTextField.text!)
-        freeNoteData.setDetail(detailTextView.text!)
-        
-        // 更新日時を現在時刻にする
-        freeNoteData.setUpdated_at(getCurrentTime())
-        
-        // 更新したいデータを取得
-        let db = Firestore.firestore()
-        let data = db.collection("FreeNoteData").document("\(userID)")
-
-        // 変更する可能性のあるデータのみ更新
-        data.updateData([
-            "title"      : freeNoteData.getTitle(),
-            "detail"     : freeNoteData.getDetail(),
-            "updated_at" : freeNoteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-            }
-        }
+        dataManager.updateFreeNoteData(titleTextField.text!, detailTextView.text!, {})
     }
-    
     
     
     //MARK:- その他のメソッド
     
     // 文字列表示メソッド
     func printText() {
-        titleTextField.text = freeNoteData.getTitle()
-        detailTextView.text = freeNoteData.getDetail()
+        titleTextField.text = dataManager.freeNoteData.getTitle()
+        detailTextView.text = dataManager.freeNoteData.getDetail()
     }
     
     // テキストフィールド以外をタップでキーボードを下げる設定
@@ -154,15 +125,6 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
 
 }

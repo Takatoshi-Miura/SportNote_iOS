@@ -388,7 +388,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if segue.identifier == "goFreeNoteView" {
             // フリーノートデータを渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
-            freeNoteViewController.freeNoteData = dataManager.freeNoteData
+            freeNoteViewController.dataManager.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailView" {
             // 練習ノートデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController

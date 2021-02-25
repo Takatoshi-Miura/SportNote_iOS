@@ -321,7 +321,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "goFreeNoteViewController" {
             // 表示するデータを確認画面へ渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
-            freeNoteViewController.freeNoteData = dataManager.freeNoteData
+            freeNoteViewController.dataManager.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailViewController" {
             // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController

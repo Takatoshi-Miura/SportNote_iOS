@@ -321,6 +321,43 @@ class DataManager {
         }
     }
     
+    /**
+     フリーノートデータを更新
+     - Parameters:
+      - completion: データ取得後に実行する処理
+     */
+    func updateFreeNoteData(_ title:String, _ detail:String, _ completion: @escaping () -> ()) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // テキストデータをセット
+        let freeNoteData = FreeNote()
+        freeNoteData.setTitle(title)
+        freeNoteData.setDetail(detail)
+        
+        // 更新日時を現在時刻にする
+        freeNoteData.setUpdated_at(getCurrentTime())
+        
+        // 更新したいデータを取得
+        let db = Firestore.firestore()
+        let data = db.collection("FreeNoteData").document("\(userID)")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "title"      : freeNoteData.getTitle(),
+            "detail"     : freeNoteData.getDetail(),
+            "updated_at" : freeNoteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("フリーノート(タイトル:\(freeNoteData.getTitle())を更新しました")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
     
     //MARK:- 課題データ
     
