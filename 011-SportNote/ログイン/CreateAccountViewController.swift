@@ -56,7 +56,6 @@ class CreateAccountViewController: UIViewController {
     
     // データ格納用
     var dataManager = DataManager()
-    var freeNoteData = FreeNote()
     var taskDataArray = [TaskData]()
     
     
@@ -139,9 +138,7 @@ class CreateAccountViewController: UIViewController {
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
-        dataManager.getFreeNoteData({
-            self.freeNoteData = self.dataManager.freeNote
-        })
+        dataManager.getFreeNoteData({})
     }
     
     // Firebaseから目標データを取得するメソッド
@@ -201,16 +198,16 @@ class CreateAccountViewController: UIViewController {
         let userID = Auth.auth().currentUser!.uid
         
         // ユーザーUIDをセット
-        freeNoteData.setUserID(userID)
+        dataManager.freeNoteData.setUserID(userID)
         
         // Firebaseにデータを保存
         let db = Firestore.firestore()
-        db.collection("FreeNoteData").document("\(freeNoteData.getUserID())").setData([
-            "title"      : freeNoteData.getTitle(),
-            "detail"     : freeNoteData.getDetail(),
-            "userID"     : freeNoteData.getUserID(),
-            "created_at" : freeNoteData.getCreated_at(),
-            "updated_at" : freeNoteData.getUpdated_at()
+        db.collection("FreeNoteData").document("\(dataManager.freeNoteData.getUserID())").setData([
+            "title"      : dataManager.freeNoteData.getTitle(),
+            "detail"     : dataManager.freeNoteData.getDetail(),
+            "userID"     : dataManager.freeNoteData.getUserID(),
+            "created_at" : dataManager.freeNoteData.getCreated_at(),
+            "updated_at" : dataManager.freeNoteData.getUpdated_at()
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")

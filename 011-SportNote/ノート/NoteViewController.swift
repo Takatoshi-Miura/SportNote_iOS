@@ -78,7 +78,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // データ格納用
     var dataManager = DataManager()
-    var freeNoteData = FreeNote()
     
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
@@ -153,8 +152,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             case 0:
                 // フリーノートセルを返却
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
-                cell.textLabel!.text = freeNoteData.getTitle()
-                cell.detailTextLabel!.text = freeNoteData.getDetail()
+                cell.textLabel!.text = dataManager.freeNoteData.getTitle()
+                cell.detailTextLabel!.text = dataManager.freeNoteData.getDetail()
                 cell.detailTextLabel?.textColor = UIColor.systemGray
                 return cell
             default:
@@ -322,7 +321,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "goFreeNoteViewController" {
             // 表示するデータを確認画面へ渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
-            freeNoteViewController.freeNoteData = freeNoteData
+            freeNoteViewController.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailViewController" {
             // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
@@ -334,8 +333,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else if segue.identifier == "goCalendarViewController" {
             // データを遷移先に渡す
             let calendarViewController = segue.destination as! calendarViewController
-            calendarViewController.freeNoteData  = self.freeNoteData
-            calendarViewController.dataManager.noteDataArray = self.dataManager.noteDataArray
+            calendarViewController.dataManager.freeNoteData  = dataManager.freeNoteData
+            calendarViewController.dataManager.noteDataArray = dataManager.noteDataArray
         }
     }
     
@@ -349,9 +348,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
-        dataManager.getFreeNoteData({
-            self.freeNoteData = self.dataManager.freeNote
-        })
+        dataManager.getFreeNoteData({})
     }
     
     // Firebaseから目標データを取得するメソッド
@@ -490,15 +487,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
         }
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
     
 }

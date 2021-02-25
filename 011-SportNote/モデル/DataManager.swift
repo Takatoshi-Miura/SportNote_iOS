@@ -15,7 +15,7 @@ class DataManager {
     //MARK:- データ配列
     
     var noteDataArray = [NoteData]()
-    var freeNote = FreeNote()
+    var freeNoteData = FreeNote()
     var taskDataArray = [TaskData]()
     var targetDataArray = [TargetData]()
     
@@ -239,11 +239,11 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // フリーノートデータを反映
                     let freeNoteDataCollection = document.data()
-                    self.freeNote.setTitle(freeNoteDataCollection["title"] as! String)
-                    self.freeNote.setDetail(freeNoteDataCollection["detail"] as! String)
-                    self.freeNote.setUserID(freeNoteDataCollection["userID"] as! String)
-                    self.freeNote.setCreated_at(freeNoteDataCollection["created_at"] as! String)
-                    self.freeNote.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
+                    self.freeNoteData.setTitle(freeNoteDataCollection["title"] as! String)
+                    self.freeNoteData.setDetail(freeNoteDataCollection["detail"] as! String)
+                    self.freeNoteData.setUserID(freeNoteDataCollection["userID"] as! String)
+                    self.freeNoteData.setCreated_at(freeNoteDataCollection["created_at"] as! String)
+                    self.freeNoteData.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
                 }
                 // 完了処理
                 completion()

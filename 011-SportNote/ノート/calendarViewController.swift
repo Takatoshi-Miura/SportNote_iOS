@@ -53,7 +53,6 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // テーブル用
     var dataManager = DataManager()
-    var freeNoteData = FreeNote()       // フリーノートデータ
     var cellDataArray:[NoteData] = []   // セルに表示するノートが格納される
     var selectIndex:Int = 0
     
@@ -132,8 +131,8 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if tableView.tag == 0 {
             // フリーノートセルを返却
             let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
-            cell.textLabel!.text = freeNoteData.getTitle()
-            cell.detailTextLabel!.text = freeNoteData.getDetail()
+            cell.textLabel!.text = dataManager.freeNoteData.getTitle()
+            cell.detailTextLabel!.text = dataManager.freeNoteData.getDetail()
             cell.detailTextLabel?.textColor = UIColor.systemGray
             return cell
         } else {
@@ -389,7 +388,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if segue.identifier == "goFreeNoteView" {
             // フリーノートデータを渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
-            freeNoteViewController.freeNoteData = self.freeNoteData
+            freeNoteViewController.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailView" {
             // 練習ノートデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
@@ -414,9 +413,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
-        dataManager.getFreeNoteData({
-            self.freeNoteData = self.dataManager.freeNote
-        })
+        dataManager.getFreeNoteData({})
     }
     
     // Firebaseから目標データを取得するメソッド
