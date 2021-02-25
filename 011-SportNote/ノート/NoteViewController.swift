@@ -31,7 +31,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             UserDefaults.standard.set(UserDefaults.standard.object(forKey: "userID") as! String, forKey: "userID")
             
             // フリーノートデータ作成
-            createFreeNoteData()
+            dataManager.createFreeNoteData({})
             
             // チュートリアル画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
@@ -40,7 +40,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         // 新規バージョンでの初回起動判定
-        if UserDefaults.standard.bool(forKey: "ver1.4") == false {
+        if UserDefaults.standard.bool(forKey: "ver1.5.0") == false {
             // ユーザーデータを作成
             let userData = UserData()
             userData.createUserData()
@@ -48,9 +48,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 利用規約を表示
             displayAgreement()
         }
-        
-        // デバック用
-        //UserDefaults.standard.removeObject(forKey: "ver1.4")
     
         // 編集ボタンの設定(複数選択可能)
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -80,9 +77,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK:- 変数の宣言
     
     // データ格納用
+    var dataManager = DataManager()
     var freeNoteData = FreeNote()
-    var targetDataArray = [TargetData]()
-    var noteDataArray = [NoteData]()
     
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
@@ -220,11 +216,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
         }
-        
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"ノートを削除",message:"選択されたノートを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-        
-        // OKボタンを宣言
+        // OKボタン
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
             // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
             self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
@@ -243,16 +235,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 編集状態を解除
             self.setEditing(false, animated: true)
         }
-        
-        // CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        
-        // ボタンを追加
-        alertController.addAction(cancelButton)
-        alertController.addAction(okAction)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
+        // CANCELボタン
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
     // セルの編集可否の設定
@@ -268,26 +253,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // アラートダイアログを生成
-            let alertController = UIAlertController(title:"ノートを削除",message:"\(dataInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-            
-            // OKボタンを宣言
+            // OKボタン
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-                // OKボタンがタップされたときの処理
                 // ノートデータを削除
                 self.deleteFinished = true
                 self.deleteNoteData(note: self.dataInSection[indexPath.section][indexPath.row])
             }
-            //OKボタンを追加
-            alertController.addAction(okAction)
-            
-            //CANCELボタンを宣言
-            let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            //CANCELボタンを追加
-            alertController.addAction(cancelButton)
-            
-            //アラートダイアログを表示
-            present(alertController,animated:true,completion:nil)
+            // CANCELボタン
+            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+            showAlert(title: "ノートを削除", message: "\(dataInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？", actions: [okAction,cancelAction])
         }
     }
     
@@ -323,36 +297,22 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc func buttonTapped(sender:UIButton){
         sectionIndex = sender.tag
-        
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"目標を削除",message:"\(self.sectionTitle[self.sectionIndex])\nを削除します。よろしいですか？",preferredStyle:UIAlertController.Style.alert)
-        
         // OKボタンを宣言
         let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // OKボタンがタップされたときの処理
             // ノートデータがない月のセクションであればセクションごと削除する
             if self.dataInSection[self.sectionIndex].isEmpty == true {
                 self.dataInSection[self.sectionIndex - 1].removeAll()
-                self.targetDataArray[self.sectionIndex - 1].setIsDeleted(true)
+                self.dataManager.targetDataArray[self.sectionIndex - 1].setIsDeleted(true)
             } else {
                 // ノートがある場合は目標テキストをクリア
-                self.targetDataArray[self.sectionIndex - 1].setDetail("")
+                self.dataManager.targetDataArray[self.sectionIndex - 1].setDetail("")
             }
-            self.updateTargetData(target: self.targetDataArray[self.sectionIndex - 1])
+            self.updateTargetData(target: self.dataManager.targetDataArray[self.sectionIndex - 1])
         }
-        //OKボタンを追加
-        alertController.addAction(okAction)
-        
         //CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        //CANCELボタンを追加
-        alertController.addAction(cancelButton)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        showAlert(title: "目標を削除", message: "\(self.sectionTitle[self.sectionIndex])\nを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
-    
-    
     
     
     //MARK:- 画面遷移
@@ -375,7 +335,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // データを遷移先に渡す
             let calendarViewController = segue.destination as! calendarViewController
             calendarViewController.freeNoteData  = self.freeNoteData
-            calendarViewController.noteDataArray = self.noteDataArray
+            calendarViewController.dataManager.noteDataArray = self.dataManager.noteDataArray
         }
     }
     
@@ -387,187 +347,36 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //MARK:- データベース関連
     
-    // Firebaseにフリーノートデータを作成するメソッド(初回起動時のみ実行)
-    func createFreeNoteData() {
-        // フリーノートデータを作成
-        let freeNote = FreeNote()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーUIDをセット
-        freeNote.setUserID(userID)
-        
-        // 現在時刻をセット
-        freeNote.setCreated_at(getCurrentTime())
-        freeNote.setUpdated_at(freeNote.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("FreeNoteData").document("\(freeNote.getUserID())").setData([
-            "title"      : freeNote.getTitle(),
-            "detail"     : freeNote.getDetail(),
-            "userID"     : freeNote.getUserID(),
-            "created_at" : freeNote.getCreated_at(),
-            "updated_at" : freeNote.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
-    
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーUIDをセット
-        freeNoteData.setUserID(userID)
-        
-        // 現在のユーザーのフリーノートデータを取得する
-        let db = Firestore.firestore()
-        db.collection("FreeNoteData")
-            .whereField("userID", isEqualTo: userID)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let freeNoteDataCollection = document.data()
-                    
-                    // フリーノートデータを反映
-                    self.freeNoteData.setTitle(freeNoteDataCollection["title"] as! String)
-                    self.freeNoteData.setDetail(freeNoteDataCollection["detail"] as! String)
-                    self.freeNoteData.setUserID(freeNoteDataCollection["userID"] as! String)
-                    self.freeNoteData.setCreated_at(freeNoteDataCollection["created_at"] as! String)
-                    self.freeNoteData.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
-                }
-            }
-        }
+        dataManager.getFreeNoteData({
+            self.freeNoteData = self.dataManager.freeNote
+        })
     }
     
     // Firebaseから目標データを取得するメソッド
     func loadTargetData() {
-        // targetDataArrayを初期化
-        targetDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーの目標データを取得する
-        let db = Firestore.firestore()
-        db.collection("TargetData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標オブジェクトを作成
-                    let target = TargetData()
-                    
-                    // 目標データを反映
-                    let targetDataCollection = document.data()
-                    target.setYear(targetDataCollection["year"] as! Int)
-                    target.setMonth(targetDataCollection["month"] as! Int)
-                    target.setDetail(targetDataCollection["detail"] as! String)
-                    target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
-                    target.setUserID(targetDataCollection["userID"] as! String)
-                    target.setCreated_at(targetDataCollection["created_at"] as! String)
-                    target.setUpdated_at(targetDataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.targetDataArray.append(target)
-                }
-                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
-                // セクションデータを再構築
-                self.reloadSectionData()
-                
-                // テーブルビューを更新
-                self.tableView?.reloadData()
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.getTargetData({
+            // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
+            // セクションデータを再構築
+            self.reloadSectionData()
+            // テーブルビューを更新
+            self.tableView?.reloadData()
+        })
     }
     
     // Firebaseからデータを取得するメソッド
     func loadNoteData() {
-        // noteDataArrayを初期化
-        noteDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーのデータを取得する
-        let db = Firestore.firestore()
-        db.collection("NoteData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .order(by: "date", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // オブジェクトを作成
-                    let noteData = NoteData()
-                    
-                    // 目標データを反映
-                    let dataCollection = document.data()
-                    noteData.setNoteID(dataCollection["noteID"] as! Int)
-                    noteData.setNoteType(dataCollection["noteType"] as! String)
-                    noteData.setYear(dataCollection["year"] as! Int)
-                    noteData.setMonth(dataCollection["month"] as! Int)
-                    noteData.setDate(dataCollection["date"] as! Int)
-                    noteData.setDay(dataCollection["day"] as! String)
-                    noteData.setWeather(dataCollection["weather"] as! String)
-                    noteData.setTemperature(dataCollection["temperature"] as! Int)
-                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
-                    noteData.setPurpose(dataCollection["purpose"] as! String)
-                    noteData.setDetail(dataCollection["detail"] as! String)
-                    noteData.setTarget(dataCollection["target"] as! String)
-                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
-                    noteData.setResult(dataCollection["result"] as! String)
-                    noteData.setReflection(dataCollection["reflection"] as! String)
-                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
-                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
-                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
-                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
-                    noteData.setUserID(dataCollection["userID"] as! String)
-                    noteData.setCreated_at(dataCollection["created_at"] as! String)
-                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.noteDataArray.append(noteData)
-                }
-                // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
-                // セクションデータを再構築
-                self.reloadSectionData()
-                
-                // テーブルビューを更新
-                self.tableView?.reloadData()
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.getNoteData({
+            // セクションデータを再構築
+            self.reloadSectionData()
+            // テーブルビューを更新
+            self.tableView?.reloadData()
+        })
     }
     
     // データを取得するメソッド
     func reloadData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
         // データ取得
         loadFreeNoteData()
         loadTargetData()
@@ -651,36 +460,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationItem.rightBarButtonItems = rightBarItems
     }
     
-    // 利用規約表示メソッド
-    func displayAgreement() {
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"利用規約の更新",message:"本アプリの利用規約とプライバシーポリシーに同意します。",preferredStyle:UIAlertController.Style.alert)
-        
-        // 同意ボタンを宣言
-        let agreeAction = UIAlertAction(title:"同意する",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // 同意ボタンがタップされたときの処理
-            // 次回以降、利用規約を表示しないようにする
-            UserDefaults.standard.set(true, forKey: "ver1.4")
-        }
-        
-        // 利用規約ボタンを宣言
-        let termsAction = UIAlertAction(title:"利用規約を読む",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // 利用規約ボタンがタップされたときの処理
-            let url = URL(string: "https://sportnote-b2c92.firebaseapp.com/")
-            UIApplication.shared.open(url!)
-            
-            // アラートが消えるため再度表示
-            self.displayAgreement()
-        }
-        
-        // ボタンを追加
-        alertController.addAction(termsAction)
-        alertController.addAction(agreeAction)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
-    }
-    
     // 広告表示を行うメソッド
     func displayAdMob() {
         // バナー広告を宣言
@@ -710,11 +489,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.view.addSubview(admobView)
     }
     
-    // 初期化sectionTitle
-    func sectionTitleInit() {
-        self.sectionTitle = ["フリーノート"]
-    }
-    
     // 初期化dataInSection
     func dataInSectionInit() {
         // フリーノート用に0番目にはダミーデータを入れる
@@ -726,31 +500,31 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // sectionTitleとdataInSectionを再構成するメソッド
     func reloadSectionData() {
         // データ初期化
-        self.sectionTitleInit()
+        self.sectionTitle = ["フリーノート"]
         self.dataInSectionInit()
         
         // targetDataArrayが空の時は更新しない（エラー対策）
-        if self.targetDataArray.isEmpty == false {
+        if self.dataManager.targetDataArray.isEmpty == false {
             // テーブルデータ更新
-            for index in 0...(self.targetDataArray.count - 1) {
+            for index in 0...(self.dataManager.targetDataArray.count - 1) {
                 // 年間目標と月間目標の区別
-                if self.targetDataArray[index].getMonth() == 13 {
+                if self.dataManager.targetDataArray[index].getMonth() == 13 {
                     // 年間目標セクション追加
-                    self.sectionTitle.append("\(self.targetDataArray[index].getYear())年:\(self.targetDataArray[index].getDetail())")
+                    self.sectionTitle.append("\(self.dataManager.targetDataArray[index].getYear())年:\(self.dataManager.targetDataArray[index].getDetail())")
                     self.dataInSection.append([])
                 } else {
                     // 月間目標セクション追加
-                    self.sectionTitle.append("\(self.targetDataArray[index].getMonth())月:\(self.targetDataArray[index].getDetail())")
+                    self.sectionTitle.append("\(self.dataManager.targetDataArray[index].getMonth())月:\(self.dataManager.targetDataArray[index].getDetail())")
                     
                     // ノートデータ追加
                     var noteArray:[NoteData] = []
                     // noteDataArrayが空の時は更新しない（エラー対策）
-                    if self.noteDataArray.isEmpty == false {
+                    if self.dataManager.noteDataArray.isEmpty == false {
                         // 年,月が合致するノート数だけappendする。
-                        for count in 0...(self.noteDataArray.count - 1) {
-                            if self.noteDataArray[count].getYear() == self.targetDataArray[index].getYear()
-                                && self.noteDataArray[count].getMonth() == self.targetDataArray[index].getMonth() {
-                                noteArray.append(self.noteDataArray[count])
+                        for count in 0...(self.dataManager.noteDataArray.count - 1) {
+                            if self.dataManager.noteDataArray[count].getYear() == self.dataManager.targetDataArray[index].getYear()
+                                && self.dataManager.noteDataArray[count].getMonth() == self.dataManager.targetDataArray[index].getMonth() {
+                                noteArray.append(self.dataManager.noteDataArray[count])
                             }
                         }
                     }

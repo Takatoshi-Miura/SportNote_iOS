@@ -3,22 +3,4 @@
    uuid = "BDED23B8-2721-4DBE-BF6D-6534599CB504"
    type = "0"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E4F32E02-A430-4A75-950F-81F09C3962A4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "011-SportNote/&#x30ce;&#x30fc;&#x30c8;/AddPracticeNoteContentViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "590"
-            endingLineNumber = "590"
-            landmarkName = "weatherPickerInit()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

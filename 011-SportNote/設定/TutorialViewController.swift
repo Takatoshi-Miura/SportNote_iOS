@@ -20,7 +20,7 @@ class TutorialViewController: UIViewController {
         setTextColor()
         
         // 同意していないなら利用規約を表示
-        if UserDefaults.standard.bool(forKey: "ver1.4") == false {
+        if UserDefaults.standard.bool(forKey: "ver1.5.0") == false {
             displayAgreement()
         }
     }
@@ -56,36 +56,6 @@ class TutorialViewController: UIViewController {
     func setTextColor() {
         self.titleLabel.textColor = UIColor.white
         self.detailLabel.textColor = UIColor.white
-    }
-    
-    // 利用規約表示メソッド
-    func displayAgreement() {
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"利用規約の更新",message:"本アプリの利用規約とプライバシーポリシーに同意します。",preferredStyle:UIAlertController.Style.alert)
-        
-        // 同意ボタンを宣言
-        let agreeAction = UIAlertAction(title:"同意する",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // 同意ボタンがタップされたときの処理
-            // 次回以降、利用規約を表示しないようにする
-            UserDefaults.standard.set(true, forKey: "ver1.4")
-        }
-        
-        // 利用規約ボタンを宣言
-        let termsAction = UIAlertAction(title:"利用規約を読む",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // 利用規約ボタンがタップされたときの処理
-            let url = URL(string: "https://sportnote-b2c92.firebaseapp.com/")
-            UIApplication.shared.open(url!)
-            
-            // アラートが消えるため再度表示
-            self.displayAgreement()
-        }
-        
-        // ボタンを追加
-        alertController.addAction(termsAction)
-        alertController.addAction(agreeAction)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
     }
     
 }

@@ -108,7 +108,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     var temperatureIndex:Int = 60
     
     // データ格納用
-    var targetDataArray = [TargetData]()
+    var dataManager = DataManager()
     var competitionNoteData = NoteData()
     
     // データ保存終了フラグ
@@ -144,7 +144,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         saveNoteData()
         
         // 目標データがなければ作成
-        if targetDataArray.isEmpty == true {
+        if dataManager.targetDataArray.isEmpty {
             // 月間目標データを作成
             saveTargetData(year: self.year, month: self.month)
             
@@ -156,9 +156,9 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
             var monthArray:[Int] = []
-            for num in 0...(targetDataArray.count - 1) {
-                if targetDataArray[num].getYear() == self.year {
-                    monthArray.append(targetDataArray[num].getMonth())
+            for num in 0...(dataManager.targetDataArray.count - 1) {
+                if dataManager.targetDataArray[num].getYear() == self.year {
+                    monthArray.append(dataManager.targetDataArray[num].getMonth())
                 }
             }
             
@@ -554,47 +554,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // Firebaseから目標データを取得するメソッド
     func loadTargetData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // targetDataArrayを初期化
-        targetDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 現在のユーザーの目標データを取得する
-        let db = Firestore.firestore()
-        db.collection("TargetData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標オブジェクトを作成
-                    let targetData = TargetData()
-                    
-                    // 目標データを反映
-                    let targetDataCollection = document.data()
-                    targetData.setYear(targetDataCollection["year"] as! Int)
-                    targetData.setMonth(targetDataCollection["month"] as! Int)
-                    targetData.setDetail(targetDataCollection["detail"] as! String)
-                    targetData.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
-                    targetData.setUserID(targetDataCollection["userID"] as! String)
-                    targetData.setCreated_at(targetDataCollection["created_at"] as! String)
-                    targetData.setUpdated_at(targetDataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.targetDataArray.append(targetData)
-                }
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.getTargetData({})
     }
     
     // Firebaseにノートデータを保存するメソッド

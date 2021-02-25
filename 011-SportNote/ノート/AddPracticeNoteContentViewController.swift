@@ -116,8 +116,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     var taskIndex:Int = 0
     
     // データ格納用
-    var targetDataArray  = [TargetData]()
-    var taskDataArray    = [TaskData]()
+    var dataManager = DataManager()
     var practiceNoteData = NoteData()
     
     // 終了フラグ
@@ -154,7 +153,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         saveNoteData()
         
         // 目標データがなければ作成
-        if targetDataArray.isEmpty == true {
+        if dataManager.targetDataArray.isEmpty == true {
             // 月間目標データを作成
             saveTargetData(year: self.year, month: self.month)
             
@@ -166,9 +165,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
             var monthArray:[Int] = []
-            for num in 0...(targetDataArray.count - 1) {
-                if targetDataArray[num].getYear() == self.year {
-                    monthArray.append(targetDataArray[num].getMonth())
+            for num in 0...(dataManager.targetDataArray.count - 1) {
+                if dataManager.targetDataArray[num].getYear() == self.year {
+                    monthArray.append(dataManager.targetDataArray[num].getMonth())
                 }
             }
             // 月間,年間双方の登録がなければ、目標作成
@@ -439,7 +438,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 return 0
             }
         } else {
-            return taskDataArray.count      // 課題数
+            return dataManager.taskDataArray.count      // 課題数
         }
     }
     
@@ -456,24 +455,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 return nil
             }
         } else {
-            return "\(taskDataArray[row].getTaskTitle())" // 課題Pickerの項目
+            return "\(dataManager.taskDataArray[row].getTaskTitle())" // 課題Pickerの項目
         }
     }
-    
-    // 表示されている課題にチェックマークを付与
-//    func pickerView(_ pickerView: UIPickerView,viewForRow row: Int,forComponent component: Int,reusing view: UIView?) -> UIView {
-//        if pickerView.tag == 2 {
-//            // 表示するラベルを生成する
-//            let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50))
-//            label.textAlignment = .center
-//            label.text = taskDataArray[row].getTaskTitle()
-//            label.textColor = .red
-//            return label
-//        } else {
-//            let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50))
-//            return label
-//        }
-//    }
     
     // 種別セル初期化メソッド
     func typeCellPickerInit() {
@@ -652,13 +636,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         taskIndex = taskPicker.selectedRow(inComponent: 0)
         
         // 課題が未登録の場合は何もしない
-        if taskDataArray.isEmpty {
+        if dataManager.taskDataArray.isEmpty {
             // 何もしない
         } else {
             // 既に表示している課題であれば追加しない
-            if self.practiceNoteData.getTaskTitle().firstIndex(of: taskDataArray[taskIndex].getTaskTitle()) == nil {
+            if self.practiceNoteData.getTaskTitle().firstIndex(of: dataManager.taskDataArray[taskIndex].getTaskTitle()) == nil {
                 // noteDataに追加
-                self.practiceNoteData.addTask(taskData: taskDataArray[taskIndex])
+                self.practiceNoteData.addTask(taskData: dataManager.taskDataArray[taskIndex])
                 
                 // セルを挿入
                 self.taskTableView.insertRows(at: [IndexPath(row: practiceNoteData.getTaskTitle().count - 1, section: 0)], with: .fade)
@@ -717,121 +701,38 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // Firebaseから目標データを取得するメソッド
     func loadTargetData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // targetDataArrayを初期化
-        targetDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        
-        // 現在のユーザーの目標データを取得する
-        db.collection("TargetData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "year", descending: true)
-            .order(by: "month", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // 目標オブジェクトを作成
-                    let targetData = TargetData()
-                    
-                    // 目標データを反映
-                    let targetDataCollection = document.data()
-                    targetData.setYear(targetDataCollection["year"] as! Int)
-                    targetData.setMonth(targetDataCollection["month"] as! Int)
-                    targetData.setDetail(targetDataCollection["detail"] as! String)
-                    targetData.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
-                    targetData.setUserID(targetDataCollection["userID"] as! String)
-                    targetData.setCreated_at(targetDataCollection["created_at"] as! String)
-                    targetData.setUpdated_at(targetDataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.targetDataArray.append(targetData)
-                }
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.getTargetData({})
     }
     
     // 課題データを取得するメソッド
     func loadTaskData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // 配列の初期化
-        taskDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーの未解決課題データ取得
-        // ログインユーザーの課題データで、かつisDeletedがfalseの課題を取得
-        // 課題画面にて、古い課題を下、新しい課題を上に表示させるため、taskIDの降順にソートする
-        let db = Firestore.firestore()
-        db.collection("TaskData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .whereField("taskAchievement", isEqualTo: false)
-            .order(by: "taskID", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
+        // 未解決の課題データを取得
+        dataManager.getUnresolvedTaskData({
+            // practiceNoteDataに反映
+            if self.previousControllerName == "PracticeNoteDetailViewController" {
             } else {
-                for document in querySnapshot!.documents {
-                    let taskDataCollection = document.data()
-                
-                    // 取得データを基に、課題データを作成
-                    let databaseTaskData = TaskData()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
-                    
-                    // practiceNoteDataに反映
-                    if self.previousControllerName == "PracticeNoteDetailViewController" {
-                    } else {
-                        self.practiceNoteData.addTask(taskData: databaseTaskData)
-                    }
+                for databaseTaskData in self.dataManager.taskDataArray {
+                    self.practiceNoteData.addTask(taskData: databaseTaskData)
                 }
-                // テーブルビューの更新
-                self.taskTableView?.reloadData()
-                
-                // 課題数によってテーブルビューの高さを設定
-                self.taskTableView?.layoutIfNeeded()
-                self.taskTableView?.updateConstraints()
-                self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
-                
-                // AddPracticeNoteViewControllerオブジェクトを取得
-                if let obj:AddPracticeNoteViewController = self.parent as? AddPracticeNoteViewController {
-                    // containerViewの高さを設定
-                    obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
-                    
-                    // 保存ボタンを有効にする
-                    obj.saveButtonEnable()
-                }
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
             }
-        }
+            
+            // テーブルビューの更新
+            self.taskTableView?.reloadData()
+            
+            // 課題数によってテーブルビューの高さを設定
+            self.taskTableView?.layoutIfNeeded()
+            self.taskTableView?.updateConstraints()
+            self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
+            
+            // AddPracticeNoteViewControllerオブジェクトを取得
+            if let obj:AddPracticeNoteViewController = self.parent as? AddPracticeNoteViewController {
+                // containerViewの高さを設定
+                obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
+                
+                // 保存ボタンを有効にする
+                obj.saveButtonEnable()
+            }
+        })
     }
     
     // Firebaseにノートデータを保存するメソッド
@@ -874,8 +775,8 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 if cell.checkBox.isSelected {
                     // 課題タイトルの配列を作成
                     var taskTitleArray:[String] = []
-                    for num in 0...self.taskDataArray.count - 1 {
-                        taskTitleArray.append(self.taskDataArray[num].getTaskTitle())
+                    for num in 0...self.dataManager.taskDataArray.count - 1 {
+                        taskTitleArray.append(self.dataManager.taskDataArray[num].getTaskTitle())
                     }
                     
                     // 該当する課題データが格納されているindexを取得
@@ -887,10 +788,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     }
                     
                     // そのindexの課題データを更新
-                    self.taskDataArray[index].addEffectiveness(title: self.practiceNoteData.getMeasuresTitle()[num], effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
+                    self.dataManager.taskDataArray[index].addEffectiveness(title: self.practiceNoteData.getMeasuresTitle()[num], effectiveness: cell.effectivenessTextView.text,noteID: self.practiceNoteData.getNoteID())
                     
                     // データ更新
-                    self.updateTaskData(task: self.taskDataArray[index])
+                    self.updateTaskData(task: self.dataManager.taskDataArray[index])
                 }
             }
         }
