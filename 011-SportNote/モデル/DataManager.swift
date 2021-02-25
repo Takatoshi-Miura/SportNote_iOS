@@ -148,6 +148,38 @@ class DataManager {
         }
     }
     
+    /**
+     ノートデータを削除
+     - Parameters:
+      - noteData: 削除したいノート
+      - completion: データ取得後に実行する処理
+     */
+    func deleteNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+        // isDeletedをセット
+        noteData.setIsDeleted(true)
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("NoteData").document("\(userID)_\(noteData.getNoteID())")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "isDeleted"  : true,
+            "updated_at" : getCurrentTime()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("ノート(ID:\(noteData.getNoteID()))を削除しました")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
     
     //MARK:- フリーノートデータ
     

@@ -500,35 +500,14 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // ノートデータを削除するメソッド
     func deleteNoteData(note noteData:NoteData) {
-        // isDeletedをセット
-        noteData.setIsDeleted(true)
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let data = db.collection("NoteData").document("\(userID)_\(noteData.getNoteID())")
-
-        // 変更する可能性のあるデータのみ更新
-        data.updateData([
-            "isDeleted"  : true,
-            "updated_at" : getCurrentTime()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-                
-                // 最後の削除であればリロード
-                if self.deleteFinished == true {
-                    self.deleteFinished = false
-                    self.reloadData()
-                }
+        dataManager.deleteNoteData(noteData, {
+            // 最後の削除であればリロード
+            if self.deleteFinished {
+                self.deleteFinished = false
+                self.reloadData()
             }
-        }
+        })
     }
-    
     
     
     //MARK:- その他のメソッド
