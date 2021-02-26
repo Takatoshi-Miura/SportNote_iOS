@@ -646,6 +646,53 @@ class DataManager {
         }
     }
     
+    /**
+     目標データを保存（新規目標追加時のみ使用）
+     - Parameters:
+      - year:  年
+      - month: 月
+      - date:  日
+      - completion: データ取得後に実行する処理
+     */
+    func saveTargetData(_ year:Int, _ month:Int, _ detail:String, _ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // 目標データを作成
+        let targetData = TargetData()
+        targetData.setYear(year)
+        targetData.setMonth(month)
+        targetData.setDetail(detail)
+        targetData.setUserID(userID)
+        targetData.setCreated_at(getCurrentTime())
+        targetData.setUpdated_at(targetData.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+            "year"       : targetData.getYear(),
+            "month"      : targetData.getMonth(),
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "userID"     : targetData.getUserID(),
+            "created_at" : targetData.getCreated_at(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("目標データを保存しました")
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
     
     //MARK:- その他
     

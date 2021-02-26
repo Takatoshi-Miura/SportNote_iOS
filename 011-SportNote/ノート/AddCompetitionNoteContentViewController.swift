@@ -639,56 +639,17 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
     func saveTargetData(year selectedYear:Int,month selectedMonth:Int) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 目標データを作成
-        let targetData = TargetData()
-        
-        // 年月をセット
-        targetData.setYear(selectedYear)
-        targetData.setMonth(selectedMonth)
-        
-        // ユーザーUIDをセット
-        targetData.setUserID(userID)
-        
-        // 現在時刻をセット
-        targetData.setCreated_at(getCurrentTime())
-        targetData.setUpdated_at(targetData.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
-            "year"       : targetData.getYear(),
-            "month"      : targetData.getMonth(),
-            "detail"     : targetData.getDetail(),
-            "isDeleted"  : targetData.getIsDeleted(),
-            "userID"     : targetData.getUserID(),
-            "created_at" : targetData.getCreated_at(),
-            "updated_at" : targetData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
+        dataManager.saveTargetData(selectedYear, selectedMonth, "", {
+            // 最後の保存であればモーダルを閉じる
+            if self.saveDataFinished == true {
+                // ストーリーボードを取得
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
                 
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // 最後の保存であればモーダルを閉じる
-                if self.saveDataFinished == true {
-                    // ストーリーボードを取得
-                    let storyboard: UIStoryboard = self.storyboard!
-                    let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
-                    // ノート画面に遷移
-                    self.present(nextView, animated: false, completion: nil)
-                }
+                // ノート画面に遷移
+                self.present(nextView, animated: false, completion: nil)
             }
-        }
+        })
     }
     
     

@@ -91,12 +91,12 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             if selectedMonth == 13 {
                 // 年間目標データを保存
                 self.saveFinished = true
-                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+                saveTargetData(selectedYear,selectedMonth,comment: targetTextField.text!)
             } else {
                 // 月間目標データを保存したなら年間目標データも作成
-                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+                saveTargetData(selectedYear,selectedMonth,comment: targetTextField.text!)
                 self.saveFinished = true
-                saveTargetData(month: 13,comment: "")
+                saveTargetData(selectedYear,13,comment: "")
             }
         } else {
             // 既に目標登録済みの月を取得(同じ年の)
@@ -109,14 +109,14 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             // 年間目標の登録がなければ、年間目標作成
             if monthArray.firstIndex(of: 13) == nil && selectedMonth == 13 {
                 self.saveFinished = true
-                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+                saveTargetData(selectedYear,selectedMonth,comment: targetTextField.text!)
             } else if monthArray.firstIndex(of: 13) == nil {
-                saveTargetData(month: 13, comment: "")
+                saveTargetData(selectedYear,13, comment: "")
                 self.saveFinished = true
-                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+                saveTargetData(selectedYear,selectedMonth,comment: targetTextField.text!)
             } else {
                 self.saveFinished = true
-                saveTargetData(month: selectedMonth,comment: targetTextField.text!)
+                saveTargetData(selectedYear,selectedMonth,comment: targetTextField.text!)
             }
         }
     }
@@ -352,6 +352,27 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     
+    //MARK:- データベース関連
+    
+    // 目標データを取得
+    func loadTargetData() {
+        dataManager.getTargetData({})
+    }
+    
+    // 目標データを保存（新規目標追加時のみ使用）
+    func saveTargetData(_ selectedYear:Int, _ selectedMonth:Int, comment detail:String) {
+        dataManager.saveTargetData(selectedYear, selectedMonth, detail, {
+            // 最後のデータ保存であればノート画面に遷移
+            if self.saveFinished == true {
+                // ストーリーボードを取得
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                // ノート画面に遷移
+                self.present(nextView, animated: false, completion: nil)
+            }
+        })
+    }
+    
     
     //MARK:- その他のメソッド
     
@@ -383,75 +404,6 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     @objc func tapOkButton(_ sender: UIButton){
         // キーボードを閉じる
         self.view.endEditing(true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
-    
-    // Firebaseから目標データを取得するメソッド
-    func loadTargetData() {
-        dataManager.getTargetData({})
-    }
-    
-    // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
-    func saveTargetData(month selectedMonth:Int,comment detail:String) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 目標データを作成
-        let targetData = TargetData()
-        
-        // 入力値を反映
-        targetData.setYear(selectedYear)
-        targetData.setMonth(selectedMonth)
-        targetData.setDetail(detail)
-        
-        // ユーザーUIDをセット
-        targetData.setUserID(userID)
-        
-        // 現在時刻をセット
-        targetData.setCreated_at(getCurrentTime())
-        targetData.setUpdated_at(targetData.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
-            "year"       : targetData.getYear(),
-            "month"      : targetData.getMonth(),
-            "detail"     : targetData.getDetail(),
-            "isDeleted"  : targetData.getIsDeleted(),
-            "userID"     : targetData.getUserID(),
-            "created_at" : targetData.getCreated_at(),
-            "updated_at" : targetData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // 最後のデータ保存であればノート画面に遷移
-                if self.saveFinished == true {
-                    // ストーリーボードを取得
-                    let storyboard: UIStoryboard = self.storyboard!
-                    let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
-                    // ノート画面に遷移
-                    self.present(nextView, animated: false, completion: nil)
-                }
-            }
-        }
     }
     
 }
