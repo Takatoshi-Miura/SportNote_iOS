@@ -145,7 +145,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 選択された課題を削除する
             for indexPathList in sortedIndexPaths {
                 self.dataManager.taskDataArray[indexPathList.row].setIsDeleted(true)
-                self.dataManager.updateTaskData(task: self.dataManager.taskDataArray[indexPathList.row], {})
+                self.dataManager.updateTaskData( self.dataManager.taskDataArray[indexPathList.row], {})
                 self.dataManager.taskDataArray.remove(at: indexPathList.row)
             }
             // tableViewの行を削除
@@ -171,7 +171,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 選択された課題を解決済みにする
             for indexPathList in sortedIndexPaths {
                 self.dataManager.taskDataArray[indexPathList.row].changeAchievement()
-                self.dataManager.updateTaskData(task: self.dataManager.taskDataArray[indexPathList.row], {})
+                self.dataManager.updateTaskData( self.dataManager.taskDataArray[indexPathList.row], {})
                 self.dataManager.taskDataArray.remove(at: indexPathList.row)
             }
             
@@ -194,7 +194,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
                 // taskDataを更新
                 self.dataManager.taskDataArray[indexPath.row].setIsDeleted(true)
-                self.dataManager.updateTaskData(task: self.dataManager.taskDataArray[indexPath.row], {})
+                self.dataManager.updateTaskData( self.dataManager.taskDataArray[indexPath.row], {})
                     
                 // taskDataArrayから削除
                 self.dataManager.taskDataArray.remove(at:indexPath.row)
@@ -214,7 +214,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         let resolveAction = UIContextualAction(style: .normal,title: "解決済み",handler: { (action: UIContextualAction, view: UIView, completion: (Bool) -> Void) in
             // 解決済みにする
             self.dataManager.taskDataArray[indexPath.row].changeAchievement()
-            self.dataManager.updateTaskData(task: self.dataManager.taskDataArray[indexPath.row], {})
+            self.dataManager.updateTaskData( self.dataManager.taskDataArray[indexPath.row], {})
             
             // taskDataArrayから削除
             self.dataManager.taskDataArray.remove(at:indexPath.row)

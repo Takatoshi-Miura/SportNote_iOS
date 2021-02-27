@@ -573,7 +573,7 @@ class DataManager {
       - task: 更新したいTaskData
       - completion: 処理完了後に実行する処理
      */
-    func updateTaskData(task taskData:TaskData, _ completion: @escaping () -> ()) {
+    func updateTaskData(_ taskData:TaskData, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         

@@ -822,36 +822,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // Firebaseの課題データを更新するメソッド
     func updateTaskData(task taskData:TaskData) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 更新日時を現在時刻にする
-        taskData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())")
-
-        // 変更する可能性のあるデータのみ更新
-        database.updateData([
-            "taskTitle"      : taskData.getTaskTitle(),
-            "taskCause"      : taskData.getTaskCouse(),
-            "taskAchievement": taskData.getTaskAchievement(),
-            "isDeleted"      : taskData.getIsDeleted(),
-            "updated_at"     : taskData.getUpdated_at(),
-            "measuresData"   : taskData.getMeasuresData(),
-            "measuresPriority" : taskData.getMeasuresPriority()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.updateTaskData(taskData, {})
     }
     
     
@@ -897,15 +868,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             self.weatherIndex = 2
         }
         self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
     
     // 現在時刻を取得するメソッド

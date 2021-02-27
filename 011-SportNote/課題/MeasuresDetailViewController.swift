@@ -226,7 +226,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // データを更新
         let dataManager = DataManager()
-        dataManager.updateTaskData(task: self.taskData, {
+        dataManager.updateTaskData(self.taskData, {
             self.tableView.reloadData()
         })
     }

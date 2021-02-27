@@ -107,7 +107,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         // データ更新
         taskData.setTaskTitle(taskTitleTextField.text!)
         taskData.setTaskCause(taskCauseTextView.text!)
-        dataManager.updateTaskData(task: taskData, {
+        dataManager.updateTaskData(taskData, {
             // 解決済みボタンをタップした場合
             if self.resolvedButtonTap == true {
                 // 前の画面に戻る
@@ -140,7 +140,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 // データ更新
                 self.taskData.setTaskTitle(self.taskTitleTextField.text!)
                 self.taskData.setTaskCause(self.taskCauseTextView.text!)
-                self.dataManager.updateTaskData(task: self.taskData, {
+                self.dataManager.updateTaskData(self.taskData, {
                 })
                 
                 // テーブルに行が追加されたことをテーブルに通知
@@ -223,7 +223,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 self.taskData.deleteMeasures(at: indexPath.row)
                 
                 // データを更新
-                self.dataManager.updateTaskData(task: self.taskData, {
+                self.dataManager.updateTaskData(self.taskData, {
                 })
                 
                 // セルを削除
@@ -253,7 +253,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
             // 課題データを更新
             taskData.setTaskTitle(taskTitleTextField.text!)
             taskData.setTaskCause(taskCauseTextView.text!)
-            dataManager.updateTaskData(task: taskData, {
+            dataManager.updateTaskData(taskData, {
             })
         }
     }

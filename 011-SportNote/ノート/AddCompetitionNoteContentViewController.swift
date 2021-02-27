@@ -705,15 +705,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         return returnText
     }
     
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
-    
     // テキストビューに枠線を追加するメソッド
     func addTextViewBorder() {
         physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
