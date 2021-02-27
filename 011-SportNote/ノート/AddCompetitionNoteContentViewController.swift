@@ -580,7 +580,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // ノートを保存
         if previousControllerName == "CompetitionNoteDetailViewController" {
             // 既存ノートを編集
-            dataManager.saveNoteData(competitionNoteData, false, {
+            dataManager.updateNoteData(competitionNoteData, {
                 if self.previousControllerName == "CompetitionNoteDetailViewController" {
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
@@ -591,7 +591,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
             })
         } else {
             // ノートを新規作成
-            dataManager.saveNoteData(competitionNoteData, true, {})
+            dataManager.saveNoteData(competitionNoteData, {})
         }
     }
     

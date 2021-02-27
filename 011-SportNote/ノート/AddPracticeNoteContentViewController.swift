@@ -792,7 +792,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // 既存ノートを更新する場合
         if previousControllerName == "PracticeNoteDetailViewController" {
-            dataManager.saveNoteData(practiceNoteData, false, {
+            dataManager.updateNoteData(practiceNoteData, {
                 if self.previousControllerName == "PracticeNoteDetailViewController" {
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
@@ -802,7 +802,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 }
             })
         } else {
-            dataManager.saveNoteData(practiceNoteData, true, {})
+            dataManager.saveNoteData(practiceNoteData, {})
         }
     }
     

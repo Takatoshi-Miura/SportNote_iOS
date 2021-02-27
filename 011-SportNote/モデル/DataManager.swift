@@ -219,12 +219,60 @@ class DataManager {
     }
     
     /**
+     ノートデータを更新
+     - Parameters:
+      - noteData: 更新したいノート
+      - completion: データ取得後に実行する処理
+     */
+    func updateNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 更新日時に現在時刻をセット
+        noteData.setUpdated_at(getCurrentTime())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        let data = db.collection("NoteData").document("\(noteData.getUserID())_\(noteData.getNoteID())")
+        data.updateData([
+            "year"                  : noteData.getYear(),
+            "month"                 : noteData.getMonth(),
+            "date"                  : noteData.getDate(),
+            "day"                   : noteData.getDay(),
+            "weather"               : noteData.getWeather(),
+            "temperature"           : noteData.getTemperature(),
+            "physicalCondition"     : noteData.getPhysicalCondition(),
+            "purpose"               : noteData.getPurpose(),
+            "detail"                : noteData.getDetail(),
+            "target"                : noteData.getTarget(),
+            "consciousness"         : noteData.getConsciousness(),
+            "result"                : noteData.getResult(),
+            "reflection"            : noteData.getReflection(),
+            "taskTitle"             : noteData.getTaskTitle(),
+            "measuresTitle"         : noteData.getMeasuresTitle(),
+            "measuresEffectiveness" : noteData.getMeasuresEffectiveness(),
+            "isDeleted"             : noteData.getIsDeleted(),
+            "updated_at"            : noteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("ノート(ID:\(noteData.getNoteID()))を更新しました")
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
      ノートデータを保存
      - Parameters:
       - noteData: 保存したいノート
       - completion: データ取得後に実行する処理
      */
-    func saveNoteData(_ noteData:NoteData, _ newNote:Bool, _ completion: @escaping () -> ()) {
+    func saveNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -232,13 +280,9 @@ class DataManager {
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         noteData.setUserID(userID)
         
-        // 更新日時に現在時刻をセット
+        // 日時に現在時刻をセット
         noteData.setUpdated_at(getCurrentTime())
-        
-        // 新規作成する場合
-        if newNote {
-            noteData.setCreated_at(getCurrentTime())
-        }
+        noteData.setCreated_at(getCurrentTime())
         
         // Firebaseにデータを保存
         let db = Firestore.firestore()
