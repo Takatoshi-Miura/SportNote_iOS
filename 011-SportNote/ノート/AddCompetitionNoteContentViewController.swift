@@ -559,12 +559,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // Firebaseにノートデータを保存するメソッド
     func saveNoteData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
         // 大会ノートデータを作成
         competitionNoteData.setNoteType("大会記録")
         
@@ -583,57 +577,21 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         competitionNoteData.setResult(resultTextView.text!)
         competitionNoteData.setReflection(reflectionTextView.text!)
         
-        // ユーザーUIDをセット
-        competitionNoteData.setUserID(userID)
-        
-        // 現在時刻をセット
-        competitionNoteData.setCreated_at(getCurrentTime())
-        competitionNoteData.setUpdated_at(competitionNoteData.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("NoteData").document("\(competitionNoteData.getUserID())_\(competitionNoteData.getNoteID())").setData([
-            "noteID"                : competitionNoteData.getNoteID(),
-            "noteType"              : competitionNoteData.getNoteType(),
-            "year"                  : competitionNoteData.getYear(),
-            "month"                 : competitionNoteData.getMonth(),
-            "date"                  : competitionNoteData.getDate(),
-            "day"                   : competitionNoteData.getDay(),
-            "weather"               : competitionNoteData.getWeather(),
-            "temperature"           : competitionNoteData.getTemperature(),
-            "physicalCondition"     : competitionNoteData.getPhysicalCondition(),
-            "purpose"               : competitionNoteData.getPurpose(),
-            "detail"                : competitionNoteData.getDetail(),
-            "target"                : competitionNoteData.getTarget(),
-            "consciousness"         : competitionNoteData.getConsciousness(),
-            "result"                : competitionNoteData.getResult(),
-            "reflection"            : competitionNoteData.getReflection(),
-            "taskTitle"             : competitionNoteData.getTaskTitle(),
-            "measuresTitle"         : competitionNoteData.getMeasuresTitle(),
-            "measuresEffectiveness" : competitionNoteData.getMeasuresEffectiveness(),
-            "isDeleted"             : competitionNoteData.getIsDeleted(),
-            "userID"                : competitionNoteData.getUserID(),
-            "created_at"            : competitionNoteData.getCreated_at(),
-            "updated_at"            : competitionNoteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // CompetitionNoteDetailViewControllerから遷移してきた場合
+        // ノートを保存
+        if previousControllerName == "CompetitionNoteDetailViewController" {
+            // 既存ノートを編集
+            dataManager.saveNoteData(competitionNoteData, false, {
                 if self.previousControllerName == "CompetitionNoteDetailViewController" {
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
                     // ノート画面に遷移
                     self.present(nextView, animated: false, completion: nil)
                 }
-            }
+            })
+        } else {
+            // ノートを新規作成
+            dataManager.saveNoteData(competitionNoteData, true, {})
         }
     }
     

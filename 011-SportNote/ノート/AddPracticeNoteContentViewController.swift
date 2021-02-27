@@ -737,12 +737,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // Firebaseにノートデータを保存するメソッド
     func saveNoteData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
         // ノートタイプを指定
         practiceNoteData.setNoteType("練習記録")
         
@@ -762,7 +756,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // 対策の有効性コメントをセット
         var measuresEffectiveness:[String] = []
-        
         if self.practiceNoteData.getTaskTitle().isEmpty {
             // 何もしない
         } else {
@@ -797,63 +790,19 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
         practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
         
-        // ノートを更新する場合
+        // 既存ノートを更新する場合
         if previousControllerName == "PracticeNoteDetailViewController" {
-            // 更新日時に現在時刻をセット
-            practiceNoteData.setUpdated_at(getCurrentTime())
-        } else {
-            // ユーザーUIDをセット
-            practiceNoteData.setUserID(userID)
-            
-            // 現在時刻をセット
-            practiceNoteData.setCreated_at(getCurrentTime())
-            practiceNoteData.setUpdated_at(practiceNoteData.getCreated_at())
-        }
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("NoteData").document("\(practiceNoteData.getUserID())_\(practiceNoteData.getNoteID())").setData([
-            "noteID"                : practiceNoteData.getNoteID(),
-            "noteType"              : practiceNoteData.getNoteType(),
-            "year"                  : practiceNoteData.getYear(),
-            "month"                 : practiceNoteData.getMonth(),
-            "date"                  : practiceNoteData.getDate(),
-            "day"                   : practiceNoteData.getDay(),
-            "weather"               : practiceNoteData.getWeather(),
-            "temperature"           : practiceNoteData.getTemperature(),
-            "physicalCondition"     : practiceNoteData.getPhysicalCondition(),
-            "purpose"               : practiceNoteData.getPurpose(),
-            "detail"                : practiceNoteData.getDetail(),
-            "target"                : practiceNoteData.getTarget(),
-            "consciousness"         : practiceNoteData.getConsciousness(),
-            "result"                : practiceNoteData.getResult(),
-            "reflection"            : practiceNoteData.getReflection(),
-            "taskTitle"             : practiceNoteData.getTaskTitle(),
-            "measuresTitle"         : practiceNoteData.getMeasuresTitle(),
-            "measuresEffectiveness" : practiceNoteData.getMeasuresEffectiveness(),
-            "isDeleted"             : practiceNoteData.getIsDeleted(),
-            "userID"                : practiceNoteData.getUserID(),
-            "created_at"            : practiceNoteData.getCreated_at(),
-            "updated_at"            : practiceNoteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // PracticeNoteDetailViewControllerから遷移してきた場合
+            dataManager.saveNoteData(practiceNoteData, false, {
                 if self.previousControllerName == "PracticeNoteDetailViewController" {
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
                     // ノート画面に遷移
                     self.present(nextView, animated: false, completion: nil)
                 }
-            }
+            })
+        } else {
+            dataManager.saveNoteData(practiceNoteData, true, {})
         }
     }
     
