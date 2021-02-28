@@ -113,11 +113,6 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     
     //MARK:- その他のメソッド
     
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     // ツールバーを作成するメソッド
     func createToolBar() {
         // ツールバーのインスタンスを作成

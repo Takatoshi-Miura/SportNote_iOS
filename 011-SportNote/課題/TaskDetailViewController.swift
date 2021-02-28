@@ -272,11 +272,6 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     //MARK:- その他のメソッド
     
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     // キーボードを出したときの設定
     func configureObserver() {
         let notification = NotificationCenter.default

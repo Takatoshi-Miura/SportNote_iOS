@@ -866,7 +866,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // テキストフィールド以外をタップでキーボードとPickerを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-        
         // Pickerをしまう
         closePicker()
     }

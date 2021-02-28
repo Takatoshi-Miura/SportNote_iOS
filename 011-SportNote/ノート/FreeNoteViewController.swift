@@ -77,11 +77,6 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
         detailTextView.text = dataManager.freeNoteData.getDetail()
     }
     
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     // キーボードを出したときの設定
     @objc func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }

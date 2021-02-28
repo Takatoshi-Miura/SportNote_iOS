@@ -172,11 +172,6 @@ class LoginViewController: UIViewController {
     
     //MARK:- その他のメソッド
     
-    // キーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     // 現在時刻を取得するメソッド
     func getCurrentTime() -> String {
         let now = Date()
