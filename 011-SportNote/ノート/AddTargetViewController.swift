@@ -154,27 +154,13 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             // 種別セルがタップされた時
-            // Pickerの宣言
             typeCellPickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
-            }
         } else {
             // 期間セルがタップされた時
-            // Pickerの宣言
             periodCellPickerInit()
-            
-            // 下からPickerを呼び出す
-            let screenSize = UIScreen.main.bounds.size
-            pickerView.frame.origin.y = screenSize.height
-            UIView.animate(withDuration: 0.3) {
-                self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
-            }
         }
+        // 下からPickerを呼び出す
+        openPicker(pickerView)
     }
     
     
@@ -183,9 +169,6 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     // 種別セル初期化メソッド
     func typeCellPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // Pickerの宣言
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
         typePicker.backgroundColor = UIColor.systemGray5
@@ -193,15 +176,12 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         // ビューを追加
         pickerView = UIView(frame: typePicker.bounds)
         pickerView.addSubview(typePicker)
-        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(typeCancel)))
+        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
     // 期間セル初期化メソッド
     func periodCellPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // Pickerの宣言
         periodPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: periodPicker.bounds.size.height)
         periodPicker.backgroundColor = UIColor.systemGray5
@@ -209,16 +189,14 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         // ビューを追加
         pickerView = UIView(frame: periodPicker.bounds)
         pickerView.addSubview(periodPicker)
-        pickerView.addSubview(createToolBar(#selector(periodDone), #selector(periodCancel)))
+        pickerView.addSubview(createToolBar(#selector(periodDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
     // キャンセルボタンの処理
-    @objc func typeCancel() {
+    @objc func cancelAction() {
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
+        closePicker(pickerView)
         
         // テーブルビューを更新
         tableView.reloadData()
@@ -230,9 +208,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         typeIndex = typePicker.selectedRow(inComponent: 0)
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
+        closePicker(pickerView)
            
         // テーブルビューを更新
         tableView.reloadData()
@@ -262,17 +238,6 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         }
     }
     
-    // キャンセルボタンの処理
-    @objc func periodCancel() {
-        // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        // テーブルビューを更新
-        tableView.reloadData()
-    }
-    
     // 完了ボタンの処理
     @objc func periodDone() {
         // 選択された項目を取得
@@ -283,9 +248,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         }
         
         // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
+        closePicker(pickerView)
         
         // テーブルビューを更新
         tableView.reloadData()

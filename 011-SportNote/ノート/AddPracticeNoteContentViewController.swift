@@ -461,9 +461,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 種別セル初期化メソッド
     func typeCellPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 種別Pickerの宣言
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
         typePicker.backgroundColor = UIColor.systemGray5
@@ -471,12 +468,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューを追加
         pickerView = UIView(frame: typePicker.bounds)
         pickerView.addSubview(typePicker)
-        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(typeCancel)))
+        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
     // キャンセルボタンの処理
-    @objc func typeCancel() {
+    @objc func cancelAction() {
         // Pickerをしまう
         closePicker()
         
@@ -522,9 +519,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 日付Pickerの初期化メソッド
     func datePickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 日付Pickerの宣言
         datePicker = UIDatePicker()
         datePicker.date = Date()
@@ -539,7 +533,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューを追加
         pickerView = UIView(frame: datePicker.bounds)
         pickerView.addSubview(datePicker)
-        pickerView.addSubview(createToolBar(#selector(datePickerDone), #selector(typeCancel)))
+        pickerView.addSubview(createToolBar(#selector(datePickerDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -555,9 +549,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 天候Pickerの初期化メソッド
     func weatherPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 天候Pickerの宣言
         weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
         weatherPicker.backgroundColor = UIColor.systemGray5
@@ -565,7 +556,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューを追加
         pickerView = UIView(frame: weatherPicker.bounds)
         pickerView.addSubview(weatherPicker)
-        pickerView.addSubview(createToolBar(#selector(weatherDone), #selector(typeCancel)))
+        pickerView.addSubview(createToolBar(#selector(weatherDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -584,9 +575,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 課題Pickerの初期化メソッド
     func taskPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 課題Pickerの宣言
         taskPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height)
         taskPicker.backgroundColor = UIColor.systemGray5
@@ -594,7 +582,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // ビューを追加
         pickerView = UIView(frame: taskPicker.bounds)
         pickerView.addSubview(taskPicker)
-        pickerView.addSubview(createToolBar("追加", #selector(taskPickerDone), #selector(typeCancel)))
+        pickerView.addSubview(createToolBar("追加", #selector(taskPickerDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -638,29 +626,14 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 現在のスクロール位置（最下点）,Pickerの座標を取得
         let obj = self.parent as! AddPracticeNoteViewController
         let scrollPotiton = obj.getScrollPosition()
-        picker.frame.origin.y = scrollPotiton
         
         // 下からPickerを出す
-        UIView.animate(withDuration: 0.3) {
-            picker.frame.origin.y = scrollPotiton - picker.bounds.size.height - self.toolbarHeight - self.bottomPadding
-        }
+        openPicker(pickerView, scrollPotiton, bottomPadding)
     }
     
     // Pickerをしまうメソッド
     func closePicker() {
-        // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddPracticeNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        
-        // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker(pickerView)
     }
     
     
