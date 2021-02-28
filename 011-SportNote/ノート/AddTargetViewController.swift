@@ -40,7 +40,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         loadTargetData()
         
         // ツールバーを作成
-        createToolBar()
+        targetTextField.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
     }
     
     
@@ -322,25 +322,6 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     
     //MARK:- その他のメソッド
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        targetTextField.inputAccessoryView = toolBar
-    }
     
     // OKボタンの処理
     @objc func tapOkButton(_ sender: UIButton){

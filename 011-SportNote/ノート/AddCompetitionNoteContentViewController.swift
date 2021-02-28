@@ -43,7 +43,11 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         configureObserver()
         
         // ツールバーを作成
-        createToolBar()
+        physicalConditionTextView.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
+        targetTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        consciousnessTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        resultTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        reflectionTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
@@ -727,29 +731,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         UIView.animate(withDuration: duration) {
             self.view.transform = CGAffineTransform.identity
         }
-    }
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        physicalConditionTextView.inputAccessoryView = toolBar
-        targetTextView.inputAccessoryView = toolBar
-        consciousnessTextView.inputAccessoryView = toolBar
-        resultTextView.inputAccessoryView = toolBar
-        reflectionTextView.inputAccessoryView = toolBar
     }
     
     // OKボタンの処理
