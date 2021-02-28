@@ -21,6 +21,7 @@
 		8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AFD724A47F7E007450BF /* SVProgressHUD.m */; };
 		8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */; };
 		8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57AFDC24A47FAB007450BF /* QuartzCore.framework */; };
+		8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */; };
 		8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2624A17CD300441B32 /* AppDelegate.swift */; };
 		8D665D2924A17CD300441B32 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2824A17CD300441B32 /* SceneDelegate.swift */; };
 		8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2C24A17CD300441B32 /* Main.storyboard */; };
@@ -74,6 +75,7 @@
 		8D57AFD824A47F7E007450BF /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		8D57AFDC24A47FAB007450BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+PickerView.swift"; path = "011-SportNote/共通/UIViewController+PickerView.swift"; sourceTree = "<group>"; };
 		8D665D2324A17CD300441B32 /* 011-SportNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "011-SportNote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D665D2624A17CD300441B32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D665D2824A17CD300441B32 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,
+				8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */,
 			);
 			name = "共通";
 			path = ..;
@@ -409,6 +412,7 @@
 				8D69FC9824B7085900DFECB3 /* TaskMeasuresTableViewCell.swift in Sources */,
 				8DCF350A24F6554900055093 /* TaskData.swift in Sources */,
 				8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */,
+				8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */,
 				8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */,
 				8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */,
 				8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */,

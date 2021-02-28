@@ -190,18 +190,10 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
         typePicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.typeDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: typePicker.bounds)
         pickerView.addSubview(typePicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(typeCancel)))
         view.addSubview(pickerView)
     }
     
@@ -214,18 +206,10 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         periodPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: periodPicker.bounds.size.height)
         periodPicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.periodDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.periodCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: periodPicker.bounds)
         pickerView.addSubview(periodPicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(periodDone), #selector(periodCancel)))
         view.addSubview(pickerView)
     }
     

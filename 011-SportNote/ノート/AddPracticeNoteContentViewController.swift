@@ -468,18 +468,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
         typePicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.typeDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: typePicker.bounds)
         pickerView.addSubview(typePicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(typeCancel)))
         view.addSubview(pickerView)
     }
     
@@ -544,18 +536,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         datePicker.backgroundColor = UIColor.systemGray5
         datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.datePickerDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: datePicker.bounds)
         pickerView.addSubview(datePicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(datePickerDone), #selector(typeCancel)))
         view.addSubview(pickerView)
     }
     
@@ -577,19 +561,11 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 天候Pickerの宣言
         weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
         weatherPicker.backgroundColor = UIColor.systemGray5
-        
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.weatherDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
+
         // ビューを追加
         pickerView = UIView(frame: weatherPicker.bounds)
         pickerView.addSubview(weatherPicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(weatherDone), #selector(typeCancel)))
         view.addSubview(pickerView)
     }
     
@@ -615,18 +591,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         taskPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height)
         taskPicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(title: "追加", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.taskPickerDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: taskPicker.bounds)
         pickerView.addSubview(taskPicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar("追加", #selector(taskPickerDone), #selector(typeCancel)))
         view.addSubview(pickerView)
     }
     

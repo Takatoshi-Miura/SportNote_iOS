@@ -72,18 +72,10 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         picker.dataSource = self
         picker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.done))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: picker.bounds)
         pickerView.addSubview(picker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(done), #selector(cancel)))
         view.addSubview(pickerView)
         
         // 下からPickerを呼び出す
