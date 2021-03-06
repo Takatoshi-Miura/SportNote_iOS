@@ -709,7 +709,7 @@ class DataManager {
       - completion: 処理完了後に実行する処理
      */
     // Firebaseにデータを保存するメソッド
-    func saveTaskData(title:String, cause:String, measuresTitleArray:[String], _ completion: @escaping () -> ()) {
+    func saveTaskData(title:String, cause:String, measuresTitleArray:[String], measuresPriority:String, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -726,11 +726,12 @@ class DataManager {
         taskData.setCreated_at(self.getCurrentTime())
         taskData.setUpdated_at(taskData.getCreated_at())
         
-        // TODO: 最有力の対策を設定するコード
+        // 最有力の対策を設定
+        taskData.setMeasuresPriority(measuresPriority)
     
         // 対策をセット
         for measuresTitle in measuresTitleArray {
-            taskData.addMeasures(title: measuresTitle,effectiveness: "課題データに追記したノートデータ")
+            taskData.addMeasures(title: measuresTitle,effectiveness: "連動したノートが表示されます")
         }
         
         // taskIDの設定

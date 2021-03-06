@@ -33,6 +33,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     //MARK:- 変数の宣言
     
     var dataManager = DataManager()         // データ用
+    var measuresPriorityTitle = ""
     var measuresTitleArray:[String] = []    // 対策タイトルを格納する配列
     
     
@@ -61,7 +62,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
                 self.measuresTitleArray.insert(textField.text!,at:0)
                 
                 // 最有力の対策に設定
-//                self.taskData.setMeasuresPriority(textField.text!)
+                self.measuresPriorityTitle = textField.text!
                 
                 //テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
@@ -88,7 +89,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     @IBAction func saveButton(_ sender: Any) {
         // 課題データを保存
         measuresTitleArray.reverse()
-        dataManager.saveTaskData(title: taskTitleTextField.text!, cause: causeTextView.text!, measuresTitleArray: measuresTitleArray, {
+        dataManager.saveTaskData(title: taskTitleTextField.text!, cause: causeTextView.text!, measuresTitleArray: measuresTitleArray, measuresPriority: measuresPriorityTitle, {
             // モーダルを閉じる
             self.dismiss(animated: true, completion: nil)
         })
