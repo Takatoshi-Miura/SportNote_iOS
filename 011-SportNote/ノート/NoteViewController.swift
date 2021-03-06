@@ -18,10 +18,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // ユーザーデータの更新(利用状況の把握)
-        let userData = UserData()
-        userData.updateUserData()
-        
         // 初回起動判定
         if UserDefaults.standard.bool(forKey: "firstLaunch") {
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
@@ -29,6 +25,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             // 2回目以降の起動では「userID」を今回生成したIDで固定(アカウント持ちならFirebaseIDで固定)
             UserDefaults.standard.set(UserDefaults.standard.object(forKey: "userID") as! String, forKey: "userID")
+            
+            // ユーザーデータを作成
+            let userData = UserData()
+            userData.createUserData()
             
             // フリーノートデータ作成
             dataManager.createFreeNoteData({})
@@ -41,28 +41,26 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // 新規バージョンでの初回起動判定
         if UserDefaults.standard.bool(forKey: "ver1.5.0") == false {
-            // ユーザーデータを作成
-            let userData = UserData()
-            userData.createUserData()
-            
             // 利用規約を表示
             displayAgreement()
         }
-    
-        // 編集ボタンの設定(複数選択可能)
-        tableView.allowsMultipleSelectionDuringEditing = true
         
-        // ナビゲーションバーのボタンを宣言
-        createNavigationBarButton()
+        // ユーザーデータの更新(利用状況の把握)
+        let userData = UserData()
+        userData.updateUserData()
         
-        // ナビゲーションボタンをセット
-        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
+        // tableViewの設定
+        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
+        tableView.tableFooterView = UIView()                    // データのないセルを非表示
         
         // カスタムセルを登録
         tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
         
-        // データのないセルを非表示
-        self.tableView.tableFooterView = UIView()
+        // ナビゲーションバーのボタンを宣言＆セット
+        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
+        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
         
         // 広告表示
         self.displayAdMob()
@@ -114,13 +112,37 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
-        tableView.reloadData()
     }
     
     // ゴミ箱ボタンの処理
     @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
-        // 選択されたノートを削除
-        self.deleteRows()
+        // ノートが選択されていない時は何もしない
+        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
+            return
+        }
+        // OKボタン
+        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
+            self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+            
+            for num in 0...self.sortedIndexPaths.count - 1 {
+                // 最後の削除であればフラグをtrueにする
+                if num == (self.sortedIndexPaths.count - 1) {
+                    self.deleteFinished = true
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
+                } else {
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
+                }
+            }
+            // 編集状態を解除
+            self.setEditing(false, animated: true)
+        }
+        // CANCELボタン
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        // アラート表示
+        showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
     // ノート追加ボタンの処理
@@ -142,7 +164,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataInSection[section].count     // セルの個数(ノート数)を返却
+        return dataInSection[section].count     // 各セクションに含まれるノート数を返却
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -164,10 +186,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 0:
-            return 44   // セルのデフォルト高さ
-        default:
-            return 60  // カスタムセルの高さ
+            case 0:
+                return 44   // セルのデフォルト高さ
+            default:
+                return 60   // カスタムセルの高さ
         }
     }
     
@@ -206,35 +228,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
         }
-    }
-    
-    // 複数のセルを削除
-    func deleteRows() {
-        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
-            return
-        }
-        // OKボタン
-        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
-            self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-            
-            for num in 0...self.sortedIndexPaths.count - 1 {
-                // 最後の削除であればフラグをtrueにする
-                if num == (self.sortedIndexPaths.count - 1) {
-                    self.deleteFinished = true
-                    // 選択されたノートを削除
-                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
-                } else {
-                    // 選択されたノートを削除
-                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
-                }
-            }
-            // 編集状態を解除
-            self.setEditing(false, animated: true)
-        }
-        // CANCELボタン
-        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
     // セルの編集可否の設定
@@ -397,13 +390,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     //MARK:- その他のメソッド
-    
-    // ナビゲーションバーボタンの宣言
-    func createNavigationBarButton() {
-        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-    }
     
     // ナビゲーションバーボタンをセットするメソッド
     func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
