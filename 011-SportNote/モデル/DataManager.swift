@@ -479,7 +479,6 @@ class DataManager {
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
         // テキストデータをセット
-        let freeNoteData = FreeNote()
         freeNoteData.setTitle(title)
         freeNoteData.setDetail(detail)
         
@@ -499,7 +498,7 @@ class DataManager {
             if let err = err {
                 print("Error updating document: \(err)")
             } else {
-                print("フリーノート(タイトル:\(freeNoteData.getTitle())を更新しました")
+                print("フリーノート(タイトル:\(self.freeNoteData.getTitle()))を更新しました")
                 // 完了処理
                 completion()
             }

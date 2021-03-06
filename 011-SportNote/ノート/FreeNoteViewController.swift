@@ -58,20 +58,18 @@ class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UI
     
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        // フリーノートデータを更新
-        updateFreeNoteData()
+        if let controller = viewController as? NoteViewController {
+            // フリーノートデータを更新・受け渡し＆フリーノートセル再描画
+            dataManager.updateFreeNoteData(titleTextField.text!, detailTextView.text!, {
+                controller.dataManager.freeNoteData = self.dataManager.freeNoteData
+                let row = IndexPath(row: 0, section: 0)
+                controller.tableView.reloadRows(at: [row], with: UITableView.RowAnimation.fade)
+            })
+        }
     }
     
     
-    //MARK:- データベース関連
-    
-    // Firebaseのデータを更新するメソッド
-    func updateFreeNoteData() {
-        dataManager.updateFreeNoteData(titleTextField.text!, detailTextView.text!, {})
-    }
-    
-    
-    //MARK:- その他のメソッド
+    //MARK:- キーボード
     
     // キーボードを出したときの設定
     @objc func adjustForKeyboard(notification: Notification) {

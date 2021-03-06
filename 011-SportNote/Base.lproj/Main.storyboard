@@ -361,7 +361,7 @@
         <!--ノート-->
         <scene sceneID="35a-o8-3VX">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="wxt-FW-UKR" customClass="NoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="noteViewController" modalPresentationStyle="fullScreen" id="wxt-FW-UKR" customClass="NoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jgH-SL-9H8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -66,9 +66,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // 広告表示
         self.displayAdMob()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
+        
         // データ取得
         reloadData()
     }
@@ -343,15 +341,14 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    
     //MARK:- データベース関連
     
-    // Firebaseからフリーノートデータを読み込むメソッド
+    // フリーノートデータを取得
     func loadFreeNoteData() {
         dataManager.getFreeNoteData({})
     }
     
-    // Firebaseから目標データを取得するメソッド
+    // 目標データを取得
     func loadTargetData() {
         dataManager.getTargetData({
             // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
@@ -362,7 +359,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
     }
     
-    // Firebaseからデータを取得するメソッド
+    // ノートデータを取得
     func loadNoteData() {
         dataManager.getNoteData({
             // セクションデータを再構築
@@ -372,15 +369,14 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
     }
     
-    // データを取得するメソッド
+    // データを取得
     func reloadData() {
-        // データ取得
         loadFreeNoteData()
         loadTargetData()
         loadNoteData()
     }
     
-    // ノートデータを削除するメソッド
+    // ノートデータを削除
     func deleteNoteData(note noteData:NoteData) {
         dataManager.deleteNoteData(noteData, {
             // 最後の削除であればリロード
@@ -391,7 +387,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
     }
     
-    // Firebaseのデータを更新するメソッド
+    // 目標を更新
     func updateTargetData(target targetData:TargetData) {
         dataManager.updateTargetData(targetData, {
             self.reloadData()
