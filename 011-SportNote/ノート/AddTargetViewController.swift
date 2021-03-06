@@ -31,7 +31,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         periodPicker.tag = 1
         
         // 初期値の設定(2020年に設定)
-        periodPicker.selectRow(70, inComponent: 0, animated: true)
+        periodPicker.selectRow(71, inComponent: 0, animated: true)
 
         // データのないセルを非表示
         self.tableView.tableFooterView = UIView()
@@ -59,7 +59,7 @@ class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     let periodPicker = UIPickerView()
     let years  = (1950...2200).map { $0 }
     let months = ["--","1","2","3","4","5","6","7","8","9","10","11","12"]
-    var selectedYear:Int  = 2020
+    var selectedYear:Int  = 2021
     var selectedMonth:Int = 13   // "--"が選択された時は13が入る
     
     // データ格納用
