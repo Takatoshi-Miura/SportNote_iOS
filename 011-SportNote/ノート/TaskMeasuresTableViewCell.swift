@@ -51,6 +51,8 @@ class TaskMeasuresTableViewCell: UITableViewCell {
     func initCheckBox() {
         self.checkBox.setImage(uncheckedImage, for: .normal)
         self.checkBox.setImage(checkedImage, for: .selected)
+        // デフォルトでチェックを入れる
+        self.checkBox.isSelected = true
     }
     
     // ツールバーを作成するメソッド
