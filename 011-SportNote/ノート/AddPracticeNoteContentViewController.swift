@@ -656,7 +656,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             if self.previousControllerName == "PracticeNoteDetailViewController" {
             } else {
                 for databaseTaskData in self.dataManager.taskDataArray {
-                    self.practiceNoteData.addTask(taskData: databaseTaskData)
+                    // 最有力の対策がない課題(対策データが存在しない)は連動できないため、読み込まない
+                    if databaseTaskData.getMeasuresPriority().isEmpty {
+                        // 読み込まない
+                    } else {
+                        self.practiceNoteData.addTask(taskData: databaseTaskData)
+                    }
                 }
             }
             
