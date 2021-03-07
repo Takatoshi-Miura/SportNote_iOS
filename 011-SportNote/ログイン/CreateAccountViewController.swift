@@ -95,9 +95,9 @@ class CreateAccountViewController: UIViewController {
             userData.removeUserData()
             
             // FirebaseのユーザーIDをセット
-            UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "userID")
-            UserDefaults.standard.set(address, forKey:"address")
-            UserDefaults.standard.set(pass,forKey:"password")
+            UserDefaultsKey.userID.set(value: Auth.auth().currentUser!.uid)
+            UserDefaultsKey.address.set(value: address)
+            UserDefaultsKey.password.set(value: pass)
             
             // データの引継ぎを通知
             SVProgressHUD.show(withStatus: "データの引継ぎをしています")
@@ -202,7 +202,6 @@ class CreateAccountViewController: UIViewController {
                 }
             })
         }
-        
     }
 
 }

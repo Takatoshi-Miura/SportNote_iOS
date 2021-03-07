@@ -42,11 +42,11 @@ public extension UIViewController {
     /**
      利用規約アラートを表示
      */
-    func displayAgreement() {
+    func displayAgreement(_ completion: @escaping () -> ()) {
         // 同意ボタン
         let agreeAction = UIAlertAction(title:"同意する",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // 次回以降、利用規約を表示しないようにする
-            UserDefaults.standard.set(true, forKey: "ver1.5.0")
+            // 完了処理
+            completion()
         }
         // 利用規約ボタン
         let termsAction = UIAlertAction(title:"利用規約を読む",style:UIAlertAction.Style.default){(action:UIAlertAction)in
@@ -54,7 +54,9 @@ public extension UIViewController {
             let url = URL(string: "https://sportnote-b2c92.firebaseapp.com/")
             UIApplication.shared.open(url!)
             // アラートが消えるため再度表示
-            self.displayAgreement()
+            self.displayAgreement({
+                completion()
+            })
         }
         showAlert(title: "利用規約の更新", message: "本アプリの利用規約とプライバシーポリシーに同意します。", actions: [agreeAction, termsAction])
     }
