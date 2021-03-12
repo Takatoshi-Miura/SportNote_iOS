@@ -153,11 +153,13 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // 保存ボタンの処理
     func saveButton() {
         // 対策の有効性コメントの記入チェック
-        for num in 0...self.practiceNoteData.getTaskTitle().count - 1 {
-            let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
-            if cell.effectivenessTextView.text.isEmpty && cell.checkBox.isSelected {
-                SVProgressHUD.showError(withStatus: "対策の有効性欄が未記入です")
-                return
+        if self.practiceNoteData.getTaskTitle().count != 0 {
+            for num in 0...self.practiceNoteData.getTaskTitle().count - 1 {
+                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+                if cell.effectivenessTextView.text.isEmpty && cell.checkBox.isSelected {
+                    SVProgressHUD.showError(withStatus: "対策の有効性欄が未記入です")
+                    return
+                }
             }
         }
         
