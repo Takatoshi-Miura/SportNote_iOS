@@ -19,12 +19,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         
         // 初回起動判定
-        if UserDefaults.standard.bool(forKey: "firstLaunch") {
+        if UserDefaultsKey.firstLaunch.bool() {
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
-            UserDefaults.standard.set(false, forKey: "firstLaunch")
-            
-            // 2回目以降の起動では「userID」を今回生成したIDで固定(アカウント持ちならFirebaseIDで固定)
-            UserDefaults.standard.set(UserDefaults.standard.object(forKey: "userID") as! String, forKey: "userID")
+            UserDefaultsKey.firstLaunch.set(value: false)
             
             // ユーザーデータを作成
             let userData = UserData()
@@ -33,16 +30,21 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // フリーノートデータ作成
             dataManager.createFreeNoteData({})
             
-            // チュートリアル画面に遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
-            self.present(nextView, animated: true, completion: nil)
+            // 利用規約を表示
+            displayAgreement({
+                UserDefaultsKey.agree.set(value: true)
+                // 同意後、チュートリアル画面に遷移
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+                self.present(nextView, animated: true, completion: nil)
+            })
         }
         
-        // 新規バージョンでの初回起動判定
-        if UserDefaults.standard.bool(forKey: "ver1.5.0") == false {
-            // 利用規約を表示
-            displayAgreement()
+        // 同意していないなら利用規約を表示
+        if !UserDefaultsKey.agree.bool() {
+            displayAgreement({
+                UserDefaultsKey.agree.set(value: true)
+            })
         }
         
         // ユーザーデータの更新(利用状況の把握)
