@@ -109,6 +109,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // 有効性コメントを取得＆返却
         cell.textLabel!.text = "\(stringArray[indexPath.row])"
+        cell.textLabel?.numberOfLines = 0
         return cell
     }
     
