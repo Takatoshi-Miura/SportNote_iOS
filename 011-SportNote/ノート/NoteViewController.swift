@@ -115,6 +115,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
+        tableView.reloadData()
     }
     
     // ゴミ箱ボタンの処理
