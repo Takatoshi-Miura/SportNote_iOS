@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iTx-Cd-gKZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iTx-Cd-gKZ">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -348,6 +348,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="closeButton" destination="xOG-J5-UXu" id="h8y-za-GGJ"/>
+                        <outlet property="createAccountButton" destination="gWd-fL-Iqa" id="K6o-W1-rOh"/>
                         <outlet property="mailAddressTextField" destination="pa6-gW-fX2" id="xoF-nn-DBO"/>
                         <outlet property="passwordTextField" destination="YW9-38-mEl" id="o5M-ic-jwf"/>
                     </connections>
@@ -359,7 +361,7 @@
         <!--ノート-->
         <scene sceneID="35a-o8-3VX">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="wxt-FW-UKR" customClass="NoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="noteViewController" modalPresentationStyle="fullScreen" id="wxt-FW-UKR" customClass="NoteViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jgH-SL-9H8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2764,10 +2766,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="9Au-jM-opu"/>
-        <segue reference="g5y-bG-FHW"/>
+        <segue reference="A5N-jC-0n4"/>
+        <segue reference="ILr-mH-cA9"/>
         <segue reference="FjQ-4Y-Eao"/>
-        <segue reference="bKu-Qs-3iF"/>
+        <segue reference="p4p-t4-Yj4"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="SportNoteIcon" width="600" height="600"/>

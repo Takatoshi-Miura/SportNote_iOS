@@ -25,13 +25,15 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         causeTextView.layer.borderWidth = 1.0
         
         // ツールバーを作成
-        createToolBar()
+        taskTitleTextField.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
+        causeTextView.inputAccessoryView = taskTitleTextField.inputAccessoryView
     }
         
     
     //MARK:- 変数の宣言
     
     var dataManager = DataManager()         // データ用
+    var measuresPriorityTitle = ""
     var measuresTitleArray:[String] = []    // 対策タイトルを格納する配列
     
     
@@ -60,7 +62,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
                 self.measuresTitleArray.insert(textField.text!,at:0)
                 
                 // 最有力の対策に設定
-//                self.taskData.setMeasuresPriority(textField.text!)
+                self.measuresPriorityTitle = textField.text!
                 
                 //テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
@@ -87,7 +89,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     @IBAction func saveButton(_ sender: Any) {
         // 課題データを保存
         measuresTitleArray.reverse()
-        dataManager.saveTaskData(title: taskTitleTextField.text!, cause: causeTextView.text!, measuresTitleArray: measuresTitleArray, {
+        dataManager.saveTaskData(title: taskTitleTextField.text!, cause: causeTextView.text!, measuresTitleArray: measuresTitleArray, measuresPriority: measuresPriorityTitle, {
             // モーダルを閉じる
             self.dismiss(animated: true, completion: nil)
         })
@@ -112,31 +114,6 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
     
     
     //MARK:- その他のメソッド
-    
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        taskTitleTextField.inputAccessoryView = toolBar
-        causeTextView.inputAccessoryView = toolBar
-    }
     
     // OKボタンの処理
     @objc func tapOkButton(_ sender: UIButton){

@@ -63,36 +63,20 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     
     // セルをタップした時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // Pickerの宣言
         picker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: picker.bounds.size.height)
         picker.delegate = self
         picker.dataSource = self
         picker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.done))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: picker.bounds)
         pickerView.addSubview(picker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(done), #selector(cancel)))
         view.addSubview(pickerView)
         
         // 下からPickerを呼び出す
-        let screenSize = UIScreen.main.bounds.size
-        pickerView.frame.origin.y = screenSize.height
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = screenSize.height - self.pickerView.bounds.size.height
-        }
-        
+        openPicker(pickerView)
     }
     
     
@@ -117,7 +101,7 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     
     @objc func cancel() {
         // Pickerをしまう
-        closePicker()
+        closePicker(pickerView)
         
         // Pickerにデフォルト値をセット
         index = 0
@@ -131,7 +115,7 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         index = picker.selectedRow(inComponent: 0)
         
         // Pickerをしまう
-        closePicker()
+        closePicker(pickerView)
         
         // テーブルビューを更新
         tableView.reloadData()
@@ -160,19 +144,6 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             break
         default:
             break
-        }
-    }
-    
-    // Pickerをしまうメソッド
-    func closePicker() {
-        // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = UIScreen.main.bounds.size.height + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
         }
     }
 

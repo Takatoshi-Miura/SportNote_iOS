@@ -31,6 +31,7 @@ class CreateAccountViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     
     // アカウント作成ボタンの処理
+    @IBOutlet weak var createAccountButton: UIButton!
     @IBAction func createAccountButton(_ sender: Any) {
         // アドレス,パスワード名,アカウント名の入力を確認
         if let address = mailAddressTextField.text, let password = passwordTextField.text {
@@ -39,13 +40,13 @@ class CreateAccountViewController: UIViewController {
                 SVProgressHUD.showError(withStatus: "必要項目を入力して下さい")
                 return
             }
-            
             // アカウント作成処理
             self.createAccount(mail: address, password: password)
         }
     }
     
     // 閉じるボタンの処理
+    @IBOutlet weak var closeButton: UIButton!
     @IBAction func closeButton(_ sender: Any) {
         // モーダルを閉じる
         self.dismiss(animated: true, completion: nil)
@@ -56,8 +57,6 @@ class CreateAccountViewController: UIViewController {
     
     // データ格納用
     var dataManager = DataManager()
-    var freeNoteData = FreeNote()
-    var taskDataArray = [TaskData]()
     
     
     //MARK:- データベース関連
@@ -66,6 +65,10 @@ class CreateAccountViewController: UIViewController {
     func createAccount(mail address:String,password pass:String) {
         // HUDで処理中を表示
         SVProgressHUD.show(withStatus: "アカウントを作成しています")
+        
+        // ボタン無効化
+        createAccountButton.isEnabled = false
+        closeButton.isEnabled = false
         
         // アカウント作成処理
         Auth.auth().createUser(withEmail: address, password: pass) { authResult, error in
@@ -92,9 +95,9 @@ class CreateAccountViewController: UIViewController {
             userData.removeUserData()
             
             // FirebaseのユーザーIDをセット
-            UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "userID")
-            UserDefaults.standard.set(address, forKey:"address")
-            UserDefaults.standard.set(pass,forKey:"password")
+            UserDefaultsKey.userID.set(value: Auth.auth().currentUser!.uid)
+            UserDefaultsKey.address.set(value: address)
+            UserDefaultsKey.password.set(value: pass)
             
             // データの引継ぎを通知
             SVProgressHUD.show(withStatus: "データの引継ぎをしています")
@@ -107,41 +110,32 @@ class CreateAccountViewController: UIViewController {
     // データを複製するメソッド
     func reproductionUserData() {
         // フリーノートデータを複製
-        createFreeNoteData()
-        
-        // 目標データを複製
-        for targetData in dataManager.targetDataArray {
-            createTargetData(data: targetData)
-        }
-        
-        // ノートデータを複製
-        for noteData in dataManager.noteDataArray {
-            createNoteData(data: noteData)
-        }
-        
-        // 課題データを複製
-        for taskData in taskDataArray {
-            createTaskData(data: taskData)
-        }
-        
-        // ユーザーデータを作成
-        let userData = UserData()
-        userData.createUserData()
-        
-        // ノート画面へ遷移
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10.0) {
-            // ノート画面へ遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-            self.present(nextView, animated: true, completion: nil)
-        }
+        createFreeNoteData({
+            // 目標データを複製
+            self.createTargetData(self.dataManager.targetDataArray, {
+                // ノートデータを複製
+                self.createNoteData(self.dataManager.noteDataArray, {
+                    // 課題データを複製
+                    self.createTaskData(self.dataManager.taskDataArray, {
+                        // ユーザーデータを作成
+                        let userData = UserData()
+                        userData.createUserData()
+                        SVProgressHUD.showSuccess(withStatus: "引継ぎに成功しました")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            // ノート画面へ遷移
+                            let storyboard: UIStoryboard = self.storyboard!
+                            let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                            self.present(nextView, animated: true, completion: nil)
+                        }
+                    })
+                })
+            })
+        })
     }
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
-        dataManager.getFreeNoteData({
-            self.freeNoteData = self.dataManager.freeNote
-        })
+        dataManager.getFreeNoteData({})
     }
     
     // Firebaseから目標データを取得するメソッド
@@ -155,167 +149,58 @@ class CreateAccountViewController: UIViewController {
     }
     
     // 課題データを取得するメソッド
-    func loadTaskData() {        
-        // 配列の初期化
-        taskDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // ユーザーの課題データ取得
-        let db = Firestore.firestore()
-        db.collection("TaskData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .order(by: "taskID", descending: true)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let taskDataCollection = document.data()
-                
-                    // 取得データを基に、課題データを作成
-                    let databaseTaskData = TaskData()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
+    func loadTaskData() {
+        dataManager.getAllTaskData({})
+    }
+    
+    // フリーノートデータを作成するメソッド(新IDで複製)
+    func createFreeNoteData(_ completion: @escaping () -> ()) {
+        SVProgressHUD.show(withStatus: "フリーノートの引継ぎをしています")
+        dataManager.createFreeNoteData({
+            completion()
+        })
+    }
+    
+    // 目標データを作成するメソッド(新IDで複製)
+    func createTargetData(_ targetDataArray:[TargetData], _ completion: @escaping () -> ()) {
+        SVProgressHUD.show(withStatus: "目標データの引継ぎをしています")
+        var count = 0
+        for targetData in targetDataArray {
+            dataManager.copyTargetData(targetData, {
+                count += 1
+                if count == targetDataArray.count {
+                    completion()
                 }
-            }
-        }
-    }
-    
-    // フリーノートデータを作成するメソッド
-    func createFreeNoteData() {
-        // FirebaseアカウントのuserIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // ユーザーUIDをセット
-        freeNoteData.setUserID(userID)
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("FreeNoteData").document("\(freeNoteData.getUserID())").setData([
-            "title"      : freeNoteData.getTitle(),
-            "detail"     : freeNoteData.getDetail(),
-            "userID"     : freeNoteData.getUserID(),
-            "created_at" : freeNoteData.getCreated_at(),
-            "updated_at" : freeNoteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
-    
-    // 目標データを作成するメソッド
-    func createTargetData(data targetData:TargetData) {
-        // FirebaseアカウントのuserIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // userIDをセット
-        targetData.setUserID(userID)
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
-            "year"       : targetData.getYear(),
-            "month"      : targetData.getMonth(),
-            "detail"     : targetData.getDetail(),
-            "isDeleted"  : targetData.getIsDeleted(),
-            "userID"     : targetData.getUserID(),
-            "created_at" : targetData.getCreated_at(),
-            "updated_at" : targetData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
+            })
         }
     }
     
     // ノートデータを複製するメソッド
-    func createNoteData(data noteData:NoteData) {
-        // FirebaseアカウントのuserIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // userIDをセット
-        noteData.setUserID(userID)
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("NoteData").document("\(noteData.getUserID())_\(noteData.getNoteID())").setData([
-            "noteID"                : noteData.getNoteID(),
-            "noteType"              : noteData.getNoteType(),
-            "year"                  : noteData.getYear(),
-            "month"                 : noteData.getMonth(),
-            "date"                  : noteData.getDate(),
-            "day"                   : noteData.getDay(),
-            "weather"               : noteData.getWeather(),
-            "temperature"           : noteData.getTemperature(),
-            "physicalCondition"     : noteData.getPhysicalCondition(),
-            "purpose"               : noteData.getPurpose(),
-            "detail"                : noteData.getDetail(),
-            "target"                : noteData.getTarget(),
-            "consciousness"         : noteData.getConsciousness(),
-            "result"                : noteData.getResult(),
-            "reflection"            : noteData.getReflection(),
-            "taskTitle"             : noteData.getTaskTitle(),
-            "measuresTitle"         : noteData.getMeasuresTitle(),
-            "measuresEffectiveness" : noteData.getMeasuresEffectiveness(),
-            "isDeleted"             : noteData.getIsDeleted(),
-            "userID"                : noteData.getUserID(),
-            "created_at"            : noteData.getCreated_at(),
-            "updated_at"            : noteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
+    func createNoteData(_ noteDataArray:[NoteData], _ completion: @escaping () -> ()) {
+        SVProgressHUD.show(withStatus: "ノートデータの引継ぎをしています")
+        var count = 0
+        for noteData in noteDataArray {
+            dataManager.copyNoteData(noteData, {
+                count += 1
+                if count == noteDataArray.count {
+                    completion()
+                }
+            })
         }
     }
     
-    // 課題データを作成するメソッド
-    func createTaskData(data taskData:TaskData) {
-        // FirebaseアカウントのuserIDを取得
-        let userID = Auth.auth().currentUser!.uid
-        
-        // ユーザーUIDをセット
-        taskData.setUserID(userID)
-        
-        // Firebaseにアクセス
-        let db = Firestore.firestore()
-        db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())").setData([
-            "taskID"           : taskData.getTaskID(),
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
-            "isDeleted"        : taskData.getIsDeleted(),
-            "userID"           : taskData.getUserID(),
-            "created_at"       : taskData.getCreated_at(),
-            "updated_at"       : taskData.getUpdated_at(),
-            "measuresData"     : taskData.getMeasuresData(),
-            "measuresPriority" : taskData.getMeasuresPriority()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
+    // 課題データを複製するメソッド
+    func createTaskData(_ taskDataArray:[TaskData], _ completion: @escaping () -> ()) {
+        // 課題データを複製
+        SVProgressHUD.show(withStatus: "課題データの引継ぎをしています")
+        var count = 0
+        for taskData in taskDataArray {
+            dataManager.copyTaskData(taskData, {
+                count += 1
+                if count == taskDataArray.count {
+                    completion()
+                }
+            })
         }
     }
 

@@ -43,7 +43,11 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         configureObserver()
         
         // ツールバーを作成
-        createToolBar()
+        physicalConditionTextView.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
+        targetTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        consciousnessTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        resultTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        reflectionTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
@@ -371,30 +375,19 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // 種別セル初期化メソッド
     func typeCellPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 種別Pickerの宣言
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
         typePicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.typeDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: typePicker.bounds)
         pickerView.addSubview(typePicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
     // キャンセルボタンの処理
-    @objc func typeCancel() {
+    @objc func cancelAction() {
         // Pickerをしまう
         closePicker()
         
@@ -440,9 +433,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // 日付Pickerの初期化メソッド
     func datePickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 日付Pickerの宣言
         datePicker = UIDatePicker()
         datePicker.date = Date()
@@ -454,18 +444,10 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         datePicker.backgroundColor = UIColor.systemGray5
         datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.datePickerDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: datePicker.bounds)
         pickerView.addSubview(datePicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(datePickerDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -483,25 +465,14 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // 天候Pickerの初期化メソッド
     func weatherPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 天候Pickerの宣言
         weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
         weatherPicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.weatherDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: weatherPicker.bounds)
         pickerView.addSubview(weatherPicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(weatherDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -523,29 +494,14 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         // 現在のスクロール位置（最下点）,Pickerの座標を取得
         let obj = self.parent as! AddCompetitionNoteViewController
         let scrollPotiton = obj.getScrollPosition()
-        picker.frame.origin.y = scrollPotiton
         
         // 下からPickerを出す
-        UIView.animate(withDuration: 0.3) {
-            picker.frame.origin.y = scrollPotiton - picker.bounds.size.height - self.toolbarHeight - self.bottomPadding
-        }
+        openPicker(pickerView, scrollPotiton, bottomPadding)
     }
     
     // Pickerをしまうメソッド
     func closePicker() {
-        // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddCompetitionNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        
-        // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker(pickerView)
     }
     
     
@@ -559,12 +515,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // Firebaseにノートデータを保存するメソッド
     func saveNoteData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
         // 大会ノートデータを作成
         competitionNoteData.setNoteType("大会記録")
         
@@ -583,112 +533,37 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         competitionNoteData.setResult(resultTextView.text!)
         competitionNoteData.setReflection(reflectionTextView.text!)
         
-        // ユーザーUIDをセット
-        competitionNoteData.setUserID(userID)
-        
-        // 現在時刻をセット
-        competitionNoteData.setCreated_at(getCurrentTime())
-        competitionNoteData.setUpdated_at(competitionNoteData.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("NoteData").document("\(competitionNoteData.getUserID())_\(competitionNoteData.getNoteID())").setData([
-            "noteID"                : competitionNoteData.getNoteID(),
-            "noteType"              : competitionNoteData.getNoteType(),
-            "year"                  : competitionNoteData.getYear(),
-            "month"                 : competitionNoteData.getMonth(),
-            "date"                  : competitionNoteData.getDate(),
-            "day"                   : competitionNoteData.getDay(),
-            "weather"               : competitionNoteData.getWeather(),
-            "temperature"           : competitionNoteData.getTemperature(),
-            "physicalCondition"     : competitionNoteData.getPhysicalCondition(),
-            "purpose"               : competitionNoteData.getPurpose(),
-            "detail"                : competitionNoteData.getDetail(),
-            "target"                : competitionNoteData.getTarget(),
-            "consciousness"         : competitionNoteData.getConsciousness(),
-            "result"                : competitionNoteData.getResult(),
-            "reflection"            : competitionNoteData.getReflection(),
-            "taskTitle"             : competitionNoteData.getTaskTitle(),
-            "measuresTitle"         : competitionNoteData.getMeasuresTitle(),
-            "measuresEffectiveness" : competitionNoteData.getMeasuresEffectiveness(),
-            "isDeleted"             : competitionNoteData.getIsDeleted(),
-            "userID"                : competitionNoteData.getUserID(),
-            "created_at"            : competitionNoteData.getCreated_at(),
-            "updated_at"            : competitionNoteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // CompetitionNoteDetailViewControllerから遷移してきた場合
+        // ノートを保存
+        if previousControllerName == "CompetitionNoteDetailViewController" {
+            // 既存ノートを編集
+            dataManager.updateNoteData(competitionNoteData, {
                 if self.previousControllerName == "CompetitionNoteDetailViewController" {
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
                     // ノート画面に遷移
                     self.present(nextView, animated: false, completion: nil)
                 }
-            }
+            })
+        } else {
+            // ノートを新規作成
+            dataManager.saveNoteData(competitionNoteData, {})
         }
     }
     
     // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
     func saveTargetData(year selectedYear:Int,month selectedMonth:Int) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 目標データを作成
-        let targetData = TargetData()
-        
-        // 年月をセット
-        targetData.setYear(selectedYear)
-        targetData.setMonth(selectedMonth)
-        
-        // ユーザーUIDをセット
-        targetData.setUserID(userID)
-        
-        // 現在時刻をセット
-        targetData.setCreated_at(getCurrentTime())
-        targetData.setUpdated_at(targetData.getCreated_at())
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
-            "year"       : targetData.getYear(),
-            "month"      : targetData.getMonth(),
-            "detail"     : targetData.getDetail(),
-            "isDeleted"  : targetData.getIsDeleted(),
-            "userID"     : targetData.getUserID(),
-            "created_at" : targetData.getCreated_at(),
-            "updated_at" : targetData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
+        dataManager.saveTargetData(selectedYear, selectedMonth, "", {
+            // 最後の保存であればモーダルを閉じる
+            if self.saveDataFinished == true {
+                // ストーリーボードを取得
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
                 
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // 最後の保存であればモーダルを閉じる
-                if self.saveDataFinished == true {
-                    // ストーリーボードを取得
-                    let storyboard: UIStoryboard = self.storyboard!
-                    let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
-                    // ノート画面に遷移
-                    self.present(nextView, animated: false, completion: nil)
-                }
+                // ノート画面に遷移
+                self.present(nextView, animated: false, completion: nil)
             }
-        }
+        })
     }
     
     
@@ -786,15 +661,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         return returnText
     }
     
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
-    }
-    
     // テキストビューに枠線を追加するメソッド
     func addTextViewBorder() {
         physicalConditionTextView.layer.borderColor = UIColor.systemGray.cgColor
@@ -865,29 +731,6 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
         UIView.animate(withDuration: duration) {
             self.view.transform = CGAffineTransform.identity
         }
-    }
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        physicalConditionTextView.inputAccessoryView = toolBar
-        targetTextView.inputAccessoryView = toolBar
-        consciousnessTextView.inputAccessoryView = toolBar
-        resultTextView.inputAccessoryView = toolBar
-        reflectionTextView.inputAccessoryView = toolBar
     }
     
     // OKボタンの処理

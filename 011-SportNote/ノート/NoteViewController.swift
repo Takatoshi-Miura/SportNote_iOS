@@ -18,57 +18,56 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // ユーザーデータの更新(利用状況の把握)
-        let userData = UserData()
-        userData.updateUserData()
-        
         // 初回起動判定
-        if UserDefaults.standard.bool(forKey: "firstLaunch") {
+        if UserDefaultsKey.firstLaunch.bool() {
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
-            UserDefaults.standard.set(false, forKey: "firstLaunch")
+            UserDefaultsKey.firstLaunch.set(value: false)
             
-            // 2回目以降の起動では「userID」を今回生成したIDで固定(アカウント持ちならFirebaseIDで固定)
-            UserDefaults.standard.set(UserDefaults.standard.object(forKey: "userID") as! String, forKey: "userID")
+            // ユーザーデータを作成
+            let userData = UserData()
+            userData.createUserData()
+            UserDefaultsKey.userID.set(value: UserDefaults.standard.object(forKey: "userID") as! String)
             
             // フリーノートデータ作成
             dataManager.createFreeNoteData({})
             
-            // チュートリアル画面に遷移
-            let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
-            self.present(nextView, animated: true, completion: nil)
-        }
-        
-        // 新規バージョンでの初回起動判定
-        if UserDefaults.standard.bool(forKey: "ver1.5.0") == false {
-            // ユーザーデータを作成
-            let userData = UserData()
-            userData.createUserData()
-            
             // 利用規約を表示
-            displayAgreement()
+            displayAgreement({
+                UserDefaultsKey.agree.set(value: true)
+                // 同意後、チュートリアル画面に遷移
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+                self.present(nextView, animated: true, completion: nil)
+            })
         }
-    
-        // 編集ボタンの設定(複数選択可能)
-        tableView.allowsMultipleSelectionDuringEditing = true
         
-        // ナビゲーションバーのボタンを宣言
-        createNavigationBarButton()
+        // 同意していないなら利用規約を表示
+        if !UserDefaultsKey.agree.bool() {
+            displayAgreement({
+                UserDefaultsKey.agree.set(value: true)
+            })
+        }
         
-        // ナビゲーションボタンをセット
-        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
+        // ユーザーデータの更新(利用状況の把握)
+        let userData = UserData()
+        userData.updateUserData()
+        
+        // tableViewの設定
+        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
+        tableView.tableFooterView = UIView()                    // データのないセルを非表示
         
         // カスタムセルを登録
         tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
         
-        // データのないセルを非表示
-        self.tableView.tableFooterView = UIView()
+        // ナビゲーションバーのボタンを宣言＆セット
+        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
+        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
+        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
         
         // 広告表示
         self.displayAdMob()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
+        
         // データ取得
         reloadData()
     }
@@ -78,7 +77,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // データ格納用
     var dataManager = DataManager()
-    var freeNoteData = FreeNote()
     
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
@@ -122,8 +120,33 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // ゴミ箱ボタンの処理
     @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
-        // 選択されたノートを削除
-        self.deleteRows()
+        // ノートが選択されていない時は何もしない
+        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
+            return
+        }
+        // OKボタン
+        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
+            self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+            
+            for num in 0...self.sortedIndexPaths.count - 1 {
+                // 最後の削除であればフラグをtrueにする
+                if num == (self.sortedIndexPaths.count - 1) {
+                    self.deleteFinished = true
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
+                } else {
+                    // 選択されたノートを削除
+                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
+                }
+            }
+            // 編集状態を解除
+            self.setEditing(false, animated: true)
+        }
+        // CANCELボタン
+        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
+        // アラート表示
+        showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
     // ノート追加ボタンの処理
@@ -145,7 +168,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataInSection[section].count     // セルの個数(ノート数)を返却
+        return dataInSection[section].count     // 各セクションに含まれるノート数を返却
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -153,8 +176,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             case 0:
                 // フリーノートセルを返却
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
-                cell.textLabel!.text = freeNoteData.getTitle()
-                cell.detailTextLabel!.text = freeNoteData.getDetail()
+                cell.textLabel!.text = dataManager.freeNoteData.getTitle()
+                cell.detailTextLabel!.text = dataManager.freeNoteData.getDetail()
                 cell.detailTextLabel?.textColor = UIColor.systemGray
                 return cell
             default:
@@ -167,10 +190,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 0:
-            return 44   // セルのデフォルト高さ
-        default:
-            return 60  // カスタムセルの高さ
+            case 0:
+                return 44   // セルのデフォルト高さ
+            default:
+                return 60   // カスタムセルの高さ
         }
     }
     
@@ -209,35 +232,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
         }
-    }
-    
-    // 複数のセルを削除
-    func deleteRows() {
-        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
-            return
-        }
-        // OKボタン
-        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
-            self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-            
-            for num in 0...self.sortedIndexPaths.count - 1 {
-                // 最後の削除であればフラグをtrueにする
-                if num == (self.sortedIndexPaths.count - 1) {
-                    self.deleteFinished = true
-                    // 選択されたノートを削除
-                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
-                } else {
-                    // 選択されたノートを削除
-                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
-                }
-            }
-            // 編集状態を解除
-            self.setEditing(false, animated: true)
-        }
-        // CANCELボタン
-        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
     // セルの編集可否の設定
@@ -322,7 +316,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "goFreeNoteViewController" {
             // 表示するデータを確認画面へ渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
-            freeNoteViewController.freeNoteData = freeNoteData
+            freeNoteViewController.dataManager.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailViewController" {
             // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
@@ -334,8 +328,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else if segue.identifier == "goCalendarViewController" {
             // データを遷移先に渡す
             let calendarViewController = segue.destination as! calendarViewController
-            calendarViewController.freeNoteData  = self.freeNoteData
-            calendarViewController.dataManager.noteDataArray = self.dataManager.noteDataArray
+            calendarViewController.dataManager.freeNoteData  = dataManager.freeNoteData
+            calendarViewController.dataManager.noteDataArray = dataManager.noteDataArray
         }
     }
     
@@ -344,17 +338,14 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    
     //MARK:- データベース関連
     
-    // Firebaseからフリーノートデータを読み込むメソッド
+    // フリーノートデータを取得
     func loadFreeNoteData() {
-        dataManager.getFreeNoteData({
-            self.freeNoteData = self.dataManager.freeNote
-        })
+        dataManager.getFreeNoteData({})
     }
     
-    // Firebaseから目標データを取得するメソッド
+    // 目標データを取得
     func loadTargetData() {
         dataManager.getTargetData({
             // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
@@ -365,7 +356,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
     }
     
-    // Firebaseからデータを取得するメソッド
+    // ノートデータを取得
     func loadNoteData() {
         dataManager.getNoteData({
             // セクションデータを再構築
@@ -375,84 +366,34 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
     }
     
-    // データを取得するメソッド
+    // データを取得
     func reloadData() {
-        // データ取得
         loadFreeNoteData()
         loadTargetData()
         loadNoteData()
     }
     
-    // ノートデータを削除するメソッド
+    // ノートデータを削除
     func deleteNoteData(note noteData:NoteData) {
-        // isDeletedをセット
-        noteData.setIsDeleted(true)
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let data = db.collection("NoteData").document("\(userID)_\(noteData.getNoteID())")
-
-        // 変更する可能性のあるデータのみ更新
-        data.updateData([
-            "isDeleted"  : true,
-            "updated_at" : getCurrentTime()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-                
-                // 最後の削除であればリロード
-                if self.deleteFinished == true {
-                    self.deleteFinished = false
-                    self.reloadData()
-                }
-            }
-        }
-    }
-    
-    // Firebaseのデータを更新するメソッド
-    func updateTargetData(target targetData:TargetData) {
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 更新日時を現在時刻にする
-        targetData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let data = db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())")
-
-        // 変更する可能性のあるデータのみ更新
-        data.updateData([
-            "detail"     : targetData.getDetail(),
-            "isDeleted"  : targetData.getIsDeleted(),
-            "updated_at" : targetData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-                
-                // リロード
+        dataManager.deleteNoteData(noteData, {
+            // 最後の削除であればリロード
+            if self.deleteFinished {
+                self.deleteFinished = false
                 self.reloadData()
             }
-        }
+        })
+    }
+    
+    // 目標を更新
+    func updateTargetData(target targetData:TargetData) {
+        dataManager.updateTargetData(targetData, {
+            self.reloadData()
+        })
     }
     
     
     
     //MARK:- その他のメソッド
-    
-    // ナビゲーションバーボタンの宣言
-    func createNavigationBarButton() {
-        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-    }
     
     // ナビゲーションバーボタンをセットするメソッド
     func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
@@ -532,15 +473,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
         }
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
     
 }

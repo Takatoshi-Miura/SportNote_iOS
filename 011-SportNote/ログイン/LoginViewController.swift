@@ -154,8 +154,7 @@ class LoginViewController: UIViewController {
             
             // ユーザーIDを作成(初期値を登録)
             let uuid = NSUUID().uuidString
-            UserDefaults.standard.register(defaults: ["userID":uuid])
-            UserDefaults.standard.set(uuid, forKey: "userID")
+            UserDefaultsKey.userID.set(value: uuid)
             
             // メッセージが隠れてしまうため、遅延処理を行う
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
@@ -172,11 +171,6 @@ class LoginViewController: UIViewController {
     
     //MARK:- その他のメソッド
     
-    // キーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     // 現在時刻を取得するメソッド
     func getCurrentTime() -> String {
         let now = Date()
@@ -188,18 +182,16 @@ class LoginViewController: UIViewController {
     
     // UserDefaultsにユーザー情報を保存するメソッド
     func saveUserInfo(mail address:String,password pass:String) {
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(Auth.auth().currentUser!.uid, forKey: "userID")
-        userDefaults.set(address, forKey:"address")
-        userDefaults.set(pass,forKey:"password")
+        UserDefaultsKey.userID.set(value: Auth.auth().currentUser!.uid)
+        UserDefaultsKey.address.set(value: address)
+        UserDefaultsKey.password.set(value: pass)
     }
     
     // UserDefaultsからユーザー情報を削除するメソッド
     func removeUserInfo() {
-        let userDefaults = UserDefaults.standard
-        userDefaults.removeObject(forKey: "userID")
-        userDefaults.removeObject(forKey: "address")
-        userDefaults.removeObject(forKey: "password")
+        UserDefaultsKey.userID.remove()
+        UserDefaultsKey.address.remove()
+        UserDefaultsKey.password.remove()
     }
     
     // ログインボタン/ログアウトボタンの設定

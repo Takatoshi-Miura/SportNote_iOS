@@ -53,7 +53,6 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // テーブル用
     var dataManager = DataManager()
-    var freeNoteData = FreeNote()       // フリーノートデータ
     var cellDataArray:[NoteData] = []   // セルに表示するノートが格納される
     var selectIndex:Int = 0
     
@@ -132,8 +131,8 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if tableView.tag == 0 {
             // フリーノートセルを返却
             let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
-            cell.textLabel!.text = freeNoteData.getTitle()
-            cell.detailTextLabel!.text = freeNoteData.getDetail()
+            cell.textLabel!.text = dataManager.freeNoteData.getTitle()
+            cell.detailTextLabel!.text = dataManager.freeNoteData.getDetail()
             cell.detailTextLabel?.textColor = UIColor.systemGray
             return cell
         } else {
@@ -389,7 +388,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
         if segue.identifier == "goFreeNoteView" {
             // フリーノートデータを渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
-            freeNoteViewController.freeNoteData = self.freeNoteData
+            freeNoteViewController.dataManager.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailView" {
             // 練習ノートデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
@@ -414,9 +413,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // Firebaseからフリーノートデータを読み込むメソッド
     func loadFreeNoteData() {
-        dataManager.getFreeNoteData({
-            self.freeNoteData = self.dataManager.freeNote
-        })
+        dataManager.getFreeNoteData({})
     }
     
     // Firebaseから目標データを取得するメソッド
@@ -442,93 +439,22 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // Firebaseからデータを取得するメソッド
     func loadNoteData(year selectYear:Int,month selectMonth:Int,date selectDate:Int) {
-        // cellDataArrayを初期化
-        cellDataArray = []
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-
-        // 現在のユーザーのデータを取得する
-        let db = Firestore.firestore()
-        db.collection("NoteData")
-            .whereField("userID", isEqualTo: userID)
-            .whereField("isDeleted", isEqualTo: false)
-            .whereField("year", isEqualTo: selectYear)
-            .whereField("month", isEqualTo: selectMonth)
-            .whereField("date", isEqualTo: selectDate)
-            .getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    // オブジェクトを作成
-                    let noteData = NoteData()
-                    
-                    // 目標データを反映
-                    let dataCollection = document.data()
-                    noteData.setNoteID(dataCollection["noteID"] as! Int)
-                    noteData.setNoteType(dataCollection["noteType"] as! String)
-                    noteData.setYear(dataCollection["year"] as! Int)
-                    noteData.setMonth(dataCollection["month"] as! Int)
-                    noteData.setDate(dataCollection["date"] as! Int)
-                    noteData.setDay(dataCollection["day"] as! String)
-                    noteData.setWeather(dataCollection["weather"] as! String)
-                    noteData.setTemperature(dataCollection["temperature"] as! Int)
-                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
-                    noteData.setPurpose(dataCollection["purpose"] as! String)
-                    noteData.setDetail(dataCollection["detail"] as! String)
-                    noteData.setTarget(dataCollection["target"] as! String)
-                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
-                    noteData.setResult(dataCollection["result"] as! String)
-                    noteData.setReflection(dataCollection["reflection"] as! String)
-                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
-                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
-                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
-                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
-                    noteData.setUserID(dataCollection["userID"] as! String)
-                    noteData.setCreated_at(dataCollection["created_at"] as! String)
-                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
-                    
-                    // 取得データを格納
-                    self.cellDataArray.append(noteData)
-                }
-                // テーブルビューを更新
-                self.noteTableView?.reloadData()
-            }
-        }
+        dataManager.getNoteData(selectYear, selectMonth, selectDate, {
+            self.cellDataArray = self.dataManager.noteDataArray
+            self.noteTableView?.reloadData()
+        })
     }
     
     // ノートデータを削除するメソッド
     func deleteNoteData(note noteData:NoteData) {
-        // isDeletedをセット
-        noteData.setIsDeleted(true)
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let data = db.collection("NoteData").document("\(userID)_\(noteData.getNoteID())")
-
-        // 変更する可能性のあるデータのみ更新
-        data.updateData([
-            "isDeleted"  : true,
-            "updated_at" : getCurrentTime()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated")
-                
-                // 最後の削除であればリロード
-                if self.deleteFinished == true {
-                    self.deleteFinished = false
-                    self.reloadData()
-                }
+        dataManager.deleteNoteData(noteData, {
+            // 最後の削除であればリロード
+            if self.deleteFinished {
+                self.deleteFinished = false
+                self.reloadData()
             }
-        }
+        })
     }
-    
     
     
     //MARK:- その他のメソッド

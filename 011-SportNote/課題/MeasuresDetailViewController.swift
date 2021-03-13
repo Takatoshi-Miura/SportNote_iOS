@@ -43,7 +43,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         }
         
         // ツールバーを作成
-        createToolBar()
+        measuresTitleTextField.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
     }
     
     
@@ -109,6 +109,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // 有効性コメントを取得＆返却
         cell.textLabel!.text = "\(stringArray[indexPath.row])"
+        cell.textLabel?.numberOfLines = 0
         return cell
     }
     
@@ -226,7 +227,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         
         // データを更新
         let dataManager = DataManager()
-        dataManager.updateTaskData(task: self.taskData, {
+        dataManager.updateTaskData(self.taskData, {
             self.tableView.reloadData()
         })
     }
@@ -245,30 +246,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     
     //MARK:- その他のメソッド
-    
-    // テキストフィールド以外をタップでキーボードを下げる設定
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        measuresTitleTextField.inputAccessoryView = toolBar
-    }
     
     // OKボタンの処理
     @objc func tapOkButton(_ sender: UIButton){

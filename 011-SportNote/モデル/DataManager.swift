@@ -15,7 +15,7 @@ class DataManager {
     //MARK:- データ配列
     
     var noteDataArray = [NoteData]()
-    var freeNote = FreeNote()
+    var freeNoteData = FreeNote()
     var taskDataArray = [TaskData]()
     var targetDataArray = [TargetData]()
     
@@ -148,6 +148,259 @@ class DataManager {
         }
     }
     
+    /**
+     ノートデータを取得(日付指定)
+     - Parameters:
+      - year:  年
+      - month: 月
+      - date:  日
+      - completion: データ取得後に実行する処理
+     */
+    func getNoteData(_ year:Int, _ month:Int, _ date:Int, _ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show(withStatus: "ノート情報を取得しています。")
+        
+        // 配列の初期化
+        noteDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+
+        // 現在のユーザーのデータを取得する
+        let db = Firestore.firestore()
+        db.collection("NoteData")
+            .whereField("userID", isEqualTo: userID)
+            .whereField("isDeleted", isEqualTo: false)
+            .whereField("year", isEqualTo: year)
+            .whereField("month", isEqualTo: month)
+            .whereField("date", isEqualTo: date)
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // オブジェクトを作成
+                    let noteData = NoteData()
+                    
+                    // 目標データを反映
+                    let dataCollection = document.data()
+                    noteData.setNoteID(dataCollection["noteID"] as! Int)
+                    noteData.setNoteType(dataCollection["noteType"] as! String)
+                    noteData.setYear(dataCollection["year"] as! Int)
+                    noteData.setMonth(dataCollection["month"] as! Int)
+                    noteData.setDate(dataCollection["date"] as! Int)
+                    noteData.setDay(dataCollection["day"] as! String)
+                    noteData.setWeather(dataCollection["weather"] as! String)
+                    noteData.setTemperature(dataCollection["temperature"] as! Int)
+                    noteData.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                    noteData.setPurpose(dataCollection["purpose"] as! String)
+                    noteData.setDetail(dataCollection["detail"] as! String)
+                    noteData.setTarget(dataCollection["target"] as! String)
+                    noteData.setConsciousness(dataCollection["consciousness"] as! String)
+                    noteData.setResult(dataCollection["result"] as! String)
+                    noteData.setReflection(dataCollection["reflection"] as! String)
+                    noteData.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                    noteData.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                    noteData.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                    noteData.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                    noteData.setUserID(dataCollection["userID"] as! String)
+                    noteData.setCreated_at(dataCollection["created_at"] as! String)
+                    noteData.setUpdated_at(dataCollection["updated_at"] as! String)
+                    
+                    // 取得データを格納
+                    self.noteDataArray.append(noteData)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     ノートデータを更新
+     - Parameters:
+      - noteData: 更新したいノート
+      - completion: データ取得後に実行する処理
+     */
+    func updateNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 更新日時に現在時刻をセット
+        noteData.setUpdated_at(getCurrentTime())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        let data = db.collection("NoteData").document("\(noteData.getUserID())_\(noteData.getNoteID())")
+        data.updateData([
+            "year"                  : noteData.getYear(),
+            "month"                 : noteData.getMonth(),
+            "date"                  : noteData.getDate(),
+            "day"                   : noteData.getDay(),
+            "weather"               : noteData.getWeather(),
+            "temperature"           : noteData.getTemperature(),
+            "physicalCondition"     : noteData.getPhysicalCondition(),
+            "purpose"               : noteData.getPurpose(),
+            "detail"                : noteData.getDetail(),
+            "target"                : noteData.getTarget(),
+            "consciousness"         : noteData.getConsciousness(),
+            "result"                : noteData.getResult(),
+            "reflection"            : noteData.getReflection(),
+            "taskTitle"             : noteData.getTaskTitle(),
+            "measuresTitle"         : noteData.getMeasuresTitle(),
+            "measuresEffectiveness" : noteData.getMeasuresEffectiveness(),
+            "isDeleted"             : noteData.getIsDeleted(),
+            "updated_at"            : noteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("ノート(ID:\(noteData.getNoteID()))を更新しました")
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     ノートデータを保存
+     - Parameters:
+      - noteData: 保存したいノート
+      - completion: データ取得後に実行する処理
+     */
+    func saveNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // ユーザーUIDをセット
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        noteData.setUserID(userID)
+        
+        // 日時に現在時刻をセット
+        noteData.setUpdated_at(getCurrentTime())
+        noteData.setCreated_at(getCurrentTime())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("NoteData").document("\(noteData.getUserID())_\(noteData.getNoteID())").setData([
+            "noteID"                : noteData.getNoteID(),
+            "noteType"              : noteData.getNoteType(),
+            "year"                  : noteData.getYear(),
+            "month"                 : noteData.getMonth(),
+            "date"                  : noteData.getDate(),
+            "day"                   : noteData.getDay(),
+            "weather"               : noteData.getWeather(),
+            "temperature"           : noteData.getTemperature(),
+            "physicalCondition"     : noteData.getPhysicalCondition(),
+            "purpose"               : noteData.getPurpose(),
+            "detail"                : noteData.getDetail(),
+            "target"                : noteData.getTarget(),
+            "consciousness"         : noteData.getConsciousness(),
+            "result"                : noteData.getResult(),
+            "reflection"            : noteData.getReflection(),
+            "taskTitle"             : noteData.getTaskTitle(),
+            "measuresTitle"         : noteData.getMeasuresTitle(),
+            "measuresEffectiveness" : noteData.getMeasuresEffectiveness(),
+            "isDeleted"             : noteData.getIsDeleted(),
+            "userID"                : noteData.getUserID(),
+            "created_at"            : noteData.getCreated_at(),
+            "updated_at"            : noteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("ノート(ID:\(noteData.getNoteID()))を保存しました")
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     ノートデータを保存(複製する際に使用)
+     - Parameters:
+      - noteData: 保存したいノート
+      - completion: データ取得後に実行する処理
+     */
+    func copyNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+        // ユーザーUIDをセット
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        noteData.setUserID(userID)
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("NoteData").document("\(noteData.getUserID())_\(noteData.getNoteID())").setData([
+            "noteID"                : noteData.getNoteID(),
+            "noteType"              : noteData.getNoteType(),
+            "year"                  : noteData.getYear(),
+            "month"                 : noteData.getMonth(),
+            "date"                  : noteData.getDate(),
+            "day"                   : noteData.getDay(),
+            "weather"               : noteData.getWeather(),
+            "temperature"           : noteData.getTemperature(),
+            "physicalCondition"     : noteData.getPhysicalCondition(),
+            "purpose"               : noteData.getPurpose(),
+            "detail"                : noteData.getDetail(),
+            "target"                : noteData.getTarget(),
+            "consciousness"         : noteData.getConsciousness(),
+            "result"                : noteData.getResult(),
+            "reflection"            : noteData.getReflection(),
+            "taskTitle"             : noteData.getTaskTitle(),
+            "measuresTitle"         : noteData.getMeasuresTitle(),
+            "measuresEffectiveness" : noteData.getMeasuresEffectiveness(),
+            "isDeleted"             : noteData.getIsDeleted(),
+            "userID"                : noteData.getUserID(),
+            "created_at"            : noteData.getCreated_at(),
+            "updated_at"            : noteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("ノート(ID:\(noteData.getNoteID()))を保存しました")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     ノートデータを削除
+     - Parameters:
+      - noteData: 削除したいノート
+      - completion: データ取得後に実行する処理
+     */
+    func deleteNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+        // isDeletedをセット
+        noteData.setIsDeleted(true)
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("NoteData").document("\(userID)_\(noteData.getNoteID())")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "isDeleted"  : true,
+            "updated_at" : getCurrentTime()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("ノート(ID:\(noteData.getNoteID()))を削除しました")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
     
     //MARK:- フリーノートデータ
     
@@ -157,25 +410,22 @@ class DataManager {
       - completion: データ取得後に実行する処理
      */
     func createFreeNoteData(_ completion: @escaping () -> ()) {
-        // フリーノートデータを作成
-        let freeNote = FreeNote()
-        
         // ユーザーUIDをセット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        freeNote.setUserID(userID)
+        freeNoteData.setUserID(userID)
         
         // 現在時刻をセット
-        freeNote.setCreated_at(getCurrentTime())
-        freeNote.setUpdated_at(freeNote.getCreated_at())
+        freeNoteData.setCreated_at(getCurrentTime())
+        freeNoteData.setUpdated_at(freeNoteData.getCreated_at())
         
         // Firebaseにデータを保存
         let db = Firestore.firestore()
-        db.collection("FreeNoteData").document("\(freeNote.getUserID())").setData([
-            "title"      : freeNote.getTitle(),
-            "detail"     : freeNote.getDetail(),
-            "userID"     : freeNote.getUserID(),
-            "created_at" : freeNote.getCreated_at(),
-            "updated_at" : freeNote.getUpdated_at()
+        db.collection("FreeNoteData").document("\(freeNoteData.getUserID())").setData([
+            "title"      : freeNoteData.getTitle(),
+            "detail"     : freeNoteData.getDetail(),
+            "userID"     : freeNoteData.getUserID(),
+            "created_at" : freeNoteData.getCreated_at(),
+            "updated_at" : freeNoteData.getUpdated_at()
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -207,12 +457,48 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // フリーノートデータを反映
                     let freeNoteDataCollection = document.data()
-                    self.freeNote.setTitle(freeNoteDataCollection["title"] as! String)
-                    self.freeNote.setDetail(freeNoteDataCollection["detail"] as! String)
-                    self.freeNote.setUserID(freeNoteDataCollection["userID"] as! String)
-                    self.freeNote.setCreated_at(freeNoteDataCollection["created_at"] as! String)
-                    self.freeNote.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
+                    self.freeNoteData.setTitle(freeNoteDataCollection["title"] as! String)
+                    self.freeNoteData.setDetail(freeNoteDataCollection["detail"] as! String)
+                    self.freeNoteData.setUserID(freeNoteDataCollection["userID"] as! String)
+                    self.freeNoteData.setCreated_at(freeNoteDataCollection["created_at"] as! String)
+                    self.freeNoteData.setUpdated_at(freeNoteDataCollection["updated_at"] as! String)
                 }
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     フリーノートデータを更新
+     - Parameters:
+      - completion: データ取得後に実行する処理
+     */
+    func updateFreeNoteData(_ title:String, _ detail:String, _ completion: @escaping () -> ()) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // テキストデータをセット
+        freeNoteData.setTitle(title)
+        freeNoteData.setDetail(detail)
+        
+        // 更新日時を現在時刻にする
+        freeNoteData.setUpdated_at(getCurrentTime())
+        
+        // 更新したいデータを取得
+        let db = Firestore.firestore()
+        let data = db.collection("FreeNoteData").document("\(userID)")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "title"      : freeNoteData.getTitle(),
+            "detail"     : freeNoteData.getDetail(),
+            "updated_at" : freeNoteData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("フリーノート(タイトル:\(self.freeNoteData.getTitle()))を更新しました")
                 // 完了処理
                 completion()
             }
@@ -221,6 +507,56 @@ class DataManager {
     
     
     //MARK:- 課題データ
+    
+    /**
+     全ての課題を取得
+     - Parameters:
+      - completion: データ取得後に実行する処理
+     */
+    func getAllTaskData(_ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // 配列の初期化
+        taskDataArray = []
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // データ取得
+        let db = Firestore.firestore()
+        db.collection("TaskData")
+            .whereField("userID", isEqualTo: userID)            // ログインユーザのデータ
+            .whereField("isDeleted", isEqualTo: false)          // 削除されていない
+            .order(by: "taskID", descending: true)              // 古い課題を下、新しい課題を上に表示させる
+            .getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // 取得データを基に、課題データを作成
+                    let taskDataCollection = document.data()
+                    let databaseTaskData = TaskData()
+                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
+                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
+                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
+                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
+                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
+                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
+                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
+                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
+                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
+                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
+                    // 課題データを格納
+                    self.taskDataArray.append(databaseTaskData)
+                }
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
     
     /**
      未解決の課題を取得
@@ -330,7 +666,7 @@ class DataManager {
       - task: 更新したいTaskData
       - completion: 処理完了後に実行する処理
      */
-    func updateTaskData(task taskData:TaskData, _ completion: @escaping () -> ()) {
+    func updateTaskData(_ taskData:TaskData, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -373,7 +709,7 @@ class DataManager {
       - completion: 処理完了後に実行する処理
      */
     // Firebaseにデータを保存するメソッド
-    func saveTaskData(title:String, cause:String, measuresTitleArray:[String], _ completion: @escaping () -> ()) {
+    func saveTaskData(title:String, cause:String, measuresTitleArray:[String], measuresPriority:String, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -390,11 +726,12 @@ class DataManager {
         taskData.setCreated_at(self.getCurrentTime())
         taskData.setUpdated_at(taskData.getCreated_at())
         
-        // TODO: 最有力の対策を設定するコード
+        // 最有力の対策を設定
+        taskData.setMeasuresPriority(measuresPriority)
     
         // 対策をセット
         for measuresTitle in measuresTitleArray {
-            taskData.addMeasures(title: measuresTitle,effectiveness: "課題データに追記したノートデータ")
+            taskData.addMeasures(title: measuresTitle,effectiveness: "連動したノートが表示されます")
         }
         
         // taskIDの設定
@@ -416,7 +753,7 @@ class DataManager {
                 if let err = err {
                     print("Error writing document: \(err)")
                 } else {
-                    print("Document successfully written!")
+                    print("課題データ(ID:\(taskData.getTaskID()))を保存しました")
                     // HUDで処理中を非表示
                     SVProgressHUD.dismiss()
                     // 完了処理
@@ -424,6 +761,42 @@ class DataManager {
                 }
             }
         })
+    }
+    
+    /**
+     課題データを保存(複製する際に使用)
+     - Parameters:
+      - taskData: 保存したいTaskData
+      - completion: 処理完了後に実行する処理
+     */
+    // Firebaseにデータを保存するメソッド
+    func copyTaskData(_ taskData:TaskData, _ completion: @escaping () -> ()) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        taskData.setUserID(userID)
+        
+        // 課題データを保存
+        let db = Firestore.firestore()
+        db.collection("TaskData").document("\(taskData.getUserID())_\(taskData.getTaskID())").setData([
+            "taskID"           : taskData.getTaskID(),
+            "taskTitle"        : taskData.getTaskTitle(),
+            "taskCause"        : taskData.getTaskCouse(),
+            "taskAchievement"  : taskData.getTaskAchievement(),
+            "isDeleted"        : taskData.getIsDeleted(),
+            "userID"           : taskData.getUserID(),
+            "created_at"       : taskData.getCreated_at(),
+            "updated_at"       : taskData.getUpdated_at(),
+            "measuresData"     : taskData.getMeasuresData(),
+            "measuresPriority" : taskData.getMeasuresPriority()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("課題データ(ID:\(taskData.getTaskID()))を保存しました")
+                // 完了処理
+                completion()
+            }
+        }
     }
     
     
@@ -473,6 +846,119 @@ class DataManager {
             }
         }
     }
+    
+    /**
+     目標データを更新
+     - Parameters:
+      - targetData: 目標データ
+      - completion: データ取得後に実行する処理
+     */
+    func updateTargetData(_ targetData:TargetData, _ completion: @escaping () -> ()) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // 更新日時を現在時刻にする
+        targetData.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())")
+
+        // 変更する可能性のあるデータのみ更新
+        data.updateData([
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     目標データを保存（新規目標追加時のみ使用）
+     - Parameters:
+      - year:  年
+      - month: 月
+      - date:  日
+      - completion: データ取得後に実行する処理
+     */
+    func saveTargetData(_ year:Int, _ month:Int, _ detail:String, _ completion: @escaping () -> ()) {
+        // HUDで処理中を表示
+        SVProgressHUD.show()
+        
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        // 目標データを作成
+        let targetData = TargetData()
+        targetData.setYear(year)
+        targetData.setMonth(month)
+        targetData.setDetail(detail)
+        targetData.setUserID(userID)
+        targetData.setCreated_at(getCurrentTime())
+        targetData.setUpdated_at(targetData.getCreated_at())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+            "year"       : targetData.getYear(),
+            "month"      : targetData.getMonth(),
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "userID"     : targetData.getUserID(),
+            "created_at" : targetData.getCreated_at(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("目標データを保存しました")
+                // HUDで処理中を非表示
+                SVProgressHUD.dismiss()
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /**
+     目標データを保存（複製する際に使用）
+     - Parameters:
+      - targetData: 保存したい目標データ
+      - completion: データ取得後に実行する処理
+     */
+    func copyTargetData(_ targetData:TargetData, _ completion: @escaping () -> ()) {
+        // ユーザーIDを取得
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        targetData.setUserID(userID)
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
+            "year"       : targetData.getYear(),
+            "month"      : targetData.getMonth(),
+            "detail"     : targetData.getDetail(),
+            "isDeleted"  : targetData.getIsDeleted(),
+            "userID"     : targetData.getUserID(),
+            "created_at" : targetData.getCreated_at(),
+            "updated_at" : targetData.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("目標データを保存しました")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
     
     //MARK:- その他
     

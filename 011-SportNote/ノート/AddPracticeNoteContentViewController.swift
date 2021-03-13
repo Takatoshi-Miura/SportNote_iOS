@@ -49,7 +49,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         configureObserver()
         
         // ツールバーを作成
-        createToolBar()
+        physicalConditionTextView.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
+        purposeTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        detailTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
+        reflectionTextView.inputAccessoryView = physicalConditionTextView.inputAccessoryView
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
@@ -149,6 +152,17 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 保存ボタンの処理
     func saveButton() {
+        // 対策の有効性コメントの記入チェック
+        if self.practiceNoteData.getTaskTitle().count != 0 {
+            for num in 0...self.practiceNoteData.getTaskTitle().count - 1 {
+                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+                if cell.effectivenessTextView.text.isEmpty && cell.checkBox.isSelected {
+                    SVProgressHUD.showError(withStatus: "対策の有効性欄が未記入です")
+                    return
+                }
+            }
+        }
+        
         // 練習ノートデータをFirebaseに保存
         saveNoteData()
         
@@ -461,30 +475,19 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 種別セル初期化メソッド
     func typeCellPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 種別Pickerの宣言
         typePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: typePicker.bounds.size.height)
         typePicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.typeDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: typePicker.bounds)
         pickerView.addSubview(typePicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(typeDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
     // キャンセルボタンの処理
-    @objc func typeCancel() {
+    @objc func cancelAction() {
         // Pickerをしまう
         closePicker()
         
@@ -530,9 +533,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 日付Pickerの初期化メソッド
     func datePickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 日付Pickerの宣言
         datePicker = UIDatePicker()
         datePicker.date = Date()
@@ -544,18 +544,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         datePicker.backgroundColor = UIColor.systemGray5
         datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.datePickerDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: datePicker.bounds)
         pickerView.addSubview(datePicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(datePickerDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -571,25 +563,14 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 天候Pickerの初期化メソッド
     func weatherPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 天候Pickerの宣言
         weatherPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
         weatherPicker.backgroundColor = UIColor.systemGray5
-        
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.weatherDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
+
         // ビューを追加
         pickerView = UIView(frame: weatherPicker.bounds)
         pickerView.addSubview(weatherPicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar(#selector(weatherDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -608,25 +589,14 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // 課題Pickerの初期化メソッド
     func taskPickerInit() {
-        // ビューの初期化
-        pickerView.removeFromSuperview()
-        
         // 課題Pickerの宣言
         taskPicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height)
         taskPicker.backgroundColor = UIColor.systemGray5
         
-        // ツールバーの宣言
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(title: "追加", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.taskPickerDone))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.typeCancel))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
-        
         // ビューを追加
         pickerView = UIView(frame: taskPicker.bounds)
         pickerView.addSubview(taskPicker)
-        pickerView.addSubview(toolbar)
+        pickerView.addSubview(createToolBar("追加", #selector(taskPickerDone), #selector(cancelAction)))
         view.addSubview(pickerView)
     }
     
@@ -670,29 +640,14 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 現在のスクロール位置（最下点）,Pickerの座標を取得
         let obj = self.parent as! AddPracticeNoteViewController
         let scrollPotiton = obj.getScrollPosition()
-        picker.frame.origin.y = scrollPotiton
         
         // 下からPickerを出す
-        UIView.animate(withDuration: 0.3) {
-            picker.frame.origin.y = scrollPotiton - picker.bounds.size.height - self.toolbarHeight - self.bottomPadding
-        }
+        openPicker(pickerView, scrollPotiton, bottomPadding)
     }
     
     // Pickerをしまうメソッド
     func closePicker() {
-        // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddPracticeNoteViewController
-        let scrollPotiton = obj.getScrollPosition()
-        
-        // Pickerをしまう
-        UIView.animate(withDuration: 0.3) {
-            self.pickerView.frame.origin.y = scrollPotiton + self.pickerView.bounds.size.height
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            // ビューの初期化
-            self.pickerView.removeFromSuperview()
-        }
+        closePicker(pickerView)
     }
     
     
@@ -712,7 +667,12 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             if self.previousControllerName == "PracticeNoteDetailViewController" {
             } else {
                 for databaseTaskData in self.dataManager.taskDataArray {
-                    self.practiceNoteData.addTask(taskData: databaseTaskData)
+                    // 最有力の対策がない課題(対策データが存在しない)は連動できないため、読み込まない
+                    if databaseTaskData.getMeasuresPriority().isEmpty {
+                        // 読み込まない
+                    } else {
+                        self.practiceNoteData.addTask(taskData: databaseTaskData)
+                    }
                 }
             }
             
@@ -737,12 +697,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // Firebaseにノートデータを保存するメソッド
     func saveNoteData() {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
         // ノートタイプを指定
         practiceNoteData.setNoteType("練習記録")
         
@@ -762,7 +716,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         
         // 対策の有効性コメントをセット
         var measuresEffectiveness:[String] = []
-        
         if self.practiceNoteData.getTaskTitle().isEmpty {
             // 何もしない
         } else {
@@ -797,152 +750,39 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
         practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)
         
-        // ノートを更新する場合
+        // 既存ノートを更新する場合
         if previousControllerName == "PracticeNoteDetailViewController" {
-            // 更新日時に現在時刻をセット
-            practiceNoteData.setUpdated_at(getCurrentTime())
-        } else {
-            // ユーザーUIDをセット
-            practiceNoteData.setUserID(userID)
-            
-            // 現在時刻をセット
-            practiceNoteData.setCreated_at(getCurrentTime())
-            practiceNoteData.setUpdated_at(practiceNoteData.getCreated_at())
-        }
-        
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("NoteData").document("\(practiceNoteData.getUserID())_\(practiceNoteData.getNoteID())").setData([
-            "noteID"                : practiceNoteData.getNoteID(),
-            "noteType"              : practiceNoteData.getNoteType(),
-            "year"                  : practiceNoteData.getYear(),
-            "month"                 : practiceNoteData.getMonth(),
-            "date"                  : practiceNoteData.getDate(),
-            "day"                   : practiceNoteData.getDay(),
-            "weather"               : practiceNoteData.getWeather(),
-            "temperature"           : practiceNoteData.getTemperature(),
-            "physicalCondition"     : practiceNoteData.getPhysicalCondition(),
-            "purpose"               : practiceNoteData.getPurpose(),
-            "detail"                : practiceNoteData.getDetail(),
-            "target"                : practiceNoteData.getTarget(),
-            "consciousness"         : practiceNoteData.getConsciousness(),
-            "result"                : practiceNoteData.getResult(),
-            "reflection"            : practiceNoteData.getReflection(),
-            "taskTitle"             : practiceNoteData.getTaskTitle(),
-            "measuresTitle"         : practiceNoteData.getMeasuresTitle(),
-            "measuresEffectiveness" : practiceNoteData.getMeasuresEffectiveness(),
-            "isDeleted"             : practiceNoteData.getIsDeleted(),
-            "userID"                : practiceNoteData.getUserID(),
-            "created_at"            : practiceNoteData.getCreated_at(),
-            "updated_at"            : practiceNoteData.getUpdated_at()
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-                
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-                
-                // PracticeNoteDetailViewControllerから遷移してきた場合
+            dataManager.updateNoteData(practiceNoteData, {
                 if self.previousControllerName == "PracticeNoteDetailViewController" {
                     // ストーリーボードを取得
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    
                     // ノート画面に遷移
                     self.present(nextView, animated: false, completion: nil)
                 }
-            }
+            })
+        } else {
+            dataManager.saveNoteData(practiceNoteData, {})
         }
     }
     
     // Firebaseに目標データを保存するメソッド（新規目標追加時のみ使用）
-    func saveTargetData(year selectedYear:Int,month selectedMonth:Int) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-            
-        // 目標データを作成
-        let targetData = TargetData()
-        
-        // 年月をセット
-        targetData.setYear(selectedYear)
-        targetData.setMonth(selectedMonth)
-            
-        // ユーザーUIDをセット
-        targetData.setUserID(userID)
-        
-        // 現在時刻をセット
-        targetData.setCreated_at(getCurrentTime())
-        targetData.setUpdated_at(targetData.getCreated_at())
-            
-        // Firebaseにデータを保存
-        let db = Firestore.firestore()
-        db.collection("TargetData").document("\(userID)_\(targetData.getYear())_\(targetData.getMonth())").setData([
-                "year"       : targetData.getYear(),
-                "month"      : targetData.getMonth(),
-                "detail"     : targetData.getDetail(),
-                "isDeleted"  : targetData.getIsDeleted(),
-                "userID"     : targetData.getUserID(),
-                "created_at" : targetData.getCreated_at(),
-                "updated_at" : targetData.getUpdated_at()
-            ]) { err in
-                if let err = err {
-                    print("Error writing document: \(err)")
-                } else {
-                    print("Document successfully written!")
-                    
-                    // HUDで処理中を非表示
-                    SVProgressHUD.dismiss()
-                    
-                    // 最後の保存であればモーダルを閉じる
-                    if self.saveFinished == true {
-                        // ストーリーボードを取得
-                        let storyboard: UIStoryboard = self.storyboard!
-                        let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                        
-                        // ノート画面に遷移
-                        self.present(nextView, animated: false, completion: nil)
-                    }
-                }
+    func saveTargetData(year selectedYear:Int, month selectedMonth:Int) {
+        dataManager.saveTargetData(selectedYear, selectedMonth, "", {
+            // 最後の保存であればモーダルを閉じる
+            if self.saveFinished == true {
+                // ストーリーボードを取得
+                let storyboard: UIStoryboard = self.storyboard!
+                let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                // ノート画面に遷移
+                self.present(nextView, animated: false, completion: nil)
             }
+        })
     }
     
     // Firebaseの課題データを更新するメソッド
     func updateTaskData(task taskData:TaskData) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
-        // ユーザーIDを取得
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        
-        // 更新日時を現在時刻にする
-        taskData.setUpdated_at(getCurrentTime())
-        
-        // 更新したい課題データを取得
-        let db = Firestore.firestore()
-        let database = db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())")
-
-        // 変更する可能性のあるデータのみ更新
-        database.updateData([
-            "taskTitle"      : taskData.getTaskTitle(),
-            "taskCause"      : taskData.getTaskCouse(),
-            "taskAchievement": taskData.getTaskAchievement(),
-            "isDeleted"      : taskData.getIsDeleted(),
-            "updated_at"     : taskData.getUpdated_at(),
-            "measuresData"   : taskData.getMeasuresData(),
-            "measuresPriority" : taskData.getMeasuresPriority()
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                // HUDで処理中を非表示
-                SVProgressHUD.dismiss()
-            }
-        }
+        dataManager.updateTaskData(taskData, {})
     }
     
     
@@ -988,15 +828,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             self.weatherIndex = 2
         }
         self.weatherPicker.selectRow(self.weatherIndex ,inComponent: 0, animated: true)
-    }
-    
-    // 現在時刻を取得するメソッド
-    func getCurrentTime() -> String {
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return dateFormatter.string(from: now)
     }
     
     // 現在時刻を取得するメソッド
@@ -1054,7 +885,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // テキストフィールド以外をタップでキーボードとPickerを下げる設定
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-        
         // Pickerをしまう
         closePicker()
     }
@@ -1108,28 +938,6 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         UIView.animate(withDuration: duration) {
             self.view.transform = CGAffineTransform.identity
         }
-    }
-    
-    // ツールバーを作成するメソッド
-    func createToolBar() {
-        // ツールバーのインスタンスを作成
-        let toolBar = UIToolbar()
-
-        // ツールバーに配置するアイテムのインスタンスを作成
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-
-        // アイテムを配置
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-
-        // ツールバーのサイズを指定
-        toolBar.sizeToFit()
-        
-        // テキストフィールドにツールバーを設定
-        physicalConditionTextView.inputAccessoryView = toolBar
-        purposeTextView.inputAccessoryView = toolBar
-        detailTextView.inputAccessoryView = toolBar
-        reflectionTextView.inputAccessoryView = toolBar
     }
     
     // OKボタンの処理
