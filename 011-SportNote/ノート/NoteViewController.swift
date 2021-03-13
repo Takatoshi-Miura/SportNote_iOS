@@ -26,6 +26,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // ユーザーデータを作成
             let userData = UserData()
             userData.createUserData()
+            UserDefaultsKey.userID.set(value: UserDefaults.standard.object(forKey: "userID") as! String)
             
             // フリーノートデータ作成
             dataManager.createFreeNoteData({})
