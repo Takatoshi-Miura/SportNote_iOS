@@ -16,7 +16,7 @@ class DataManager {
     
     var noteDataArray = [NoteData]()
     var freeNoteData = FreeNote()
-    var taskDataArray = [TaskData]()
+    var taskDataArray = [Task]()
     var targetDataArray = [TargetData]()
     
     
@@ -536,7 +536,7 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // 取得データを基に、課題データを作成
                     let taskDataCollection = document.data()
-                    let databaseTaskData = TaskData()
+                    let databaseTaskData = Task()
                     databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
                     databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
                     databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
@@ -587,7 +587,7 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // 取得データを基に、課題データを作成
                     let taskDataCollection = document.data()
-                    let databaseTaskData = TaskData()
+                    let databaseTaskData = Task()
                     databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
                     databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
                     databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
@@ -638,7 +638,7 @@ class DataManager {
                     for document in querySnapshot!.documents {
                         // 取得データを基に、課題データを作成
                         let taskDataCollection = document.data()
-                        let databaseTaskData = TaskData()
+                        let databaseTaskData = Task()
                         databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
                         databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
                         databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
@@ -663,10 +663,10 @@ class DataManager {
     /**
      課題データをを更新
      - Parameters:
-      - task: 更新したいTaskData
+      - task: 更新したいTask
       - completion: 処理完了後に実行する処理
      */
-    func updateTaskData(_ taskData:TaskData, _ completion: @escaping () -> ()) {
+    func updateTaskData(_ taskData:Task, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -715,7 +715,7 @@ class DataManager {
         
         // ユーザーIDをセット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        let taskData = TaskData()
+        let taskData = Task()
         taskData.setUserID(userID)
         
         // 入力されたテキストをTaskDataにセット
@@ -766,11 +766,11 @@ class DataManager {
     /**
      課題データを保存(複製する際に使用)
      - Parameters:
-      - taskData: 保存したいTaskData
+      - taskData: 保存したいTask
       - completion: 処理完了後に実行する処理
      */
     // Firebaseにデータを保存するメソッド
-    func copyTaskData(_ taskData:TaskData, _ completion: @escaping () -> ()) {
+    func copyTaskData(_ taskData:Task, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         taskData.setUserID(userID)

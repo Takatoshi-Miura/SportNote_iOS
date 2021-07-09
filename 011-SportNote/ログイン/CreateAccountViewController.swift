@@ -190,7 +190,7 @@ class CreateAccountViewController: UIViewController {
     }
     
     // 課題データを複製するメソッド
-    func createTaskData(_ taskDataArray:[TaskData], _ completion: @escaping () -> ()) {
+    func createTaskData(_ taskDataArray:[Task], _ completion: @escaping () -> ()) {
         // 課題データを複製
         SVProgressHUD.show(withStatus: "課題データの引継ぎをしています")
         var count = 0

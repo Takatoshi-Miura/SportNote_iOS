@@ -781,7 +781,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // Firebaseの課題データを更新するメソッド
-    func updateTaskData(task taskData:TaskData) {
+    func updateTaskData(task taskData:Task) {
         dataManager.updateTaskData(taskData, {})
     }
     

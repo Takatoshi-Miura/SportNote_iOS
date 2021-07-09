@@ -70,7 +70,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     //MARK:- 変数の宣言
     
     var dataManager = DataManager()
-    var taskData = TaskData()               // 課題データの格納用
+    var taskData = Task()               // 課題データの格納用
     var measuresTitleArray:[String] = []    // 対策タイトルの格納用
     var indexPath:Int = 0                   // 行番号格納用
     var resolvedButtonTap:Bool = false      // 解決済みボタンのタップ判定
