@@ -21,8 +21,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         navigationController?.delegate = self
 
         // 受け取った課題データを表示する
-        taskTitleTextField.text = taskData.getTaskTitle()
-        taskCauseTextView.text  = taskData.getTaskCouse()
+        taskTitleTextField.text = taskData.getTitle()
+        taskCauseTextView.text  = taskData.getCause()
         
         // TaskViewControllerから受け取った課題データの対策を取得
         measuresTitleArray = taskData.getMeasuresTitleArray()
@@ -106,8 +106,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         taskData.changeAchievement()
         
         // データ更新
-        taskData.setTaskTitle(taskTitleTextField.text!)
-        taskData.setTaskCause(taskCauseTextView.text!)
+        taskData.setTitle(taskTitleTextField.text!)
+        taskData.setCause(taskCauseTextView.text!)
         taskData.setOrder(0)
         dataManager.updateTaskData(taskData, {
             // 解決済みボタンをタップした場合
@@ -140,8 +140,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
                 self.measuresTitleArray.insert(textField.text!,at:0)
                 
                 // データ更新
-                self.taskData.setTaskTitle(self.taskTitleTextField.text!)
-                self.taskData.setTaskCause(self.taskCauseTextView.text!)
+                self.taskData.setTitle(self.taskTitleTextField.text!)
+                self.taskData.setCause(self.taskCauseTextView.text!)
                 self.dataManager.updateTaskData(self.taskData, {
                 })
                 
@@ -253,8 +253,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskViewController {
             // 課題データを更新
-            taskData.setTaskTitle(taskTitleTextField.text!)
-            taskData.setTaskCause(taskCauseTextView.text!)
+            taskData.setTitle(taskTitleTextField.text!)
+            taskData.setCause(taskCauseTextView.text!)
             dataManager.updateTaskData(taskData, {
             })
         }

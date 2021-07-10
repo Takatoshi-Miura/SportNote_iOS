@@ -637,13 +637,13 @@ class DataManager {
         let databaseTask = Task()
         
         databaseTask.setTaskID(taskCollection["taskID"] as! Int)
-        databaseTask.setTaskTitle(taskCollection["taskTitle"] as! String)
-        databaseTask.setTaskCause(taskCollection["taskCause"] as! String)
+        databaseTask.setTitle(taskCollection["taskTitle"] as! String)
+        databaseTask.setCause(taskCollection["taskCause"] as! String)
         let order: Int? = taskCollection["order"] as? Int
         if let order = order {
             databaseTask.setOrder(order)
         }
-        databaseTask.setTaskAchievement(taskCollection["taskAchievement"] as! Bool)
+        databaseTask.setAchievement(taskCollection["taskAchievement"] as! Bool)
         databaseTask.setIsDeleted(taskCollection["isDeleted"] as! Bool)
         databaseTask.setUserID(taskCollection["userID"] as! String)
         databaseTask.setCreated_at(taskCollection["created_at"] as! String)
@@ -676,10 +676,10 @@ class DataManager {
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
+            "taskTitle"        : taskData.getTitle(),
+            "taskCause"        : taskData.getCause(),
             "order"            : taskData.getOrder(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
+            "taskAchievement"  : taskData.getAchievement(),
             "isDeleted"        : taskData.getIsDeleted(),
             "updated_at"       : taskData.getUpdated_at(),
             "measuresData"     : taskData.getMeasuresData(),
@@ -715,8 +715,8 @@ class DataManager {
         taskData.setUserID(userID)
         
         // 入力されたテキストをTaskDataにセット
-        taskData.setTaskTitle(title)
-        taskData.setTaskCause(cause)
+        taskData.setTitle(title)
+        taskData.setCause(cause)
         
         // 現在時刻をセット
         taskData.setCreated_at(self.getCurrentTime())
@@ -761,10 +761,10 @@ class DataManager {
         let db = Firestore.firestore()
         db.collection("TaskData").document("\(taskData.getUserID())_\(taskData.getTaskID())").setData([
             "taskID"           : taskData.getTaskID(),
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
+            "taskTitle"        : taskData.getTitle(),
+            "taskCause"        : taskData.getCause(),
             "order"            : taskData.getOrder(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
+            "taskAchievement"  : taskData.getAchievement(),
             "isDeleted"        : taskData.getIsDeleted(),
             "userID"           : taskData.getUserID(),
             "created_at"       : taskData.getCreated_at(),

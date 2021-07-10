@@ -271,7 +271,7 @@ class Note {
     
     // 課題を追加するメソッド
     func addTask(taskData task:Task) {
-        self.taskTitle.append(task.getTaskTitle())
+        self.taskTitle.append(task.getTitle())
         self.measuresTitle.append(task.getMeasuresPriority())
         self.measuresEffectiveness.append("")
     }

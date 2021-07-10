@@ -39,11 +39,11 @@ class Task {
         self.taskID = taskID
     }
     
-    func setTaskTitle(_ taskTitle:String) {
+    func setTitle(_ taskTitle:String) {
         self.title = taskTitle
     }
     
-    func setTaskCause(_ taskCause:String) {
+    func setCause(_ taskCause:String) {
         self.cause = taskCause
     }
     
@@ -51,7 +51,7 @@ class Task {
         self.order = order
     }
     
-    func setTaskAchievement(_ taskAchievement:Bool) {
+    func setAchievement(_ taskAchievement:Bool) {
         self.isAchieve = taskAchievement
     }
     
@@ -116,11 +116,11 @@ class Task {
         return self.taskID
     }
     
-    func getTaskTitle() -> String {
+    func getTitle() -> String {
         return self.title
     }
     
-    func getTaskCouse() -> String {
+    func getCause() -> String {
         return self.cause
     }
     
@@ -128,7 +128,7 @@ class Task {
         return self.order
     }
     
-    func getTaskAchievement() -> Bool {
+    func getAchievement() -> Bool {
         return self.isAchieve
     }
     
