@@ -43,7 +43,7 @@ class AddCompetitionNoteViewController: UIViewController,UIScrollViewDelegate {
     //MARK:- 変数の宣言
     
     var previousControllerName:String = ""  // 前のViewController名
-    var noteData = NoteData()               // ノート詳細画面からの遷移用
+    var noteData = Note()               // ノート詳細画面からの遷移用
     var scrollPosition:CGFloat = 0          // スクロール位置
     var bottomPadding:CGFloat = 0           // safearea下側の余白
     

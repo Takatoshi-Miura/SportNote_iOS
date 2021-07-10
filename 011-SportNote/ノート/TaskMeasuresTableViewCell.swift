@@ -34,7 +34,7 @@ class TaskMeasuresTableViewCell: UITableViewCell {
     //MARK:- その他のメソッド
     
     // 課題データをラベルに表示するメソッド
-    func printTaskData(noteData note:NoteData,at index:Int) {
+    func printTaskData(noteData note:Note,at index:Int) {
         // ラベルに表示
         taskTitleLabel.text = note.getTaskTitle()[index]
         taskMeasuresTitleLabel.text = "対策:\(note.getMeasuresTitle()[index])"

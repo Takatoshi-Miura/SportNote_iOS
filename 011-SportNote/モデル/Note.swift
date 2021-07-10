@@ -1,5 +1,5 @@
 //
-//  NoteData.swift
+//  Note.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/08.
@@ -8,7 +8,7 @@
 
 import Firebase
 
-class NoteData {
+class Note {
     
     //MARK:- 保持データ
     static var noteCount:Int = 0                    // ノートの数
@@ -157,14 +157,14 @@ class NoteData {
                     let dataCollection = document.data()
             
                     // ノートIDの重複対策
-                    if dataCollection["noteID"] as! Int > NoteData.noteCount {
-                        NoteData.noteCount = dataCollection["noteID"] as! Int
+                    if dataCollection["noteID"] as! Int > Note.noteCount {
+                        Note.noteCount = dataCollection["noteID"] as! Int
                     }
                 }
             }
             // 新規ノートIDはノート数+1で設定
-            NoteData.noteCount += 1
-            self.setNoteID(NoteData.noteCount)
+            Note.noteCount += 1
+            self.setNoteID(Note.noteCount)
         }
     }
     

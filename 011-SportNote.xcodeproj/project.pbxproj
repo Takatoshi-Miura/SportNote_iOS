@@ -50,8 +50,8 @@
 		8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */; };
 		8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */; };
 		8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCC058924F8E40300744A61 /* MessageUI.framework */; };
-		8DCF350724F6554900055093 /* NoteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350324F6554900055093 /* NoteData.swift */; };
-		8DCF350824F6554900055093 /* TargetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350424F6554900055093 /* TargetData.swift */; };
+		8DCF350724F6554900055093 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350324F6554900055093 /* Note.swift */; };
+		8DCF350824F6554900055093 /* Target.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350424F6554900055093 /* Target.swift */; };
 		8DCF350924F6554900055093 /* FreeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350524F6554900055093 /* FreeNote.swift */; };
 		8DCF350A24F6554900055093 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350624F6554900055093 /* Task.swift */; };
 		8DCF350C24F67E8700055093 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350B24F67E8700055093 /* UserData.swift */; };
@@ -109,8 +109,8 @@
 		8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DCC058924F8E40300744A61 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		8DCF350324F6554900055093 /* NoteData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteData.swift; sourceTree = "<group>"; };
-		8DCF350424F6554900055093 /* TargetData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetData.swift; sourceTree = "<group>"; };
+		8DCF350324F6554900055093 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		8DCF350424F6554900055093 /* Target.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Target.swift; sourceTree = "<group>"; };
 		8DCF350524F6554900055093 /* FreeNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeNote.swift; sourceTree = "<group>"; };
 		8DCF350624F6554900055093 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		8DCF350B24F67E8700055093 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
@@ -205,8 +205,8 @@
 			children = (
 				8DB5371E25E4FCD400CB426F /* DataManager.swift */,
 				8DCF350B24F67E8700055093 /* UserData.swift */,
-				8DCF350324F6554900055093 /* NoteData.swift */,
-				8DCF350424F6554900055093 /* TargetData.swift */,
+				8DCF350324F6554900055093 /* Note.swift */,
+				8DCF350424F6554900055093 /* Target.swift */,
 				8DCF350524F6554900055093 /* FreeNote.swift */,
 				8DCF350624F6554900055093 /* Task.swift */,
 			);
@@ -411,7 +411,7 @@
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */,
 				8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */,
-				8DCF350724F6554900055093 /* NoteData.swift in Sources */,
+				8DCF350724F6554900055093 /* Note.swift in Sources */,
 				8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */,
 				8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */,
 				8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */,
@@ -436,7 +436,7 @@
 				8D7853FE24A6FE0000CCA440 /* TaskDetailViewController.swift in Sources */,
 				8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */,
 				8D01653624AF202F00F9D69F /* AddNoteViewController.swift in Sources */,
-				8DCF350824F6554900055093 /* TargetData.swift in Sources */,
+				8DCF350824F6554900055093 /* Target.swift in Sources */,
 				8DCF350C24F67E8700055093 /* UserData.swift in Sources */,
 				8D7C676224DD045C005599AD /* TutorialViewController.swift in Sources */,
 				8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */,

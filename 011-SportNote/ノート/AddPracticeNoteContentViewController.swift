@@ -120,7 +120,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // データ格納用
     var dataManager = DataManager()
-    var practiceNoteData = NoteData()
+    var practiceNoteData = Note()
     
     // 終了フラグ
     var saveFinished:Bool = false
@@ -790,7 +790,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     //MARK:- その他のメソッド
     
     // ノートデータのテキストをセットするメソッド
-    func setTextData(noteData note:NoteData) {
+    func setTextData(noteData note:Note) {
         self.physicalConditionTextView.text = note.getPhysicalCondition()
         self.purposeTextView.text = note.getPurpose()
         self.detailTextView.text = note.getDetail()
@@ -798,7 +798,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // ノートの日付をDatePickerにセットするメソッド
-    func setDatePicker(noteData note:NoteData) {
+    func setDatePicker(noteData note:Note) {
         // 日付をセット
         self.year  = note.getYear()
         self.month = note.getMonth()
@@ -816,7 +816,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // 天候データをweatherPickerにセットするメソッド
-    func setWeatherPicker(noteData note:NoteData) {
+    func setWeatherPicker(noteData note:Note) {
         // 気温をセット
         self.temperatureIndex = note.getTemperature() + 40
         self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)

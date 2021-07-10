@@ -26,7 +26,7 @@ class CompetitionNoteDetailViewController: UIViewController {
     
     //MARK:- 変数の宣言
     
-    var noteData = NoteData()
+    var noteData = Note()
     
     
     
@@ -65,7 +65,7 @@ class CompetitionNoteDetailViewController: UIViewController {
     //MARK:- その他のメソッド
     
     // テキストビューにnoteDataを表示するメソッド
-    func printNoteData(_ noteData:NoteData) {
+    func printNoteData(_ noteData:Note) {
         // テキストビューに表示
         physicalConditionTextView.text = noteData.getPhysicalCondition()
         targetTextView.text = noteData.getTarget()

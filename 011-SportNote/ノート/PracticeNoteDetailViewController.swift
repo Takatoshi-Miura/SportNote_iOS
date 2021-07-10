@@ -25,7 +25,7 @@ class PracticeNoteDetailViewController: UIViewController {
     
     //MARK:- 変数の宣言
     
-    var noteData = NoteData()
+    var noteData = Note()
     
     
     
