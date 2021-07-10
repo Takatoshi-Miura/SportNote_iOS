@@ -14,6 +14,7 @@ class Task {
     private var taskID: Int = 0                  // 課題ID
     private var title: String = ""               // タイトル
     private var cause: String = ""               // 原因
+    private var order: Int = 0                   // 並び順
     private var isAchieve: Bool = false          // 解決済み：true, 未解決：false
     private var isDeleted: Bool = false          // 削除：true, 削除しない：false
     private var userID: String = ""              // ユーザーUID
@@ -44,6 +45,10 @@ class Task {
     
     func setTaskCause(_ taskCause:String) {
         self.cause = taskCause
+    }
+    
+    func setOrder(_ order: Int) {
+        self.order = order
     }
     
     func setTaskAchievement(_ taskAchievement:Bool) {
@@ -117,6 +122,10 @@ class Task {
     
     func getTaskCouse() -> String {
         return self.cause
+    }
+    
+    func getOrder() -> Int {
+        return self.order
     }
     
     func getTaskAchievement() -> Bool {

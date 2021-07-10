@@ -535,20 +535,9 @@ class DataManager {
             } else {
                 for document in querySnapshot!.documents {
                     // 取得データを基に、課題データを作成
-                    let taskDataCollection = document.data()
-                    let databaseTaskData = Task()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
+                    let taskCollection = document.data()
+                    let databaseTask = self.createTaskFromCollection(taskCollection)
+                    self.taskDataArray.append(databaseTask)
                 }
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
@@ -586,20 +575,9 @@ class DataManager {
             } else {
                 for document in querySnapshot!.documents {
                     // 取得データを基に、課題データを作成
-                    let taskDataCollection = document.data()
-                    let databaseTaskData = Task()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
+                    let taskCollection = document.data()
+                    let databaseTask = self.createTaskFromCollection(taskCollection)
+                    self.taskDataArray.append(databaseTask)
                 }
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
@@ -637,20 +615,9 @@ class DataManager {
                 } else {
                     for document in querySnapshot!.documents {
                         // 取得データを基に、課題データを作成
-                        let taskDataCollection = document.data()
-                        let databaseTaskData = Task()
-                        databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                        databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                        databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                        databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                        databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                        databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                        databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                        databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                        databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                        databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                        // 課題データを格納
-                        self.taskDataArray.append(databaseTaskData)
+                        let taskCollection = document.data()
+                        let databaseTask = self.createTaskFromCollection(taskCollection)
+                        self.taskDataArray.append(databaseTask)
                     }
                     // HUDで処理中を非表示
                     SVProgressHUD.dismiss()
@@ -661,7 +628,34 @@ class DataManager {
     }
     
     /**
-     課題データをを更新
+     DBからの取得データから課題データを作成
+     - Parameters:
+      - documents: querySnapshot!.documents
+     - Returns: 課題データ
+     */
+    func createTaskFromCollection(_ taskCollection: [String: Any]) -> Task {
+        let databaseTask = Task()
+        
+        databaseTask.setTaskID(taskCollection["taskID"] as! Int)
+        databaseTask.setTaskTitle(taskCollection["taskTitle"] as! String)
+        databaseTask.setTaskCause(taskCollection["taskCause"] as! String)
+        let order: Int? = taskCollection["order"] as? Int
+        if let order = order {
+            databaseTask.setOrder(order)
+        }
+        databaseTask.setTaskAchievement(taskCollection["taskAchievement"] as! Bool)
+        databaseTask.setIsDeleted(taskCollection["isDeleted"] as! Bool)
+        databaseTask.setUserID(taskCollection["userID"] as! String)
+        databaseTask.setCreated_at(taskCollection["created_at"] as! String)
+        databaseTask.setUpdated_at(taskCollection["updated_at"] as! String)
+        databaseTask.setMeasuresData(taskCollection["measuresData"] as! [String:[[String:Int]]])
+        databaseTask.setMeasuresPriority(taskCollection["measuresPriority"] as! String)
+        
+        return databaseTask
+    }
+    
+    /**
+     課題データを更新
      - Parameters:
       - task: 更新したいTask
       - completion: 処理完了後に実行する処理
@@ -684,6 +678,7 @@ class DataManager {
         database.updateData([
             "taskTitle"        : taskData.getTaskTitle(),
             "taskCause"        : taskData.getTaskCouse(),
+            "order"            : taskData.getOrder(),
             "taskAchievement"  : taskData.getTaskAchievement(),
             "isDeleted"        : taskData.getIsDeleted(),
             "updated_at"       : taskData.getUpdated_at(),
@@ -708,11 +703,12 @@ class DataManager {
       - cause: 原因
       - completion: 処理完了後に実行する処理
      */
-    // Firebaseにデータを保存するメソッド
-    func saveTaskData(title:String, cause:String, measuresTitleArray:[String], measuresPriority:String, _ completion: @escaping () -> ()) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
+    func saveTaskData(title:String,
+                      cause:String,
+                      measuresTitleArray:[String],
+                      measuresPriority:String,
+                      _ completion: @escaping () -> ())
+    {
         // ユーザーIDをセット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         let taskData = Task()
@@ -736,30 +732,7 @@ class DataManager {
         
         // taskIDの設定
         taskData.setNewTaskID({
-            // 課題データを保存
-            let db = Firestore.firestore()
-            db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())").setData([
-                "taskID"           : taskData.getTaskID(),
-                "taskTitle"        : taskData.getTaskTitle(),
-                "taskCause"        : taskData.getTaskCouse(),
-                "taskAchievement"  : taskData.getTaskAchievement(),
-                "isDeleted"        : taskData.getIsDeleted(),
-                "userID"           : taskData.getUserID(),
-                "created_at"       : taskData.getCreated_at(),
-                "updated_at"       : taskData.getUpdated_at(),
-                "measuresData"     : taskData.getMeasuresData(),
-                "measuresPriority" : taskData.getMeasuresPriority()
-            ]) { err in
-                if let err = err {
-                    print("Error writing document: \(err)")
-                } else {
-                    print("課題データ(ID:\(taskData.getTaskID()))を保存しました")
-                    // HUDで処理中を非表示
-                    SVProgressHUD.dismiss()
-                    // 完了処理
-                    completion()
-                }
-            }
+            self.saveTask(taskData, completion)
         })
     }
     
@@ -769,18 +742,28 @@ class DataManager {
       - taskData: 保存したいTask
       - completion: 処理完了後に実行する処理
      */
-    // Firebaseにデータを保存するメソッド
     func copyTaskData(_ taskData:Task, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         taskData.setUserID(userID)
         
         // 課題データを保存
+        self.saveTask(taskData, completion)
+    }
+    
+    /**
+     課題データを保存
+     - Parameters:
+      - taskData: 保存したいTask
+      - completion: 処理完了後に実行する処理
+     */
+    func saveTask(_ taskData: Task, _ completion: @escaping () -> ()) {
         let db = Firestore.firestore()
         db.collection("TaskData").document("\(taskData.getUserID())_\(taskData.getTaskID())").setData([
             "taskID"           : taskData.getTaskID(),
             "taskTitle"        : taskData.getTaskTitle(),
             "taskCause"        : taskData.getTaskCouse(),
+            "order"            : taskData.getOrder(),
             "taskAchievement"  : taskData.getTaskAchievement(),
             "isDeleted"        : taskData.getIsDeleted(),
             "userID"           : taskData.getUserID(),
@@ -793,10 +776,27 @@ class DataManager {
                 print("Error writing document: \(err)")
             } else {
                 print("課題データ(ID:\(taskData.getTaskID()))を保存しました")
-                // 完了処理
                 completion()
             }
         }
+    }
+    
+    /**
+     現在の課題の並び順をorderに反映
+     */
+    func setTaskOrder() {
+        var index: Int = 0
+        for task in self.taskDataArray {
+            task.setOrder(index)
+            index += 1
+        }
+    }
+    
+    /**
+     保存されたorderの昇順で課題を並び替える
+     */
+    func sortTaskByOrder() {
+        self.taskDataArray.sort(by: {$0.getOrder() < $1.getOrder()})
     }
     
     

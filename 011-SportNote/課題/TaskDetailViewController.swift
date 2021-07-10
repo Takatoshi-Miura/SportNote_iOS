@@ -108,6 +108,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         // データ更新
         taskData.setTaskTitle(taskTitleTextField.text!)
         taskData.setTaskCause(taskCauseTextView.text!)
+        taskData.setOrder(0)
         dataManager.updateTaskData(taskData, {
             // 解決済みボタンをタップした場合
             if self.resolvedButtonTap == true {
