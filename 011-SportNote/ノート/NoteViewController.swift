@@ -80,7 +80,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // テーブル用
     var sectionTitle:[String] = ["フリーノート"]
-    var dataInSection:[[NoteData]] = [[]]
+    var dataInSection:[[Note]] = [[]]
     var sortedIndexPaths:[IndexPath] = []
     var deleteFinished:Bool = false
     var sectionIndex:Int = 0
@@ -374,7 +374,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // ノートデータを削除
-    func deleteNoteData(note noteData:NoteData) {
+    func deleteNoteData(note noteData:Note) {
         dataManager.deleteNoteData(noteData, {
             // 最後の削除であればリロード
             if self.deleteFinished {
@@ -385,7 +385,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // 目標を更新
-    func updateTargetData(target targetData:TargetData) {
+    func updateTargetData(target targetData:Target) {
         dataManager.updateTargetData(targetData, {
             self.reloadData()
         })
@@ -433,7 +433,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // 初期化dataInSection
     func dataInSectionInit() {
         // フリーノート用に0番目にはダミーデータを入れる
-        let dummyNoteData = NoteData()
+        let dummyNoteData = Note()
         self.dataInSection = [[]]
         self.dataInSection[0].append(dummyNoteData)
     }
@@ -458,7 +458,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                     self.sectionTitle.append("\(self.dataManager.targetDataArray[index].getMonth())月:\(self.dataManager.targetDataArray[index].getDetail())")
                     
                     // ノートデータ追加
-                    var noteArray:[NoteData] = []
+                    var noteArray:[Note] = []
                     // noteDataArrayが空の時は更新しない（エラー対策）
                     if self.dataManager.noteDataArray.isEmpty == false {
                         // 年,月が合致するノート数だけappendする。

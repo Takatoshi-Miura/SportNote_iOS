@@ -50,10 +50,10 @@
 		8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */; };
 		8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */; };
 		8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCC058924F8E40300744A61 /* MessageUI.framework */; };
-		8DCF350724F6554900055093 /* NoteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350324F6554900055093 /* NoteData.swift */; };
-		8DCF350824F6554900055093 /* TargetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350424F6554900055093 /* TargetData.swift */; };
+		8DCF350724F6554900055093 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350324F6554900055093 /* Note.swift */; };
+		8DCF350824F6554900055093 /* Target.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350424F6554900055093 /* Target.swift */; };
 		8DCF350924F6554900055093 /* FreeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350524F6554900055093 /* FreeNote.swift */; };
-		8DCF350A24F6554900055093 /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350624F6554900055093 /* TaskData.swift */; };
+		8DCF350A24F6554900055093 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350624F6554900055093 /* Task.swift */; };
 		8DCF350C24F67E8700055093 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350B24F67E8700055093 /* UserData.swift */; };
 		8DE6E10825F461DE0012DA54 /* UIViewController+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */; };
 		8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */; };
@@ -109,10 +109,10 @@
 		8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DCC058924F8E40300744A61 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		8DCF350324F6554900055093 /* NoteData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteData.swift; sourceTree = "<group>"; };
-		8DCF350424F6554900055093 /* TargetData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetData.swift; sourceTree = "<group>"; };
+		8DCF350324F6554900055093 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		8DCF350424F6554900055093 /* Target.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Target.swift; sourceTree = "<group>"; };
 		8DCF350524F6554900055093 /* FreeNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeNote.swift; sourceTree = "<group>"; };
-		8DCF350624F6554900055093 /* TaskData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
+		8DCF350624F6554900055093 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		8DCF350B24F67E8700055093 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+UserDefaults.swift"; path = "011-SportNote/共通/UIViewController+UserDefaults.swift"; sourceTree = "<group>"; };
 		8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -205,10 +205,10 @@
 			children = (
 				8DB5371E25E4FCD400CB426F /* DataManager.swift */,
 				8DCF350B24F67E8700055093 /* UserData.swift */,
-				8DCF350324F6554900055093 /* NoteData.swift */,
-				8DCF350424F6554900055093 /* TargetData.swift */,
+				8DCF350324F6554900055093 /* Note.swift */,
+				8DCF350424F6554900055093 /* Target.swift */,
 				8DCF350524F6554900055093 /* FreeNote.swift */,
-				8DCF350624F6554900055093 /* TaskData.swift */,
+				8DCF350624F6554900055093 /* Task.swift */,
 			);
 			path = "モデル";
 			sourceTree = "<group>";
@@ -411,14 +411,14 @@
 				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */,
 				8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */,
-				8DCF350724F6554900055093 /* NoteData.swift in Sources */,
+				8DCF350724F6554900055093 /* Note.swift in Sources */,
 				8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */,
 				8DE8B1D424B1BD7F00E1195B /* TaskViewController.swift in Sources */,
 				8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */,
 				8D941CC42552188400B3A472 /* NoteViewCell.swift in Sources */,
 				8D7C676024DD03F6005599AD /* PageViewController.swift in Sources */,
 				8D69FC9824B7085900DFECB3 /* TaskMeasuresTableViewCell.swift in Sources */,
-				8DCF350A24F6554900055093 /* TaskData.swift in Sources */,
+				8DCF350A24F6554900055093 /* Task.swift in Sources */,
 				8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */,
 				8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */,
 				8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */,
@@ -436,7 +436,7 @@
 				8D7853FE24A6FE0000CCA440 /* TaskDetailViewController.swift in Sources */,
 				8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */,
 				8D01653624AF202F00F9D69F /* AddNoteViewController.swift in Sources */,
-				8DCF350824F6554900055093 /* TargetData.swift in Sources */,
+				8DCF350824F6554900055093 /* Target.swift in Sources */,
 				8DCF350C24F67E8700055093 /* UserData.swift in Sources */,
 				8D7C676224DD045C005599AD /* TutorialViewController.swift in Sources */,
 				8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */,
@@ -597,7 +597,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.Takatoshi.Miura.SportsNoteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";
@@ -623,7 +623,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.Takatoshi.Miura.SportsNoteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "011-SportNote/011-SportNote-Bridging-Header.h";

@@ -90,7 +90,6 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         // 課題データを保存
         measuresTitleArray.reverse()
         dataManager.saveTaskData(title: taskTitleTextField.text!, cause: causeTextView.text!, measuresTitleArray: measuresTitleArray, measuresPriority: measuresPriorityTitle, {
-            // モーダルを閉じる
             self.dismiss(animated: true, completion: nil)
         })
     }

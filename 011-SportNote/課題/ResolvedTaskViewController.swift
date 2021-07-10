@@ -64,8 +64,8 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 未解決の課題セルを返却
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "resolvedTaskCell", for: indexPath)
-        cell.textLabel!.text = dataManager.taskDataArray[indexPath.row].getTaskTitle()
-        cell.detailTextLabel!.text = "原因：\(dataManager.taskDataArray[indexPath.row].getTaskCouse())"
+        cell.textLabel!.text = dataManager.taskDataArray[indexPath.row].getTitle()
+        cell.detailTextLabel!.text = "原因：\(dataManager.taskDataArray[indexPath.row].getCause())"
         cell.detailTextLabel?.textColor = UIColor.systemGray
         return cell
     }

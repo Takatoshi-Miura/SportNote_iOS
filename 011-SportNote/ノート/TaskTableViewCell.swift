@@ -21,7 +21,7 @@ class TaskTableViewCell: UITableViewCell {
     //MARK:- その他のメソッド
     
     // 課題データをラベルに表示するメソッド
-    func printTaskData(_ noteData:NoteData,_ index:Int) {
+    func printTaskData(_ noteData:Note,_ index:Int) {
         taskTitle.text             = noteData.getTaskTitle()[index]
         measuresTitle.text         = "対策：\(noteData.getMeasuresTitle()[index])"
         measuresEffectiveness.text = noteData.getMeasuresEffectiveness()[index]

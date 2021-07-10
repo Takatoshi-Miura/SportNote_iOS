@@ -14,10 +14,10 @@ class DataManager {
     
     //MARK:- データ配列
     
-    var noteDataArray = [NoteData]()
+    var noteDataArray = [Note]()
     var freeNoteData = FreeNote()
-    var taskDataArray = [TaskData]()
-    var targetDataArray = [TargetData]()
+    var taskDataArray = [Task]()
+    var targetDataArray = [Target]()
     
     
     //MARK:- ノートデータ
@@ -52,7 +52,7 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // 目標データを反映
                     let dataCollection = document.data()
-                    let noteData = NoteData()
+                    let noteData = Note()
                     noteData.setNoteID(dataCollection["noteID"] as! Int)
                     noteData.setNoteType(dataCollection["noteType"] as! String)
                     noteData.setYear(dataCollection["year"] as! Int)
@@ -100,7 +100,7 @@ class DataManager {
         noteDataArray = []
         
         // ユーザーIDを取得
-        let noteData = NoteData()
+        let noteData = Note()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
 
         // 現在のユーザーのデータを取得する
@@ -180,7 +180,7 @@ class DataManager {
             } else {
                 for document in querySnapshot!.documents {
                     // オブジェクトを作成
-                    let noteData = NoteData()
+                    let noteData = Note()
                     
                     // 目標データを反映
                     let dataCollection = document.data()
@@ -224,7 +224,7 @@ class DataManager {
       - noteData: 更新したいノート
       - completion: データ取得後に実行する処理
      */
-    func updateNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+    func updateNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -272,7 +272,7 @@ class DataManager {
       - noteData: 保存したいノート
       - completion: データ取得後に実行する処理
      */
-    func saveNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+    func saveNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -328,7 +328,7 @@ class DataManager {
       - noteData: 保存したいノート
       - completion: データ取得後に実行する処理
      */
-    func copyNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+    func copyNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
         // ユーザーUIDをセット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         noteData.setUserID(userID)
@@ -375,7 +375,7 @@ class DataManager {
       - noteData: 削除したいノート
       - completion: データ取得後に実行する処理
      */
-    func deleteNoteData(_ noteData:NoteData, _ completion: @escaping () -> ()) {
+    func deleteNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
         // isDeletedをセット
         noteData.setIsDeleted(true)
         
@@ -535,20 +535,9 @@ class DataManager {
             } else {
                 for document in querySnapshot!.documents {
                     // 取得データを基に、課題データを作成
-                    let taskDataCollection = document.data()
-                    let databaseTaskData = TaskData()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
+                    let taskCollection = document.data()
+                    let databaseTask = self.createTaskFromCollection(taskCollection)
+                    self.taskDataArray.append(databaseTask)
                 }
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
@@ -586,20 +575,9 @@ class DataManager {
             } else {
                 for document in querySnapshot!.documents {
                     // 取得データを基に、課題データを作成
-                    let taskDataCollection = document.data()
-                    let databaseTaskData = TaskData()
-                    databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                    databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                    databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                    databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                    databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                    databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                    databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                    databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                    databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                    databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                    // 課題データを格納
-                    self.taskDataArray.append(databaseTaskData)
+                    let taskCollection = document.data()
+                    let databaseTask = self.createTaskFromCollection(taskCollection)
+                    self.taskDataArray.append(databaseTask)
                 }
                 // HUDで処理中を非表示
                 SVProgressHUD.dismiss()
@@ -637,20 +615,9 @@ class DataManager {
                 } else {
                     for document in querySnapshot!.documents {
                         // 取得データを基に、課題データを作成
-                        let taskDataCollection = document.data()
-                        let databaseTaskData = TaskData()
-                        databaseTaskData.setTaskID(taskDataCollection["taskID"] as! Int)
-                        databaseTaskData.setTaskTitle(taskDataCollection["taskTitle"] as! String)
-                        databaseTaskData.setTaskCause(taskDataCollection["taskCause"] as! String)
-                        databaseTaskData.setTaskAchievement(taskDataCollection["taskAchievement"] as! Bool)
-                        databaseTaskData.setIsDeleted(taskDataCollection["isDeleted"] as! Bool)
-                        databaseTaskData.setUserID(taskDataCollection["userID"] as! String)
-                        databaseTaskData.setCreated_at(taskDataCollection["created_at"] as! String)
-                        databaseTaskData.setUpdated_at(taskDataCollection["updated_at"] as! String)
-                        databaseTaskData.setMeasuresData(taskDataCollection["measuresData"] as! [String:[[String:Int]]])
-                        databaseTaskData.setMeasuresPriority(taskDataCollection["measuresPriority"] as! String)
-                        // 課題データを格納
-                        self.taskDataArray.append(databaseTaskData)
+                        let taskCollection = document.data()
+                        let databaseTask = self.createTaskFromCollection(taskCollection)
+                        self.taskDataArray.append(databaseTask)
                     }
                     // HUDで処理中を非表示
                     SVProgressHUD.dismiss()
@@ -661,12 +628,39 @@ class DataManager {
     }
     
     /**
-     課題データをを更新
+     DBからの取得データから課題データを作成
      - Parameters:
-      - task: 更新したいTaskData
+      - documents: querySnapshot!.documents
+     - Returns: 課題データ
+     */
+    func createTaskFromCollection(_ taskCollection: [String: Any]) -> Task {
+        let databaseTask = Task()
+        
+        databaseTask.setTaskID(taskCollection["taskID"] as! Int)
+        databaseTask.setTitle(taskCollection["taskTitle"] as! String)
+        databaseTask.setCause(taskCollection["taskCause"] as! String)
+        let order: Int? = taskCollection["order"] as? Int
+        if let order = order {
+            databaseTask.setOrder(order)
+        }
+        databaseTask.setAchievement(taskCollection["taskAchievement"] as! Bool)
+        databaseTask.setIsDeleted(taskCollection["isDeleted"] as! Bool)
+        databaseTask.setUserID(taskCollection["userID"] as! String)
+        databaseTask.setCreated_at(taskCollection["created_at"] as! String)
+        databaseTask.setUpdated_at(taskCollection["updated_at"] as! String)
+        databaseTask.setMeasuresData(taskCollection["measuresData"] as! [String:[[String:Int]]])
+        databaseTask.setMeasuresPriority(taskCollection["measuresPriority"] as! String)
+        
+        return databaseTask
+    }
+    
+    /**
+     課題データを更新
+     - Parameters:
+      - task: 更新したいTask
       - completion: 処理完了後に実行する処理
      */
-    func updateTaskData(_ taskData:TaskData, _ completion: @escaping () -> ()) {
+    func updateTaskData(_ taskData:Task, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -682,9 +676,10 @@ class DataManager {
 
         // 変更する可能性のあるデータのみ更新
         database.updateData([
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
+            "taskTitle"        : taskData.getTitle(),
+            "taskCause"        : taskData.getCause(),
+            "order"            : taskData.getOrder(),
+            "taskAchievement"  : taskData.getAchievement(),
             "isDeleted"        : taskData.getIsDeleted(),
             "updated_at"       : taskData.getUpdated_at(),
             "measuresData"     : taskData.getMeasuresData(),
@@ -708,19 +703,20 @@ class DataManager {
       - cause: 原因
       - completion: 処理完了後に実行する処理
      */
-    // Firebaseにデータを保存するメソッド
-    func saveTaskData(title:String, cause:String, measuresTitleArray:[String], measuresPriority:String, _ completion: @escaping () -> ()) {
-        // HUDで処理中を表示
-        SVProgressHUD.show()
-        
+    func saveTaskData(title:String,
+                      cause:String,
+                      measuresTitleArray:[String],
+                      measuresPriority:String,
+                      _ completion: @escaping () -> ())
+    {
         // ユーザーIDをセット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        let taskData = TaskData()
+        let taskData = Task()
         taskData.setUserID(userID)
         
         // 入力されたテキストをTaskDataにセット
-        taskData.setTaskTitle(title)
-        taskData.setTaskCause(cause)
+        taskData.setTitle(title)
+        taskData.setCause(cause)
         
         // 現在時刻をセット
         taskData.setCreated_at(self.getCurrentTime())
@@ -736,52 +732,39 @@ class DataManager {
         
         // taskIDの設定
         taskData.setNewTaskID({
-            // 課題データを保存
-            let db = Firestore.firestore()
-            db.collection("TaskData").document("\(userID)_\(taskData.getTaskID())").setData([
-                "taskID"           : taskData.getTaskID(),
-                "taskTitle"        : taskData.getTaskTitle(),
-                "taskCause"        : taskData.getTaskCouse(),
-                "taskAchievement"  : taskData.getTaskAchievement(),
-                "isDeleted"        : taskData.getIsDeleted(),
-                "userID"           : taskData.getUserID(),
-                "created_at"       : taskData.getCreated_at(),
-                "updated_at"       : taskData.getUpdated_at(),
-                "measuresData"     : taskData.getMeasuresData(),
-                "measuresPriority" : taskData.getMeasuresPriority()
-            ]) { err in
-                if let err = err {
-                    print("Error writing document: \(err)")
-                } else {
-                    print("課題データ(ID:\(taskData.getTaskID()))を保存しました")
-                    // HUDで処理中を非表示
-                    SVProgressHUD.dismiss()
-                    // 完了処理
-                    completion()
-                }
-            }
+            self.saveTask(taskData, completion)
         })
     }
     
     /**
      課題データを保存(複製する際に使用)
      - Parameters:
-      - taskData: 保存したいTaskData
+      - taskData: 保存したいTask
       - completion: 処理完了後に実行する処理
      */
-    // Firebaseにデータを保存するメソッド
-    func copyTaskData(_ taskData:TaskData, _ completion: @escaping () -> ()) {
+    func copyTaskData(_ taskData:Task, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         taskData.setUserID(userID)
         
         // 課題データを保存
+        self.saveTask(taskData, completion)
+    }
+    
+    /**
+     課題データを保存
+     - Parameters:
+      - taskData: 保存したいTask
+      - completion: 処理完了後に実行する処理
+     */
+    func saveTask(_ taskData: Task, _ completion: @escaping () -> ()) {
         let db = Firestore.firestore()
         db.collection("TaskData").document("\(taskData.getUserID())_\(taskData.getTaskID())").setData([
             "taskID"           : taskData.getTaskID(),
-            "taskTitle"        : taskData.getTaskTitle(),
-            "taskCause"        : taskData.getTaskCouse(),
-            "taskAchievement"  : taskData.getTaskAchievement(),
+            "taskTitle"        : taskData.getTitle(),
+            "taskCause"        : taskData.getCause(),
+            "order"            : taskData.getOrder(),
+            "taskAchievement"  : taskData.getAchievement(),
             "isDeleted"        : taskData.getIsDeleted(),
             "userID"           : taskData.getUserID(),
             "created_at"       : taskData.getCreated_at(),
@@ -793,10 +776,27 @@ class DataManager {
                 print("Error writing document: \(err)")
             } else {
                 print("課題データ(ID:\(taskData.getTaskID()))を保存しました")
-                // 完了処理
                 completion()
             }
         }
+    }
+    
+    /**
+     現在の課題の並び順をorderに反映
+     */
+    func setTaskOrder() {
+        var index: Int = 0
+        for task in self.taskDataArray {
+            task.setOrder(index)
+            index += 1
+        }
+    }
+    
+    /**
+     保存されたorderの昇順で課題を並び替える
+     */
+    func sortTaskByOrder() {
+        self.taskDataArray.sort(by: {$0.getOrder() < $1.getOrder()})
     }
     
     
@@ -828,7 +828,7 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // 目標データを反映
                     let targetDataCollection = document.data()
-                    let target = TargetData()
+                    let target = Target()
                     target.setYear(targetDataCollection["year"] as! Int)
                     target.setMonth(targetDataCollection["month"] as! Int)
                     target.setDetail(targetDataCollection["detail"] as! String)
@@ -853,7 +853,7 @@ class DataManager {
       - targetData: 目標データ
       - completion: データ取得後に実行する処理
      */
-    func updateTargetData(_ targetData:TargetData, _ completion: @escaping () -> ()) {
+    func updateTargetData(_ targetData:Target, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
@@ -896,7 +896,7 @@ class DataManager {
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
         // 目標データを作成
-        let targetData = TargetData()
+        let targetData = Target()
         targetData.setYear(year)
         targetData.setMonth(month)
         targetData.setDetail(detail)
@@ -933,7 +933,7 @@ class DataManager {
       - targetData: 保存したい目標データ
       - completion: データ取得後に実行する処理
      */
-    func copyTargetData(_ targetData:TargetData, _ completion: @escaping () -> ()) {
+    func copyTargetData(_ targetData:Target, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         targetData.setUserID(userID)

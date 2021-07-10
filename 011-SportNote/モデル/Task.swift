@@ -1,5 +1,5 @@
 //
-//  TaskData.swift
+//  Task.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/06/26.
@@ -7,20 +7,21 @@
 //
 import Firebase
 
-class TaskData {
+class Task {
     
     //MARK:- 保持データ
-    static var taskCount:Int = 0                // 課題の数
-    private var taskID:Int = 0                  // 課題ID
-    private var taskTitle:String = ""           // タイトル
-    private var taskCause:String = ""           // 原因
-    private var taskAchievement:Bool = false    // 解決済み：true, 未解決：false
-    private var isDeleted:Bool = false          // 削除：true, 削除しない：false
-    private var userID:String = ""              // ユーザーUID
-    private var created_at:String = ""          // 作成日
-    private var updated_at:String = ""          // 更新日
-    private var measuresData:[String:[[String:Int]]] = [:]   // [対策タイトル,[ [対策の有効性コメント：ノートID],[対策の有効性コメント：ノートID] ] ]
-    private var measuresPriority:String = ""                 // 最優先の対策名
+    static var count: Int = 0                    // 課題の数
+    private var taskID: Int = 0                  // 課題ID
+    private var title: String = ""               // タイトル
+    private var cause: String = ""               // 原因
+    private var order: Int = 0                   // 並び順
+    private var isAchieve: Bool = false          // 解決済み：true, 未解決：false
+    private var isDeleted: Bool = false          // 削除：true, 削除しない：false
+    private var userID: String = ""              // ユーザーUID
+    private var created_at: String = ""          // 作成日
+    private var updated_at: String = ""          // 更新日
+    private var measures: [String: [[String: Int]]] = [:]   // [対策タイトル, [ [対策の有効性コメント：ノートID], [対策の有効性コメント：ノートID] ] ]
+    private var measuresPriorityTitle: String = ""          // 最優先の対策名
     
     
     
@@ -38,16 +39,20 @@ class TaskData {
         self.taskID = taskID
     }
     
-    func setTaskTitle(_ taskTitle:String) {
-        self.taskTitle = taskTitle
+    func setTitle(_ taskTitle:String) {
+        self.title = taskTitle
     }
     
-    func setTaskCause(_ taskCause:String) {
-        self.taskCause = taskCause
+    func setCause(_ taskCause:String) {
+        self.cause = taskCause
     }
     
-    func setTaskAchievement(_ taskAchievement:Bool) {
-        self.taskAchievement = taskAchievement
+    func setOrder(_ order: Int) {
+        self.order = order
+    }
+    
+    func setAchievement(_ taskAchievement:Bool) {
+        self.isAchieve = taskAchievement
     }
     
     func setIsDeleted(_ isDeleted:Bool) {
@@ -67,11 +72,11 @@ class TaskData {
     }
     
     func setMeasuresData(_ measuresData:[String:[[String:Int]]]) {
-        self.measuresData = measuresData
+        self.measures = measuresData
     }
     
     func setMeasuresPriority(_ measuresPriority:String) {
-        self.measuresPriority = measuresPriority
+        self.measuresPriorityTitle = measuresPriority
     }
     
     // 新規課題用の課題IDを設定するメソッド
@@ -91,13 +96,13 @@ class TaskData {
                     let taskDataCollection = document.data()
                     // 課題IDの重複対策
                     // データベースの課題IDの最大値を取得
-                    if taskDataCollection["taskID"] as! Int  > TaskData.taskCount {
-                        TaskData.taskCount = taskDataCollection["taskID"] as! Int
+                    if taskDataCollection["taskID"] as! Int  > Task.count {
+                        Task.count = taskDataCollection["taskID"] as! Int
                     }
                 }
                 // 課題IDは課題IDの最大値＋１で設定
-                TaskData.taskCount += 1
-                self.taskID = TaskData.taskCount
+                Task.count += 1
+                self.taskID = Task.count
                 // 完了処理
                 completion()
             }
@@ -111,16 +116,20 @@ class TaskData {
         return self.taskID
     }
     
-    func getTaskTitle() -> String {
-        return self.taskTitle
+    func getTitle() -> String {
+        return self.title
     }
     
-    func getTaskCouse() -> String {
-        return self.taskCause
+    func getCause() -> String {
+        return self.cause
     }
     
-    func getTaskAchievement() -> Bool {
-        return self.taskAchievement
+    func getOrder() -> Int {
+        return self.order
+    }
+    
+    func getAchievement() -> Bool {
+        return self.isAchieve
     }
     
     func getIsDeleted() -> Bool {
@@ -140,12 +149,12 @@ class TaskData {
     }
     
     func getMeasuresData() -> [String:[[String:Int]]] {
-        return self.measuresData
+        return self.measures
     }
     
     func getMeasuresTitleArray() -> [String] {
         // キーだけの配列を作成（.keysで取得すると[""]が付いてしまうため、これを防止する）
-        let stringArray = Array(self.measuresData.keys)
+        let stringArray = Array(self.measures.keys)
         return stringArray
     }
     
@@ -154,7 +163,7 @@ class TaskData {
         let measuresTitle = getMeasuresTitleArray()[index]
         
         // 有効性コメントリストを取得
-        let measuresEffectivenessArray = self.measuresData[measuresTitle]!
+        let measuresEffectivenessArray = self.measures[measuresTitle]!
         
         // .keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
         let stringArray = Array(measuresEffectivenessArray[0].keys)
@@ -167,11 +176,11 @@ class TaskData {
         // index番目の対策タイトルを取得
         let measuresTitle = getMeasuresTitleArray()[index]
         // 有効性コメントリストを返却
-        return self.measuresData[measuresTitle]!
+        return self.measures[measuresTitle]!
     }
     
     func getMeasuresPriority() -> String {
-        return self.measuresPriority
+        return self.measuresPriorityTitle
     }
     
     
@@ -183,7 +192,7 @@ class TaskData {
         // Firebaseはリストされた配列を扱えないため、[対策の有効性コメント：ノートID]型のオブジェクトを作成
         let obj = [measuresEffectiveness : 0]
         // [対策タイトル：[対策の有効性コメント：ノートID]]の形式で追加
-        self.measuresData.updateValue([obj], forKey: measuresTitle)
+        self.measures.updateValue([obj], forKey: measuresTitle)
     }
     
     // 対策タイトルを更新するメソッド
@@ -195,18 +204,18 @@ class TaskData {
         self.deleteMeasures(at: index)
         
         // 新しい名前の対策を追加
-        self.measuresData.updateValue(effectivenessArray, forKey: newMeasuresTitle)
+        self.measures.updateValue(effectivenessArray, forKey: newMeasuresTitle)
     }
     
     // 有効性コメントを追加するメソッド（ノート追加時に使用するメソッド）
     func addEffectiveness(title measuresTitle:String,effectiveness measuresEffectiveness:String,noteID:Int) {
         let obj = [measuresEffectiveness : noteID]
-        self.measuresData[measuresTitle]?.insert(obj, at: 0)
+        self.measures[measuresTitle]?.insert(obj, at: 0)
     }
     
     // 対策を削除するメソッド
     func deleteMeasures(at index:Int) {
-        self.measuresData[getMeasuresTitleArray()[index]] = nil
+        self.measures[getMeasuresTitleArray()[index]] = nil
     }
     
     // 有効性を削除するメソッド
@@ -216,12 +225,12 @@ class TaskData {
         effectiveness.remove(at: index)
         
         // データ更新
-        self.measuresData.updateValue(effectiveness, forKey: title)
+        self.measures.updateValue(effectiveness, forKey: title)
     }
     
     // 解決、未解決を反転するメソッド
     func changeAchievement() {
-        self.taskAchievement.toggle()
+        self.isAchieve.toggle()
     }
     
 }

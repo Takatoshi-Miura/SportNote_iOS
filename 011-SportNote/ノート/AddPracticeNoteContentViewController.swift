@@ -120,7 +120,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // データ格納用
     var dataManager = DataManager()
-    var practiceNoteData = NoteData()
+    var practiceNoteData = Note()
     
     // 終了フラグ
     var saveFinished:Bool = false
@@ -469,7 +469,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 return nil
             }
         } else {
-            return "\(dataManager.taskDataArray[row].getTaskTitle())" // 課題Pickerの項目
+            return "\(dataManager.taskDataArray[row].getTitle())" // 課題Pickerの項目
         }
     }
     
@@ -610,7 +610,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             // 何もしない
         } else {
             // 既に表示している課題であれば追加しない
-            if self.practiceNoteData.getTaskTitle().firstIndex(of: dataManager.taskDataArray[taskIndex].getTaskTitle()) == nil {
+            if self.practiceNoteData.getTaskTitle().firstIndex(of: dataManager.taskDataArray[taskIndex].getTitle()) == nil {
                 // noteDataに追加
                 self.practiceNoteData.addTask(taskData: dataManager.taskDataArray[taskIndex])
                 
@@ -729,7 +729,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     // 課題タイトルの配列を作成
                     var taskTitleArray:[String] = []
                     for num in 0...self.dataManager.taskDataArray.count - 1 {
-                        taskTitleArray.append(self.dataManager.taskDataArray[num].getTaskTitle())
+                        taskTitleArray.append(self.dataManager.taskDataArray[num].getTitle())
                     }
                     
                     // 該当する課題データが格納されているindexを取得
@@ -781,7 +781,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // Firebaseの課題データを更新するメソッド
-    func updateTaskData(task taskData:TaskData) {
+    func updateTaskData(task taskData:Task) {
         dataManager.updateTaskData(taskData, {})
     }
     
@@ -790,7 +790,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     //MARK:- その他のメソッド
     
     // ノートデータのテキストをセットするメソッド
-    func setTextData(noteData note:NoteData) {
+    func setTextData(noteData note:Note) {
         self.physicalConditionTextView.text = note.getPhysicalCondition()
         self.purposeTextView.text = note.getPurpose()
         self.detailTextView.text = note.getDetail()
@@ -798,7 +798,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // ノートの日付をDatePickerにセットするメソッド
-    func setDatePicker(noteData note:NoteData) {
+    func setDatePicker(noteData note:Note) {
         // 日付をセット
         self.year  = note.getYear()
         self.month = note.getMonth()
@@ -816,7 +816,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // 天候データをweatherPickerにセットするメソッド
-    func setWeatherPicker(noteData note:NoteData) {
+    func setWeatherPicker(noteData note:Note) {
         // 気温をセット
         self.temperatureIndex = note.getTemperature() + 40
         self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)

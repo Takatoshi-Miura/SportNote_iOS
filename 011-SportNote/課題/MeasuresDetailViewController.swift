@@ -50,9 +50,9 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     //MARK:- 変数の宣言
     
-    var taskData = TaskData()               // 課題データ格納用
+    var taskData = Task()               // 課題データ格納用
     var indexPath = 0                       // 行番号格納用
-    var noteData = NoteData()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
+    var noteData = Note()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
     var previousControllerName:String = ""  // 前のViewController名
     
     

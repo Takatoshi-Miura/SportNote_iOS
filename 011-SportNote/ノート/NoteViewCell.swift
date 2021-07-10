@@ -22,7 +22,7 @@ class NoteViewCell: UITableViewCell {
     //MARK:- その他のメソッド
     
     // ラベルに表示するメソッド
-    func printNoteData(_ noteData:NoteData) {
+    func printNoteData(_ noteData:Note) {
         // ノートタイプアイコン
         if noteData.getNoteType() == "練習記録" {
             noteTypeImageView.image = UIImage(named: "practice")
