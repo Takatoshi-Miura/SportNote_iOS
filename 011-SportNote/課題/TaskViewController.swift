@@ -159,11 +159,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
      tableViewの初期設定
      */
     func setupTableView() {
-        // 編集ボタンの設定(複数選択可能)
-        tableView.allowsMultipleSelectionDuringEditing = true
-        
-        // データのないセルを非表示
-        tableView.tableFooterView = UIView()
+        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
+        tableView.tableFooterView = UIView()                    // データのないセルを非表示
     }
     
     override func viewWillAppear(_ animated: Bool) {

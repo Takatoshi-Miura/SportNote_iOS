@@ -12,6 +12,25 @@ import SVProgressHUD
 import GoogleMobileAds
 
 class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    //MARK:- 変数の宣言
+    
+    // データ格納用
+    var dataManager = DataManager()
+    
+    // テーブル用
+    var sectionTitle:[String] = ["フリーノート"]
+    var dataInSection:[[Note]] = [[]]
+    var sortedIndexPaths:[IndexPath] = []
+    var deleteFinished:Bool = false
+    var sectionIndex:Int = 0
+    var rowIndex:Int = 0
+    
+    // 広告用
+    let AdMobTest: Bool = false     // 広告テストモード
+    let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
+    let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
+    
 
     //MARK:- ライフサイクルメソッド
     
@@ -52,74 +71,68 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         let userData = UserData()
         userData.updateUserData()
         
-        // tableViewの設定
-        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
-        tableView.tableFooterView = UIView()                    // データのないセルを非表示
-        
-        // カスタムセルを登録
-        tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
-        
-        // ナビゲーションバーのボタンを宣言＆セット
-        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
-        
-        // 広告表示
-        self.displayAdMob()
-        
-        // データ取得
+        setupTableView()
+        setNavigationBarButtonDefault()
+        showAdMob()
         reloadData()
     }
     
-    
-    //MARK:- 変数の宣言
-    
-    // データ格納用
-    var dataManager = DataManager()
-    
-    // テーブル用
-    var sectionTitle:[String] = ["フリーノート"]
-    var dataInSection:[[Note]] = [[]]
-    var sortedIndexPaths:[IndexPath] = []
-    var deleteFinished:Bool = false
-    var sectionIndex:Int = 0
-    var rowIndex:Int = 0
-    
-    // ナビゲーションバー用のボタン
-    var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
-    var addButton:UIBarButtonItem!      // 追加ボタン
-    var calendarButton:UIBarButtonItem! // カレンダーボタン
-    
-    // 広告用
-    let AdMobTest:Bool = false          // 広告テストモード
-    let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
-    let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
-    
-    
-    //MARK:- UIの設定
-    
-    // テーブルビュー
-    @IBOutlet weak var tableView: UITableView!
-    
-    // 編集ボタンの処理
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        // 編集モード
-        if editing {
-            self.editButtonItem.title = "完了"
-            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton])
-        } else {
-            self.editButtonItem.title = "編集"
-            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
-        }
-        // 編集モード時のみ複数選択可能とする
-        tableView.isEditing = editing
-        tableView.reloadData()
+    /**
+     tableViewの初期設定
+     */
+    func setupTableView() {
+        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
+        tableView.tableFooterView = UIView()                    // データのないセルを非表示
+        tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
     }
     
-    // ゴミ箱ボタンの処理
-    @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
+    /**
+     通常時のNavigationBar設定
+     */
+    func setNavigationBarButtonDefault() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                        target: self,
+                                        action: #selector(addNote(_:)))
+        let calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"),
+                                             style: UIBarButtonItem.Style.plain,
+                                             target: self,
+                                             action: #selector(showCalendar(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton, calendarButton])
+    }
+    
+    /**
+     編集時のNavigationBar設定
+     */
+    func setNavigationBarButtonIsEditing() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                        target: self,
+                                        action: #selector(addNote(_:)))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
+                                           target: self,
+                                           action: #selector(deleteNote(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton, deleteButton])
+    }
+    
+    /**
+     ノートを追加(ノート追加画面に遷移)
+     */
+    @objc func addNote(_ sender: UIBarButtonItem) {
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
+        self.present(nextView, animated: true, completion: nil)
+    }
+    
+    /**
+     カレンダー表示
+     */
+    @objc func showCalendar(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "goCalendarViewController", sender: nil)
+    }
+    
+    /**
+     ノートを削除
+     */
+    @objc func deleteNote(_ sender: UIBarButtonItem) {
         // ノートが選択されていない時は何もしない
         guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
             return
@@ -149,20 +162,40 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
     }
     
-    // ノート追加ボタンの処理
-    @objc func addButtonTapped(_ sender: UIBarButtonItem) {
-        // ノート追加画面に遷移
-        let storyboard: UIStoryboard = self.storyboard!
-        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
-        self.present(nextView, animated: true, completion: nil)
+    /**
+     NavigationBarにボタンをセット
+     - Parameters:
+      - leftBar: 左側に表示するボタン
+      - rightBar: 右側に表示するボタン
+     */
+    func setNavigationBarButton(leftBar leftBarItems: [UIBarButtonItem],
+                                rightBar rightBarItems: [UIBarButtonItem])
+    {
+        navigationItem.leftBarButtonItems = leftBarItems
+        navigationItem.rightBarButtonItems = rightBarItems
     }
     
-    // カレンダーボタンの処理
-    @objc func calendarButtonTapped(_ sender: UIBarButtonItem) {
-        // カレンダー画面へ遷移
-        performSegue(withIdentifier: "goCalendarViewController", sender: nil)
-    }
     
+    //MARK:- UIの設定
+    
+    // テーブルビュー
+    @IBOutlet weak var tableView: UITableView!
+    
+    // 編集ボタンの処理
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        // 編集モード
+        if editing {
+            self.editButtonItem.title = "完了"
+            setNavigationBarButtonIsEditing()
+        } else {
+            self.editButtonItem.title = "編集"
+            setNavigationBarButtonDefault()
+        }
+        // 編集モード時のみ複数選択可能とする
+        tableView.isEditing = editing
+        tableView.reloadData()
+    }
     
     
     //MARK:- テーブルビューの設定
@@ -395,14 +428,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //MARK:- その他のメソッド
     
-    // ナビゲーションバーボタンをセットするメソッド
-    func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
-        navigationItem.leftBarButtonItems  = leftBarItems
-        navigationItem.rightBarButtonItems = rightBarItems
-    }
-    
     // 広告表示を行うメソッド
-    func displayAdMob() {
+    func showAdMob() {
         // バナー広告を宣言
         var admobView = GADBannerView()
         admobView = GADBannerView(adSize:kGADAdSizeBanner)
