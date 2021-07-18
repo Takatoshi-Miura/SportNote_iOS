@@ -728,6 +728,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 if cell.checkBox.isSelected {
                     // 課題タイトルの配列を作成
                     var taskTitleArray:[String] = []
+                    if self.dataManager.taskDataArray.count <= 0 {
+                        continue
+                    }
                     for num in 0...self.dataManager.taskDataArray.count - 1 {
                         taskTitleArray.append(self.dataManager.taskDataArray[num].getTitle())
                     }
@@ -754,10 +757,9 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         if previousControllerName == "PracticeNoteDetailViewController" {
             dataManager.updateNoteData(practiceNoteData, {
                 if self.previousControllerName == "PracticeNoteDetailViewController" {
-                    // ストーリーボードを取得
+                    // ノート画面に遷移
                     let storyboard: UIStoryboard = self.storyboard!
                     let nextView = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                    // ノート画面に遷移
                     self.present(nextView, animated: false, completion: nil)
                 }
             })
