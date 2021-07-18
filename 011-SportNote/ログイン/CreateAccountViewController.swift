@@ -90,9 +90,6 @@ class CreateAccountViewController: UIViewController {
                     return
                 }
             }
-            // ユーザーデータを削除
-            let userData = UserData()
-            userData.removeUserData()
             
             // FirebaseのユーザーIDをセット
             UserDefaultsKey.userID.set(value: Auth.auth().currentUser!.uid)
@@ -117,9 +114,6 @@ class CreateAccountViewController: UIViewController {
                 self.createNoteData(self.dataManager.noteDataArray, {
                     // 課題データを複製
                     self.createTaskData(self.dataManager.taskDataArray, {
-                        // ユーザーデータを作成
-                        let userData = UserData()
-                        userData.createUserData()
                         SVProgressHUD.showSuccess(withStatus: "引継ぎに成功しました")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                             // ノート画面へ遷移

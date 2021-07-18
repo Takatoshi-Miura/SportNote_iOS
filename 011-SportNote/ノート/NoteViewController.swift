@@ -42,11 +42,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
             UserDefaultsKey.firstLaunch.set(value: false)
             
-            // ユーザーデータを作成
-            let userData = UserData()
-            userData.createUserData()
-            UserDefaultsKey.userID.set(value: UserDefaults.standard.object(forKey: "userID") as! String)
-            
             // フリーノートデータ作成
             dataManager.createFreeNoteData({})
             
@@ -66,10 +61,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 UserDefaultsKey.agree.set(value: true)
             })
         }
-        
-        // ユーザーデータの更新(利用状況の把握)
-        let userData = UserData()
-        userData.updateUserData()
         
         setupTableView()
         setNavigationBarButtonDefault()

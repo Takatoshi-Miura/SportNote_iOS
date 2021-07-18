@@ -118,19 +118,11 @@ class LoginViewController: UIViewController {
             // ログイン成功を通知
             SVProgressHUD.showSuccess(withStatus: "ログインしました。")
             
-            // ユーザーデータを削除
-            let userData = UserData()
-            userData.removeUserData()
-            
             // UserDefaultsにユーザー情報を保存
             self.saveUserInfo(mail: address, password: pass)
             
             // メッセージが隠れてしまうため、遅延処理を行う
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                // ユーザーデータを更新
-                let userData = UserData()
-                userData.createUserData()
-                
                 // ノート画面に遷移
                 self.performSegue(withIdentifier: "goTabBarController", sender: nil)
             }
