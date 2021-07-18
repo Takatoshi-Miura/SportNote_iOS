@@ -174,6 +174,49 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationItem.rightBarButtonItems = rightBarItems
     }
     
+    /**
+     広告表示
+     */
+    func showAdMob() {
+        let AdMobTest: Bool = false     // 広告テストモード
+        let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
+        let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
+        
+        // バナー広告を宣言
+        var admobView = GADBannerView()
+        admobView = GADBannerView(adSize:kGADAdSizeBanner)
+        
+        // レイアウト調整(画面下部に設置)
+        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
+        admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
+        
+        // safeAreaの値を取得
+        let window = UIApplication.shared.connectedScenes
+                    .filter({$0.activationState == .foregroundActive})
+                    .map({$0 as? UIWindowScene})
+                    .compactMap({$0})
+                    .first?
+                    .windows
+                    .filter({$0.isKeyWindow})
+                    .first
+        let bottomInsets = window!.safeAreaInsets.bottom
+        if(bottomInsets >= 30.0){
+            admobView.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height - admobView.frame.height - 80)
+        }
+        
+        // テストモードの検出
+        if AdMobTest {
+            admobView.adUnitID = TEST_ID
+        } else {
+            admobView.adUnitID = AdMobID
+        }
+         
+        admobView.rootViewController = self
+        admobView.load(GADRequest())
+         
+        self.view.addSubview(admobView)
+    }
+    
     
     //MARK:- UIの設定
     
@@ -439,43 +482,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         dataManager.updateTargetData(targetData, {
             self.reloadData()
         })
-    }
-    
-    
-    
-    //MARK:- その他のメソッド
-    
-    // 広告表示を行うメソッド
-    func showAdMob() {
-        let AdMobTest: Bool = false     // 広告テストモード
-        let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
-        let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
-        
-        // バナー広告を宣言
-        var admobView = GADBannerView()
-        admobView = GADBannerView(adSize:kGADAdSizeBanner)
-        
-        // レイアウト調整(画面下部に設置)
-        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
-        admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
-        
-        // safeAreaの値を取得
-        let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets.bottom
-        if(safeAreaInsets! >= 30.0){
-            admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 80)
-        }
-        
-        // テストモードの検出
-        if AdMobTest {
-            admobView.adUnitID = TEST_ID
-        } else {
-            admobView.adUnitID = AdMobID
-        }
-         
-        admobView.rootViewController = self
-        admobView.load(GADRequest())
-         
-        self.view.addSubview(admobView)
     }
     
 }
