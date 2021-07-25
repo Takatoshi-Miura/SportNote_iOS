@@ -11,6 +11,12 @@ import Firebase
 import SVProgressHUD
 
 class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    //MARK:- 変数の宣言
+    
+    var dataManager = DataManager()
+    var index: Int = 0  // 行番号格納用
+    
 
     //MARK:- ライフサイクルメソッド
     
@@ -23,21 +29,13 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
     override func viewWillAppear(_ animated: Bool) {
         // 解決済みの課題データを取得
         dataManager.getResolvedTaskData({
-            // テーブルビューの更新
             self.tableView?.reloadData()
         })
     }
     
     
-    //MARK:- 変数の宣言
-    
-    var dataManager = DataManager()   // データ用
-    var indexPath:Int = 0             // 行番号格納用
-    
-    
     //MARK:- UIの設定
     
-    // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
     
@@ -49,21 +47,20 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         
         // タップしたセルの行番号を取得
-        self.indexPath = indexPath.row
+        self.index = indexPath.row
         
         // 詳細確認画面へ遷移
         performSegue(withIdentifier: "goResolvedTaskDetailViewController", sender: nil)
     }
     
-    // 解決済みのTaskDataArrayの項目数を返却
+    // 解決済みの課題数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.dataManager.taskDataArray.count
     }
     
-    // テーブルの行ごとのセルを返却する
+    // 解決済みの課題セルを返却
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 未解決の課題セルを返却
-        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "resolvedTaskCell", for: indexPath)
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "resolvedTaskCell", for: indexPath)
         cell.textLabel!.text = dataManager.taskDataArray[indexPath.row].getTitle()
         cell.detailTextLabel!.text = "原因：\(dataManager.taskDataArray[indexPath.row].getCause())"
         cell.detailTextLabel?.textColor = UIColor.systemGray
@@ -78,7 +75,7 @@ class ResolvedTaskViewController: UIViewController, UITableViewDelegate, UITable
         if segue.identifier == "goResolvedTaskDetailViewController" {
             // 表示する課題データを課題詳細確認画面へ渡す
             let taskDetailViewController = segue.destination as! TaskDetailViewController
-            taskDetailViewController.taskData = dataManager.taskDataArray[indexPath]
+            taskDetailViewController.task = dataManager.taskDataArray[index]
             taskDetailViewController.previousControllerName = "ResolvedTaskViewController"
         }
     }

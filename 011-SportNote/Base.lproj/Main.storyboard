@@ -1063,23 +1063,6 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="resolvedTaskCell" textLabel="u27-Rp-Tl6" style="IBUITableViewCellStyleDefault" id="sBh-pl-KjS">
-                                        <rect key="frame" x="0.0" y="80" width="320" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sBh-pl-KjS" id="BUE-jC-iLE">
-                                            <rect key="frame" x="0.0" y="0.0" width="294.5" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="u27-Rp-Tl6">
-                                                    <rect key="frame" x="16" y="0.0" width="270.5" height="43.5"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </prototypes>
                                 <sections/>
                                 <connections>
@@ -2792,7 +2775,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="A5N-jC-0n4"/>
         <segue reference="ILr-mH-cA9"/>
-        <segue reference="FjQ-4Y-Eao"/>
+        <segue reference="Yvf-Pz-j6e"/>
         <segue reference="p4p-t4-Yj4"/>
     </inferredMetricsTieBreakers>
     <resources>

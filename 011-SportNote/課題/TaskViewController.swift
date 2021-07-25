@@ -12,46 +12,167 @@ import SVProgressHUD
 
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK:- 変数の宣言
+    
+    var dataManager = DataManager()
+    var index: Int = 0  // 行番号格納用
+    
+    
     //MARK:- ライフサイクルメソッド
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // ナビゲーションバーボタン作成
-        addButton     = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-        resolveButton = UIBarButtonItem(image: UIImage(named: "check_on"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(resolveButtonTapped(_:)))
-        
-        // ナビゲーションバーのボタンをセット
-        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton])
-        
-        // 編集ボタンの設定(複数選択可能)
-        tableView.allowsMultipleSelectionDuringEditing = true
-        
-        // データのないセルを非表示
-        tableView.tableFooterView = UIView()
+        setNavigationBarButtonDefault()
+        setupTableView()
     }
     
     /**
-     ナビゲーションボタンをセット
+     通常時のNavigationBar設定
+     */
+    func setNavigationBarButtonDefault() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                        target: self,
+                                        action: #selector(addButtonTapped(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton])
+    }
+    
+    /**
+     編集時のNavigationBar設定
+     */
+    func setNavigationBarButtonIsEditing() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                        target: self,
+                                        action: #selector(addButtonTapped(_:)))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
+                                           target: self,
+                                           action: #selector(deleteButtonTapped(_:)))
+        let resolveButton = UIBarButtonItem(image: UIImage(named: "check_on"),
+                                            style: UIBarButtonItem.Style.plain,
+                                            target: self,
+                                            action: #selector(resolveButtonTapped(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton, deleteButton, resolveButton])
+    }
+    
+    @objc func addButtonTapped(_ sender: UIBarButtonItem) {
+        self.performSegue(withIdentifier: "goAddTaskViewController", sender: nil)
+    }
+    
+    @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
+        guard self.tableView.indexPathsForSelectedRows != nil else { return }
+        self.showDeleteTaskAlert(title: "課題を削除",
+                                 message: "選択された課題を削除します。\nよろしいですか？",
+                                 okAction:
+        {
+            self.deleteTasks()
+            self.setEditing(false, animated: true)
+        })
+    }
+    
+    /**
+     課題削除アラートを表示
+     - Parameters:
+      - title: アラートのタイトル
+      - message: アラートのメッセージ
+      - okAction: okタップ時の処理
+     */
+    func showDeleteTaskAlert(title: String, message: String, okAction: @escaping () -> ()) {
+        showDeleteAlert(title: title, message: message, okAction: okAction)
+    }
+    
+    /**
+     課題を複数個削除
+     */
+    func deleteTasks() {
+        // 配列の要素削除でindexの矛盾を防ぐため、降順にソートしてから削除
+        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else { return }
+        let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+        for indexPath in sortedIndexPaths {
+            deleteTask(indexPath)
+        }
+    }
+    
+    /**
+     課題を1つ削除
+     */
+    func deleteTask(_ indexPath: IndexPath) {
+        dataManager.taskDataArray[indexPath.row].setIsDeleted(true)
+        dataManager.updateTaskData(dataManager.taskDataArray[indexPath.row], {})
+        dataManager.taskDataArray.remove(at:indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+    }
+    
+    @objc func resolveButtonTapped(_ sender: UIBarButtonItem) {
+        guard self.tableView.indexPathsForSelectedRows != nil else { return }
+        self.showResolveTaskAlert({
+            self.resolveTasks()
+            self.setEditing(false, animated: true)
+        })
+    }
+    
+    /**
+     課題を解決済みにするアラートを表示
+     */
+    func showResolveTaskAlert(_ okAction: @escaping () -> ()) {
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {(action: UIAlertAction) in
+            okAction()
+        }
+        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
+        showAlert(title: "課題を解決済みにする", message: "選択された課題を解決済みにします。\nよろしいですか？", actions: [okAction,cancelAction])
+    }
+    
+    /**
+     選択された課題を解決済みにする
+     */
+    func resolveTasks() {
+        // 配列の要素削除でindexの矛盾を防ぐため、降順にソートしてから解決済みにする
+        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else { return }
+        let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
+        for indexPath in sortedIndexPaths {
+            resolveTask(indexPath)
+        }
+    }
+    
+    /**
+     課題を1つ解決済みにする
+     */
+    func resolveTask(_ indexPath: IndexPath) {
+        dataManager.taskDataArray[indexPath.row].changeAchievement()
+        dataManager.updateTaskData(dataManager.taskDataArray[indexPath.row], {})
+        dataManager.taskDataArray.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.right)
+    }
+    
+    /**
+     NavigationBarにボタンをセット
      - Parameters:
       - leftBar: 左側に表示するボタン
       - rightBar: 右側に表示するボタン
      */
-    func setNavigationBarButton(leftBar leftBarItems: [UIBarButtonItem], rightBar rightBarItems: [UIBarButtonItem]) {
-        navigationItem.leftBarButtonItems  = leftBarItems
+    func setNavigationBarButton(leftBar leftBarItems: [UIBarButtonItem],
+                                rightBar rightBarItems: [UIBarButtonItem])
+    {
+        navigationItem.leftBarButtonItems = leftBarItems
         navigationItem.rightBarButtonItems = rightBarItems
     }
     
+    /**
+     tableViewの初期設定
+     */
+    func setupTableView() {
+        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
+        tableView.tableFooterView = UIView()                    // データのないセルを非表示
+        tableView.register(UINib(nibName: "TaskCell", bundle: nil), forCellReuseIdentifier: "TaskCell")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        // 未解決課題データを取得
-        refreshTask()
+        getUnresolvedTask()
     }
     
     /**
-     リフレッシュ処理
+     未解決の課題を取得
      */
-    func refreshTask() {
+    func getUnresolvedTask() {
         dataManager.getUnresolvedTaskData({
             self.tableView?.reloadData()
             self.dataManager.sortTaskByOrder()
@@ -63,26 +184,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    //MARK:- 変数の宣言
-    
-    // データ
-    var dataManager = DataManager()
-    
-    // リフレッシュ機能用
-    fileprivate let refreshCtl = UIRefreshControl()
-    
-    // 行番号格納用
-    var indexPath: Int = 0
-    
-    // ナビゲーションバーのボタン
-    var deleteButton: UIBarButtonItem!   // ゴミ箱ボタン
-    var resolveButton: UIBarButtonItem!  // 解決済みボタン
-    var addButton: UIBarButtonItem!      // 課題追加ボタン
-    
-    
     //MARK:- UIの設定
     
-    // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
     
     // 解決済みの課題一覧
@@ -94,84 +197,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton,resolveButton])
+            setNavigationBarButtonIsEditing()
             self.editButtonItem.title = "完了"
         } else {
-            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton])
+            setNavigationBarButtonDefault()
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
     }
-    
-    // ゴミ箱ボタンの処理
-    @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
-        self.deleteRows()
-    }
-    
-    // 複数のセルを削除
-    func deleteRows() {
-        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
-            return
-        }
-        // OKボタン
-        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
-            let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-            // 選択された課題を削除する
-            for indexPathList in sortedIndexPaths {
-                self.dataManager.taskDataArray[indexPathList.row].setIsDeleted(true)
-                self.dataManager.updateTaskData(self.dataManager.taskDataArray[indexPathList.row], {})
-                self.dataManager.taskDataArray.remove(at: indexPathList.row)
-            }
-            // tableViewの行を削除
-            self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
-            // 編集状態を解除
-            self.setEditing(false, animated: true)
-        }
-        // CANCELボタン
-        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        showAlert(title: "課題を削除", message: "選択された課題を削除します。\nよろしいですか？", actions: [okAction,cancelAction])
-    }
-    
-    // 解決済みボタンの処理
-    @objc func resolveButtonTapped(_ sender: UIBarButtonItem) {
-        self.resolveRows()
-    }
-    
-    // 複数のセルを解決済みにする
-    func resolveRows() {
-        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
-            return
-        }
-        // OKボタンを宣言
-        let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // 配列の要素削除で、indexの矛盾を防ぐため、降順にソートする
-            let sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-            
-            // 選択された課題を解決済みにする
-            for indexPathList in sortedIndexPaths {
-                self.dataManager.taskDataArray[indexPathList.row].changeAchievement()
-                self.dataManager.updateTaskData( self.dataManager.taskDataArray[indexPathList.row], {})
-                self.dataManager.taskDataArray.remove(at: indexPathList.row)
-            }
-            
-            // tableViewの行を削除
-            self.tableView.deleteRows(at: sortedIndexPaths, with: UITableView.RowAnimation.automatic)
-            
-            // 編集状態を解除
-            self.setEditing(false, animated: true)
-        }
-        // CANCELボタン
-        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        showAlert(title: "課題を解決済みにする", message: "選択された課題を解決済みにします。\nよろしいですか？", actions: [okAction,cancelAction])
-    }
-    
-    // 課題追加ボタンの処理
-    @objc func addButtonTapped(_ sender: UIBarButtonItem) {
-        // 課題追加画面に遷移
-        self.performSegue(withIdentifier: "goAddTaskViewController", sender: nil)
-    }
-    
     
     
     //MARK:- テーブルビューの設定
@@ -206,70 +239,49 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // 課題詳細確認画面へ遷移
-            self.indexPath = indexPath.row
+            self.index = indexPath.row
             performSegue(withIdentifier: "goTaskDetailViewController", sender: nil)
         }
     }
     
     // セルを削除したときの処理（左スワイプ）
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // OKボタン
-            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-                // taskDataを更新
-                self.dataManager.taskDataArray[indexPath.row].setIsDeleted(true)
-                self.dataManager.updateTaskData( self.dataManager.taskDataArray[indexPath.row], {})
-                    
-                // taskDataArrayから削除
-                self.dataManager.taskDataArray.remove(at:indexPath.row)
-                    
-                // セルを削除
-                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
-            }
-            // CANCELボタン
-            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            showAlert(title: "課題を削除", message: "課題を削除します。\nよろしいですか？", actions: [okAction,cancelAction])
+            self.showDeleteTaskAlert(title: "課題を削除",
+                                     message: "「\(dataManager.taskDataArray[indexPath.row].getTitle())」\nを削除します。\nよろしいですか？",
+                                     okAction:
+            {
+                self.deleteTask(indexPath)
+            })
         }
     }
     
     // セルを解決済みにするときの処理（右スワイプ）
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        // アクションの定義
-        let resolveAction = UIContextualAction(style: .normal,title: "解決済み",handler: { (action: UIContextualAction, view: UIView, completion: (Bool) -> Void) in
-            // 解決済みにする
-            self.dataManager.taskDataArray[indexPath.row].changeAchievement()
-            self.dataManager.updateTaskData( self.dataManager.taskDataArray[indexPath.row], {})
-            
-            // taskDataArrayから削除
-            self.dataManager.taskDataArray.remove(at:indexPath.row)
-            
-            // セルをテーブルから削除
-            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.right)
-            
-            // 処理を実行完了した場合はtrue
+        let resolveAction = UIContextualAction(style: .normal, title: "解決済み", handler: { (action: UIContextualAction, view: UIView, completion: (Bool) -> Void) in
+            self.resolveTask(indexPath)
             completion(true)
         })
         resolveAction.backgroundColor = UIColor.systemBlue
-        
         return UISwipeActionsConfiguration(actions: [resolveAction])
     }
     
-    // 課題数を返却する
+    // 課題数を返却
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataManager.taskDataArray.count
     }
     
-    // セルを返却する
+    // 課題セルを取得
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 未解決の課題セルを取得する
-        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
-        cell.textLabel!.text = dataManager.taskDataArray[indexPath.row].getTitle()
-        cell.detailTextLabel!.text = "原因：\(dataManager.taskDataArray[indexPath.row].getCause())"
-        cell.detailTextLabel?.textColor = UIColor.systemGray
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! TaskCell
+        cell.setTaskData(dataManager.taskDataArray[indexPath.row])
+        cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator 
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 73
+    }
     
     
     //MARK:- 画面遷移
@@ -279,7 +291,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "goTaskDetailViewController" {
             // 表示する課題データを課題詳細確認画面へ渡す
             let taskDetailViewController = segue.destination as! TaskDetailViewController
-            taskDetailViewController.taskData = dataManager.taskDataArray[indexPath]
+            taskDetailViewController.task = dataManager.taskDataArray[index]
             taskDetailViewController.previousControllerName = "TaskViewController"
         } else if segue.identifier == "goResolvedTaskViewController" {
             // 解決済みの課題一覧画面へ遷移
@@ -289,7 +301,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     // TaskViewControllerに戻ったときの処理
     @IBAction func goToTaskViewController(_segue:UIStoryboardSegue) {
         dataManager.getUnresolvedTaskData({
-            // テーブルビューの更新
             self.tableView?.reloadData()
         })
     }

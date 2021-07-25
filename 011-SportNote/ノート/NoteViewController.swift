@@ -12,6 +12,21 @@ import SVProgressHUD
 import GoogleMobileAds
 
 class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    //MARK:- 変数の宣言
+    
+    var dataManager = DataManager()
+    
+    // テーブル用
+    var sectionTitle: [String] = ["フリーノート"]
+    var noteInSection: [[Note]] = [[]]
+    var selectedIndexPath: IndexPath = [0, 0]
+    
+    enum NoteType: Int {
+        case freeNote = 0
+        case practiceNote = 1
+    }
+    
 
     //MARK:- ライフサイクルメソッド
     
@@ -22,11 +37,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         if UserDefaultsKey.firstLaunch.bool() {
             // 2回目以降の起動では「firstLaunch」のkeyをfalseに
             UserDefaultsKey.firstLaunch.set(value: false)
-            
-            // ユーザーデータを作成
-            let userData = UserData()
-            userData.createUserData()
-            UserDefaultsKey.userID.set(value: UserDefaults.standard.object(forKey: "userID") as! String)
             
             // フリーノートデータ作成
             dataManager.createFreeNoteData({})
@@ -48,53 +58,162 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
             })
         }
         
-        // ユーザーデータの更新(利用状況の把握)
-        let userData = UserData()
-        userData.updateUserData()
-        
-        // tableViewの設定
-        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
-        tableView.tableFooterView = UIView()                    // データのないセルを非表示
-        
-        // カスタムセルを登録
-        tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
-        
-        // ナビゲーションバーのボタンを宣言＆セット
-        calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"), style:UIBarButtonItem.Style.plain, target:self, action: #selector(calendarButtonTapped(_:)))
-        addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped(_:)))
-        deleteButton  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonTapped(_:)))
-        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
-        
-        // 広告表示
-        self.displayAdMob()
-        
-        // データ取得
+        setupTableView()
+        setNavigationBarButtonDefault()
+        showAdMob()
         reloadData()
     }
     
+    /**
+     tableViewの初期設定
+     */
+    func setupTableView() {
+        tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
+        tableView.tableFooterView = UIView()                    // データのないセルを非表示
+        tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
+    }
     
-    //MARK:- 変数の宣言
+    /**
+     通常時のNavigationBar設定
+     */
+    func setNavigationBarButtonDefault() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                        target: self,
+                                        action: #selector(addNote(_:)))
+        let calendarButton = UIBarButtonItem(image: UIImage(systemName: "calendar"),
+                                             style: UIBarButtonItem.Style.plain,
+                                             target: self,
+                                             action: #selector(showCalendar(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton, calendarButton])
+    }
     
-    // データ格納用
-    var dataManager = DataManager()
+    /**
+     編集時のNavigationBar設定
+     */
+    func setNavigationBarButtonIsEditing() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                        target: self,
+                                        action: #selector(addNote(_:)))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
+                                           target: self,
+                                           action: #selector(deleteNotes(_:)))
+        setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton, deleteButton])
+    }
     
-    // テーブル用
-    var sectionTitle:[String] = ["フリーノート"]
-    var dataInSection:[[Note]] = [[]]
-    var sortedIndexPaths:[IndexPath] = []
-    var deleteFinished:Bool = false
-    var sectionIndex:Int = 0
-    var rowIndex:Int = 0
+    /**
+     ノートを追加(ノート追加画面に遷移)
+     */
+    @objc func addNote(_ sender: UIBarButtonItem) {
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
+        self.present(nextView, animated: true, completion: nil)
+    }
     
-    // ナビゲーションバー用のボタン
-    var deleteButton:UIBarButtonItem!   // ゴミ箱ボタン
-    var addButton:UIBarButtonItem!      // 追加ボタン
-    var calendarButton:UIBarButtonItem! // カレンダーボタン
+    /**
+     カレンダー表示
+     */
+    @objc func showCalendar(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "goCalendarViewController", sender: nil)
+    }
     
-    // 広告用
-    let AdMobTest:Bool = false          // 広告テストモード
-    let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
-    let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
+    /**
+     ノートを複数削除
+     */
+    @objc func deleteNotes(_ sender: UIBarButtonItem) {
+        guard let selectedIndexPaths = tableView.indexPathsForSelectedRows else {
+            return
+        }
+        showDeleteNoteAlert(title: "ノートを削除" ,
+                            message: "選択されたノートを削除します。よろしいですか？",
+                            okAction:
+        {
+            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
+            let sortedIndexPaths: [IndexPath] = selectedIndexPaths.sorted { $0.row > $1.row }
+            for indexPath in sortedIndexPaths {
+                self.deleteNote(indexPath)
+            }
+            self.setEditing(false, animated: true)
+        })
+    }
+    
+    /**
+     ノートを1つ削除
+     - Parameters:
+     - indexPath: 削除したいノートが格納されているindexPath
+     */
+    func deleteNote(_ indexPath: IndexPath) {
+        let note = noteInSection[indexPath.section][indexPath.row]
+        dataManager.deleteNoteData(note, {})
+        noteInSection[indexPath.section].remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+    }
+    
+    /**
+     削除アラートを表示
+     - Parameters:
+      - title: アラートのタイトル
+      - message: アラートのメッセージ
+      - okAction: okタップ時の処理
+     */
+    func showDeleteNoteAlert(title: String, message: String, okAction: @escaping () -> ()) {
+        showDeleteAlert(title: title, message: message, okAction: okAction)
+    }
+    
+    /**
+     NavigationBarにボタンをセット
+     - Parameters:
+      - leftBar: 左側に表示するボタン
+      - rightBar: 右側に表示するボタン
+     */
+    func setNavigationBarButton(leftBar leftBarItems: [UIBarButtonItem],
+                                rightBar rightBarItems: [UIBarButtonItem])
+    {
+        navigationItem.leftBarButtonItems = leftBarItems
+        navigationItem.rightBarButtonItems = rightBarItems
+    }
+    
+    /**
+     広告表示
+     */
+    func showAdMob() {
+        let AdMobTest: Bool = false     // 広告テストモード
+        let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
+        let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
+        
+        // バナー広告を宣言
+        var admobView = GADBannerView()
+        admobView = GADBannerView(adSize:kGADAdSizeBanner)
+        
+        // レイアウト調整(画面下部に設置)
+        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
+        admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
+        
+        // safeAreaの値を取得
+        let window = UIApplication.shared.connectedScenes
+                    .filter({$0.activationState == .foregroundActive})
+                    .map({$0 as? UIWindowScene})
+                    .compactMap({$0})
+                    .first?
+                    .windows
+                    .filter({$0.isKeyWindow})
+                    .first
+        let bottomInsets = window!.safeAreaInsets.bottom
+        if(bottomInsets >= 30.0){
+            admobView.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height - admobView.frame.height - 80)
+        }
+        
+        // テストモードの検出
+        if AdMobTest {
+            admobView.adUnitID = TEST_ID
+        } else {
+            admobView.adUnitID = AdMobID
+        }
+         
+        admobView.rootViewController = self
+        admobView.load(GADRequest())
+         
+        self.view.addSubview(admobView)
+    }
     
     
     //MARK:- UIの設定
@@ -105,92 +224,43 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // 編集ボタンの処理
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        // 編集モード
         if editing {
             self.editButtonItem.title = "完了"
-            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,deleteButton])
+            setNavigationBarButtonIsEditing()
         } else {
             self.editButtonItem.title = "編集"
-            self.setNavigationBarButton(leftBar: [editButtonItem], rightBar: [addButton,calendarButton])
+            setNavigationBarButtonDefault()
         }
         // 編集モード時のみ複数選択可能とする
         tableView.isEditing = editing
         tableView.reloadData()
     }
     
-    // ゴミ箱ボタンの処理
-    @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
-        // ノートが選択されていない時は何もしない
-        guard let selectedIndexPaths = self.tableView.indexPathsForSelectedRows else {
-            return
-        }
-        // OKボタン
-        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
-            self.sortedIndexPaths =  selectedIndexPaths.sorted { $0.row > $1.row }
-            
-            for num in 0...self.sortedIndexPaths.count - 1 {
-                // 最後の削除であればフラグをtrueにする
-                if num == (self.sortedIndexPaths.count - 1) {
-                    self.deleteFinished = true
-                    // 選択されたノートを削除
-                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
-                } else {
-                    // 選択されたノートを削除
-                    self.deleteNoteData(note: self.dataInSection[self.sortedIndexPaths[num][0]][self.sortedIndexPaths[num][1]])
-                }
-            }
-            // 編集状態を解除
-            self.setEditing(false, animated: true)
-        }
-        // CANCELボタン
-        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        // アラート表示
-        showAlert(title: "ノートを削除", message: "選択されたノートを削除します。よろしいですか？", actions: [okAction,cancelAction])
-    }
-    
-    // ノート追加ボタンの処理
-    @objc func addButtonTapped(_ sender: UIBarButtonItem) {
-        // ノート追加画面に遷移
-        let storyboard: UIStoryboard = self.storyboard!
-        let nextView = storyboard.instantiateViewController(withIdentifier: "AddViewController")
-        self.present(nextView, animated: true, completion: nil)
-    }
-    
-    // カレンダーボタンの処理
-    @objc func calendarButtonTapped(_ sender: UIBarButtonItem) {
-        // カレンダー画面へ遷移
-        performSegue(withIdentifier: "goCalendarViewController", sender: nil)
-    }
-    
-    
     
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataInSection[section].count     // 各セクションに含まれるノート数を返却
+        return noteInSection[section].count     // 各セクションに含まれるノート数を返却
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
-            case 0:
-                // フリーノートセルを返却
+        case NoteType.freeNote.rawValue:
                 let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "freeNoteCell", for: indexPath)
                 cell.textLabel!.text = dataManager.freeNoteData.getTitle()
                 cell.detailTextLabel!.text = dataManager.freeNoteData.getDetail()
                 cell.detailTextLabel?.textColor = UIColor.systemGray
                 return cell
             default:
-                // ノートセルを返却
                 let cell = tableView.dequeueReusableCell(withIdentifier: "noteViewCell", for: indexPath) as! NoteViewCell
-                cell.printNoteData(dataInSection[indexPath.section][indexPath.row])
+                cell.printNoteData(noteInSection[indexPath.section][indexPath.row])
                 return cell
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-            case 0:
+            case NoteType.freeNote.rawValue:
                 return 44   // セルのデフォルト高さ
             default:
                 return 60   // カスタムセルの高さ
@@ -207,36 +277,26 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
-            // 編集時の処理
         } else {
-            // 通常時の処理
             // タップしたときの選択色を消去
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             
             // 画面遷移
-            if indexPath.section == 0 {
-                // フリーノートセルがタップされたとき
+            if indexPath.section == NoteType.freeNote.rawValue {
                 performSegue(withIdentifier: "goFreeNoteViewController", sender: nil)
             } else {
-                // 選択されたIndexを取得
-                sectionIndex = indexPath.section
-                rowIndex = indexPath.row
-                
-                // ノートセルがタップされたとき
-                if dataInSection[indexPath.section][indexPath.row].getNoteType() == "練習記録" {
-                    // 練習ノートセル
+                selectedIndexPath = indexPath
+                if noteInSection[indexPath.section][indexPath.row].getNoteType() == "練習記録" {
                     performSegue(withIdentifier: "goPracticeNoteDetailViewController", sender: nil)
                 } else {
-                    // 大会ノートセル
                     performSegue(withIdentifier: "goCompetitionNoteDetailViewController", sender: nil)
                 }
             }
         }
     }
     
-    // セルの編集可否の設定
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 0 {
+        if indexPath.section == NoteType.freeNote.rawValue {
             return false    // フリーノートセルは編集不可
         } else {
             return true     // 他のノートセルは編集可能
@@ -245,25 +305,19 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // セルを削除したときの処理（左スワイプ）
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // OKボタン
-            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-                // ノートデータを削除
-                self.deleteFinished = true
-                self.deleteNoteData(note: self.dataInSection[indexPath.section][indexPath.row])
-            }
-            // CANCELボタン
-            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            showAlert(title: "ノートを削除", message: "\(dataInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？", actions: [okAction,cancelAction])
+            showDeleteNoteAlert(title: "ノートを削除",
+                                message: "\(noteInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？",
+                                okAction:
+            {
+                self.deleteNote(indexPath)
+            })
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // ビューを作成
         let view = UIView(frame: CGRect.zero)
-        
-        // セクションラベルの設定
         let label = UILabel(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 30))
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.text = "   \(sectionTitle[section])"
@@ -272,7 +326,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         label.textColor =  UIColor.label
         view.addSubview(label)
         
-        if section == 0 {
+        if section == NoteType.freeNote.rawValue {
             // フリーノートセクションは削除不可
         } else {
             // 目標セクション編集時の表示
@@ -282,30 +336,32 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 button.backgroundColor = UIColor.systemRed
                 button.setTitle("削除", for: .normal)
                 button.tag = section //ボタンにタグをつける
-                button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
+                button.addTarget(self, action: #selector(deleteTarget(sender:)), for: .touchUpInside)
                 view.addSubview(button)
             }
         }
         return view
     }
     
-    @objc func buttonTapped(sender:UIButton){
-        sectionIndex = sender.tag
-        // OKボタンを宣言
-        let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-            // ノートデータがない月のセクションであればセクションごと削除する
-            if self.dataInSection[self.sectionIndex].isEmpty == true {
-                self.dataInSection[self.sectionIndex - 1].removeAll()
-                self.dataManager.targetDataArray[self.sectionIndex - 1].setIsDeleted(true)
+    /**
+     目標を削除
+     */
+    @objc func deleteTarget(sender: UIButton){
+        selectedIndexPath.section = sender.tag
+        showDeleteNoteAlert(title: "目標を削除",
+                            message: "\(sectionTitle[selectedIndexPath.section])\nを削除します。よろしいですか？",
+                            okAction:
+        {
+            if self.noteInSection[self.selectedIndexPath.section].isEmpty {
+                // ノートがない月ならセクションごと削除
+                self.noteInSection[self.selectedIndexPath.section - 1].removeAll()
+                self.dataManager.targetDataArray[self.selectedIndexPath.section - 1].setIsDeleted(true)
             } else {
                 // ノートがある場合は目標テキストをクリア
-                self.dataManager.targetDataArray[self.sectionIndex - 1].setDetail("")
+                self.dataManager.targetDataArray[self.selectedIndexPath.section - 1].setDetail("")
             }
-            self.updateTargetData(target: self.dataManager.targetDataArray[self.sectionIndex - 1])
-        }
-        //CANCELボタンを宣言
-        let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        showAlert(title: "目標を削除", message: "\(self.sectionTitle[self.sectionIndex])\nを削除します。よろしいですか？", actions: [okAction,cancelAction])
+            self.updateTargetData(target: self.dataManager.targetDataArray[self.selectedIndexPath.section - 1])
+        })
     }
     
     
@@ -314,19 +370,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // 画面遷移時に呼ばれる処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goFreeNoteViewController" {
-            // 表示するデータを確認画面へ渡す
             let freeNoteViewController = segue.destination as! FreeNoteViewController
             freeNoteViewController.dataManager.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailViewController" {
-            // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
-            noteDetailViewController.noteData = dataInSection[sectionIndex][rowIndex]
+            noteDetailViewController.noteData = noteInSection[selectedIndexPath.section][selectedIndexPath.row]
         } else if segue.identifier == "goCompetitionNoteDetailViewController" {
-            // 表示するデータを確認画面へ渡す
             let noteDetailViewController = segue.destination as! CompetitionNoteDetailViewController
-            noteDetailViewController.noteData = dataInSection[sectionIndex][rowIndex]
+            noteDetailViewController.noteData = noteInSection[selectedIndexPath.section][selectedIndexPath.row]
         } else if segue.identifier == "goCalendarViewController" {
-            // データを遷移先に渡す
             let calendarViewController = segue.destination as! calendarViewController
             calendarViewController.dataManager.freeNoteData  = dataManager.freeNoteData
             calendarViewController.dataManager.noteDataArray = dataManager.noteDataArray
@@ -350,8 +402,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         dataManager.getTargetData({
             // TargetDataとNoteDataのどちらが先にロードが終わるか不明なため、両方に記述
             // セクションデータを再構築
-            self.reloadSectionData()
-            // テーブルビューを更新
+            self.resetSectionData()
             self.tableView?.reloadData()
         })
     }
@@ -360,10 +411,67 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     func loadNoteData() {
         dataManager.getNoteData({
             // セクションデータを再構築
-            self.reloadSectionData()
-            // テーブルビューを更新
+            self.resetSectionData()
             self.tableView?.reloadData()
         })
+    }
+    
+    /**
+     sectionTitleを初期化
+     */
+    func initSectionTitle() {
+        sectionTitle = ["フリーノート"]
+    }
+    
+    /**
+     noteInSectionを初期化
+     (フリーノート用に0番目にはダミーのノートを入れる)
+     */
+    func initNoteInSection() {
+        let dummyNoteData = Note()
+        self.noteInSection = [[]]
+        self.noteInSection[NoteType.freeNote.rawValue].append(dummyNoteData)
+    }
+    
+    /**
+     sectionTitleとnoteInSectionを再構成
+     */
+    func resetSectionData() {
+        initSectionTitle()
+        initNoteInSection()
+        
+        if dataManager.targetDataArray.isEmpty {
+        } else {
+            for target in dataManager.targetDataArray {
+                if target.getMonth() == 13 {
+                    // 年間目標セクション追加
+                    sectionTitle.append("\(target.getYear())年:\(target.getDetail())")
+                    noteInSection.append([])
+                } else {
+                    // 月間目標セクション追加
+                    sectionTitle.append("\(target.getMonth())月:\(target.getDetail())")
+                    noteInSection.append(getNoteArray(target))
+                }
+            }
+        }
+    }
+    
+    /**
+     目標データの年月と合致するノートを取得
+     - Parameters:
+     - target: 目標データ
+     - returns: ノートデータ
+     */
+    func getNoteArray(_ target: Target) -> [Note] {
+        var noteArray:[Note] = []
+        for note in dataManager.noteDataArray {
+            if note.getYear() == target.getYear()
+                && note.getMonth() == target.getMonth()
+            {
+                noteArray.append(note)
+            }
+        }
+        return noteArray
     }
     
     // データを取得
@@ -373,106 +481,11 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         loadNoteData()
     }
     
-    // ノートデータを削除
-    func deleteNoteData(note noteData:Note) {
-        dataManager.deleteNoteData(noteData, {
-            // 最後の削除であればリロード
-            if self.deleteFinished {
-                self.deleteFinished = false
-                self.reloadData()
-            }
-        })
-    }
-    
     // 目標を更新
     func updateTargetData(target targetData:Target) {
         dataManager.updateTargetData(targetData, {
             self.reloadData()
         })
-    }
-    
-    
-    
-    //MARK:- その他のメソッド
-    
-    // ナビゲーションバーボタンをセットするメソッド
-    func setNavigationBarButton(leftBar leftBarItems:[UIBarButtonItem],rightBar rightBarItems:[UIBarButtonItem]) {
-        navigationItem.leftBarButtonItems  = leftBarItems
-        navigationItem.rightBarButtonItems = rightBarItems
-    }
-    
-    // 広告表示を行うメソッド
-    func displayAdMob() {
-        // バナー広告を宣言
-        var admobView = GADBannerView()
-        admobView = GADBannerView(adSize:kGADAdSizeBanner)
-        
-        // レイアウト調整(画面下部に設置)
-        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
-        admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
-        
-        // safeAreaの値を取得
-        let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets.bottom
-        if(safeAreaInsets! >= 30.0){
-            admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 80)
-        }
-        
-        // テストモードの検出
-        if AdMobTest {
-            admobView.adUnitID = TEST_ID
-        } else {
-            admobView.adUnitID = AdMobID
-        }
-         
-        admobView.rootViewController = self
-        admobView.load(GADRequest())
-         
-        self.view.addSubview(admobView)
-    }
-    
-    // 初期化dataInSection
-    func dataInSectionInit() {
-        // フリーノート用に0番目にはダミーデータを入れる
-        let dummyNoteData = Note()
-        self.dataInSection = [[]]
-        self.dataInSection[0].append(dummyNoteData)
-    }
-    
-    // sectionTitleとdataInSectionを再構成するメソッド
-    func reloadSectionData() {
-        // データ初期化
-        self.sectionTitle = ["フリーノート"]
-        self.dataInSectionInit()
-        
-        // targetDataArrayが空の時は更新しない（エラー対策）
-        if self.dataManager.targetDataArray.isEmpty == false {
-            // テーブルデータ更新
-            for index in 0...(self.dataManager.targetDataArray.count - 1) {
-                // 年間目標と月間目標の区別
-                if self.dataManager.targetDataArray[index].getMonth() == 13 {
-                    // 年間目標セクション追加
-                    self.sectionTitle.append("\(self.dataManager.targetDataArray[index].getYear())年:\(self.dataManager.targetDataArray[index].getDetail())")
-                    self.dataInSection.append([])
-                } else {
-                    // 月間目標セクション追加
-                    self.sectionTitle.append("\(self.dataManager.targetDataArray[index].getMonth())月:\(self.dataManager.targetDataArray[index].getDetail())")
-                    
-                    // ノートデータ追加
-                    var noteArray:[Note] = []
-                    // noteDataArrayが空の時は更新しない（エラー対策）
-                    if self.dataManager.noteDataArray.isEmpty == false {
-                        // 年,月が合致するノート数だけappendする。
-                        for count in 0...(self.dataManager.noteDataArray.count - 1) {
-                            if self.dataManager.noteDataArray[count].getYear() == self.dataManager.targetDataArray[index].getYear()
-                                && self.dataManager.noteDataArray[count].getMonth() == self.dataManager.targetDataArray[index].getMonth() {
-                                noteArray.append(self.dataManager.noteDataArray[count])
-                            }
-                        }
-                    }
-                    self.dataInSection.append(noteArray)
-                }
-            }
-        }
     }
     
 }
