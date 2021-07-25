@@ -15,7 +15,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     //MARK:- 変数の宣言
     
     var dataManager = DataManager()
-    var taskData = Task()                   // 課題データの格納用
+    var task = Task()                       // 課題データの格納用
     var measuresTitleArray: [String] = []   // 対策タイトルの格納用
     var indexPath: IndexPath = [0, 0]       // 行番号格納用
     var previousControllerName: String = "" // 前のViewController名
@@ -30,9 +30,9 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         navigationController?.delegate = self
 
         // 受け取った課題データを表示する
-        taskTitleTextField.text = taskData.getTitle()
-        taskCauseTextView.text  = taskData.getCause()
-        measuresTitleArray = taskData.getMeasuresTitleArray()
+        taskTitleTextField.text = task.getTitle()
+        taskCauseTextView.text  = task.getCause()
+        measuresTitleArray = task.getMeasuresTitleArray()
         
         // テキストビューの枠線付け
         taskCauseTextView.layer.borderColor = UIColor.systemGray.cgColor
@@ -140,19 +140,19 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     // 解決済みにするボタンの処理
     @IBAction func resolvedButton(_ sender: Any) {
         // 解決済み or 未解決にする
-        taskData.changeAchievement()
+        task.changeAchievement()
         
         // データ更新
-        taskData.setTitle(taskTitleTextField.text!)
-        taskData.setCause(taskCauseTextView.text!)
-        taskData.setOrder(0)
-        dataManager.updateTaskData(taskData, {
+        task.setTitle(taskTitleTextField.text!)
+        task.setCause(taskCauseTextView.text!)
+        task.setOrder(0)
+        dataManager.updateTaskData(task, {
             // 前の画面に戻る
             self.navigationController?.popViewController(animated: true)
         })
     }
     
-    // 追加ボタンの処理
+    // 対策追加ボタンの処理
     @IBAction func addMeasuresButton(_ sender: Any) {
         // アラートを生成
         let alertController = UIAlertController(title: "対策を追加", message: "対策を入力してください", preferredStyle: UIAlertController.Style.alert)
@@ -162,16 +162,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         
         let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {(action: UIAlertAction) in
             if let textField = alertController.textFields?.first {
-                // 対策を追加
-                self.taskData.setTitle(self.taskTitleTextField.text!)
-                self.taskData.setCause(self.taskCauseTextView.text!)
-                self.taskData.setMeasuresPriority(textField.text!)
-                self.taskData.addMeasures(title: textField.text!, effectiveness: "連動したノートが表示されます")
-                self.dataManager.updateTaskData(self.taskData, {})
-                
-                // テーブルに反映
-                self.measuresTitleArray.insert(textField.text!, at: 0)
-                self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.right)
+                self.addMeasure(textField.text!)
             }
         }
         let cancelButton = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
@@ -182,22 +173,45 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         present(alertController, animated: true, completion: nil)
     }
     
+    /**
+     対策を追加
+     - Parameters:
+     - title: 対策名
+     */
+    func addMeasure(_ title: String) {
+        if measuresTitleArray.firstIndex(of: title) == nil {
+            self.task.setTitle(self.taskTitleTextField.text!)
+            self.task.setCause(self.taskCauseTextView.text!)
+            self.task.setMeasuresPriority(title)
+            self.task.addMeasures(title: title, effectiveness: "連動したノートが表示されます")
+            self.dataManager.updateTaskData(self.task, {
+                self.measuresTitleArray = self.task.getMeasuresTitleArray()
+                if let firstIndex = self.measuresTitleArray.firstIndex(of: title) {
+                    self.measuresTitleArray.insert(title, at: firstIndex)
+                    self.tableView.insertRows(at: [IndexPath(row: firstIndex, section: 0)], with: UITableView.RowAnimation.right)
+                }
+            })
+        } else {
+            SVProgressHUD.showError(withStatus: "同じ対策名が存在します。\n別の名前にしてください。")
+        }
+    }
+    
     
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskData.getMeasuresTitleArray().count   // 対策の数を返却
+        return task.getMeasuresTitleArray().count   // 対策の数を返却
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 対策セルを返却
         let cell = tableView.dequeueReusableCell(withIdentifier: "measuresCell", for: indexPath)
-        cell.textLabel!.text = taskData.getMeasuresTitleArray()[indexPath.row]
+        cell.textLabel!.text = task.getMeasuresTitleArray()[indexPath.row]
         cell.detailTextLabel?.textColor = UIColor.systemGray
-        if taskData.getMeasuresEffectivenessArray(at: indexPath.row).isEmpty {
+        if task.getEffectivenessComment(at: indexPath.row).isEmpty {
             cell.detailTextLabel?.text = "有効性："
         } else {
-            cell.detailTextLabel?.text = "有効性：\(self.taskData.getMeasuresEffectiveness(at: indexPath.row))"
+            cell.detailTextLabel?.text = "有効性：\(self.task.getEffectivenessComment(at: indexPath.row))"
         }
         return cell
     }
@@ -247,11 +261,11 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
       - indexPath: 削除する対策のIndexPath
      */
     func deleteMeasure(_ indexPath: IndexPath) {
-        taskData.deleteMeasures(at: indexPath.row)
-        if taskData.getMeasuresTitleArray()[indexPath.row] == taskData.getMeasuresPriority() {
-            taskData.setMeasuresPriority("")
+        if task.getMeasuresTitleArray()[indexPath.row] == task.getMeasuresPriority() {
+            task.setMeasuresPriority("")
         }
-        dataManager.updateTaskData(taskData, {})
+        task.deleteMeasures(at: indexPath.row)
+        dataManager.updateTaskData(task, {})
     }
     
     
@@ -261,9 +275,9 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskViewController {
             // 課題データを更新
-            taskData.setTitle(taskTitleTextField.text!)
-            taskData.setCause(taskCauseTextView.text!)
-            dataManager.updateTaskData(taskData, {})
+            task.setTitle(taskTitleTextField.text!)
+            task.setCause(taskCauseTextView.text!)
+            dataManager.updateTaskData(task, {})
         }
     }
     
@@ -272,8 +286,8 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         if segue.identifier == "goMeasuresDetailViewController" {
             // 課題データを対策詳細確認画面へ渡す
             let measuresDetailViewController = segue.destination as! MeasuresDetailViewController
-            measuresDetailViewController.taskData  = taskData
-            measuresDetailViewController.indexPath = indexPath.row
+            measuresDetailViewController.task  = task
+            measuresDetailViewController.indexPath = indexPath
             measuresDetailViewController.previousControllerName = self.previousControllerName
         }
     }

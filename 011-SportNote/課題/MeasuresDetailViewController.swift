@@ -12,28 +12,35 @@ import SVProgressHUD
 
 class MeasuresDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate {
     
+    //MARK:- 変数の宣言
+    
+    var task = Task()                       // 課題データ格納用
+    var indexPath: IndexPath = [0, 0]       // 行番号格納用
+    var noteData = Note()                   // ノートデータ格納用（有効性セルタップ時にデータを格納）
+    var previousControllerName: String = "" // 前のViewController名
+    
+    
     //MARK:- ライフサイクルメソッド
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // デリゲートの指定
         measuresTitleTextField.delegate = self
         navigationController?.delegate = self
         
         // チェックボックスの設定
-        self.checkButton.setImage(uncheckedImage, for: .normal)
-        self.checkButton.setImage(checkedImage, for: .selected)
+        checkButton.setImage(UIImage(named: "check_off"), for: .normal)
+        checkButton.setImage(UIImage(named: "check_on"), for: .selected)
         
         // データのないセルを非表示
         tableView.tableFooterView = UIView()
 
         // 対策データの表示
-        measuresTitleTextField.text = taskData.getMeasuresTitleArray()[indexPath]
+        measuresTitleTextField.text = task.getMeasuresTitleArray()[indexPath.row]
         
         // 最有力の対策ならチェックボックスを選択済みにする
-        if taskData.getMeasuresPriority() == taskData.getMeasuresTitleArray()[indexPath] {
-            self.checkButton.isSelected = !self.checkButton.isSelected
+        if task.getMeasuresPriority() == task.getMeasuresTitleArray()[indexPath.row] {
+            checkButton.isSelected = !checkButton.isSelected
         }
         
         // 解決済みの課題の場合の設定
@@ -46,33 +53,19 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         measuresTitleTextField.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
     }
     
-    
-    
-    //MARK:- 変数の宣言
-    
-    var taskData = Task()               // 課題データ格納用
-    var indexPath = 0                       // 行番号格納用
-    var noteData = Note()               // ノートデータ格納用（有効性セルタップ時にデータを格納）
-    var previousControllerName:String = ""  // 前のViewController名
-    
+    @objc func tapOkButton(_ sender: UIButton){
+        // キーボードを閉じる
+        self.view.endEditing(true)
+    }
     
     
     //MARK:- UIの設定
     
-    // テキスト
     @IBOutlet weak var measuresTitleTextField: UITextField!
-    
-    // テーブルビュー
     @IBOutlet weak var tableView: UITableView!
-    
-    // チェックボックス
     @IBOutlet weak var checkButton: UIButton!
-    private let checkedImage = UIImage(named: "check_on")
-    private let uncheckedImage = UIImage(named: "check_off")
     
-    // チェックボックスがタップされた時の処理
     @IBAction func checkButtonTap(_ sender: Any) {
-        // 解決済みの課題の場合の設定
         if previousControllerName == "ResolvedTaskViewController" {
             // 編集不可能
         } else {
@@ -82,33 +75,25 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     }
     
     
-    
     //MARK:- テーブルビューの設定
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 有効性コメント数を返却
-        if self.taskData.getMeasuresEffectivenessArray(at: indexPath).isEmpty {
+        let measuresEffectiveness: [[String: Int]] = task.getMeasuresEffectivenessArray(at: indexPath.row)
+        if measuresEffectiveness.isEmpty {
             return 0
         } else {
-            return self.taskData.getMeasuresEffectivenessArray(at: indexPath).count
+            return measuresEffectiveness.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // セルを取得
-        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
-        
-        // [有効性コメント:ノートID]配列を取得
-        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(at: self.indexPath)
-        
-        // 有効性コメントのみの配列を作成
-        var stringArray:[String] = []
-        for num in 0...effectivenessArray.count - 1 {
-            stringArray.append(contentsOf: effectivenessArray[num].keys)
+        // 連動したノートのセルを取得
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
+        let measuresEffectivenessComments = task.getEffectivenessComments(at: self.indexPath.row)
+        if measuresEffectivenessComments.count > 0 {
+            cell.textLabel!.text = "\(measuresEffectivenessComments[indexPath.row])"
         }
-        
-        // 有効性コメントを取得＆返却
-        cell.textLabel!.text = "\(stringArray[indexPath.row])"
         cell.textLabel?.numberOfLines = 0
         return cell
     }
@@ -117,25 +102,27 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
         // タップしたときの選択色を消去
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         
-        // [有効性コメント:ノートID]配列を取得
-        let effectivenessArray = self.taskData.getMeasuresEffectivenessArray(at: self.indexPath)
-        
-        // 有効性コメントのみの配列を作成
-        var stringArray:[String] = []
-        for num in 0...effectivenessArray.count - 1 {
-            stringArray.append(contentsOf: effectivenessArray[num].keys)
+        // 連動するノートを取得
+        let effectivenessComments = task.getEffectivenessComments(at: self.indexPath.row)
+        if effectivenessComments.count > 0 {
+            let comment = effectivenessComments[indexPath.row]
+            if let noteID = task.getEffectivenessNoteID(at: self.indexPath.row, indexPath.row, comment) {
+                loadNoteData(noteID)
+            }
         }
-        
-        // タップされた有効性コメントを取得
-        let comment:String = stringArray[indexPath.row]
-        
-        // ノートIDが存在をチェック
-        if effectivenessArray[indexPath.row][comment] == 0 {
-            // ノートIDがゼロなら何もしない
-        } else {
-            // ノートデータを取得
-            loadNoteData(effectivenessArray[indexPath.row][comment]!)
-        }
+    }
+    
+    /**
+     連動するノートを取得＆遷移
+     - Parameters:
+     - noteID: ノートID
+     */
+    func loadNoteData(_ noteID: Int) {
+        let dataManager = DataManager()
+        dataManager.getNoteData(noteID, {
+            self.noteData = dataManager.noteDataArray[0]
+            self.performSegue(withIdentifier: "goToPracticeNoteDetailViewController", sender: nil)
+        })
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -149,28 +136,32 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // セルを削除したときの処理（左スワイプ）
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // 削除処理かどうかの判定
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            // OKボタン
-            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
+            showDeleteEffectivenessAlert({
                 // 有効性データを削除
-                let effectiveness = self.taskData.getMeasuresEffectivenessArray(at: self.indexPath)
-                let title = self.taskData.getMeasuresTitleArray()[self.indexPath]
-                self.taskData.deleteEffectiveness(measuresTitle: title, effectivenessArray: effectiveness, at: indexPath.row)
-                // データを更新
-                self.updateTaskData()
-            }
-            // CANCELボタン
-            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            showAlert(title: "有効性コメントを削除", message: "コメントを削除します。よろしいですか？", actions: [okAction,cancelAction])
+                let effectiveness = self.task.getMeasuresEffectivenessArray(at: self.indexPath.row)
+                let title = self.task.getMeasuresTitleArray()[self.indexPath.row]
+                self.task.deleteEffectiveness(measuresTitle: title, effectivenessArray: effectiveness, at: indexPath.row)
+                let dataManager = DataManager()
+                dataManager.updateTaskData(self.task, {
+                    tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+                })
+            })
         }
     }
     
-    // deleteの表示名を変更
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "削除"
+    /**
+     有効性コメント削除アラートを表示
+     - Parameters:
+      - okAction: okタップ時の処理
+     */
+    func showDeleteEffectivenessAlert(_ okAction: @escaping () -> ()) {
+        let okAction = UIAlertAction(title: "削除", style: UIAlertAction.Style.destructive) {(action: UIAlertAction) in
+            okAction()
+        }
+        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
+        showAlert(title: "有効性コメントを削除", message: "コメントを削除します。よろしいですか？", actions: [okAction, cancelAction])
     }
-    
     
     
     //MARK:- 画面遷移
@@ -178,9 +169,34 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         if viewController is TaskDetailViewController {
-            // データ更新
             updateTaskData()
         }
+    }
+    
+    /**
+     対策データを更新
+     */
+    func updateTaskData() {
+        // 同じ対策名の登録がないか確認
+        for num in 0...task.getMeasuresTitleArray().count - 1 {
+            if num == indexPath.row {
+                // 判定しない
+            } else {
+                // 対策名被りのチェック
+                if measuresTitleTextField.text == task.getMeasuresTitleArray()[num] {
+                    SVProgressHUD.showError(withStatus: "同じ対策名が存在します。\n別の名前にしてください。")
+                    return
+                }
+            }
+        }
+        task.updateMeasuresTitle(newTitle: measuresTitleTextField.text!, at: indexPath.row)
+        if self.checkButton.isSelected {
+            task.setMeasuresPriority(measuresTitleTextField.text!)
+        }
+        
+        // データを更新
+        let dataManager = DataManager()
+        dataManager.updateTaskData(self.task, {})
     }
     
     // 画面遷移時に呼ばれる処理
@@ -190,67 +206,6 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
             noteDetailViewController.noteData = self.noteData
         }
-    }
-    
-    
-    
-    //MARK:- データベース関連
-    
-    // Firebaseの課題データを更新するメソッド
-    func updateTaskData() {
-        // 同じ対策名の登録がないか確認
-        var measuresTitleCheck:Bool = false
-        for num in 0...taskData.getMeasuresTitleArray().count - 1 {
-            if num == indexPath {
-                // 判定しない
-            } else {
-                // 対策名被りのチェック
-                if measuresTitleTextField.text == taskData.getMeasuresTitleArray()[num] {
-                    measuresTitleCheck = true
-                }
-            }
-        }
-        
-        // 同じ対策名の登録があった場合
-        if measuresTitleCheck == true {
-            SVProgressHUD.showError(withStatus: "同じ対策名が存在します。\n別の名前にしてください。")
-            return
-        } else {
-            // 対策を更新
-            taskData.updateMeasuresTitle(newTitle: measuresTitleTextField.text!, at: indexPath)
-        }
-        
-        // チェックボックスが選択されている場合は、この対策を最有力にする
-        if self.checkButton.isSelected {
-            taskData.setMeasuresPriority(measuresTitleTextField.text!)
-        }
-        
-        // データを更新
-        let dataManager = DataManager()
-        dataManager.updateTaskData(self.taskData, {
-            self.tableView.reloadData()
-        })
-    }
-    
-    // Firebaseから指定したノートIDのデータを取得するメソッド
-    func loadNoteData(_ noteID:Int) {
-        let dataManager = DataManager()
-        dataManager.getNoteData(noteID, {
-            // ノートデータ取得
-            self.noteData = dataManager.noteDataArray[0]
-            // ノート詳細確認画面へ遷移
-            self.performSegue(withIdentifier: "goToPracticeNoteDetailViewController", sender: nil)
-        })
-    }
-    
-    
-    
-    //MARK:- その他のメソッド
-    
-    // OKボタンの処理
-    @objc func tapOkButton(_ sender: UIButton){
-        // キーボードを閉じる
-        self.view.endEditing(true)
     }
 
 }

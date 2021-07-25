@@ -158,20 +158,6 @@ class Task {
         return stringArray
     }
     
-    func getMeasuresEffectiveness(at index:Int) -> String {
-        // index番目の対策タイトルを取得
-        let measuresTitle = getMeasuresTitleArray()[index]
-        
-        // 有効性コメントリストを取得
-        let measuresEffectivenessArray = self.measures[measuresTitle]!
-        
-        // .keysのまま表示すると [""]が表示されるため、キーだけの配列を作成
-        let stringArray = Array(measuresEffectivenessArray[0].keys)
-        
-        // 先頭の有効性コメントを返却
-        return stringArray[0]
-    }
-    
     func getMeasuresEffectivenessArray(at index:Int) -> [[String:Int]] {
         // index番目の対策タイトルを取得
         let measuresTitle = getMeasuresTitleArray()[index]
@@ -183,6 +169,53 @@ class Task {
         return self.measuresPriorityTitle
     }
     
+    /**
+     最新の有効性コメントを取得
+     - Parameters:
+    　- index: 取得したいコメントのIndex
+     - Returns:最新の有効性コメント
+     */
+    func getEffectivenessComment(at index: Int) -> String {
+        let comments = getEffectivenessComments(at: index)
+        if comments.count == 0 {
+            return ""
+        } else {
+            return comments[0]
+        }
+    }
+    
+    /**
+     有効性コメント配列を取得
+     - Parameters:
+    　- index: 取得したいコメントのIndex
+     - Returns: 有効性コメント配列
+     */
+    func getEffectivenessComments(at index: Int) -> [String] {
+        let measuresEffectiveness: [[String: Int]] = getMeasuresEffectivenessArray(at: index)
+        var measuresEffectivenessComments: [String] = []
+        for effectiveness in measuresEffectiveness {
+            measuresEffectivenessComments.append(contentsOf: effectiveness.keys)
+        }
+        return measuresEffectivenessComments
+    }
+    
+    /**
+     有効性コメントと連動するノートIDを取得
+     - Parameters:
+      - measureIndex: 対策のIndex
+      - effectivenessIndex: 有効性コメントのIndex
+      - effectivenessComment: 取得したいノートと連動している有効性コメント
+     - Returns: ノートID(連動するノートが無ければnil)
+     */
+    func getEffectivenessNoteID(at measureIndex: Int , _ effectivenessIndex: Int, _ effectivenessComment: String) -> Int? {
+        let measuresEffectiveness: [[String: Int]] = getMeasuresEffectivenessArray(at: measureIndex)
+        let noteID = measuresEffectiveness[effectivenessIndex][effectivenessComment]
+        if noteID == 0 {
+            return nil
+        } else {
+            return noteID
+        }
+    }
     
     
     //MARK:- その他のメソッド

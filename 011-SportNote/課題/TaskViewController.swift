@@ -283,7 +283,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "goTaskDetailViewController" {
             // 表示する課題データを課題詳細確認画面へ渡す
             let taskDetailViewController = segue.destination as! TaskDetailViewController
-            taskDetailViewController.taskData = dataManager.taskDataArray[index]
+            taskDetailViewController.task = dataManager.taskDataArray[index]
             taskDetailViewController.previousControllerName = "TaskViewController"
         } else if segue.identifier == "goResolvedTaskViewController" {
             // 解決済みの課題一覧画面へ遷移
