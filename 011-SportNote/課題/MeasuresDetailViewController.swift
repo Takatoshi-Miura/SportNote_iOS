@@ -156,11 +156,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
       - okAction: okタップ時の処理
      */
     func showDeleteEffectivenessAlert(_ okAction: @escaping () -> ()) {
-        let okAction = UIAlertAction(title: "削除", style: UIAlertAction.Style.destructive) {(action: UIAlertAction) in
-            okAction()
-        }
-        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
-        showAlert(title: "有効性コメントを削除", message: "コメントを削除します。よろしいですか？", actions: [okAction, cancelAction])
+        showDeleteAlert(title: "有効性コメントを削除", message: "コメントを削除します。よろしいですか？", okAction: okAction)
     }
     
     

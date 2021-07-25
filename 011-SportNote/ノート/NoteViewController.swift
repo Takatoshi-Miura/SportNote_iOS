@@ -15,7 +15,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //MARK:- 変数の宣言
     
-    // データ格納用
     var dataManager = DataManager()
     
     // テーブル用
@@ -124,14 +123,17 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let selectedIndexPaths = tableView.indexPathsForSelectedRows else {
             return
         }
-        showDeleteAlert({
+        showDeleteNoteAlert(title: "ノートを削除" ,
+                            message: "選択されたノートを削除します。よろしいですか？",
+                            okAction:
+        {
             // 配列の要素削除で、indexのずれを防ぐため、降順にソートする
             let sortedIndexPaths: [IndexPath] = selectedIndexPaths.sorted { $0.row > $1.row }
             for indexPath in sortedIndexPaths {
                 self.deleteNote(indexPath)
             }
             self.setEditing(false, animated: true)
-        },"ノートを削除" , "選択されたノートを削除します。よろしいですか？")
+        })
     }
     
     /**
@@ -149,16 +151,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     /**
      削除アラートを表示
      - Parameters:
-      - okAction: okタップ時の処理
       - title: アラートのタイトル
       - message: アラートのメッセージ
+      - okAction: okタップ時の処理
      */
-    func showDeleteAlert(_ okAction: @escaping () -> (), _ title: String, _ message: String) {
-        let okAction = UIAlertAction(title: "削除", style: UIAlertAction.Style.destructive) {(action: UIAlertAction) in
-            okAction()
-        }
-        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
-        showAlert(title: title, message: message, actions: [okAction, cancelAction])
+    func showDeleteNoteAlert(title: String, message: String, okAction: @escaping () -> ()) {
+        showDeleteAlert(title: title, message: message, okAction: okAction)
     }
     
     /**
@@ -308,9 +306,12 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     // セルを削除したときの処理（左スワイプ）
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            showDeleteAlert({
+            showDeleteNoteAlert(title: "ノートを削除",
+                                message: "\(noteInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？",
+                                okAction:
+            {
                 self.deleteNote(indexPath)
-            }, "ノートを削除", "\(noteInSection[indexPath.section][indexPath.row].getCellTitle())\nを削除します。よろしいですか？")
+            })
         }
     }
     
@@ -347,7 +348,10 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
      */
     @objc func deleteTarget(sender: UIButton){
         selectedIndexPath.section = sender.tag
-        showDeleteAlert({
+        showDeleteNoteAlert(title: "目標を削除",
+                            message: "\(sectionTitle[selectedIndexPath.section])\nを削除します。よろしいですか？",
+                            okAction:
+        {
             if self.noteInSection[self.selectedIndexPath.section].isEmpty {
                 // ノートがない月ならセクションごと削除
                 self.noteInSection[self.selectedIndexPath.section - 1].removeAll()
@@ -357,7 +361,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.dataManager.targetDataArray[self.selectedIndexPath.section - 1].setDetail("")
             }
             self.updateTargetData(target: self.dataManager.targetDataArray[self.selectedIndexPath.section - 1])
-        }, "目標を削除", "\(sectionTitle[selectedIndexPath.section])\nを削除します。よろしいですか？")
+        })
     }
     
     

@@ -248,11 +248,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
       - okAction: okタップ時の処理
      */
     func showDeleteMeasureAlert(_ okAction: @escaping () -> ()) {
-        let okAction = UIAlertAction(title: "削除", style: UIAlertAction.Style.destructive) {(action: UIAlertAction) in
-            okAction()
-        }
-        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
-        showAlert(title: "対策を削除", message: "対策を削除します。よろしいですか？", actions: [okAction, cancelAction])
+        showDeleteAlert(title: "対策を削除", message: "対策を削除します。よろしいですか？", okAction: okAction)
     }
     
     /**

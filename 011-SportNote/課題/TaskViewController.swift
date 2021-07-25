@@ -60,7 +60,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc func deleteButtonTapped(_ sender: UIBarButtonItem) {
         guard self.tableView.indexPathsForSelectedRows != nil else { return }
-        self.showDeleteTaskAlert({
+        self.showDeleteTaskAlert(title: "課題を削除",
+                                 message: "選択された課題を削除します。\nよろしいですか？",
+                                 okAction:
+        {
             self.deleteTasks()
             self.setEditing(false, animated: true)
         })
@@ -69,14 +72,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     /**
      課題削除アラートを表示
      - Parameters:
+      - title: アラートのタイトル
+      - message: アラートのメッセージ
       - okAction: okタップ時の処理
      */
-    func showDeleteTaskAlert(_ okAction: @escaping () -> ()) {
-        let okAction = UIAlertAction(title: "削除", style: UIAlertAction.Style.destructive) {(action: UIAlertAction) in
-            okAction()
-        }
-        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
-        showAlert(title: "課題を削除", message: "選択された課題を削除します。\nよろしいですか？", actions: [okAction, cancelAction])
+    func showDeleteTaskAlert(title: String, message: String, okAction: @escaping () -> ()) {
+        showDeleteAlert(title: title, message: message, okAction: okAction)
     }
     
     /**
@@ -245,7 +246,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     // セルを削除したときの処理（左スワイプ）
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            self.showDeleteTaskAlert({
+            self.showDeleteTaskAlert(title: "課題を削除",
+                                     message: "「\(dataManager.taskDataArray[indexPath.row].getTitle())」\nを削除します。\nよろしいですか？",
+                                     okAction:
+            {
                 self.deleteTask(indexPath)
             })
         }

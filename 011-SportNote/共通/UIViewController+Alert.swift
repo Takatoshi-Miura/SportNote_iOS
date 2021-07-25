@@ -26,6 +26,21 @@ public extension UIViewController {
     }
     
     /**
+     削除アラートを表示
+     - Parameters:
+      - title: タイトル
+      - message: 説明文
+      - actions: [okAction、cancelAction]等
+     */
+    func showDeleteAlert(title: String, message: String, okAction: @escaping () -> ()) {
+        let okAction = UIAlertAction(title: "削除", style: UIAlertAction.Style.destructive) {(action: UIAlertAction) in
+            okAction()
+        }
+        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
+        showAlert(title: title, message: message, actions: [okAction, cancelAction])
+    }
+    
+    /**
      テキストエリア付きアラートを表示
      - Parameters:
       - title: タイトル
