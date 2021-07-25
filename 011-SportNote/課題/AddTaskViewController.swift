@@ -58,10 +58,7 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         
         let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {(action: UIAlertAction) in
             if let textField = alertController.textFields?.first {
-                // 最有力の対策に設定
-                self.measuresPriorityTitle = textField.text!
-                self.measuresTitleArray.insert(textField.text!, at: 0)
-                self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.right)
+                self.addMeasure(textField.text!)
             }
         }
         let cancelButton = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
@@ -70,6 +67,21 @@ class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewD
         alertController.addAction(cancelButton)
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    /**
+     対策を追加
+     - Parameters:
+     - title: 対策名
+     */
+    func addMeasure(_ title: String) {
+        if measuresTitleArray.firstIndex(of: title) == nil {
+            measuresPriorityTitle = title
+            measuresTitleArray.insert(title, at: 0)
+            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.right)
+        } else {
+            SVProgressHUD.showError(withStatus: "同じ対策名が存在します。\n別の名前にしてください。")
+        }
     }
     
     // 戻るボタンの処理
