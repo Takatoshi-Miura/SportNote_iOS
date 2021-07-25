@@ -191,6 +191,7 @@ class Task {
     func addMeasures(title measuresTitle:String,effectiveness measuresEffectiveness:String) {
         // Firebaseはリストされた配列を扱えないため、[対策の有効性コメント：ノートID]型のオブジェクトを作成
         let obj = [measuresEffectiveness : 0]
+        
         // [対策タイトル：[対策の有効性コメント：ノートID]]の形式で追加
         self.measures.updateValue([obj], forKey: measuresTitle)
     }

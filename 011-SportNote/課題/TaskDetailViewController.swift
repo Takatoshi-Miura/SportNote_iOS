@@ -11,20 +11,27 @@ import Firebase
 import SVProgressHUD
 
 class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate {
+    
+    //MARK:- 変数の宣言
+    
+    var dataManager = DataManager()
+    var taskData = Task()                   // 課題データの格納用
+    var measuresTitleArray: [String] = []   // 対策タイトルの格納用
+    var indexPath: IndexPath = [0, 0]       // 行番号格納用
+    var previousControllerName: String = "" // 前のViewController名
+    var textFrame_y: CGFloat = 0.0          // textのY座標
+    
 
     //MARK:- ライフサイクルメソッド
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // デリゲートの指定
         navigationController?.delegate = self
 
         // 受け取った課題データを表示する
         taskTitleTextField.text = taskData.getTitle()
         taskCauseTextView.text  = taskData.getCause()
-        
-        // TaskViewControllerから受け取った課題データの対策を取得
         measuresTitleArray = taskData.getMeasuresTitleArray()
         
         // テキストビューの枠線付け
@@ -54,267 +61,54 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         taskCauseTextView.inputAccessoryView = taskTitleTextField.inputAccessoryView
     }
     
+    @objc func tapOkButton(_ sender: UIButton){
+        // キーボードを閉じる
+        self.view.endEditing(true)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        self.tableView?.reloadData()
+        tableView?.reloadData()
         
-        // デリゲートの設定
         taskTitleTextField.delegate = self
         taskCauseTextView.delegate = self
         
-        // キーボードでテキストフィールドが隠れない設定
-        self.configureObserver()
+        addKeyboadObserver()
     }
     
-    
-    
-    //MARK:- 変数の宣言
-    
-    var dataManager = DataManager()
-    var taskData = Task()               // 課題データの格納用
-    var measuresTitleArray:[String] = []    // 対策タイトルの格納用
-    var indexPath:Int = 0                   // 行番号格納用
-    var resolvedButtonTap:Bool = false      // 解決済みボタンのタップ判定
-    var previousControllerName:String = ""  // 前のViewController名
-    
-    // キーボードでテキストフィールドが隠れないための設定用
-    var selectedTextField: UITextField?
-    var selectedTextView: UITextView?
-    let screenSize = UIScreen.main.bounds.size
-    var textHeight: CGFloat = 0.0
-    
-    
-    
-    //MARK:- UIの設定
-    
-    // テキスト
-    @IBOutlet weak var taskTitleTextField: UITextField!
-    @IBOutlet weak var taskCauseTextView: UITextView!
-    
-    // テーブルビュー
-    @IBOutlet weak var tableView: UITableView!
-    
-    // ボタン
-    @IBOutlet weak var resolvedButton: UIButton!
-    @IBOutlet weak var addMeasuresButton: UIButton!
-    
-    // 解決済みにするボタンの処理
-    @IBAction func resolvedButton(_ sender: Any) {
-        // タップ判定
-        resolvedButtonTap = true
-        
-        // 解決済み or 未解決にする
-        taskData.changeAchievement()
-        
-        // データ更新
-        taskData.setTitle(taskTitleTextField.text!)
-        taskData.setCause(taskCauseTextView.text!)
-        taskData.setOrder(0)
-        dataManager.updateTaskData(taskData, {
-            // 解決済みボタンをタップした場合
-            if self.resolvedButtonTap == true {
-                // 前の画面に戻る
-                self.navigationController?.popViewController(animated: true)
-            }
-        })
-    }
-    
-    // 追加ボタンの処理
-    @IBAction func addMeasuresButton(_ sender: Any) {
-        // アラートダイアログを生成
-        let alertController = UIAlertController(title:"対策を追加",message:"対策を入力してください",preferredStyle:UIAlertController.Style.alert)
-        
-        // テキストエリアを追加
-        alertController.addTextField(configurationHandler:nil)
-        
-        // OKボタンを宣言
-        let okAction = UIAlertAction(title:"OK",style:UIAlertAction.Style.default){(action:UIAlertAction)in
-            // OKボタンがタップされたときの処理
-            if let textField = alertController.textFields?.first {
-                // データベースの対策データを追加
-                self.taskData.addMeasures(title: textField.text!,effectiveness: "課題データに追記したノートデータ")
-                
-                // 最有力の対策に設定
-                self.taskData.setMeasuresPriority(textField.text!)
-                
-                // 対策タイトルの配列に入力値を挿入。先頭に挿入する
-                self.measuresTitleArray.insert(textField.text!,at:0)
-                
-                // データ更新
-                self.taskData.setTitle(self.taskTitleTextField.text!)
-                self.taskData.setCause(self.taskCauseTextView.text!)
-                self.dataManager.updateTaskData(self.taskData, {
-                })
-                
-                // テーブルに行が追加されたことをテーブルに通知
-                self.tableView.insertRows(at: [IndexPath(row:0,section:0)],with: UITableView.RowAnimation.right)
-                
-                // テーブル更新
-                self.tableView.reloadData()
-            }
-        }
-        // CANCELボタンを宣言
-        let cancelButton = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-        
-        // ボタンを追加
-        alertController.addAction(okAction)
-        alertController.addAction(cancelButton)
-        
-        //アラートダイアログを表示
-        present(alertController,animated:true,completion:nil)
-    }
-    
-    
-    
-    //MARK:- テーブルビューの設定
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskData.getMeasuresTitleArray().count   // 対策の数を返却
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // セルを取得する
-        let cell = tableView.dequeueReusableCell(withIdentifier: "measuresCell", for: indexPath)
-        
-        // 行番号に合った対策データをラベルに表示する
-        cell.textLabel!.text = taskData.getMeasuresTitleArray()[indexPath.row]
-        
-        // 有効性コメントを取得
-        if taskData.getMeasuresEffectivenessArray(at: indexPath.row).isEmpty == true {
-            cell.detailTextLabel?.text = "有効性："
-        } else {
-            cell.detailTextLabel?.text = "有効性：\(self.taskData.getMeasuresEffectiveness(at: indexPath.row))"
-        }
-        cell.detailTextLabel?.textColor = UIColor.systemGray
-        return cell
-    }
-    
-    // セルをタップした時の処理
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // タップしたときの選択色を消去
-        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        
-        // タップしたセルの行番号を取得
-        self.indexPath = indexPath.row
-        
-        // 課題詳細確認画面へ遷移
-        performSegue(withIdentifier: "goMeasuresDetailViewController", sender: nil)
-    }
-    
-    // セルの編集可否設定
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // 解決済みの課題の場合の設定
-        if previousControllerName == "ResolvedTaskViewController" {
-            return false
-        } else {
-            return true
-        }
-    }
-    
-    // セルを削除したときの処理（左スワイプ）
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // 削除処理かどうかの判定
-        if editingStyle == UITableViewCell.EditingStyle.delete {
-            // OKボタンを宣言
-            let okAction = UIAlertAction(title:"削除",style:UIAlertAction.Style.destructive){(action:UIAlertAction)in
-                // 削除した対策が最有力だった場合、最有力を未設定にする
-                if self.taskData.getMeasuresTitleArray()[indexPath.row] == self.taskData.getMeasuresPriority() {
-                    self.taskData.setMeasuresPriority("")
-                }
-                
-                // 次回以降、この対策データを取得しないようにする
-                self.taskData.deleteMeasures(at: indexPath.row)
-                
-                // データを更新
-                self.dataManager.updateTaskData(self.taskData, {
-                })
-                
-                // セルを削除
-                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
-                
-                // リロード
-                tableView.reloadData()
-            }
-            // CANCELボタンを宣言
-            let cancelAction = UIAlertAction(title:"キャンセル",style:UIAlertAction.Style.cancel,handler:nil)
-            showAlert(title: "対策を削除", message: "対策を削除します。よろしいですか？", actions: [okAction,cancelAction])
-        }
-    }
-    
-    // deleteの表示名を変更
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "削除"
-    }
-    
-    
-    
-    //MARK:- 画面遷移
-    
-    // 前画面に戻るときに呼ばれる処理
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        if viewController is TaskViewController {
-            // 課題データを更新
-            taskData.setTitle(taskTitleTextField.text!)
-            taskData.setCause(taskCauseTextView.text!)
-            dataManager.updateTaskData(taskData, {
-            })
-        }
-    }
-    
-    // 対策詳細画面に遷移する時に呼ばれる処理
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goMeasuresDetailViewController" {
-            // 課題データを対策詳細確認画面へ渡す
-            let measuresDetailViewController = segue.destination as! MeasuresDetailViewController
-            measuresDetailViewController.taskData  = taskData
-            measuresDetailViewController.indexPath = indexPath
-            measuresDetailViewController.previousControllerName = self.previousControllerName
-        }
-    }
-    
-    
-    //MARK:- その他のメソッド
-    
-    // キーボードを出したときの設定
-    func configureObserver() {
+    /**
+     キーボードの通知設定(キーボードでテキストフィールドが隠れない設定)
+     */
+    func addKeyboadObserver() {
         let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notification.addObserver(self,
+                                 selector: #selector(keyboardWillShow(_:)),
+                                 name: UIResponder.keyboardWillShowNotification,
+                                 object: nil)
+        notification.addObserver(self,
+                                 selector: #selector(keyboardWillHide(_:)),
+                                 name: UIResponder.keyboardWillHideNotification,
+                                 object: nil)
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.selectedTextField = textField
-        self.textHeight = textField.frame.maxY
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.selectedTextView = textView
-        self.textHeight = textView.frame.maxY
-    }
-        
     @objc func keyboardWillShow(_ notification: Notification?) {
-            
-        guard let rect = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+        guard let keyboad = (notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
             let duration = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else {
             return
         }
-                    
-        // サイズ取得
-        let screenHeight = screenSize.height
-        let keyboardHeight = rect.size.height
         
         // スクロールする高さを計算
-        let hiddenHeight = keyboardHeight + textHeight - screenHeight
+        let hiddenHeight = keyboad.size.height + textFrame_y - UIScreen.main.bounds.size.height
                 
         // スクロール処理
         if hiddenHeight > 0 {
             UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
-            self.view.transform = transform
+                let transform = CGAffineTransform(translationX: 0, y: -(hiddenHeight + 20))
+                self.view.transform = transform
             }
         } else {
             UIView.animate(withDuration: duration) {
-            let transform = CGAffineTransform(translationX: 0, y: -(0))
-            self.view.transform = transform
+                let transform = CGAffineTransform(translationX: 0, y: -(0))
+                self.view.transform = transform
             }
         }
     }
@@ -326,10 +120,162 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
         }
     }
     
-    // OKボタンの処理
-    @objc func tapOkButton(_ sender: UIButton){
-        // キーボードを閉じる
-        self.view.endEditing(true)
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.textFrame_y = textField.frame.maxY
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.textFrame_y = textView.frame.maxY
+    }
+    
+    
+    //MARK:- UIの設定
+    
+    @IBOutlet weak var taskTitleTextField: UITextField!
+    @IBOutlet weak var taskCauseTextView: UITextView!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var resolvedButton: UIButton!
+    @IBOutlet weak var addMeasuresButton: UIButton!
+    
+    // 解決済みにするボタンの処理
+    @IBAction func resolvedButton(_ sender: Any) {
+        // 解決済み or 未解決にする
+        taskData.changeAchievement()
+        
+        // データ更新
+        taskData.setTitle(taskTitleTextField.text!)
+        taskData.setCause(taskCauseTextView.text!)
+        taskData.setOrder(0)
+        dataManager.updateTaskData(taskData, {
+            // 前の画面に戻る
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+    
+    // 追加ボタンの処理
+    @IBAction func addMeasuresButton(_ sender: Any) {
+        // アラートを生成
+        let alertController = UIAlertController(title: "対策を追加", message: "対策を入力してください", preferredStyle: UIAlertController.Style.alert)
+        
+        // テキストエリアを追加
+        alertController.addTextField(configurationHandler: nil)
+        
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {(action: UIAlertAction) in
+            if let textField = alertController.textFields?.first {
+                // 対策を追加
+                self.taskData.setTitle(self.taskTitleTextField.text!)
+                self.taskData.setCause(self.taskCauseTextView.text!)
+                self.taskData.setMeasuresPriority(textField.text!)
+                self.taskData.addMeasures(title: textField.text!, effectiveness: "連動したノートが表示されます")
+                self.dataManager.updateTaskData(self.taskData, {})
+                
+                // テーブルに反映
+                self.measuresTitleArray.insert(textField.text!, at: 0)
+                self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.right)
+            }
+        }
+        let cancelButton = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
+        
+        alertController.addAction(okAction)
+        alertController.addAction(cancelButton)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    //MARK:- テーブルビューの設定
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return taskData.getMeasuresTitleArray().count   // 対策の数を返却
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // 対策セルを返却
+        let cell = tableView.dequeueReusableCell(withIdentifier: "measuresCell", for: indexPath)
+        cell.textLabel!.text = taskData.getMeasuresTitleArray()[indexPath.row]
+        cell.detailTextLabel?.textColor = UIColor.systemGray
+        if taskData.getMeasuresEffectivenessArray(at: indexPath.row).isEmpty {
+            cell.detailTextLabel?.text = "有効性："
+        } else {
+            cell.detailTextLabel?.text = "有効性：\(self.taskData.getMeasuresEffectiveness(at: indexPath.row))"
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 課題詳細確認画面へ遷移
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        self.indexPath = indexPath
+        performSegue(withIdentifier: "goMeasuresDetailViewController", sender: nil)
+    }
+    
+    // セルの編集可否設定
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if previousControllerName == "ResolvedTaskViewController" {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    // セルを削除したときの処理（左スワイプ）
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            showDeleteMeasureAlert({
+                self.deleteMeasure(indexPath)
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+            })
+        }
+    }
+    
+    /**
+     対策削除アラートを表示
+     - Parameters:
+      - okAction: okタップ時の処理
+     */
+    func showDeleteMeasureAlert(_ okAction: @escaping () -> ()) {
+        let okAction = UIAlertAction(title: "削除", style: UIAlertAction.Style.destructive) {(action: UIAlertAction) in
+            okAction()
+        }
+        let cancelAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler: nil)
+        showAlert(title: "対策を削除", message: "対策を削除します。よろしいですか？", actions: [okAction, cancelAction])
+    }
+    
+    /**
+     対策を削除
+     - Parameters:
+      - indexPath: 削除する対策のIndexPath
+     */
+    func deleteMeasure(_ indexPath: IndexPath) {
+        taskData.deleteMeasures(at: indexPath.row)
+        if taskData.getMeasuresTitleArray()[indexPath.row] == taskData.getMeasuresPriority() {
+            taskData.setMeasuresPriority("")
+        }
+        dataManager.updateTaskData(taskData, {})
+    }
+    
+    
+    //MARK:- 画面遷移
+    
+    // 前画面に戻るときに呼ばれる処理
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        if viewController is TaskViewController {
+            // 課題データを更新
+            taskData.setTitle(taskTitleTextField.text!)
+            taskData.setCause(taskCauseTextView.text!)
+            dataManager.updateTaskData(taskData, {})
+        }
+    }
+    
+    // 対策詳細画面に遷移する時に呼ばれる処理
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goMeasuresDetailViewController" {
+            // 課題データを対策詳細確認画面へ渡す
+            let measuresDetailViewController = segue.destination as! MeasuresDetailViewController
+            measuresDetailViewController.taskData  = taskData
+            measuresDetailViewController.indexPath = indexPath.row
+            measuresDetailViewController.previousControllerName = self.previousControllerName
+        }
     }
     
 }
