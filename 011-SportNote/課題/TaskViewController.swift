@@ -162,6 +162,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func setupTableView() {
         tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
         tableView.tableFooterView = UIView()                    // データのないセルを非表示
+        tableView.register(UINib(nibName: "TaskCell", bundle: nil), forCellReuseIdentifier: "TaskCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -270,13 +271,16 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return dataManager.taskDataArray.count
     }
     
-    // 未解決の課題セルを取得
+    // 課題セルを取得
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
-        cell.textLabel!.text = dataManager.taskDataArray[indexPath.row].getTitle()
-        cell.detailTextLabel!.text = "原因：\(dataManager.taskDataArray[indexPath.row].getCause())"
-        cell.detailTextLabel?.textColor = UIColor.systemGray
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! TaskCell
+        cell.setTaskData(dataManager.taskDataArray[indexPath.row])
+        cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 73
     }
     
     

@@ -17,6 +17,8 @@
 		8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */; };
 		8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */; };
 		8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */; };
+		8D3AE8A226AD2AD00007D873 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3AE8A026AD2AD00007D873 /* TaskCell.swift */; };
+		8D3AE8A326AD2AD00007D873 /* TaskCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D3AE8A126AD2AD00007D873 /* TaskCell.xib */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
 		8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AFD724A47F7E007450BF /* SVProgressHUD.m */; };
@@ -70,6 +72,8 @@
 		8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+Alert.swift"; path = "011-SportNote/共通/UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedTaskViewController.swift; sourceTree = "<group>"; };
 		8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+TextFIeld.swift"; path = "011-SportNote/共通/UIViewController+TextFIeld.swift"; sourceTree = "<group>"; };
+		8D3AE8A026AD2AD00007D873 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
+		8D3AE8A126AD2AD00007D873 /* TaskCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskCell.xib; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D57AFD624A47F7D007450BF /* 011-SportNote-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "011-SportNote-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -224,6 +228,8 @@
 			isa = PBXGroup;
 			children = (
 				8DE8B1D324B1BD7F00E1195B /* TaskViewController.swift */,
+				8D3AE8A026AD2AD00007D873 /* TaskCell.swift */,
+				8D3AE8A126AD2AD00007D873 /* TaskCell.xib */,
 				8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */,
 				8D7BAB4E24A5B18800BE196B /* AddTaskViewController.swift */,
 				8D7853FD24A6FE0000CCA440 /* TaskDetailViewController.swift */,
@@ -339,6 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */,
+				8D3AE8A326AD2AD00007D873 /* TaskCell.xib in Resources */,
 				8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */,
 				8D941CC52552188400B3A472 /* NoteViewCell.xib in Resources */,
 				8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */,
@@ -402,6 +409,7 @@
 				8DCF350924F6554900055093 /* FreeNote.swift in Sources */,
 				8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */,
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
+				8D3AE8A226AD2AD00007D873 /* TaskCell.swift in Sources */,
 				8DE6E10825F461DE0012DA54 /* UIViewController+UserDefaults.swift in Sources */,
 				8D05F54B24EBEFAB00842CD5 /* CreateAccountViewController.swift in Sources */,
 				8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift in Sources */,
