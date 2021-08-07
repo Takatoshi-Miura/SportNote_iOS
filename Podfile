@@ -7,7 +7,7 @@ target '011-SportNote' do
 
   # Pods for 011-SportNote
 
-pod 'Firebase/Analytics'
+pod 'FirebaseAnalytics'
 pod 'Firebase/Auth'
 pod 'Firebase/Firestore'
 pod 'SVProgressHUD'
