@@ -185,19 +185,13 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         admobView = GADBannerView(adSize:kGADAdSizeBanner)
         
         // レイアウト調整(画面下部に設置)
-        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
+        let tabBarController:UITabBarController = UITabBarController()
+        let tabBarHeight = tabBarController.tabBar.frame.size.height
+        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - tabBarHeight)
         admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
         
         // safeAreaの値を取得
-        let window = UIApplication.shared.connectedScenes
-                    .filter({$0.activationState == .foregroundActive})
-                    .map({$0 as? UIWindowScene})
-                    .compactMap({$0})
-                    .first?
-                    .windows
-                    .filter({$0.isKeyWindow})
-                    .first
-        let bottomInsets = window!.safeAreaInsets.bottom
+        let bottomInsets = self.view.safeAreaInsets.bottom
         if(bottomInsets >= 30.0){
             admobView.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height - admobView.frame.height - 80)
         }
