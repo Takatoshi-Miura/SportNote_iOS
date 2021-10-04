@@ -22,6 +22,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var noteInSection: [[Note]] = [[]]
     var selectedIndexPath: IndexPath = [0, 0]
     
+    var isAdMobShow:Bool = false
+    
     enum NoteType: Int {
         case freeNote = 0
         case practiceNote = 1
@@ -60,7 +62,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         setupTableView()
         setNavigationBarButtonDefault()
-        showAdMob()
         reloadData()
     }
     
@@ -176,6 +177,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
      広告表示
      */
     func showAdMob() {
+        if isAdMobShow { return }
+        
         let AdMobTest: Bool = false     // 広告テストモード
         let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
         let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
@@ -193,7 +196,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         // safeAreaの値を取得
         let bottomInsets = self.view.safeAreaInsets.bottom
         if(bottomInsets >= 30.0){
-            admobView.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height - admobView.frame.height - 80)
+            admobView.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height - admobView.frame.height - bottomInsets)
         }
         
         // テストモードの検出
@@ -207,8 +210,14 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         admobView.load(GADRequest())
          
         self.view.addSubview(admobView)
+        
+        isAdMobShow = true
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        showAdMob()
+    }
     
     //MARK:- UIの設定
     
