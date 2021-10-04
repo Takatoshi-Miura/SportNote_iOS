@@ -72,6 +72,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
         tableView.tableFooterView = UIView()                    // データのないセルを非表示
         tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
     }
     
     /**
