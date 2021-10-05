@@ -22,6 +22,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
     var noteInSection: [[Note]] = [[]]
     var selectedIndexPath: IndexPath = [0, 0]
     
+    var isAdMobShow:Bool = false
+    
     enum NoteType: Int {
         case freeNote = 0
         case practiceNote = 1
@@ -60,7 +62,6 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         setupTableView()
         setNavigationBarButtonDefault()
-        showAdMob()
         reloadData()
     }
     
@@ -71,6 +72,9 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.allowsMultipleSelectionDuringEditing = true   // 複数選択可能
         tableView.tableFooterView = UIView()                    // データのないセルを非表示
         tableView.register(UINib(nibName: "NoteViewCell", bundle: nil), forCellReuseIdentifier: "noteViewCell")
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
     }
     
     /**
@@ -176,6 +180,8 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
      広告表示
      */
     func showAdMob() {
+        if isAdMobShow { return }
+        
         let AdMobTest: Bool = false     // 広告テストモード
         let AdMobID = "ca-app-pub-9630417275930781/4051421921"  // 広告ユニットID
         let TEST_ID = "ca-app-pub-3940256099942544/2934735716"  // テスト用広告ユニットID
@@ -185,21 +191,15 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         admobView = GADBannerView(adSize:kGADAdSizeBanner)
         
         // レイアウト調整(画面下部に設置)
-        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - 49)
+        let tabBarController:UITabBarController = UITabBarController()
+        let tabBarHeight = tabBarController.tabBar.frame.size.height
+        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height - tabBarHeight)
         admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
         
         // safeAreaの値を取得
-        let window = UIApplication.shared.connectedScenes
-                    .filter({$0.activationState == .foregroundActive})
-                    .map({$0 as? UIWindowScene})
-                    .compactMap({$0})
-                    .first?
-                    .windows
-                    .filter({$0.isKeyWindow})
-                    .first
-        let bottomInsets = window!.safeAreaInsets.bottom
+        let bottomInsets = self.view.safeAreaInsets.bottom
         if(bottomInsets >= 30.0){
-            admobView.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height - admobView.frame.height - 80)
+            admobView.frame.origin = CGPoint(x: 0, y: self.view.frame.size.height - admobView.frame.height - bottomInsets)
         }
         
         // テストモードの検出
@@ -213,8 +213,14 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         admobView.load(GADRequest())
          
         self.view.addSubview(admobView)
+        
+        isAdMobShow = true
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        showAdMob()
+    }
     
     //MARK:- UIの設定
     

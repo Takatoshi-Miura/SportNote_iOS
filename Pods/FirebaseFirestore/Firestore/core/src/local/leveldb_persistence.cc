@@ -76,7 +76,7 @@ std::set<std::string> CollectUserSet(LevelDbTransaction* transaction) {
 
 }  // namespace
 
-util::StatusOr<std::unique_ptr<LevelDbPersistence>> LevelDbPersistence::Create(
+StatusOr<std::unique_ptr<LevelDbPersistence>> LevelDbPersistence::Create(
     util::Path dir, LocalSerializer serializer, const LruParams& lru_params) {
   auto* fs = Filesystem::Default();
   Status status = EnsureDirectory(dir);
@@ -117,6 +117,7 @@ LevelDbPersistence::LevelDbPersistence(std::unique_ptr<leveldb::DB> db,
   index_manager_ = absl::make_unique<LevelDbIndexManager>(this);
   reference_delegate_ =
       absl::make_unique<LevelDbLruReferenceDelegate>(this, lru_params);
+  bundle_cache_ = absl::make_unique<LevelDbBundleCache>(this, &serializer_);
 
   // TODO(gsoltis): set up a leveldb transaction for these operations.
   target_cache_->Start();
@@ -178,21 +179,37 @@ util::Status LevelDbPersistence::ClearPersistence(
   return fs->RecursivelyRemove(leveldb_dir);
 }
 
-int64_t LevelDbPersistence::CalculateByteSize() {
+StatusOr<int64_t> LevelDbPersistence::CalculateByteSize() {
   auto* fs = Filesystem::Default();
 
-  int64_t count = 0;
+  // Accumulate the total size in an unsigned integer to avoid undefined
+  // behavior on overflow.
+  uint64_t count = 0;
   auto iter = util::DirectoryIterator::Create(directory_);
   for (; iter->Valid(); iter->Next()) {
-    int64_t file_size = fs->FileSize(iter->file()).ValueOrDie();
+    StatusOr<int64_t> maybe_size = fs->FileSize(iter->file());
+    if (!maybe_size.ok()) {
+      return Status::FromCause("Failed to size LevelDB directory",
+                               maybe_size.status());
+    }
+
+    uint64_t old_count = count;
+    int64_t file_size = maybe_size.ValueOrDie();
     count += file_size;
+
+    auto max_signed_value =
+        static_cast<uint64_t>(std::numeric_limits<int64_t>::max());
+    if (count < old_count || count > max_signed_value) {
+      return Status(Error::kErrorOutOfRange,
+                    "Failed to size LevelDB: count overflowed");
+    }
   }
 
-  HARD_ASSERT(iter->status().ok(), "Failed to iterate LevelDB directory: %s",
-              iter->status().error_message().c_str());
-  HARD_ASSERT(count >= 0 && count <= std::numeric_limits<int64_t>::max(),
-              "Overflowed counting bytes cached");
-  return count;
+  if (!iter->status().ok()) {
+    return Status::FromCause("Failed to iterate over LevelDB files",
+                             iter->status());
+  }
+  return static_cast<int64_t>(count);
 }
 
 // MARK: - Persistence
@@ -230,6 +247,10 @@ LevelDbIndexManager* LevelDbPersistence::index_manager() {
 
 LevelDbLruReferenceDelegate* LevelDbPersistence::reference_delegate() {
   return reference_delegate_.get();
+}
+
+LevelDbBundleCache* LevelDbPersistence::bundle_cache() {
+  return bundle_cache_.get();
 }
 
 void LevelDbPersistence::RunInternal(absl::string_view label,

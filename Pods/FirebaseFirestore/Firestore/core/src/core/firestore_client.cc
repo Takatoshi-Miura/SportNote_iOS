@@ -16,8 +16,10 @@
 
 #include "Firestore/core/src/core/firestore_client.h"
 
+#include <functional>
 #include <future>  // NOLINT(build/c++11)
 #include <memory>
+#include <string>
 #include <utility>
 
 #include "Firestore/core/src/api/document_reference.h"
@@ -26,23 +28,26 @@
 #include "Firestore/core/src/api/query_snapshot.h"
 #include "Firestore/core/src/api/settings.h"
 #include "Firestore/core/src/auth/credentials_provider.h"
+#include "Firestore/core/src/bundle/bundle_reader.h"
 #include "Firestore/core/src/core/database_info.h"
 #include "Firestore/core/src/core/event_manager.h"
 #include "Firestore/core/src/core/query_listener.h"
 #include "Firestore/core/src/core/sync_engine.h"
 #include "Firestore/core/src/core/view.h"
-#include "Firestore/core/src/local/index_free_query_engine.h"
 #include "Firestore/core/src/local/leveldb_opener.h"
 #include "Firestore/core/src/local/leveldb_persistence.h"
 #include "Firestore/core/src/local/local_documents_view.h"
 #include "Firestore/core/src/local/local_serializer.h"
 #include "Firestore/core/src/local/local_store.h"
 #include "Firestore/core/src/local/memory_persistence.h"
+#include "Firestore/core/src/local/query_engine.h"
 #include "Firestore/core/src/local/query_result.h"
 #include "Firestore/core/src/model/database_id.h"
 #include "Firestore/core/src/model/document_set.h"
 #include "Firestore/core/src/model/mutation.h"
+#include "Firestore/core/src/remote/connectivity_monitor.h"
 #include "Firestore/core/src/remote/datastore.h"
+#include "Firestore/core/src/remote/firebase_metadata_provider.h"
 #include "Firestore/core/src/remote/remote_store.h"
 #include "Firestore/core/src/remote/serializer.h"
 #include "Firestore/core/src/util/async_queue.h"
@@ -70,12 +75,12 @@ using api::SnapshotMetadata;
 using auth::CredentialsProvider;
 using auth::User;
 using firestore::Error;
-using local::IndexFreeQueryEngine;
 using local::LevelDbOpener;
 using local::LocalSerializer;
 using local::LocalStore;
 using local::LruParams;
 using local::MemoryPersistence;
+using local::QueryEngine;
 using local::QueryResult;
 using model::DatabaseId;
 using model::Document;
@@ -84,7 +89,9 @@ using model::DocumentMap;
 using model::MaybeDocument;
 using model::Mutation;
 using model::OnlineState;
+using remote::ConnectivityMonitor;
 using remote::Datastore;
+using remote::FirebaseMetadataProvider;
 using remote::RemoteStore;
 using remote::Serializer;
 using util::AsyncQueue;
@@ -105,13 +112,14 @@ static const size_t kMaxConcurrentLimboResolutions = 100;
 std::shared_ptr<FirestoreClient> FirestoreClient::Create(
     const DatabaseInfo& database_info,
     const api::Settings& settings,
-    std::shared_ptr<auth::CredentialsProvider> credentials_provider,
-    std::shared_ptr<util::Executor> user_executor,
-    std::shared_ptr<util::AsyncQueue> worker_queue) {
+    std::shared_ptr<CredentialsProvider> credentials_provider,
+    std::shared_ptr<Executor> user_executor,
+    std::shared_ptr<AsyncQueue> worker_queue,
+    std::unique_ptr<FirebaseMetadataProvider> firebase_metadata_provider) {
   // Have to use `new` because `make_shared` cannot access private constructor.
-  std::shared_ptr<FirestoreClient> shared_client(
-      new FirestoreClient(database_info, std::move(credentials_provider),
-                          std::move(user_executor), std::move(worker_queue)));
+  std::shared_ptr<FirestoreClient> shared_client(new FirestoreClient(
+      database_info, std::move(credentials_provider), std::move(user_executor),
+      std::move(worker_queue), std::move(firebase_metadata_provider)));
 
   std::weak_ptr<FirestoreClient> weak_client(shared_client);
   auto credential_change_listener = [weak_client, settings](User user) mutable {
@@ -150,13 +158,15 @@ std::shared_ptr<FirestoreClient> FirestoreClient::Create(
 
 FirestoreClient::FirestoreClient(
     const DatabaseInfo& database_info,
-    std::shared_ptr<auth::CredentialsProvider> credentials_provider,
-    std::shared_ptr<util::Executor> user_executor,
-    std::shared_ptr<util::AsyncQueue> worker_queue)
+    std::shared_ptr<CredentialsProvider> credentials_provider,
+    std::shared_ptr<Executor> user_executor,
+    std::shared_ptr<AsyncQueue> worker_queue,
+    std::unique_ptr<FirebaseMetadataProvider> firebase_metadata_provider)
     : database_info_(database_info),
       credentials_provider_(std::move(credentials_provider)),
       worker_queue_(std::move(worker_queue)),
-      user_executor_(std::move(user_executor)) {
+      user_executor_(std::move(user_executor)),
+      firebase_metadata_provider_(std::move(firebase_metadata_provider)) {
 }
 
 void FirestoreClient::Initialize(const User& user, const Settings& settings) {
@@ -190,16 +200,17 @@ void FirestoreClient::Initialize(const User& user, const Settings& settings) {
     persistence_ = MemoryPersistence::WithEagerGarbageCollector();
   }
 
-  query_engine_ = absl::make_unique<IndexFreeQueryEngine>();
+  query_engine_ = absl::make_unique<QueryEngine>();
   local_store_ = absl::make_unique<LocalStore>(persistence_.get(),
                                                query_engine_.get(), user);
-
-  auto datastore = std::make_shared<Datastore>(database_info_, worker_queue_,
-                                               credentials_provider_);
+  connectivity_monitor_ = ConnectivityMonitor::Create(worker_queue_);
+  auto datastore = std::make_shared<Datastore>(
+      database_info_, worker_queue_, credentials_provider_,
+      connectivity_monitor_.get(), firebase_metadata_provider_.get());
 
   remote_store_ = absl::make_unique<RemoteStore>(
       local_store_.get(), std::move(datastore), worker_queue_,
-      [this](OnlineState online_state) {
+      connectivity_monitor_.get(), [this](OnlineState online_state) {
         sync_engine_->HandleOnlineStateChange(online_state);
       });
 
@@ -501,6 +512,47 @@ void FirestoreClient::RemoveSnapshotsInSyncListener(
     const std::shared_ptr<EventListener<Empty>>& user_listener) {
   worker_queue_->Enqueue([this, user_listener] {
     event_manager_->RemoveSnapshotsInSyncListener(user_listener);
+  });
+}
+
+void FirestoreClient::LoadBundle(
+    std::unique_ptr<util::ByteStream> bundle_data,
+    std::shared_ptr<api::LoadBundleTask> result_task) {
+  VerifyNotTerminated();
+
+  bundle::BundleSerializer bundle_serializer(
+      remote::Serializer(database_info_.database_id()));
+  auto reader = std::make_shared<bundle::BundleReader>(
+      std::move(bundle_serializer), std::move(bundle_data));
+  worker_queue_->Enqueue([this, reader, result_task] {
+    sync_engine_->LoadBundle(std::move(reader), std::move(result_task));
+  });
+}
+
+void FirestoreClient::GetNamedQuery(const std::string& name,
+                                    api::QueryCallback callback) {
+  VerifyNotTerminated();
+
+  // Dispatch the result back onto the user dispatch queue.
+  auto async_callback =
+      [this, callback](const absl::optional<bundle::NamedQuery>& named_query) {
+        if (callback) {
+          if (named_query.has_value()) {
+            const Target& target = named_query.value().bundled_query().target();
+            Query query(target.path(), target.collection_group(),
+                        target.filters(), target.order_bys(), target.limit(),
+                        named_query.value().bundled_query().limit_type(),
+                        target.start_at(), target.end_at());
+            user_executor_->Execute(
+                [query, callback] { callback(std::move(query)); });
+          } else {
+            user_executor_->Execute([callback] { callback(absl::nullopt); });
+          }
+        }
+      };
+
+  worker_queue_->Enqueue([this, name, async_callback] {
+    async_callback(local_store_->GetNamedQuery(name));
   });
 }
 
