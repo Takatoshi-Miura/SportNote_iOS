@@ -269,7 +269,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        if viewController is TaskViewController {
+        if viewController is TaskViewController_old {
             // 課題データを更新
             task.setTitle(taskTitleTextField.text!)
             task.setCause(taskCauseTextView.text!)
