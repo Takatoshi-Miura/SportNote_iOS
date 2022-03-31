@@ -681,7 +681,7 @@
 				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
-				INFOPLIST_FILE = "011-SportNote/Info.plist";
+				INFOPLIST_FILE = "011-SportNote/Resource/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -707,7 +707,7 @@
 				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
-				INFOPLIST_FILE = "011-SportNote/Info.plist";
+				INFOPLIST_FILE = "011-SportNote/Resource/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

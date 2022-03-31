@@ -188,7 +188,7 @@ class NoteViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // バナー広告を宣言
         var admobView = GADBannerView()
-        admobView = GADBannerView(adSize:kGADAdSizeBanner)
+        admobView = GADBannerView(adSize:GADAdSizeBanner)
         
         // レイアウト調整(画面下部に設置)
         let tabBarController:UITabBarController = UITabBarController()

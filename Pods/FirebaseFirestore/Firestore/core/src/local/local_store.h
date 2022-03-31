@@ -28,15 +28,16 @@
 #include "Firestore/core/src/core/target_id_generator.h"
 #include "Firestore/core/src/local/reference_set.h"
 #include "Firestore/core/src/local/target_data.h"
+#include "Firestore/core/src/model/document.h"
 #include "Firestore/core/src/model/model_fwd.h"
 #include "absl/types/optional.h"
 
 namespace firebase {
 namespace firestore {
 
-namespace auth {
+namespace credentials {
 class User;
-}  // namespace auth
+}  // namespace credentials
 
 namespace core {
 class Query;
@@ -50,6 +51,7 @@ class TargetChange;
 namespace local {
 
 class BundleCache;
+class IndexManager;
 class LocalDocumentsView;
 class LocalViewChanges;
 class LocalWriteResult;
@@ -107,7 +109,7 @@ class LocalStore : public bundle::BundleCallback {
  public:
   LocalStore(Persistence* persistence,
              QueryEngine* query_engine,
-             const auth::User& initial_user);
+             const credentials::User& initial_user);
 
   ~LocalStore();
 
@@ -120,17 +122,16 @@ class LocalStore : public bundle::BundleCallback {
    * In response the local store switches the mutation queue to the new user and
    * returns any resulting document changes.
    */
-  model::MaybeDocumentMap HandleUserChange(const auth::User& user);
+  model::DocumentMap HandleUserChange(const credentials::User& user);
 
   /** Accepts locally generated Mutations and commits them to storage. */
   LocalWriteResult WriteLocally(std::vector<model::Mutation>&& mutations);
 
   /**
-   * Returns the current value of a document with a given key, or `nullopt` if
-   * not found.
+   * Returns the current value of a document with a given key, or an invalid
+   * document if not found.
    */
-  absl::optional<model::MaybeDocument> ReadDocument(
-      const model::DocumentKey& key);
+  const model::Document ReadDocument(const model::DocumentKey& key);
 
   /**
    * Acknowledges the given batch.
@@ -146,7 +147,7 @@ class LocalStore : public bundle::BundleCallback {
    *
    * @return The resulting (modified) documents.
    */
-  model::MaybeDocumentMap AcknowledgeBatch(
+  model::DocumentMap AcknowledgeBatch(
       const model::MutationBatchResult& batch_result);
 
   /**
@@ -155,7 +156,7 @@ class LocalStore : public bundle::BundleCallback {
    *
    * @return The resulting (modified) documents.
    */
-  model::MaybeDocumentMap RejectBatch(model::BatchId batch_id);
+  model::DocumentMap RejectBatch(model::BatchId batch_id);
 
   /** Returns the last recorded stream token for the current user. */
   nanopb::ByteString GetLastStreamToken();
@@ -181,8 +182,7 @@ class LocalStore : public bundle::BundleCallback {
    * LocalDocuments are re-calculated if there are remaining mutations in the
    * queue.
    */
-  model::MaybeDocumentMap ApplyRemoteEvent(
-      const remote::RemoteEvent& remote_event);
+  model::DocumentMap ApplyRemoteEvent(const remote::RemoteEvent& remote_event);
 
   /**
    * Returns the keys of the documents that are associated with the given
@@ -259,8 +259,8 @@ class LocalStore : public bundle::BundleCallback {
    * Local documents are re-calculated if there are remaining mutations in the
    * queue.
    */
-  model::MaybeDocumentMap ApplyBundledDocuments(
-      const model::MaybeDocumentMap& documents,
+  model::DocumentMap ApplyBundledDocuments(
+      const model::MutableDocumentMap& documents,
       const std::string& bundle_id) override;
 
   /** Saves the given `NamedQuery` to local persistence. */
@@ -298,7 +298,7 @@ class LocalStore : public bundle::BundleCallback {
    * Returns the TargetData as seen by the LocalStore, including updates that
    * may have not yet been persisted to the TargetCache.
    */
-  absl::optional<TargetData> GetTargetData(const core::Target& query);
+  absl::optional<TargetData> GetTargetData(const core::Target& target);
 
   /**
    * Creates a new target using the given bundle name, which will be used to
@@ -322,7 +322,7 @@ class LocalStore : public bundle::BundleCallback {
    * @param global_version A SnapshotVersion representing the read time if all
    * documents have the same read time.
    */
-  model::OptionalMaybeDocumentMap PopulateDocumentChanges(
+  model::MutableDocumentMap PopulateDocumentChanges(
       const model::DocumentUpdateMap& documents,
       const model::DocumentVersionMap& document_versions,
       const model::SnapshotVersion& global_version);
@@ -353,6 +353,11 @@ class LocalStore : public bundle::BundleCallback {
    * indexes).
    */
   QueryEngine* query_engine_ = nullptr;
+
+  /**
+   * Manages indexes and support indexed queries.
+   */
+  IndexManager* index_manager_ = nullptr;
 
   /**
    * The "local" view of all documents (layering mutation queue on top of

@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import GoogleMobileAds
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
-        // Admob広告を追加
+        // Google AdMob初期化
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         
         // 初回起動判定(初期値を登録)
