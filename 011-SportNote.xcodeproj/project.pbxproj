@@ -48,11 +48,11 @@
 		8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5338B24CAA696000ADAFB /* PracticeNoteDetailViewController.swift */; };
 		8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5338D24CAA77E000ADAFB /* PracticeNoteContentViewController.swift */; };
 		8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */; };
-		8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA6351324B47A1A00186358 /* TabBarController.swift */; };
 		8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */; };
 		8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */; };
 		8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */; };
 		8DB5371F25E4FCD400CB426F /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB5371E25E4FCD400CB426F /* DataManager.swift */; };
+		8DC1930D27F7B8690097BF07 /* TaskViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DC1930C27F7B8690097BF07 /* TaskViewController.xib */; };
 		8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */; };
 		8DC778A424B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */; };
 		8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCC058924F8E40300744A61 /* MessageUI.framework */; };
@@ -110,12 +110,12 @@
 		8DA5338B24CAA696000ADAFB /* PracticeNoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNoteDetailViewController.swift; sourceTree = "<group>"; };
 		8DA5338D24CAA77E000ADAFB /* PracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteViewController.swift; sourceTree = "<group>"; };
-		8DA6351324B47A1A00186358 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8DA93AA824BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionNoteDetailViewController.swift; sourceTree = "<group>"; };
 		8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
 		8DB5371E25E4FCD400CB426F /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		8DB9E58924DEBDFC0042A7A2 /* 011-SportNoteRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "011-SportNoteRelease.entitlements"; sourceTree = "<group>"; };
+		8DC1930C27F7B8690097BF07 /* TaskViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskViewController.xib; sourceTree = "<group>"; };
 		8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCompetitionNoteContentViewController.swift; sourceTree = "<group>"; };
 		8DCC058924F8E40300744A61 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -227,6 +227,7 @@
 		8D18E81B27F65CA200035E99 /* Task */ = {
 			isa = PBXGroup;
 			children = (
+				8DC1930C27F7B8690097BF07 /* TaskViewController.xib */,
 			);
 			path = Task;
 			sourceTree = "<group>";
@@ -306,7 +307,6 @@
 				8D18E81427F65AA400035E99 /* Application */,
 				8D18E81527F65ACC00035E99 /* Model */,
 				8D18E81627F65AF400035E99 /* View */,
-				8DA6351324B47A1A00186358 /* TabBarController.swift */,
 				8D18E81727F65B0000035E99 /* Controller */,
 				8D18E81827F65B0F00035E99 /* Coordinator */,
 				8D18E81A27F65B3B00035E99 /* Utils */,
@@ -470,6 +470,7 @@
 				8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */,
 				8D941CC52552188400B3A472 /* NoteViewCell.xib in Resources */,
 				8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */,
+				8DC1930D27F7B8690097BF07 /* TaskViewController.xib in Resources */,
 				8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */,
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
 				8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */,
@@ -528,7 +529,6 @@
 			files = (
 				8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */,
 				8DCF350924F6554900055093 /* FreeNote.swift in Sources */,
-				8DA6351424B47A1A00186358 /* TabBarController.swift in Sources */,
 				8D665D3B24A17D9A00441B32 /* LoginViewController.swift in Sources */,
 				8D3AE8A226AD2AD00007D873 /* TaskCell.swift in Sources */,
 				8DE6E10825F461DE0012DA54 /* UIViewController+UserDefaults.swift in Sources */,
