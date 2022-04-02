@@ -18,7 +18,7 @@ class SyncManager {
         let dbDataFormatter = DBDataFormatter()
         
         firebaseManager.getOldNote({
-            self.oldNoteArray = firebaseManager.firebaseOldNoteArray
+            self.oldNoteArray = firebaseManager.oldNoteArray
             for oldNote in self.oldNoteArray {
                 self.newNoteArray.append(dbDataFormatter.convertToNote(oldNote: oldNote))
             }
