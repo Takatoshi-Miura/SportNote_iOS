@@ -26,6 +26,7 @@
 		8D3FFE5F27F666A20021C9FC /* TaskCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE5E27F666A20021C9FC /* TaskCoordinator.swift */; };
 		8D3FFE6227F66B400021C9FC /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE6127F66B400021C9FC /* TaskViewController.swift */; };
 		8D481D4827F7D2870082D956 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D481D4A27F7D2870082D956 /* Localizable.strings */; };
+		8D481D4D27F7D9040082D956 /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D4C27F7D9030082D956 /* Definition.swift */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
 		8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AFD724A47F7E007450BF /* SVProgressHUD.m */; };
@@ -93,6 +94,7 @@
 		8D481D4527F7D1550082D956 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		8D481D4927F7D2870082D956 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D481D4B27F7D28C0082D956 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8D481D4C27F7D9030082D956 /* Definition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definition.swift; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D57AFD724A47F7E007450BF /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,
 				8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */,
 				8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */,
+				8D481D4C27F7D9030082D956 /* Definition.swift */,
 				8D12B0C727F7D01E0040AF3D /* Definition+String.swift */,
 			);
 			path = Utils;
@@ -589,6 +592,7 @@
 				8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */,
 				8D05F54924EBD18800842CD5 /* PasswordResetViewController.swift in Sources */,
 				8DF91CB724B3051500FFE201 /* AddPracticeNoteViewController.swift in Sources */,
+				8D481D4D27F7D9040082D956 /* Definition.swift in Sources */,
 				8D01653024AEEBD100F9D69F /* NoteViewController_old.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,

@@ -75,5 +75,24 @@ public extension UIViewController {
         }
         showAlert(title: "利用規約の更新", message: "本アプリの利用規約とプライバシーポリシーに同意します。", actions: [agreeAction, termsAction])
     }
+    
+    /**
+     アクションシートを表示
+     - Parameters:
+       - title: タイトル
+       - message: 説明文
+       - actions: [UIAlertAction]
+       - frame: フレーム(iPadの場合のみ必要)
+     */
+    func showActionSheet(title: String, message: String, actions: [UIAlertAction], frame: CGRect?) {
+        let actionSheet = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        actions.forEach { actionSheet.addAction($0) }
+        actionSheet.addAction(UIAlertAction(title: TITLE_CANCEL, style: .cancel, handler: nil))
+        if isiPad() {
+            actionSheet.popoverPresentationController?.sourceView = self.view
+            actionSheet.popoverPresentationController?.sourceRect = frame!
+        }
+        present(actionSheet, animated: true)
+    }
 
 }

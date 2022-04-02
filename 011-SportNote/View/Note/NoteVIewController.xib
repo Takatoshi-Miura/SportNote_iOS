@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NoteViewController" customModule="_11_SportNote" customModuleProvider="target">
             <connections>
+                <outlet property="adVIew" destination="pKa-ZZ-T5q" id="oGo-7s-aIj"/>
+                <outlet property="addButton" destination="1df-oQ-f21" id="xRp-bO-YVP"/>
                 <outlet property="tableView" destination="Mrm-5e-xpt" id="Zdw-mA-1mE"/>
                 <outlet property="view" destination="iN0-l3-epB" id="7WE-z6-chL"/>
             </connections>
@@ -21,26 +23,47 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Mrm-5e-xpt">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="518"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Ljc-qL-iBe"/>
                         <outlet property="delegate" destination="-1" id="lSE-ex-oQk"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pKa-ZZ-T5q">
+                    <rect key="frame" x="0.0" y="518" width="320" height="50"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="2rW-yG-pHZ"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1df-oQ-f21">
+                    <rect key="frame" x="244" y="442" width="56" height="56"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="Plus_Button"/>
+                    <connections>
+                        <action selector="tapAddButton:" destination="-1" eventType="touchUpInside" id="alO-aM-oI5"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="Mrm-5e-xpt" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="0hL-fj-cLH"/>
                 <constraint firstItem="Mrm-5e-xpt" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="3dR-qX-pKt"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Mrm-5e-xpt" secondAttribute="bottom" id="Pvr-Xi-AZK"/>
+                <constraint firstItem="pKa-ZZ-T5q" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="55R-bQ-7Yx"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Mrm-5e-xpt" secondAttribute="bottom" constant="50" id="Pvr-Xi-AZK"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Mrm-5e-xpt" secondAttribute="trailing" id="TEd-0q-mw9"/>
+                <constraint firstItem="pKa-ZZ-T5q" firstAttribute="top" secondItem="1df-oQ-f21" secondAttribute="bottom" constant="20" id="Vb4-gv-8na"/>
+                <constraint firstItem="pKa-ZZ-T5q" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="bhY-Xb-ret"/>
+                <constraint firstItem="pKa-ZZ-T5q" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="dbB-Mo-ngf"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="1df-oQ-f21" secondAttribute="trailing" constant="20" id="h32-VL-qDb"/>
             </constraints>
             <point key="canvasLocation" x="138.75" y="103.52112676056338"/>
         </view>
     </objects>
     <resources>
+        <image name="Plus_Button" width="55.5" height="55.5"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

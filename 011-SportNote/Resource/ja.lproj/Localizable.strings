@@ -6,6 +6,21 @@
   Copyright © 2022 Takatoshi Miura. All rights reserved.
 */
 
+// MARK: - Common
+"Cancel" = "キャンセル";
+
 // MARK: - TabBarController
 "Task" = "課題";
 "Note" = "ノート";
+"Group" = "グループ";
+"Target" = "目標";
+"PracticeNote" = "練習ノート";
+"TournamentNote" = "大会ノート";
+
+// MARK: - TaskViewController
+"AddGroupTaskTitle" = "グループ・課題の追加";
+"AddGroupTaskMessage" = "何を追加しますか？";
+
+// MARK: - NoteViewController
+"AddTargetNoteTitle" = "目標・ノートの追加";
+"AddTargetNoteMessage" = "何を追加しますか？";
