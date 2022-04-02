@@ -15,7 +15,7 @@ class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,
     //MARK:- 変数の宣言
     
     var dataManager = DataManager()
-    var task = Task()                       // 課題データの格納用
+    var task = Task_old()                       // 課題データの格納用
     var measuresTitleArray: [String] = []   // 対策タイトルの格納用
     var indexPath: IndexPath = [0, 0]       // 行番号格納用
     var previousControllerName: String = "" // 前のViewController名

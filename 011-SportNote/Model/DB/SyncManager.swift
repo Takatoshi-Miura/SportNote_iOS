@@ -10,7 +10,7 @@ import Foundation
 
 class SyncManager {
     
-    var oldNoteArray = [Note]()
+    var oldNoteArray = [Note_old]()
     var newNoteArray = [Any]()
     
     func convertOldNoteToNote(_ completion: @escaping () -> ()) {

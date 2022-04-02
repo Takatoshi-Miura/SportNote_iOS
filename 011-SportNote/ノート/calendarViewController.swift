@@ -53,7 +53,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     
     // テーブル用
     var dataManager = DataManager()
-    var cellDataArray:[Note] = []   // セルに表示するノートが格納される
+    var cellDataArray:[Note_old] = []   // セルに表示するノートが格納される
     var selectIndex:Int = 0
     
     // フラグ
@@ -446,7 +446,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     // ノートデータを削除するメソッド
-    func deleteNoteData(note noteData:Note) {
+    func deleteNoteData(note noteData:Note_old) {
         dataManager.deleteNoteData(noteData, {
             // 最後の削除であればリロード
             if self.deleteFinished {

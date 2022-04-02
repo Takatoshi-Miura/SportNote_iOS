@@ -14,10 +14,10 @@ class DataManager {
     
     //MARK:- データ配列
     
-    var noteDataArray = [Note]()
-    var freeNoteData = FreeNote()
-    var taskDataArray = [Task]()
-    var targetDataArray = [Target]()
+    var noteDataArray = [Note_old]()
+    var freeNoteData = FreeNote_old()
+    var taskDataArray = [Task_old]()
+    var targetDataArray = [Target_old]()
     
     
     //MARK:- ノートデータ
@@ -52,7 +52,7 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // 目標データを反映
                     let dataCollection = document.data()
-                    let noteData = Note()
+                    let noteData = Note_old()
                     noteData.setNoteID(dataCollection["noteID"] as! Int)
                     noteData.setNoteType(dataCollection["noteType"] as! String)
                     noteData.setYear(dataCollection["year"] as! Int)
@@ -100,7 +100,7 @@ class DataManager {
         noteDataArray = []
         
         // ユーザーIDを取得
-        let noteData = Note()
+        let noteData = Note_old()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
 
         // 現在のユーザーのデータを取得する
@@ -180,7 +180,7 @@ class DataManager {
             } else {
                 for document in querySnapshot!.documents {
                     // オブジェクトを作成
-                    let noteData = Note()
+                    let noteData = Note_old()
                     
                     // 目標データを反映
                     let dataCollection = document.data()
@@ -224,7 +224,7 @@ class DataManager {
       - noteData: 更新したいノート
       - completion: データ取得後に実行する処理
      */
-    func updateNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
+    func updateNoteData(_ noteData:Note_old, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -272,7 +272,7 @@ class DataManager {
       - noteData: 保存したいノート
       - completion: データ取得後に実行する処理
      */
-    func saveNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
+    func saveNoteData(_ noteData:Note_old, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -328,7 +328,7 @@ class DataManager {
       - noteData: 保存したいノート
       - completion: データ取得後に実行する処理
      */
-    func copyNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
+    func copyNoteData(_ noteData:Note_old, _ completion: @escaping () -> ()) {
         // ユーザーUIDをセット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         noteData.setUserID(userID)
@@ -375,7 +375,7 @@ class DataManager {
       - noteData: 削除したいノート
       - completion: データ取得後に実行する処理
      */
-    func deleteNoteData(_ noteData:Note, _ completion: @escaping () -> ()) {
+    func deleteNoteData(_ noteData:Note_old, _ completion: @escaping () -> ()) {
         // isDeletedをセット
         noteData.setIsDeleted(true)
         
@@ -633,8 +633,8 @@ class DataManager {
       - documents: querySnapshot!.documents
      - Returns: 課題データ
      */
-    func createTaskFromCollection(_ taskCollection: [String: Any]) -> Task {
-        let databaseTask = Task()
+    func createTaskFromCollection(_ taskCollection: [String: Any]) -> Task_old {
+        let databaseTask = Task_old()
         
         databaseTask.setTaskID(taskCollection["taskID"] as! Int)
         databaseTask.setTitle(taskCollection["taskTitle"] as! String)
@@ -660,7 +660,7 @@ class DataManager {
       - task: 更新したいTask
       - completion: 処理完了後に実行する処理
      */
-    func updateTaskData(_ taskData:Task, _ completion: @escaping () -> ()) {
+    func updateTaskData(_ taskData:Task_old, _ completion: @escaping () -> ()) {
         // HUDで処理中を表示
         SVProgressHUD.show()
         
@@ -711,7 +711,7 @@ class DataManager {
     {
         // ユーザーIDをセット
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        let taskData = Task()
+        let taskData = Task_old()
         taskData.setUserID(userID)
         
         // 入力されたテキストをTaskDataにセット
@@ -742,7 +742,7 @@ class DataManager {
       - taskData: 保存したいTask
       - completion: 処理完了後に実行する処理
      */
-    func copyTaskData(_ taskData:Task, _ completion: @escaping () -> ()) {
+    func copyTaskData(_ taskData:Task_old, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         taskData.setUserID(userID)
@@ -757,7 +757,7 @@ class DataManager {
       - taskData: 保存したいTask
       - completion: 処理完了後に実行する処理
      */
-    func saveTask(_ taskData: Task, _ completion: @escaping () -> ()) {
+    func saveTask(_ taskData: Task_old, _ completion: @escaping () -> ()) {
         let db = Firestore.firestore()
         db.collection("TaskData").document("\(taskData.getUserID())_\(taskData.getTaskID())").setData([
             "taskID"           : taskData.getTaskID(),
@@ -828,7 +828,7 @@ class DataManager {
                 for document in querySnapshot!.documents {
                     // 目標データを反映
                     let targetDataCollection = document.data()
-                    let target = Target()
+                    let target = Target_old()
                     target.setYear(targetDataCollection["year"] as! Int)
                     target.setMonth(targetDataCollection["month"] as! Int)
                     target.setDetail(targetDataCollection["detail"] as! String)
@@ -853,7 +853,7 @@ class DataManager {
       - targetData: 目標データ
       - completion: データ取得後に実行する処理
      */
-    func updateTargetData(_ targetData:Target, _ completion: @escaping () -> ()) {
+    func updateTargetData(_ targetData:Target_old, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
@@ -896,7 +896,7 @@ class DataManager {
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
         // 目標データを作成
-        let targetData = Target()
+        let targetData = Target_old()
         targetData.setYear(year)
         targetData.setMonth(month)
         targetData.setDetail(detail)
@@ -933,7 +933,7 @@ class DataManager {
       - targetData: 保存したい目標データ
       - completion: データ取得後に実行する処理
      */
-    func copyTargetData(_ targetData:Target, _ completion: @escaping () -> ()) {
+    func copyTargetData(_ targetData:Target_old, _ completion: @escaping () -> ()) {
         // ユーザーIDを取得
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         targetData.setUserID(userID)

@@ -1,12 +1,12 @@
 //
-//  FreeNote.swift
+//  FreeNote_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/03.
 //  Copyright © 2020 Takatoshi Miura. All rights reserved.
 //
 
-class FreeNote {
+class FreeNote_old {
     
     //MARK:- 保持データ
     private var title:String  = "フリーノート"                        // タイトル

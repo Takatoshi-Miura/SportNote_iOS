@@ -1,5 +1,5 @@
 //
-//  Task.swift
+//  Task_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/06/26.
@@ -7,7 +7,7 @@
 //
 import Firebase
 
-class Task {
+class Task_old {
     
     //MARK:- 保持データ
     static var count: Int = 0                    // 課題の数
@@ -96,13 +96,13 @@ class Task {
                     let taskDataCollection = document.data()
                     // 課題IDの重複対策
                     // データベースの課題IDの最大値を取得
-                    if taskDataCollection["taskID"] as! Int  > Task.count {
-                        Task.count = taskDataCollection["taskID"] as! Int
+                    if taskDataCollection["taskID"] as! Int  > Task_old.count {
+                        Task_old.count = taskDataCollection["taskID"] as! Int
                     }
                 }
                 // 課題IDは課題IDの最大値＋１で設定
-                Task.count += 1
-                self.taskID = Task.count
+                Task_old.count += 1
+                self.taskID = Task_old.count
                 // 完了処理
                 completion()
             }

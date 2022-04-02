@@ -19,7 +19,7 @@ class NoteViewController_old: UIViewController, UITableViewDelegate, UITableView
     
     // テーブル用
     var sectionTitle: [String] = ["フリーノート"]
-    var noteInSection: [[Note]] = [[]]
+    var noteInSection: [[Note_old]] = [[]]
     var selectedIndexPath: IndexPath = [0, 0]
     
     var isAdMobShow:Bool = false
@@ -434,7 +434,7 @@ class NoteViewController_old: UIViewController, UITableViewDelegate, UITableView
      (フリーノート用に0番目にはダミーのノートを入れる)
      */
     func initNoteInSection() {
-        let dummyNoteData = Note()
+        let dummyNoteData = Note_old()
         self.noteInSection = [[]]
         self.noteInSection[NoteType.freeNote.rawValue].append(dummyNoteData)
     }
@@ -468,8 +468,8 @@ class NoteViewController_old: UIViewController, UITableViewDelegate, UITableView
      - target: 目標データ
      - returns: ノートデータ
      */
-    func getNoteArray(_ target: Target) -> [Note] {
-        var noteArray:[Note] = []
+    func getNoteArray(_ target: Target_old) -> [Note_old] {
+        var noteArray:[Note_old] = []
         for note in dataManager.noteDataArray {
             if note.getYear() == target.getYear()
                 && note.getMonth() == target.getMonth()
@@ -488,7 +488,7 @@ class NoteViewController_old: UIViewController, UITableViewDelegate, UITableView
     }
     
     // 目標を更新
-    func updateTargetData(target targetData:Target) {
+    func updateTargetData(target targetData:Target_old) {
         dataManager.updateTargetData(targetData, {
             self.reloadData()
         })

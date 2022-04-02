@@ -113,7 +113,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     
     // データ格納用
     var dataManager = DataManager()
-    var competitionNoteData = Note()
+    var competitionNoteData = Note_old()
     
     // データ保存終了フラグ
     var saveDataFinished:Bool = false
@@ -571,7 +571,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     //MARK:- その他のメソッド
     
     // ノートデータのテキストをセットするメソッド
-    func setTextData(noteData note:Note) {
+    func setTextData(noteData note:Note_old) {
         self.physicalConditionTextView.text = note.getPhysicalCondition()
         self.targetTextView.text = note.getTarget()
         self.consciousnessTextView.text = note.getConsciousness()
@@ -580,7 +580,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     }
     
     // ノートの日付をDatePickerにセットするメソッド
-    func setDatePicker(noteData note:Note) {
+    func setDatePicker(noteData note:Note_old) {
         // 日付をセット
         self.year  = note.getYear()
         self.month = note.getMonth()
@@ -598,7 +598,7 @@ class AddCompetitionNoteContentViewController: UIViewController, UIPickerViewDel
     }
     
     // 天候データをweatherPickerにセットするメソッド
-    func setWeatherPicker(noteData note:Note) {
+    func setWeatherPicker(noteData note:Note_old) {
         // 気温をセット
         self.temperatureIndex = note.getTemperature() + 40
         self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)

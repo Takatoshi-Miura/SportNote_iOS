@@ -120,7 +120,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     
     // データ格納用
     var dataManager = DataManager()
-    var practiceNoteData = Note()
+    var practiceNoteData = Note_old()
     
     // 終了フラグ
     var saveFinished:Bool = false
@@ -783,7 +783,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // Firebaseの課題データを更新するメソッド
-    func updateTaskData(task taskData:Task) {
+    func updateTaskData(task taskData:Task_old) {
         dataManager.updateTaskData(taskData, {})
     }
     
@@ -792,7 +792,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     //MARK:- その他のメソッド
     
     // ノートデータのテキストをセットするメソッド
-    func setTextData(noteData note:Note) {
+    func setTextData(noteData note:Note_old) {
         self.physicalConditionTextView.text = note.getPhysicalCondition()
         self.purposeTextView.text = note.getPurpose()
         self.detailTextView.text = note.getDetail()
@@ -800,7 +800,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // ノートの日付をDatePickerにセットするメソッド
-    func setDatePicker(noteData note:Note) {
+    func setDatePicker(noteData note:Note_old) {
         // 日付をセット
         self.year  = note.getYear()
         self.month = note.getMonth()
@@ -818,7 +818,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     }
     
     // 天候データをweatherPickerにセットするメソッド
-    func setWeatherPicker(noteData note:Note) {
+    func setWeatherPicker(noteData note:Note_old) {
         // 気温をセット
         self.temperatureIndex = note.getTemperature() + 40
         self.weatherPicker.selectRow(self.temperatureIndex, inComponent: 1, animated: true)

@@ -1,5 +1,5 @@
 //
-//  Target.swift
+//  Target_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/04.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Target {
+class Target_old {
     
     //MARK:- 保持データ
     private var year:Int = 2020         // 年

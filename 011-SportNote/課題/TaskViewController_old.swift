@@ -222,7 +222,7 @@ class TaskViewController_old: UIViewController, UITableViewDelegate, UITableView
     // セルの並び替え時の処理
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         // 並び順を保存
-        let task: Task = dataManager.taskDataArray[sourceIndexPath.row]
+        let task: Task_old = dataManager.taskDataArray[sourceIndexPath.row]
         self.dataManager.taskDataArray.remove(at: sourceIndexPath.row)
         self.dataManager.taskDataArray.insert(task, at: destinationIndexPath.row)
         self.dataManager.setTaskOrder()

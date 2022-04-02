@@ -156,7 +156,7 @@ class CreateAccountViewController: UIViewController {
     }
     
     // 目標データを作成するメソッド(新IDで複製)
-    func createTargetData(_ targetDataArray:[Target], _ completion: @escaping () -> ()) {
+    func createTargetData(_ targetDataArray:[Target_old], _ completion: @escaping () -> ()) {
         SVProgressHUD.show(withStatus: "目標データの引継ぎをしています")
         var count = 0
         for targetData in targetDataArray {
@@ -170,7 +170,7 @@ class CreateAccountViewController: UIViewController {
     }
     
     // ノートデータを複製するメソッド
-    func createNoteData(_ noteDataArray:[Note], _ completion: @escaping () -> ()) {
+    func createNoteData(_ noteDataArray:[Note_old], _ completion: @escaping () -> ()) {
         SVProgressHUD.show(withStatus: "ノートデータの引継ぎをしています")
         var count = 0
         for noteData in noteDataArray {
@@ -184,7 +184,7 @@ class CreateAccountViewController: UIViewController {
     }
     
     // 課題データを複製するメソッド
-    func createTaskData(_ taskDataArray:[Task], _ completion: @escaping () -> ()) {
+    func createTaskData(_ taskDataArray:[Task_old], _ completion: @escaping () -> ()) {
         // 課題データを複製
         SVProgressHUD.show(withStatus: "課題データの引継ぎをしています")
         var count = 0

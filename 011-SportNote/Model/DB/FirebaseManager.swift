@@ -10,7 +10,7 @@ import Firebase
 
 class FirebaseManager {
     
-    var firebaseOldNoteArray: [Note] = []
+    var firebaseOldNoteArray: [Note_old] = []
     var firebasePracticeNoteArray: [PracticeNote] = []
 
     // MARK: - Create
@@ -34,7 +34,7 @@ class FirebaseManager {
                 self.firebaseOldNoteArray = []
                 for document in querySnapshot!.documents {
                     let dataCollection = document.data()
-                    let note = Note()
+                    let note = Note_old()
                     note.setNoteID(dataCollection["noteID"] as! Int)
                     note.setNoteType(dataCollection["noteType"] as! String)
                     note.setYear(dataCollection["year"] as! Int)

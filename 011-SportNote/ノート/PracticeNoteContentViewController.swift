@@ -43,7 +43,7 @@ class PracticeNoteContentViewController: UIViewController,UITableViewDelegate,UI
     
     //MARK:- 変数の宣言
     
-    var noteData = Note()
+    var noteData = Note_old()
     
     
     
@@ -109,7 +109,7 @@ class PracticeNoteContentViewController: UIViewController,UITableViewDelegate,UI
     //MARK:- その他のメソッド
     
     // テキストビューにnoteDataを表示するメソッド
-    func printNoteData(_ noteData:Note) {
+    func printNoteData(_ noteData:Note_old) {
         // テキストビューに表示
         physicalConditionTextView.text = noteData.getPhysicalCondition()
         purposeTextView.text = noteData.getPurpose()

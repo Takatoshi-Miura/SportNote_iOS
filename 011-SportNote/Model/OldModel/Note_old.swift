@@ -1,5 +1,5 @@
 //
-//  Note.swift
+//  Note_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/08.
@@ -8,7 +8,7 @@
 
 import Firebase
 
-class Note {
+class Note_old {
     
     //MARK:- 保持データ
     static var noteCount:Int = 0                    // ノートの数
@@ -157,14 +157,14 @@ class Note {
                     let dataCollection = document.data()
             
                     // ノートIDの重複対策
-                    if dataCollection["noteID"] as! Int > Note.noteCount {
-                        Note.noteCount = dataCollection["noteID"] as! Int
+                    if dataCollection["noteID"] as! Int > Note_old.noteCount {
+                        Note_old.noteCount = dataCollection["noteID"] as! Int
                     }
                 }
             }
             // 新規ノートIDはノート数+1で設定
-            Note.noteCount += 1
-            self.setNoteID(Note.noteCount)
+            Note_old.noteCount += 1
+            self.setNoteID(Note_old.noteCount)
         }
     }
     
@@ -270,7 +270,7 @@ class Note {
     }
     
     // 課題を追加するメソッド
-    func addTask(taskData task:Task) {
+    func addTask(taskData task:Task_old) {
         self.taskTitle.append(task.getTitle())
         self.measuresTitle.append(task.getMeasuresPriority())
         self.measuresEffectiveness.append("")

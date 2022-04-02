@@ -48,7 +48,7 @@ class DBDataFormatter {
     /// - Parameters:
     ///   - oldNote: 旧ノートデータ
     /// - Returns: 新ノートデータ(PracticeNote or TournamentNote)
-    func convertToNote(oldNote: Note) -> Any {
+    func convertToNote(oldNote: Note_old) -> Any {
         if oldNote.getNoteType() == OldNoteType.practice.rawValue {
             let practiceNote = PracticeNote()
             practiceNote.weather = convertToWeather(weather: oldNote.getWeather())

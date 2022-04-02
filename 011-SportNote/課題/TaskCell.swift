@@ -22,7 +22,7 @@ class TaskCell: UITableViewCell {
     @IBOutlet weak var cause: UILabel!
     @IBOutlet weak var measure: UILabel!
     
-    func setTaskData(_ task: Task) {
+    func setTaskData(_ task: Task_old) {
         title.text = task.getTitle()
         cause.text = "　原因：\(task.getCause())"
         measure.text = "　対策：\(task.getMeasuresPriority())"
