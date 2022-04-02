@@ -24,10 +24,8 @@ enum TabBarPage {
         }
     }
     
-    /**
-     タイトルを返却
-     - Returns: タイトル文字列
-     */
+    /// タイトルを返却
+    /// - Returns: タイトル文字列
     func pageTitleValue() -> String {
         switch self {
         case .task:
@@ -36,11 +34,9 @@ enum TabBarPage {
             return NSLocalizedString("Note", comment: "")
         }
     }
-
-    /**
-     並び順を返却
-     - Returns: 並び順
-     */
+    
+    /// 並び順を返却
+    /// - Returns: 並び順
     func pageOrderNumber() -> Int {
         switch self {
         case .task:
@@ -50,10 +46,8 @@ enum TabBarPage {
         }
     }
     
-    /**
-     タブのアイコン画像を返却
-     - Returns: アイコン画像
-     */
+    /// タブのアイコン画像を返却
+    /// - Returns: アイコン画像
     func pageTabIcon() -> UIImage {
         switch self {
         case .task:
@@ -62,6 +56,7 @@ enum TabBarPage {
             return UIImage(systemName: "book")!
         }
     }
+    
 }
 
 
@@ -82,7 +77,7 @@ class TabCoordinator: NSObject, Coordinator {
     
     var tabBarController: UITabBarController
     let taskCoordinator = TaskCoordinator()
-//    let noteCoordinator = NoteCoordinator()
+    let noteCoordinator = NoteCoordinator()
     
     required override init() {
         self.tabBarController = .init()
@@ -101,13 +96,11 @@ class TabCoordinator: NSObject, Coordinator {
     
     func startFlow(in viewController: UIViewController) {
     }
-      
-    /**
-     TabBarControllerに含まれるViewControllerを取得
-     - Parameters:
-        - page: ページ番号
-     - Returns: ViewController(NavigationController配下)
-     */
+    
+    /// TabBarControllerに含まれるViewControllerを取得
+    /// - Parameters:
+    ///    - page: ページ番号
+    /// - Returns: ViewController(NavigationController配下)
     private func getTabController(_ page: TabBarPage) -> UINavigationController {
         // NavigationController生成
         let navController = UINavigationController()
@@ -128,8 +121,7 @@ class TabCoordinator: NSObject, Coordinator {
         case .task:
             taskCoordinator.startFlow(in: navController)
         case .note:
-            print("")
-//            noteCoordinator.startFlow(in: navController)
+            noteCoordinator.startFlow(in: navController)
         }
         
         return navController
@@ -148,11 +140,9 @@ class TabCoordinator: NSObject, Coordinator {
         tabBarController.selectedIndex = page.pageOrderNumber()
     }
     
-    /**
-     TabBarControllerの初期設定
-     - Parameters:
-        - withTabControllers: TabBarに含めるViewController
-     */
+    /// TabBarControllerの初期設定
+    /// - Parameters:
+    ///    - withTabControllers: TabBarに含めるViewController
     private func prepareTabBarController(withTabControllers tabControllers: [UIViewController]) {
         tabBarController.delegate = self
         tabBarController.setViewControllers(tabControllers, animated: true)
@@ -166,8 +156,8 @@ class TabCoordinator: NSObject, Coordinator {
             UITabBar.appearance().scrollEdgeAppearance = appearance
         }
     }
+    
 }
-
 
 extension TabCoordinator: UITabBarControllerDelegate {
     

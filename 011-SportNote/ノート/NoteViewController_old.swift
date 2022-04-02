@@ -1,5 +1,5 @@
 //
-//  NoteViewController.swift
+//  NoteViewController_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/03.
@@ -11,7 +11,7 @@ import Firebase
 import SVProgressHUD
 import GoogleMobileAds
 
-class NoteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class NoteViewController_old: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK:- 変数の宣言
     
