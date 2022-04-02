@@ -15,12 +15,12 @@ class SyncManager {
     
     func convertOldNoteToNote(_ completion: @escaping () -> ()) {
         let firebaseManager = FirebaseManager()
-        let dbDataFormatter = DBDataFormatter()
+        let dataConverter = DataConverter()
         
         firebaseManager.getOldNote({
             self.oldNoteArray = firebaseManager.oldNoteArray
             for oldNote in self.oldNoteArray {
-                self.newNoteArray.append(dbDataFormatter.convertToNote(oldNote: oldNote))
+                self.newNoteArray.append(dataConverter.convertToNote(oldNote: oldNote))
             }
             completion()
         })

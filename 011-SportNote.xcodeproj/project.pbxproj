@@ -29,7 +29,7 @@
 		8D481D4D27F7D9040082D956 /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D4C27F7D9030082D956 /* Definition.swift */; };
 		8D481D5127F7E5470082D956 /* PracticeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5027F7E5470082D956 /* PracticeNote.swift */; };
 		8D481D5527F808090082D956 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5427F808090082D956 /* FirebaseManager.swift */; };
-		8D481D5727F80EB50082D956 /* DBDataFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5627F80EB50082D956 /* DBDataFormatter.swift */; };
+		8D481D5727F80EB50082D956 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5627F80EB50082D956 /* DataConverter.swift */; };
 		8D481D5927F813650082D956 /* TournamentNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5827F813650082D956 /* TournamentNote.swift */; };
 		8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5A27F8256E0082D956 /* SyncManager.swift */; };
 		8D481D5E27F861D50082D956 /* FreeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5D27F861D50082D956 /* FreeNote.swift */; };
@@ -106,7 +106,7 @@
 		8D481D4C27F7D9030082D956 /* Definition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definition.swift; sourceTree = "<group>"; };
 		8D481D5027F7E5470082D956 /* PracticeNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNote.swift; sourceTree = "<group>"; };
 		8D481D5427F808090082D956 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
-		8D481D5627F80EB50082D956 /* DBDataFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBDataFormatter.swift; sourceTree = "<group>"; };
+		8D481D5627F80EB50082D956 /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
 		8D481D5827F813650082D956 /* TournamentNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentNote.swift; sourceTree = "<group>"; };
 		8D481D5A27F8256E0082D956 /* SyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		8D481D5D27F861D50082D956 /* FreeNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNote.swift; sourceTree = "<group>"; };
@@ -335,7 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				8D481D5A27F8256E0082D956 /* SyncManager.swift */,
-				8D481D5627F80EB50082D956 /* DBDataFormatter.swift */,
+				8D481D5627F80EB50082D956 /* DataConverter.swift */,
 				8D481D5427F808090082D956 /* FirebaseManager.swift */,
 			);
 			path = DB;
@@ -633,7 +633,7 @@
 				8DCF350A24F6554900055093 /* Task_old.swift in Sources */,
 				8DC1931427F7BE320097BF07 /* NoteCoordinator.swift in Sources */,
 				8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */,
-				8D481D5727F80EB50082D956 /* DBDataFormatter.swift in Sources */,
+				8D481D5727F80EB50082D956 /* DataConverter.swift in Sources */,
 				8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */,
 				8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */,
 				8D481D6627F8678E0082D956 /* Memo.swift in Sources */,
