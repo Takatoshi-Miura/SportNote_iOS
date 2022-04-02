@@ -1,0 +1,351 @@
+
+/* Class = "UINavigationItem"; title = "ノート追加"; ObjectID = "0Sx-QK-ETr"; */
+"0Sx-QK-ETr.title" = "ノート追加";
+
+/* Class = "UILabel"; text = "　反省・気づいたこと"; ObjectID = "0cz-3v-fIW"; */
+"0cz-3v-fIW.text" = "　反省・気づいたこと";
+
+/* Class = "UIButton"; normalTitle = "追加"; ObjectID = "1cW-fz-mNm"; */
+"1cW-fz-mNm.normalTitle" = "追加";
+
+/* Class = "UINavigationItem"; title = "設定"; ObjectID = "1g3-if-Vzu"; */
+"1g3-if-Vzu.title" = "設定";
+
+/* Class = "UIButton"; normalTitle = "戻る"; ObjectID = "1hr-z2-oMV"; */
+"1hr-z2-oMV.normalTitle" = "戻る";
+
+/* Class = "UILabel"; text = "　結果"; ObjectID = "1we-dm-e8b"; */
+"1we-dm-e8b.text" = "　結果";
+
+/* Class = "UINavigationItem"; title = "対策の詳細"; ObjectID = "34d-Wo-hFs"; */
+"34d-Wo-hFs.title" = "対策の詳細";
+
+/* Class = "UIButton"; normalTitle = "閉じる"; ObjectID = "35l-iD-CC6"; */
+"35l-iD-CC6.normalTitle" = "閉じる";
+
+/* Class = "UILabel"; text = "　反省・気づいたこと"; ObjectID = "38F-HS-G8K"; */
+"38F-HS-G8K.text" = "　反省・気づいたこと";
+
+/* Class = "UIButton"; normalTitle = "保存"; ObjectID = "3K1-Ly-3DY"; */
+"3K1-Ly-3DY.normalTitle" = "保存";
+
+/* Class = "UILabel"; text = "　内容"; ObjectID = "4Qd-p5-ENl"; */
+"4Qd-p5-ENl.text" = "　内容";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "5GT-ME-rt9"; */
+"5GT-ME-rt9.text" = "Title";
+
+/* Class = "UINavigationItem"; title = "課題"; ObjectID = "5Nx-Qs-1Of"; */
+"5Nx-Qs-1Of.title" = "課題";
+
+/* Class = "UILabel"; text = "　練習内容"; ObjectID = "5Qh-vS-xMV"; */
+"5Qh-vS-xMV.text" = "　練習内容";
+
+/* Class = "UIButton"; normalTitle = "追加"; ObjectID = "5kQ-Pv-68B"; */
+"5kQ-Pv-68B.normalTitle" = "追加";
+
+/* Class = "UILabel"; text = "　タイトル"; ObjectID = "6G8-31-gMM"; */
+"6G8-31-gMM.text" = "　タイトル";
+
+/* Class = "UINavigationItem"; title = "課題の詳細"; ObjectID = "6Oc-tf-xOx"; */
+"6Oc-tf-xOx.title" = "課題の詳細";
+
+/* Class = "UIButton"; normalTitle = "戻る"; ObjectID = "6sL-CO-oWk"; */
+"6sL-CO-oWk.normalTitle" = "戻る";
+
+/* Class = "UIButton"; normalTitle = "解決済みの課題一覧"; ObjectID = "77R-1Z-HDv"; */
+"77R-1Z-HDv.normalTitle" = "解決済みの課題一覧";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "7qp-zD-FBO"; */
+"7qp-zD-FBO.text" = "Detail";
+
+/* Class = "UIButton"; normalTitle = "編集"; ObjectID = "87u-og-RkA"; */
+"87u-og-RkA.normalTitle" = "編集";
+
+/* Class = "UITextField"; placeholder = "課題の内容を入力して下さい"; ObjectID = "BUa-JU-aBw"; */
+"BUa-JU-aBw.placeholder" = "課題の内容を入力して下さい";
+
+/* Class = "UIButton"; normalTitle = "保存"; ObjectID = "Ba3-5Z-KMO"; */
+"Ba3-5Z-KMO.normalTitle" = "保存";
+
+/* Class = "UILabel"; text = "　反省・気づいたこと"; ObjectID = "C4u-co-xoU"; */
+"C4u-co-xoU.text" = "　反省・気づいたこと";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "CTQ-8K-8cb"; */
+"CTQ-8K-8cb.text" = "Title";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "CgZ-Pn-35D"; */
+"CgZ-Pn-35D.text" = "Title";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "DWd-XA-SEV"; */
+"DWd-XA-SEV.text" = "Detail";
+
+/* Class = "UILabel"; text = "　目標"; ObjectID = "Dfv-c4-th4"; */
+"Dfv-c4-th4.text" = "　目標";
+
+/* Class = "UILabel"; text = "　意識すること"; ObjectID = "EBL-w6-8U7"; */
+"EBL-w6-8U7.text" = "　意識すること";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "Ebd-tU-2Ke"; */
+"Ebd-tU-2Ke.text" = "Title";
+
+/* Class = "UILabel"; text = "　体調"; ObjectID = "Eqj-H3-UG1"; */
+"Eqj-H3-UG1.text" = "　体調";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "Eu2-E2-K7D"; */
+"Eu2-E2-K7D.text" = "Subtitle";
+
+/* Class = "UILabel"; text = "　反省・気づいたこと"; ObjectID = "FM2-WX-yqz"; */
+"FM2-WX-yqz.text" = "　反省・気づいたこと";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "GMO-N8-Wm4"; */
+"GMO-N8-Wm4.text" = "Subtitle";
+
+/* Class = "UITextField"; placeholder = "メールアドレス"; ObjectID = "HrZ-FU-ZWy"; */
+"HrZ-FU-ZWy.placeholder" = "メールアドレス";
+
+/* Class = "UIButton"; normalTitle = "保存"; ObjectID = "I6G-mA-bA4"; */
+"I6G-mA-bA4.normalTitle" = "保存";
+
+/* Class = "UILabel"; text = "　意識すること"; ObjectID = "IU1-Ox-lLN"; */
+"IU1-Ox-lLN.text" = "　意識すること";
+
+/* Class = "UILabel"; text = "アカウントを作成し、ログインするとデータを引き継ぐことができます。"; ObjectID = "Ias-xl-Mee"; */
+"Ias-xl-Mee.text" = "アカウントを作成し、ログインするとデータを引き継ぐことができます。";
+
+/* Class = "UILabel"; text = "課題解決に特化したノートアプリです。課題の原因と対策を考え、あああああああああああああああああああああああああああ"; ObjectID = "JJU-Xm-NC4"; */
+"JJU-Xm-NC4.text" = "課題解決に特化したノートアプリです。課題の原因と対策を考え、あああああああああああああああああああああああああああ";
+
+/* Class = "UILabel"; text = "　体調"; ObjectID = "JW7-A0-XwT"; */
+"JW7-A0-XwT.text" = "　体調";
+
+/* Class = "UINavigationItem"; title = "ノートの日付"; ObjectID = "Jkc-hG-vrC"; */
+"Jkc-hG-vrC.title" = "ノートの日付";
+
+/* Class = "UILabel"; text = "　内容"; ObjectID = "KcX-tk-MI9"; */
+"KcX-tk-MI9.text" = "　内容";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "Kyn-9N-wgY"; */
+"Kyn-9N-wgY.text" = "Subtitle";
+
+/* Class = "UILabel"; text = "初めての方"; ObjectID = "Lpa-xf-gzj"; */
+"Lpa-xf-gzj.text" = "初めての方";
+
+/* Class = "UIButton"; normalTitle = "戻る"; ObjectID = "McN-rb-jLj"; */
+"McN-rb-jLj.normalTitle" = "戻る";
+
+/* Class = "UILabel"; text = "　対策"; ObjectID = "N6N-Vu-ObP"; */
+"N6N-Vu-ObP.text" = "　対策";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "Nik-wU-Sfc"; */
+"Nik-wU-Sfc.text" = "Title";
+
+/* Class = "UIButton"; normalTitle = "この対策を最有力にする"; ObjectID = "OK4-Ic-uvt"; */
+"OK4-Ic-uvt.normalTitle" = "この対策を最有力にする";
+
+/* Class = "UIButton"; normalTitle = "閉じる"; ObjectID = "P53-3z-1xH"; */
+"P53-3z-1xH.normalTitle" = "閉じる";
+
+/* Class = "UINavigationItem"; title = "ノート追加"; ObjectID = "PSw-nC-03y"; */
+"PSw-nC-03y.title" = "ノート追加";
+
+/* Class = "UILabel"; text = "　練習内容"; ObjectID = "QAK-ZF-wxm"; */
+"QAK-ZF-wxm.text" = "　練習内容";
+
+/* Class = "UINavigationItem"; title = "ノート"; ObjectID = "QFB-Dg-et7"; */
+"QFB-Dg-et7.title" = "ノート";
+
+/* Class = "UIBarButtonItem"; title = "戻る"; ObjectID = "Qga-t7-REU"; */
+"Qga-t7-REU.title" = "戻る";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "R8K-Aj-lbV"; */
+"R8K-Aj-lbV.text" = "Subtitle";
+
+/* Class = "UILabel"; text = "　体調"; ObjectID = "RSY-H7-Ct7"; */
+"RSY-H7-Ct7.text" = "　体調";
+
+/* Class = "UILabel"; text = "パスワードをリセットする"; ObjectID = "Re2-xW-Czd"; */
+"Re2-xW-Czd.text" = "パスワードをリセットする";
+
+/* Class = "UITextField"; placeholder = "メールアドレス"; ObjectID = "SAU-2O-3WL"; */
+"SAU-2O-3WL.placeholder" = "メールアドレス";
+
+/* Class = "UILabel"; text = "　体調"; ObjectID = "SXh-vS-J8p"; */
+"SXh-vS-J8p.text" = "　体調";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "T5z-ry-TE2"; */
+"T5z-ry-TE2.text" = "Title";
+
+/* Class = "UITextField"; placeholder = "パスワード"; ObjectID = "TR3-Ge-Hfz"; */
+"TR3-Ge-Hfz.placeholder" = "パスワード";
+
+/* Class = "UILabel"; text = "　対策の有効性"; ObjectID = "UwF-Ia-l8E"; */
+"UwF-Ia-l8E.text" = "　対策の有効性";
+
+/* Class = "UILabel"; text = "　課題と対策の有効性"; ObjectID = "V20-4o-abY"; */
+"V20-4o-abY.text" = "　課題と対策の有効性";
+
+/* Class = "UILabel"; text = "　対策"; ObjectID = "Vle-Sc-bE5"; */
+"Vle-Sc-bE5.text" = "　対策";
+
+/* Class = "UILabel"; text = "既にアカウントをお持ちの方"; ObjectID = "Wsn-s7-pAm"; */
+"Wsn-s7-pAm.text" = "既にアカウントをお持ちの方";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "XaJ-LM-Gea"; */
+"XaJ-LM-Gea.text" = "Subtitle";
+
+/* Class = "UINavigationItem"; title = "解決済み"; ObjectID = "Xgl-ke-KKi"; */
+"Xgl-ke-KKi.title" = "解決済み";
+
+/* Class = "UITextField"; placeholder = "タイトルを入力して下さい"; ObjectID = "YQt-0S-EVZ"; */
+"YQt-0S-EVZ.placeholder" = "タイトルを入力して下さい";
+
+/* Class = "UITextField"; placeholder = "パスワード"; ObjectID = "YW9-38-mEl"; */
+"YW9-38-mEl.placeholder" = "パスワード";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "Yip-yr-e8q"; */
+"Yip-yr-e8q.text" = "Detail";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "a37-ks-1CF"; */
+"a37-ks-1CF.text" = "Title";
+
+/* Class = "UIButton"; normalTitle = "パスワードを忘れた場合"; ObjectID = "acP-1J-4XK"; */
+"acP-1J-4XK.normalTitle" = "パスワードを忘れた場合";
+
+/* Class = "UINavigationItem"; title = "課題の追加"; ObjectID = "ahZ-pw-iTx"; */
+"ahZ-pw-iTx.title" = "課題の追加";
+
+/* Class = "UIButton"; normalTitle = "ログイン"; ObjectID = "c2Q-en-uRn"; */
+"c2Q-en-uRn.normalTitle" = "ログイン";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "cPt-Al-WOM"; */
+"cPt-Al-WOM.text" = "Title";
+
+/* Class = "UILabel"; text = "　原因"; ObjectID = "d3l-5i-xIq"; */
+"d3l-5i-xIq.text" = "　原因";
+
+/* Class = "UILabel"; text = "SportsNoteアカウントで使用しているメールアドレスを入力してください。"; ObjectID = "dQD-Af-XSw"; */
+"dQD-Af-XSw.text" = "SportsNoteアカウントで使用しているメールアドレスを入力してください。";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "ehK-nQ-E9a"; */
+"ehK-nQ-E9a.text" = "Title";
+
+/* Class = "UITextField"; placeholder = "対策の内容を入力して下さい"; ObjectID = "fBP-LM-uWJ"; */
+"fBP-LM-uWJ.placeholder" = "対策の内容を入力して下さい";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "fTX-F7-5oE"; */
+"fTX-F7-5oE.text" = "Title";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "faZ-YO-v2y"; */
+"faZ-YO-v2y.text" = "Title";
+
+/* Class = "UIButton"; normalTitle = "リセットメールを送信"; ObjectID = "ftV-ce-5IG"; */
+"ftV-ce-5IG.normalTitle" = "リセットメールを送信";
+
+/* Class = "UITabBarItem"; title = "ノート"; ObjectID = "fuB-Uu-gaQ"; */
+"fuB-Uu-gaQ.title" = "ノート";
+
+/* Class = "UITabBarItem"; title = "設定"; ObjectID = "g6f-va-lf2"; */
+"g6f-va-lf2.title" = "設定";
+
+/* Class = "UIButton"; normalTitle = "アカウント作成"; ObjectID = "gWd-fL-Iqa"; */
+"gWd-fL-Iqa.normalTitle" = "アカウント作成";
+
+/* Class = "UINavigationItem"; title = "ノート追加"; ObjectID = "gpA-Xa-pMl"; */
+"gpA-Xa-pMl.title" = "ノート追加";
+
+/* Class = "UILabel"; text = "　原因"; ObjectID = "h5i-Xv-JM1"; */
+"h5i-Xv-JM1.text" = "　原因";
+
+/* Class = "UIBarButtonItem"; title = "保存"; ObjectID = "hjW-AZ-GTR"; */
+"hjW-AZ-GTR.title" = "保存";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "iPN-ky-BpI"; */
+"iPN-ky-BpI.text" = "Detail";
+
+/* Class = "UITextView"; text = "常に最上位に表示されるノートです。"; ObjectID = "idN-Xg-QwJ"; */
+"idN-Xg-QwJ.text" = "常に最上位に表示されるノートです。";
+
+/* Class = "UILabel"; text = "　練習の目的"; ObjectID = "k1j-yd-gRx"; */
+"k1j-yd-gRx.text" = "　練習の目的";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "k5a-w1-7gj"; */
+"k5a-w1-7gj.text" = "Title";
+
+/* Class = "UILabel"; text = "　タイトル"; ObjectID = "kxC-uY-OKr"; */
+"kxC-uY-OKr.text" = "　タイトル";
+
+/* Class = "UILabel"; text = "　課題と対策の有効性"; ObjectID = "l5p-c1-IuY"; */
+"l5p-c1-IuY.text" = "　課題と対策の有効性";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "mx0-6T-iaJ"; */
+"mx0-6T-iaJ.text" = "Title";
+
+/* Class = "UILabel"; text = "　タイトル"; ObjectID = "o1l-F8-dKe"; */
+"o1l-F8-dKe.text" = "　タイトル";
+
+/* Class = "UINavigationItem"; title = "課題の追加"; ObjectID = "oNT-xV-sFw"; */
+"oNT-xV-sFw.title" = "課題の追加";
+
+/* Class = "UILabel"; text = "　結果"; ObjectID = "ojk-HC-wuZ"; */
+"ojk-HC-wuZ.text" = "　結果";
+
+/* Class = "UITextField"; placeholder = "課題の内容を入力して下さい"; ObjectID = "opI-eD-Aj8"; */
+"opI-eD-Aj8.placeholder" = "課題の内容を入力して下さい";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "pK1-9Q-PE0"; */
+"pK1-9Q-PE0.text" = "Title";
+
+/* Class = "UITextField"; placeholder = "メールアドレス"; ObjectID = "pa6-gW-fX2"; */
+"pa6-gW-fX2.placeholder" = "メールアドレス";
+
+/* Class = "UINavigationItem"; title = "ノート追加"; ObjectID = "q40-bD-cPz"; */
+"q40-bD-cPz.title" = "ノート追加";
+
+/* Class = "UIButton"; normalTitle = "アカウント作成"; ObjectID = "qVB-W8-vTb"; */
+"qVB-W8-vTb.normalTitle" = "アカウント作成";
+
+/* Class = "UILabel"; text = "SportsNoteとは"; ObjectID = "sIW-ie-ZLY"; */
+"sIW-ie-ZLY.text" = "SportsNoteとは";
+
+/* Class = "UILabel"; text = "　練習の目的"; ObjectID = "t8e-zm-ois"; */
+"t8e-zm-ois.text" = "　練習の目的";
+
+/* Class = "UILabel"; text = "アカウントを作成する"; ObjectID = "tT0-04-f70"; */
+"tT0-04-f70.text" = "アカウントを作成する";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "u7X-Zc-mNI"; */
+"u7X-Zc-mNI.text" = "Subtitle";
+
+/* Class = "UILabel"; text = "　目標"; ObjectID = "vsX-Vg-J32"; */
+"vsX-Vg-J32.text" = "　目標";
+
+/* Class = "UIButton"; normalTitle = "解決済みにする"; ObjectID = "wbI-Ae-6qd"; */
+"wbI-Ae-6qd.normalTitle" = "解決済みにする";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "wed-QU-RNF"; */
+"wed-QU-RNF.text" = "Title";
+
+/* Class = "UILabel"; text = "　タイトル"; ObjectID = "wie-4e-cxv"; */
+"wie-4e-cxv.text" = "　タイトル";
+
+/* Class = "UIButton"; normalTitle = "編集"; ObjectID = "woH-Bd-4Qv"; */
+"woH-Bd-4Qv.normalTitle" = "編集";
+
+/* Class = "UITabBarItem"; title = "課題"; ObjectID = "wx5-H6-RuS"; */
+"wx5-H6-RuS.title" = "課題";
+
+/* Class = "UIButton"; normalTitle = "閉じる"; ObjectID = "xOG-J5-UXu"; */
+"xOG-J5-UXu.normalTitle" = "閉じる";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "xZp-00-tbQ"; */
+"xZp-00-tbQ.text" = "Subtitle";
+
+/* Class = "UIButton"; normalTitle = "追加"; ObjectID = "yU0-iC-0C4"; */
+"yU0-iC-0C4.normalTitle" = "追加";
+
+/* Class = "UIButton"; normalTitle = "戻る"; ObjectID = "yUJ-hO-EhV"; */
+"yUJ-hO-EhV.normalTitle" = "戻る";
+
+/* Class = "UIButton"; normalTitle = "保存"; ObjectID = "zwZ-Wy-jBv"; */
+"zwZ-Wy-jBv.normalTitle" = "保存";

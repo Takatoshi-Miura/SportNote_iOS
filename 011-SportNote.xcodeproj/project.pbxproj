@@ -14,6 +14,7 @@
 		8D05F54924EBD18800842CD5 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D05F54824EBD18800842CD5 /* PasswordResetViewController.swift */; };
 		8D05F54B24EBEFAB00842CD5 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D05F54A24EBEFAB00842CD5 /* CreateAccountViewController.swift */; };
 		8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D06D5DC24A834A4004D5307 /* SettingViewController.swift */; };
+		8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12B0C727F7D01E0040AF3D /* Definition+String.swift */; };
 		8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */; };
 		8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */; };
 		8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */; };
@@ -24,6 +25,7 @@
 		8D3FFE5A27F665650021C9FC /* TabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE5927F665650021C9FC /* TabCoordinator.swift */; };
 		8D3FFE5F27F666A20021C9FC /* TaskCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE5E27F666A20021C9FC /* TaskCoordinator.swift */; };
 		8D3FFE6227F66B400021C9FC /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE6127F66B400021C9FC /* TaskViewController.swift */; };
+		8D481D4827F7D2870082D956 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D481D4A27F7D2870082D956 /* Localizable.strings */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
 		8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AFD724A47F7E007450BF /* SVProgressHUD.m */; };
@@ -76,6 +78,7 @@
 		8D05F54824EBD18800842CD5 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		8D05F54A24EBEFAB00842CD5 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		8D06D5DC24A834A4004D5307 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		8D12B0C727F7D01E0040AF3D /* Definition+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+String.swift"; sourceTree = "<group>"; };
 		8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedTaskViewController.swift; sourceTree = "<group>"; };
 		8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+TextFIeld.swift"; sourceTree = "<group>"; };
@@ -86,6 +89,10 @@
 		8D3FFE5927F665650021C9FC /* TabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCoordinator.swift; sourceTree = "<group>"; };
 		8D3FFE5E27F666A20021C9FC /* TaskCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCoordinator.swift; sourceTree = "<group>"; };
 		8D3FFE6127F66B400021C9FC /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
+		8D481D4427F7D1550082D956 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		8D481D4527F7D1550082D956 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		8D481D4927F7D2870082D956 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8D481D4B27F7D28C0082D956 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D57AFD724A47F7E007450BF /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
@@ -213,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				8DB9E58924DEBDFC0042A7A2 /* 011-SportNoteRelease.entitlements */,
+				8D481D4A27F7D2870082D956 /* Localizable.strings */,
 				8D665D2F24A17CD400441B32 /* Assets.xcassets */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
 				8D665D3424A17CD400441B32 /* Info.plist */,
@@ -227,6 +235,7 @@
 				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,
 				8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */,
 				8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */,
+				8D12B0C727F7D01E0040AF3D /* Definition+String.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -466,6 +475,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 8D665D1A24A17CD300441B32;
 			productRefGroup = 8D665D2424A17CD300441B32 /* Products */;
@@ -483,6 +493,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */,
+				8D481D4827F7D2870082D956 /* Localizable.strings in Resources */,
 				8DC1931827F7CB9B0097BF07 /* NoteViewController.xib in Resources */,
 				8D3AE8A326AD2AD00007D873 /* TaskCell.xib in Resources */,
 				8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */,
@@ -572,6 +583,7 @@
 				8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */,
 				8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */,
 				8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */,
+				8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */,
 				8D3FFE5627F664940021C9FC /* Coordinator.swift in Sources */,
 				8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */,
 				8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */,
@@ -596,10 +608,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		8D481D4A27F7D2870082D956 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8D481D4927F7D2870082D956 /* en */,
+				8D481D4B27F7D28C0082D956 /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		8D665D2C24A17CD300441B32 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				8D665D2D24A17CD300441B32 /* Base */,
+				8D481D4427F7D1550082D956 /* ja */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -608,6 +630,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8D665D3224A17CD400441B32 /* Base */,
+				8D481D4527F7D1550082D956 /* ja */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -619,6 +642,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -680,6 +704,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

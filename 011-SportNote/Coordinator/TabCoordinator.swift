@@ -29,9 +29,9 @@ enum TabBarPage {
     func pageTitleValue() -> String {
         switch self {
         case .task:
-            return NSLocalizedString("Task", comment: "")
+            return TITLE_TASK
         case .note:
-            return NSLocalizedString("Note", comment: "")
+            return TITLE_NOTE
         }
     }
     
