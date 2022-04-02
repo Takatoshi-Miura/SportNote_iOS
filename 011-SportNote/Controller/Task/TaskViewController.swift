@@ -29,6 +29,17 @@ class TaskViewController: UIViewController {
     
     func initNavigationController() {
         self.title = TITLE_TASK
+        
+        let settingButton = UIBarButtonItem(image: UIImage(systemName: "gear"),
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(openSettingView(_:)))
+        navigationItem.rightBarButtonItems = [settingButton]
+    }
+    
+    /// 設定画面を表示
+    @objc func openSettingView(_ sender: UIBarButtonItem) {
+//        self.delegate?.taskVCHumburgerMenuButtonDidTap(self)
     }
     
     @IBAction func tapAddButton(_ sender: Any) {
