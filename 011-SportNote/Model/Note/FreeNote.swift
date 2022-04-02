@@ -10,6 +10,7 @@ import RealmSwift
 
 class FreeNote: Object {
     
+    @objc dynamic var freeNoteID: String = NSUUID().uuidString
     @objc dynamic var userID: String = UserDefaults.standard.object(forKey: "userID") as! String
     @objc dynamic var created_at: Date = Date() // 作成日
     @objc dynamic var updated_at: Date = Date() // 更新日
@@ -18,7 +19,7 @@ class FreeNote: Object {
     
     // 主キー
     override static func primaryKey() -> String? {
-        return "userID"
+        return "freeNoteID"
     }
     
 }

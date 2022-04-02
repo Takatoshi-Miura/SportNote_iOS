@@ -11,7 +11,7 @@ import RealmSwift
 
 class PracticeNote: Object {
     
-    @objc dynamic var noteID: String = NSUUID().uuidString
+    @objc dynamic var practiceNoteID: String = NSUUID().uuidString
     @objc dynamic var userID: String = UserDefaults.standard.object(forKey: "userID") as! String
     @objc dynamic var isDeleted: Bool = false   // 削除フラグ
     @objc dynamic var created_at: Date = Date() // 作成日
@@ -26,7 +26,7 @@ class PracticeNote: Object {
     
     // 主キー
     override static func primaryKey() -> String? {
-        return "noteID"
+        return "practiceNoteID"
     }
     
 }

@@ -37,10 +37,9 @@
 		8D481D6227F864F20082D956 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6127F864F20082D956 /* Group.swift */; };
 		8D481D6427F865D70082D956 /* Measures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6327F865D70082D956 /* Measures.swift */; };
 		8D481D6627F8678E0082D956 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6527F8678E0082D956 /* Memo.swift */; };
+		8D481D6927F875780082D956 /* Target.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6827F875780082D956 /* Target.swift */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
-		8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AFD724A47F7E007450BF /* SVProgressHUD.m */; };
-		8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */; };
 		8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57AFDC24A47FAB007450BF /* QuartzCore.framework */; };
 		8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */; };
 		8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2624A17CD300441B32 /* AppDelegate.swift */; };
@@ -115,11 +114,9 @@
 		8D481D6127F864F20082D956 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		8D481D6327F865D70082D956 /* Measures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measures.swift; sourceTree = "<group>"; };
 		8D481D6527F8678E0082D956 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
+		8D481D6827F875780082D956 /* Target.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Target.swift; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8D57AFD724A47F7E007450BF /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
-		8D57AFD824A47F7E007450BF /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
-		8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		8D57AFDC24A47FAB007450BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PickerView.swift"; sourceTree = "<group>"; };
 		8D665D2324A17CD300441B32 /* 011-SportNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "011-SportNote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,9 +198,10 @@
 		8D18E81527F65ACC00035E99 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				8D481D5C27F860710082D956 /* OldModel */,
 				8D481D5227F807CF0082D956 /* DB */,
+				8D481D5C27F860710082D956 /* OldModel */,
 				8D18E81E27F65D9600035E99 /* Task */,
+				8D481D6727F875640082D956 /* Target */,
 				8D18E81F27F65D9E00035E99 /* Note */,
 			);
 			path = Model;
@@ -354,6 +352,14 @@
 			path = OldModel;
 			sourceTree = "<group>";
 		};
+		8D481D6727F875640082D956 /* Target */ = {
+			isa = PBXGroup;
+			children = (
+				8D481D6827F875780082D956 /* Target.swift */,
+			);
+			path = Target;
+			sourceTree = "<group>";
+		};
 		8D665D1A24A17CD300441B32 = {
 			isa = PBXGroup;
 			children = (
@@ -387,9 +393,6 @@
 				8DE8B1EB24B1C4D200E1195B /* 設定 */,
 				8DE8B1E924B1C28000E1195B /* ログイン */,
 				8DCF350224F6554900055093 /* モデル */,
-				8D57AFD924A47F7E007450BF /* SVProgressHUD.bundle */,
-				8D57AFD824A47F7E007450BF /* SVProgressHUD.h */,
-				8D57AFD724A47F7E007450BF /* SVProgressHUD.m */,
 			);
 			path = "011-SportNote";
 			sourceTree = "<group>";
@@ -541,7 +544,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D57AFDB24A47F7E007450BF /* SVProgressHUD.bundle in Resources */,
 				8D481D4827F7D2870082D956 /* Localizable.strings in Resources */,
 				8DC1931827F7CB9B0097BF07 /* NoteViewController.xib in Resources */,
 				8D3AE8A326AD2AD00007D873 /* TaskCell.xib in Resources */,
@@ -615,7 +617,6 @@
 				8D05F54B24EBEFAB00842CD5 /* CreateAccountViewController.swift in Sources */,
 				8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift in Sources */,
 				8D3FFE6227F66B400021C9FC /* TaskViewController.swift in Sources */,
-				8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */,
 				8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */,
 				8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */,
 				8DCF350724F6554900055093 /* Note_old.swift in Sources */,
@@ -648,6 +649,7 @@
 				8D481D5127F7E5470082D956 /* PracticeNote.swift in Sources */,
 				8D01653024AEEBD100F9D69F /* NoteViewController_old.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
+				8D481D6927F875780082D956 /* Target.swift in Sources */,
 				8D481D5E27F861D50082D956 /* FreeNote.swift in Sources */,
 				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,
