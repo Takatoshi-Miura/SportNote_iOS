@@ -37,7 +37,6 @@ class TaskViewController: UIViewController {
         navigationItem.rightBarButtonItems = [settingButton]
     }
     
-    /// 設定画面を表示
     @objc func openSettingView(_ sender: UIBarButtonItem) {
 //        self.delegate?.taskVCHumburgerMenuButtonDidTap(self)
     }

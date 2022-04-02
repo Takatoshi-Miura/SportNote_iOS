@@ -27,6 +27,11 @@
 		8D3FFE6227F66B400021C9FC /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE6127F66B400021C9FC /* TaskViewController.swift */; };
 		8D481D4827F7D2870082D956 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D481D4A27F7D2870082D956 /* Localizable.strings */; };
 		8D481D4D27F7D9040082D956 /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D4C27F7D9030082D956 /* Definition.swift */; };
+		8D481D5127F7E5470082D956 /* PracticeNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5027F7E5470082D956 /* PracticeNote.swift */; };
+		8D481D5527F808090082D956 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5427F808090082D956 /* FirebaseManager.swift */; };
+		8D481D5727F80EB50082D956 /* DBDataFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5627F80EB50082D956 /* DBDataFormatter.swift */; };
+		8D481D5927F813650082D956 /* TournamentNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5827F813650082D956 /* TournamentNote.swift */; };
+		8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D5A27F8256E0082D956 /* SyncManager.swift */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
 		8D57AFDA24A47F7E007450BF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AFD724A47F7E007450BF /* SVProgressHUD.m */; };
@@ -95,6 +100,11 @@
 		8D481D4927F7D2870082D956 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D481D4B27F7D28C0082D956 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D481D4C27F7D9030082D956 /* Definition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definition.swift; sourceTree = "<group>"; };
+		8D481D5027F7E5470082D956 /* PracticeNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeNote.swift; sourceTree = "<group>"; };
+		8D481D5427F808090082D956 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		8D481D5627F80EB50082D956 /* DBDataFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBDataFormatter.swift; sourceTree = "<group>"; };
+		8D481D5827F813650082D956 /* TournamentNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentNote.swift; sourceTree = "<group>"; };
+		8D481D5A27F8256E0082D956 /* SyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D57AFD724A47F7E007450BF /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
@@ -181,8 +191,11 @@
 		8D18E81527F65ACC00035E99 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				8D481D5227F807CF0082D956 /* DB */,
 				8D18E81E27F65D9600035E99 /* Task */,
 				8D18E81F27F65D9E00035E99 /* Note */,
+				8D481D5027F7E5470082D956 /* PracticeNote.swift */,
+				8D481D5827F813650082D956 /* TournamentNote.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -302,6 +315,16 @@
 				8D3FFE6127F66B400021C9FC /* TaskViewController.swift */,
 			);
 			path = Task;
+			sourceTree = "<group>";
+		};
+		8D481D5227F807CF0082D956 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+				8D481D5A27F8256E0082D956 /* SyncManager.swift */,
+				8D481D5627F80EB50082D956 /* DBDataFormatter.swift */,
+				8D481D5427F808090082D956 /* FirebaseManager.swift */,
+			);
+			path = DB;
 			sourceTree = "<group>";
 		};
 		8D665D1A24A17CD300441B32 = {
@@ -581,11 +604,14 @@
 				8D7C676024DD03F6005599AD /* PageViewController.swift in Sources */,
 				8D3FFE5A27F665650021C9FC /* TabCoordinator.swift in Sources */,
 				8D69FC9824B7085900DFECB3 /* TaskMeasuresTableViewCell.swift in Sources */,
+				8D481D5527F808090082D956 /* FirebaseManager.swift in Sources */,
 				8DCF350A24F6554900055093 /* Task.swift in Sources */,
 				8DC1931427F7BE320097BF07 /* NoteCoordinator.swift in Sources */,
 				8DA93AA924BF1BAF00CE0833 /* CompetitionNoteDetailViewController.swift in Sources */,
+				8D481D5727F80EB50082D956 /* DBDataFormatter.swift in Sources */,
 				8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */,
 				8DA4121624B03077002FD67A /* AddTargetViewController.swift in Sources */,
+				8D481D5927F813650082D956 /* TournamentNote.swift in Sources */,
 				8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */,
 				8D3FFE5627F664940021C9FC /* Coordinator.swift in Sources */,
 				8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */,
@@ -593,8 +619,10 @@
 				8D05F54924EBD18800842CD5 /* PasswordResetViewController.swift in Sources */,
 				8DF91CB724B3051500FFE201 /* AddPracticeNoteViewController.swift in Sources */,
 				8D481D4D27F7D9040082D956 /* Definition.swift in Sources */,
+				8D481D5127F7E5470082D956 /* PracticeNote.swift in Sources */,
 				8D01653024AEEBD100F9D69F /* NoteViewController_old.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
+				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,
 				8DB5371F25E4FCD400CB426F /* DataManager.swift in Sources */,
 				8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */,
