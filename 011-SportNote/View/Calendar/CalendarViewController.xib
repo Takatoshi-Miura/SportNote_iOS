@@ -67,6 +67,10 @@
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="string" keyPath="headerDateFormat" value="yyyy / MM"/>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="TRO-vL-4ui"/>
+                        <outlet property="delegate" destination="-1" id="vFd-ME-bMG"/>
+                    </connections>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
