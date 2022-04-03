@@ -19,15 +19,27 @@ class NoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adVIew: UIView!
     var syncManager = SyncManager()
-    var noteArray = [Any]()
+    
+    var taskArray: [Task] = []
+    var measuresArray: [Measures] = []
+    var memoArray: [Memo] = []
+    var targetArray: [Target] = []
+    var freeNote = FreeNote()
+    var noteArray: [Any] = []
+    
     var delegate: NoteViewControllerDelegate?
     
     // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationController()
-        syncManager.convertOldNoteToNote({
-            self.noteArray = self.syncManager.newNoteArray
+        syncManager.convertOldDataToNew({
+            self.taskArray = self.syncManager.taskArray
+            self.measuresArray = self.syncManager.measuresArray
+            self.memoArray = self.syncManager.memoArray
+            self.targetArray = self.syncManager.targetArray
+            self.freeNote = self.syncManager.freeNote
+            self.noteArray = self.syncManager.noteArray
             self.tableView.reloadData()
         })
     }

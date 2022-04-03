@@ -56,6 +56,8 @@ class DataConverter {
         task.order = oldTask.getOrder()
         task.isComplete = oldTask.getAchievement()
         task.isDeleted = oldTask.getIsDeleted()
+        var taskArray: [Task] = []
+        taskArray.append(task)
         
         var measuresArray: [Measures] = []
         var memoArray: [Memo] = []
@@ -87,7 +89,7 @@ class DataConverter {
         newDataDic["task"] = newDataDic["task"] ?? []
         newDataDic["measures"] = newDataDic["measures"] ?? []
         newDataDic["memo"] = newDataDic["memo"] ?? []
-        newDataDic["task"]?.append([task])
+        newDataDic["task"]?.append(taskArray)
         newDataDic["measures"]?.append(measuresArray)
         newDataDic["memo"]?.append(memoArray)
         return newDataDic
