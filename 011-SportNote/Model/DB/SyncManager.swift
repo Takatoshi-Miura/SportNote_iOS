@@ -64,7 +64,7 @@ class SyncManager {
     }
     
     /// 全ての旧課題データを変換
-    func convertOldTask(completion: @escaping () -> ()) {
+    private func convertOldTask(completion: @escaping () -> ()) {
         firebaseManager.getOldTask({
             let oldTaskArray = self.firebaseManager.oldTaskArray
             for oldTask in oldTaskArray {
@@ -78,7 +78,7 @@ class SyncManager {
     }
     
     /// 全ての旧目標データを変換
-    func convertOldTarget(completion: @escaping () -> ()) {
+    private func convertOldTarget(completion: @escaping () -> ()) {
         firebaseManager.getOldTarget({
             let oldTargetArray = self.firebaseManager.oldTargetArray
             for oldTarget in oldTargetArray {
@@ -89,7 +89,7 @@ class SyncManager {
     }
     
     /// 全ての旧フリーノートデータを変換
-    func convertOldFreeNote(completion: @escaping () -> ()) {
+    private func convertOldFreeNote(completion: @escaping () -> ()) {
         firebaseManager.getOldFreeNote({
             let oldFreeNote = self.firebaseManager.oldFreeNote
             self.freeNote = self.dataConverter.convertToFreeNote(oldFreeNote: oldFreeNote)
@@ -98,7 +98,7 @@ class SyncManager {
     }
     
     /// 全ての旧ノートデータを変換
-    func convertOldNote(completion: @escaping () -> ()) {
+    private func convertOldNote(completion: @escaping () -> ()) {
         firebaseManager.getOldNote({
             let oldNoteArray = self.firebaseManager.oldNoteArray
             for oldNote in oldNoteArray {
@@ -120,7 +120,7 @@ class SyncManager {
         - completion: 完了処理
         - completionNumber: タスク完了数
      */
-    func convertCompletion(completion: @escaping () -> (), completionNumber: Int) {
+    private func convertCompletion(completion: @escaping () -> (), completionNumber: Int) {
         // 課題、対策、ノート全ての変換が終了した場合のみ完了処理を実行
         if completionNumber == 4 {
             completion()
