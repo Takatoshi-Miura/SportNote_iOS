@@ -19,6 +19,7 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
+    private var adMobView: GADBannerView?
     var delegate: TaskViewControllerDelegate?
     
     // MARK: LifeCycle
@@ -39,6 +40,27 @@ class TaskViewController: UIViewController {
     
     @objc func openSettingView(_ sender: UIBarButtonItem) {
 //        self.delegate?.taskVCHumburgerMenuButtonDidTap(self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        showAdMob()
+    }
+    
+    /// バナー広告を表示
+    func showAdMob() {
+        if let adMobView = adMobView {
+            adMobView.frame.size = CGSize(width: self.view.frame.width, height: adMobView.frame.height)
+            return
+        }
+        adMobView = GADBannerView()
+        adMobView = GADBannerView(adSize: GADAdSizeBanner)
+        adMobView!.adUnitID = "ca-app-pub-9630417275930781/4051421921"
+        adMobView!.rootViewController = self
+        adMobView!.load(GADRequest())
+        adMobView!.frame.origin = CGPoint(x: 0, y: 0)
+        adMobView!.frame.size = CGSize(width: self.view.frame.width, height: adMobView!.frame.height)
+        self.adView.addSubview(adMobView!)
     }
     
     @IBAction func tapAddButton(_ sender: Any) {

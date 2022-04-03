@@ -30,7 +30,7 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jQm-OW-Ppf">
-                    <rect key="frame" x="0.0" y="430" width="320" height="88"/>
+                    <rect key="frame" x="10" y="420" width="300" height="88"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="88" id="hdc-0J-h7a"/>
@@ -41,7 +41,7 @@
                     </connections>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Wi-jE-WWY" customClass="FSCalendar">
-                    <rect key="frame" x="10" y="10" width="300" height="410"/>
+                    <rect key="frame" x="10" y="10" width="300" height="400"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="firstWeekday">
@@ -73,13 +73,13 @@
             <color key="backgroundColor" systemColor="systemBlueColor"/>
             <constraints>
                 <constraint firstItem="lmL-I1-uTC" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="5Mu-Bp-5XJ"/>
-                <constraint firstItem="jQm-OW-Ppf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="B2y-Qo-FRx"/>
+                <constraint firstItem="jQm-OW-Ppf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="B2y-Qo-FRx"/>
                 <constraint firstItem="7Wi-jE-WWY" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="Juv-8S-8hw"/>
                 <constraint firstItem="jQm-OW-Ppf" firstAttribute="top" secondItem="7Wi-jE-WWY" secondAttribute="bottom" constant="10" id="O7E-o4-SMa"/>
-                <constraint firstItem="lmL-I1-uTC" firstAttribute="top" secondItem="jQm-OW-Ppf" secondAttribute="bottom" id="Uqe-nX-jYY"/>
+                <constraint firstItem="lmL-I1-uTC" firstAttribute="top" secondItem="jQm-OW-Ppf" secondAttribute="bottom" constant="10" id="Uqe-nX-jYY"/>
                 <constraint firstItem="lmL-I1-uTC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Xia-P8-9Ai"/>
                 <constraint firstItem="7Wi-jE-WWY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="Xiw-fT-tcJ"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="jQm-OW-Ppf" secondAttribute="trailing" id="gTI-7c-r7R"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="jQm-OW-Ppf" secondAttribute="trailing" constant="10" id="gTI-7c-r7R"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="7Wi-jE-WWY" secondAttribute="trailing" constant="10" id="kJQ-rG-g7J"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="lmL-I1-uTC" secondAttribute="bottom" id="l2q-zu-Bbw"/>
             </constraints>

@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NoteViewController" customModule="_11_SportNote" customModuleProvider="target">
             <connections>
-                <outlet property="adVIew" destination="pKa-ZZ-T5q" id="oGo-7s-aIj"/>
+                <outlet property="adView" destination="pKa-ZZ-T5q" id="oGo-7s-aIj"/>
                 <outlet property="addButton" destination="1df-oQ-f21" id="xRp-bO-YVP"/>
                 <outlet property="tableView" destination="Mrm-5e-xpt" id="Zdw-mA-1mE"/>
                 <outlet property="view" destination="iN0-l3-epB" id="7WE-z6-chL"/>
