@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -11,21 +11,90 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarViewController" customModule="_11_SportNote" customModuleProvider="target">
             <connections>
+                <outlet property="adView" destination="lmL-I1-uTC" id="sSs-9S-ebB"/>
+                <outlet property="calendar" destination="7Wi-jE-WWY" id="YaJ-E9-Fcd"/>
+                <outlet property="tableView" destination="jQm-OW-Ppf" id="l2E-pj-VP8"/>
                 <outlet property="view" destination="iN0-l3-epB" id="ESe-ec-eE6"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lmL-I1-uTC">
+                    <rect key="frame" x="0.0" y="518" width="320" height="50"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="oY8-y5-3CB"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jQm-OW-Ppf">
+                    <rect key="frame" x="0.0" y="430" width="320" height="88"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="88" id="hdc-0J-h7a"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="JCr-gU-6ga"/>
+                        <outlet property="delegate" destination="-1" id="3Yd-hr-nis"/>
+                    </connections>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Wi-jE-WWY" customClass="FSCalendar">
+                    <rect key="frame" x="10" y="10" width="300" height="410"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="firstWeekday">
+                            <integer key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="headerHeight">
+                            <real key="value" value="80"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="weekdayHeight">
+                            <real key="value" value="20"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="headerTitleTextSize">
+                            <real key="value" value="14"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="headerTitleColor">
+                            <color key="value" systemColor="labelColor"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="selectionColor">
+                            <color key="value" red="1" green="0.2527923882" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="todayColor">
+                            <color key="value" systemColor="systemBlueColor"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="string" keyPath="headerDateFormat" value="yyyy / MM"/>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-            <point key="canvasLocation" x="133" y="135"/>
+            <color key="backgroundColor" systemColor="systemBlueColor"/>
+            <constraints>
+                <constraint firstItem="lmL-I1-uTC" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="5Mu-Bp-5XJ"/>
+                <constraint firstItem="jQm-OW-Ppf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="B2y-Qo-FRx"/>
+                <constraint firstItem="7Wi-jE-WWY" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="Juv-8S-8hw"/>
+                <constraint firstItem="jQm-OW-Ppf" firstAttribute="top" secondItem="7Wi-jE-WWY" secondAttribute="bottom" constant="10" id="O7E-o4-SMa"/>
+                <constraint firstItem="lmL-I1-uTC" firstAttribute="top" secondItem="jQm-OW-Ppf" secondAttribute="bottom" id="Uqe-nX-jYY"/>
+                <constraint firstItem="lmL-I1-uTC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Xia-P8-9Ai"/>
+                <constraint firstItem="7Wi-jE-WWY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="Xiw-fT-tcJ"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="jQm-OW-Ppf" secondAttribute="trailing" id="gTI-7c-r7R"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="7Wi-jE-WWY" secondAttribute="trailing" constant="10" id="kJQ-rG-g7J"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="lmL-I1-uTC" secondAttribute="bottom" id="l2q-zu-Bbw"/>
+            </constraints>
+            <point key="canvasLocation" x="131.25" y="134.1549295774648"/>
         </view>
     </objects>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
