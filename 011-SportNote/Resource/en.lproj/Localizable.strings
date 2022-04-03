@@ -8,6 +8,7 @@
 
 // MARK: - Common
 "Cancel" = "Cancel";
+"ServerCommunicationMessage" = "During server communication...";
 
 // MARK: - TabBarController
 "Task" = "Task";

@@ -33,15 +33,22 @@ class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationController()
-        syncManager.convertOldDataToNew({
-            self.taskArray = self.syncManager.taskArray
-            self.measuresArray = self.syncManager.measuresArray
-            self.memoArray = self.syncManager.memoArray
-            self.targetArray = self.syncManager.targetArray
-            self.freeNote = self.syncManager.freeNote
-            self.noteArray = self.syncManager.noteArray
-            self.tableView.reloadData()
-        })
+        if Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            syncManager.convertOldDataToNew({
+                self.taskArray = self.syncManager.taskArray
+                self.measuresArray = self.syncManager.measuresArray
+                self.memoArray = self.syncManager.memoArray
+                self.targetArray = self.syncManager.targetArray
+                self.freeNote = self.syncManager.freeNote
+                self.noteArray = self.syncManager.noteArray
+                self.tableView.reloadData()
+                HUD.hide()
+            })
+        } else {
+            
+        }
+        
     }
     
     func initNavigationController() {

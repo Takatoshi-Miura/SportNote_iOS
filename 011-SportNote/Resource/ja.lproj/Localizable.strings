@@ -8,6 +8,7 @@
 
 // MARK: - Common
 "Cancel" = "キャンセル";
+"ServerCommunicationMessage" = "通信中";
 
 // MARK: - TabBarController
 "Task" = "課題";

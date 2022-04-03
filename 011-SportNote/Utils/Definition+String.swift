@@ -10,6 +10,7 @@ import UIKit
 
 // MARK: - Common
 let TITLE_CANCEL = NSLocalizedString("Cancel", comment: "")
+let MESSAGE_SERVER_COMMUNICATION = NSLocalizedString("ServerCommunicationMessage", comment: "")
 
 // MARK: - TabBarController
 let TITLE_TASK = NSLocalizedString("Task", comment: "")

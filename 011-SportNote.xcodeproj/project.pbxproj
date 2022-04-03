@@ -38,6 +38,7 @@
 		8D481D6427F865D70082D956 /* Measures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6327F865D70082D956 /* Measures.swift */; };
 		8D481D6627F8678E0082D956 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6527F8678E0082D956 /* Memo.swift */; };
 		8D481D6927F875780082D956 /* Target.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6827F875780082D956 /* Target.swift */; };
+		8D481D6B27F98BF60082D956 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D481D6A27F98BF60082D956 /* Network.swift */; };
 		8D53E06324D1309000841B5B /* calendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53E06224D1309000841B5B /* calendarViewController.swift */; };
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
 		8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57AFDC24A47FAB007450BF /* QuartzCore.framework */; };
@@ -115,6 +116,7 @@
 		8D481D6327F865D70082D956 /* Measures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measures.swift; sourceTree = "<group>"; };
 		8D481D6527F8678E0082D956 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		8D481D6827F875780082D956 /* Target.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Target.swift; sourceTree = "<group>"; };
+		8D481D6A27F98BF60082D956 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		8D53E06224D1309000841B5B /* calendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarViewController.swift; sourceTree = "<group>"; };
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D57AFDC24A47FAB007450BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -259,6 +261,7 @@
 				8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */,
 				8D481D4C27F7D9030082D956 /* Definition.swift */,
 				8D12B0C727F7D01E0040AF3D /* Definition+String.swift */,
+				8D481D6A27F98BF60082D956 /* Network.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -639,6 +642,7 @@
 				8D481D6627F8678E0082D956 /* Memo.swift in Sources */,
 				8D481D5927F813650082D956 /* TournamentNote.swift in Sources */,
 				8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */,
+				8D481D6B27F98BF60082D956 /* Network.swift in Sources */,
 				8D3FFE5627F664940021C9FC /* Coordinator.swift in Sources */,
 				8DA6350E24B416B000186358 /* AddCompetitionNoteViewController.swift in Sources */,
 				8D481D6227F864F20082D956 /* Group.swift in Sources */,
