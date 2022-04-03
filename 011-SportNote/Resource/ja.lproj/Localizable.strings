@@ -13,6 +13,7 @@
 // MARK: - TabBarController
 "Task" = "課題";
 "Note" = "ノート";
+"Calendar" = "カレンダー";
 "Group" = "グループ";
 "Target" = "目標";
 "PracticeNote" = "練習ノート";

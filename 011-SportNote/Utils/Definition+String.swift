@@ -15,6 +15,7 @@ let MESSAGE_SERVER_COMMUNICATION = NSLocalizedString("ServerCommunicationMessage
 // MARK: - TabBarController
 let TITLE_TASK = NSLocalizedString("Task", comment: "")
 let TITLE_NOTE = NSLocalizedString("Note", comment: "")
+let TITLE_CALENDAR = NSLocalizedString("Calendar", comment: "")
 let TITLE_GROUP = NSLocalizedString("Group", comment: "")
 let TITLE_TARGET = NSLocalizedString("Target", comment: "")
 let TITLE_PRACTICE_NOTE = NSLocalizedString("PracticeNote", comment: "")

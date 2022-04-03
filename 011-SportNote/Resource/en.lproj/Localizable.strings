@@ -13,6 +13,7 @@
 // MARK: - TabBarController
 "Task" = "Task";
 "Note" = "Note";
+"Calendar" = "Calendar";
 "Group" = "Group";
 "Target" = "Target";
 "PracticeNote" = "PracticeNote";

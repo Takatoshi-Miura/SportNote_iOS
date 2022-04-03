@@ -12,6 +12,7 @@ enum TabBarPage {
     
     case task
     case note
+    case calendar
 
     init?(index: Int) {
         switch index {
@@ -19,6 +20,8 @@ enum TabBarPage {
             self = .task
         case 1:
             self = .note
+        case 2:
+            self = .calendar
         default:
             return nil
         }
@@ -32,6 +35,8 @@ enum TabBarPage {
             return TITLE_TASK
         case .note:
             return TITLE_NOTE
+        case .calendar:
+            return TITLE_CALENDAR
         }
     }
     
@@ -43,6 +48,8 @@ enum TabBarPage {
             return 0
         case .note:
             return 1
+        case .calendar:
+            return 2
         }
     }
     
@@ -54,11 +61,12 @@ enum TabBarPage {
             return UIImage(systemName: "list.bullet.indent")!
         case .note:
             return UIImage(systemName: "book")!
+        case .calendar:
+            return UIImage(systemName: "calendar")!
         }
     }
     
 }
-
 
 protocol TabCoordinatorProtocol: Coordinator {
     
@@ -72,19 +80,19 @@ protocol TabCoordinatorProtocol: Coordinator {
     
 }
 
-
 class TabCoordinator: NSObject, Coordinator {
     
     var tabBarController: UITabBarController
     let taskCoordinator = TaskCoordinator()
     let noteCoordinator = NoteCoordinator()
+    let calendarCoordinator = CalendarCoordinator()
     
     required override init() {
         self.tabBarController = .init()
     }
     
     func startFlow(in window: UIWindow?) {
-        let pages: [TabBarPage] = [.note, .task]
+        let pages: [TabBarPage] = [.task, .note, .calendar]
             .sorted(by: { $0.pageOrderNumber() < $1.pageOrderNumber() })
         let controllers: [UINavigationController] = pages.map({ getTabController($0) })
         prepareTabBarController(withTabControllers: controllers)
@@ -122,6 +130,8 @@ class TabCoordinator: NSObject, Coordinator {
             taskCoordinator.startFlow(in: navController)
         case .note:
             noteCoordinator.startFlow(in: navController)
+        case .calendar:
+            calendarCoordinator.startFlow(in: navController)
         }
         
         return navController
