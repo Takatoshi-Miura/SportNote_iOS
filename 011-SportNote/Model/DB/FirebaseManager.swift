@@ -121,6 +121,12 @@ class FirebaseManager {
                 print("Error getting documents: \(err)")
             } else {
                 self.oldFreeNote = FreeNote_old()
+                if querySnapshot!.documents.count == 0 {
+                    // FreeNoteが存在しない場合
+                    self.oldFreeNote.setUserID("FreeNoteIsEmpty")
+                    completion()
+                    return
+                }
                 for document in querySnapshot!.documents {
                     let freeNoteDataCollection = document.data()
                     self.oldFreeNote.setTitle(freeNoteDataCollection["title"] as! String)
@@ -179,6 +185,118 @@ class FirebaseManager {
                     note.setUpdated_at(dataCollection["updated_at"] as! String)
                     self.oldNoteArray.append(note)
                 }
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    // MARK: - Update
+    
+    /// 旧課題を更新(削除用)
+    /// - Parameters:
+    ///   - oldTask: 旧課題
+    ///   - completion: 完了処理
+    func deleteOldTask(oldTask: Task_old, completion: @escaping () -> ()) {
+        oldTask.setIsDeleted(true)
+        oldTask.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let database = db.collection("TaskData").document("\(oldTask.getUserID())_\(oldTask.getTaskID())")
+        database.updateData([
+            "taskTitle"        : oldTask.getTitle(),
+            "taskCause"        : oldTask.getCause(),
+            "order"            : oldTask.getOrder(),
+            "taskAchievement"  : oldTask.getAchievement(),
+            "isDeleted"        : oldTask.getIsDeleted(),
+            "updated_at"       : oldTask.getUpdated_at(),
+            "measuresData"     : oldTask.getMeasuresData(),
+            "measuresPriority" : oldTask.getMeasuresPriority()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully deleted")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /// 旧目標を更新(削除用)
+    /// - Parameters:
+    ///   - oldTarget: 旧目標
+    ///   - completion: 完了処理
+    func deleteOldTarget(oldTarget: Target_old, completion: @escaping () -> ()) {
+        oldTarget.setIsDeleted(true)
+        oldTarget.setUpdated_at(getCurrentTime())
+        
+        // 更新したい課題データを取得
+        let db = Firestore.firestore()
+        let data = db.collection("TargetData").document("\(oldTarget.getUserID())_\(oldTarget.getYear())_\(oldTarget.getMonth())")
+        data.updateData([
+            "detail"     : oldTarget.getDetail(),
+            "isDeleted"  : oldTarget.getIsDeleted(),
+            "updated_at" : oldTarget.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully deleted")
+                // 完了処理
+                completion()
+            }
+        }
+    }
+    
+    /// 旧フリーノートを更新(削除用)
+    /// - Parameters:
+    ///   - oldFreeNote: 旧フリーノート
+    ///   - completion: 完了処理
+    func deleteOldFreeNote(oldFreeNote: FreeNote_old, completion: @escaping () -> ()) {
+        let db = Firestore.firestore()
+        let data = db.collection("FreeNoteData").document("\(oldFreeNote.getUserID())")
+        data.delete()
+        completion()
+    }
+    
+    /// 旧ノートを更新(削除用)
+    /// - Parameters:
+    ///   - oldNote: 旧ノート
+    ///   - completion: 完了処理
+    func deleteOldNote(oldNote: Note_old, completion: @escaping () -> ()) {
+        // 削除フラグを更新
+        oldNote.setIsDeleted(true)
+        oldNote.setUpdated_at(getCurrentTime())
+        
+        // Firebaseにデータを保存
+        let db = Firestore.firestore()
+        let data = db.collection("NoteData").document("\(oldNote.getUserID())_\(oldNote.getNoteID())")
+        data.updateData([
+            "year"                  : oldNote.getYear(),
+            "month"                 : oldNote.getMonth(),
+            "date"                  : oldNote.getDate(),
+            "day"                   : oldNote.getDay(),
+            "weather"               : oldNote.getWeather(),
+            "temperature"           : oldNote.getTemperature(),
+            "physicalCondition"     : oldNote.getPhysicalCondition(),
+            "purpose"               : oldNote.getPurpose(),
+            "detail"                : oldNote.getDetail(),
+            "target"                : oldNote.getTarget(),
+            "consciousness"         : oldNote.getConsciousness(),
+            "result"                : oldNote.getResult(),
+            "reflection"            : oldNote.getReflection(),
+            "taskTitle"             : oldNote.getTaskTitle(),
+            "measuresTitle"         : oldNote.getMeasuresTitle(),
+            "measuresEffectiveness" : oldNote.getMeasuresEffectiveness(),
+            "isDeleted"             : oldNote.getIsDeleted(),
+            "updated_at"            : oldNote.getUpdated_at()
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully deleted")
                 // 完了処理
                 completion()
             }

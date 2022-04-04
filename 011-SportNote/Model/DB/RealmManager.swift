@@ -26,6 +26,22 @@ class RealmManager {
         return true
     }
     
+    /// Realmにデータを作成(既に存在するオブジェクトはUpdate)
+    /// - Parameters:
+    ///    - object: Realmオブジェクト
+    /// - Returns: 成功失敗
+    func createRealmWithUpdate(objects: [Object]) -> Bool {
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(objects, update: .modified)
+            }
+        } catch {
+            return false
+        }
+        return true
+    }
+    
 }
 
 // MARK: - Group
@@ -283,6 +299,7 @@ extension RealmManager {
         try! realm.write {
             result?.title = freeNote.title
             result?.detail = freeNote.detail
+            result?.isDeleted = freeNote.isDeleted
             result?.updated_at = freeNote.updated_at
         }
     }

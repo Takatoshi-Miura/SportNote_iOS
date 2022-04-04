@@ -20,6 +20,7 @@ class NoteViewController: UIViewController {
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
     var syncManager = SyncManager()
+    var relamManager = RealmManager()
     
     var taskArray: [Task] = []
     var measuresArray: [Measures] = []
@@ -36,13 +37,16 @@ class NoteViewController: UIViewController {
         initNavigationController()
         if Network.isOnline() {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            syncManager.convertOldDataToNew({
-                self.taskArray = self.syncManager.taskArray
-                self.measuresArray = self.syncManager.measuresArray
-                self.memoArray = self.syncManager.memoArray
-                self.targetArray = self.syncManager.targetArray
-                self.freeNote = self.syncManager.freeNote
-                self.noteArray = self.syncManager.noteArray
+            // 旧データを新データに変換
+            syncManager.convertOldDataToNew(completion: {
+                // 新データをRealmに保存(確実に成功するまで繰り返し)
+                var result = false
+                repeat {
+                    result = self.syncManager.createRealmWithUpdate()
+                } while result == false
+                
+                self.noteArray.append(contentsOf: self.relamManager.getAllPracticeNote())
+                self.noteArray.append(contentsOf: self.relamManager.getAllTournamentNote())
                 self.tableView.reloadData()
                 HUD.hide()
             })

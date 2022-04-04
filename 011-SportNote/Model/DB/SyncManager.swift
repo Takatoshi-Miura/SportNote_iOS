@@ -12,18 +12,37 @@ class SyncManager {
     
     let firebaseManager = FirebaseManager()
     let dataConverter = DataConverter()
+    let realmManager = RealmManager()
     
     var taskArray: [Task] = []
     var measuresArray: [Measures] = []
     var memoArray: [Memo] = []
     var targetArray: [Target] = []
-    var freeNote = FreeNote()
+    var freeNoteArray: [FreeNote] = []
     var noteArray: [Any] = []
     var practiceNoteArray: [PracticeNote] = []
     var tournamentNoteArray: [TournamentNote] = []
     
+    /// 全ての新データをRealmに保存
+    func createRealmWithUpdate() -> Bool {
+        let task = realmManager.createRealmWithUpdate(objects: taskArray)
+        let measures = realmManager.createRealmWithUpdate(objects: measuresArray)
+        let memo = realmManager.createRealmWithUpdate(objects: memoArray)
+        let target = realmManager.createRealmWithUpdate(objects: targetArray)
+        let freeNote = realmManager.createRealmWithUpdate(objects: freeNoteArray)
+        let practiceNote = realmManager.createRealmWithUpdate(objects: practiceNoteArray)
+        let tournamentNote = realmManager.createRealmWithUpdate(objects: tournamentNoteArray)
+        
+        let resultArray = [task, measures, memo, target, freeNote, practiceNote, tournamentNote]
+        if resultArray.contains(false) {
+            print("もう一度保存処理が必要")
+            return false
+        }
+        return true
+    }
+    
     /// 全ての旧データを変換
-    func convertOldDataToNew(_ completion: @escaping () -> ()) {
+    func convertOldDataToNew(completion: @escaping () -> ()) {
         var completionNumber = 0
         
         print("OldTask変換開始")
@@ -63,7 +82,7 @@ class SyncManager {
         }
     }
     
-    /// 全ての旧課題データを変換
+    /// 全ての旧課題データを変換&旧データをFIrebaseから削除
     private func convertOldTask(completion: @escaping () -> ()) {
         firebaseManager.getOldTask({
             let oldTaskArray = self.firebaseManager.oldTaskArray
@@ -72,32 +91,37 @@ class SyncManager {
                 self.taskArray.append(contentsOf: dic["task"]!.first as! [Task])
                 self.measuresArray.append(contentsOf: dic["measures"]!.first as! [Measures])
                 self.memoArray.append(contentsOf: dic["memo"]!.first as! [Memo])
+                self.firebaseManager.deleteOldTask(oldTask: oldTask, completion: {})
             }
             completion()
         })
     }
     
-    /// 全ての旧目標データを変換
+    /// 全ての旧目標データを変換&旧データをFIrebaseから削除
     private func convertOldTarget(completion: @escaping () -> ()) {
         firebaseManager.getOldTarget({
             let oldTargetArray = self.firebaseManager.oldTargetArray
             for oldTarget in oldTargetArray {
                 self.targetArray.append(self.dataConverter.convertToTarget(oldTarget: oldTarget))
+                self.firebaseManager.deleteOldTarget(oldTarget: oldTarget, completion: {})
             }
             completion()
         })
     }
     
-    /// 全ての旧フリーノートデータを変換
+    /// 全ての旧フリーノートデータを変換&旧データをFIrebaseから削除
     private func convertOldFreeNote(completion: @escaping () -> ()) {
         firebaseManager.getOldFreeNote({
             let oldFreeNote = self.firebaseManager.oldFreeNote
-            self.freeNote = self.dataConverter.convertToFreeNote(oldFreeNote: oldFreeNote)
+            if oldFreeNote.getUserID() != "FreeNoteIsEmpty" {
+                self.freeNoteArray.append(self.dataConverter.convertToFreeNote(oldFreeNote: oldFreeNote))
+                self.firebaseManager.deleteOldFreeNote(oldFreeNote: oldFreeNote, completion: {})
+            }
             completion()
         })
     }
     
-    /// 全ての旧ノートデータを変換
+    /// 全ての旧ノートデータを変換&旧データをFIrebaseから削除
     private func convertOldNote(completion: @escaping () -> ()) {
         firebaseManager.getOldNote({
             let oldNoteArray = self.firebaseManager.oldNoteArray
@@ -109,6 +133,7 @@ class SyncManager {
                 } else {
                     self.tournamentNoteArray.append(note as! TournamentNote)
                 }
+                self.firebaseManager.deleteOldNote(oldNote: oldNote, completion: {})
             }
             completion()
         })
