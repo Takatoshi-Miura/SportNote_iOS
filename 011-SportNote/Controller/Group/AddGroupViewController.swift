@@ -33,6 +33,7 @@ class AddGroupViewController: UIViewController {
         super.viewDidLoad()
         initView()
         initColorPicker()
+        titleTextField.becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,6 +67,7 @@ class AddGroupViewController: UIViewController {
     
     /// カラーボタンの処理
     @IBAction func tapColorButton(_ sender: Any) {
+        titleTextField.resignFirstResponder()
         closePicker(pickerView)
         pickerView = UIView(frame: colorPicker.bounds)
         pickerView.addSubview(colorPicker)
@@ -89,6 +91,7 @@ class AddGroupViewController: UIViewController {
         // 入力チェック
         if titleTextField.text!.isEmpty {
             showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
+            titleTextField.becomeFirstResponder()
             return
         }
         
