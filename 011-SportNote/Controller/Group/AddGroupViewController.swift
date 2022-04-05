@@ -90,8 +90,9 @@ class AddGroupViewController: UIViewController {
     @IBAction func tapSaveButton(_ sender: Any) {
         // 入力チェック
         if titleTextField.text!.isEmpty {
-            showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
-            titleTextField.becomeFirstResponder()
+            showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                self.titleTextField.becomeFirstResponder()
+            })
             return
         }
         
