@@ -35,6 +35,12 @@ class AddGroupViewController: UIViewController {
         initColorPicker()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // マルチタスクビュー対策
+        colorPicker.frame.size.width = self.view.bounds.size.width
+    }
+    
     /// 画面表示の初期化
     func initView() {
         naviItem.title = TITLE_ADD_GROUP
@@ -46,7 +52,6 @@ class AddGroupViewController: UIViewController {
         colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
         saveButton.setTitle(TITLE_SAVE, for: .normal)
         cancelButton.setTitle(TITLE_CANCEL, for: .normal)
-        print(Color.allCases.count)
     }
     
     /// Picker初期化
@@ -57,11 +62,7 @@ class AddGroupViewController: UIViewController {
         colorPicker.backgroundColor = UIColor.systemGray5
     }
     
-    /// マルチタスクビュー対策
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        colorPicker.frame.size.width = self.view.bounds.size.width
-    }
+    // MARK: - Action
     
     /// カラーボタンの処理
     @IBAction func tapColorButton(_ sender: Any) {
@@ -74,11 +75,51 @@ class AddGroupViewController: UIViewController {
     
     /// キャンセルボタンの処理
     @IBAction func tapCancelButton(_ sender: Any) {
-        self.delegate?.addGroupVCDismiss(self)
+        if titleTextField.text!.isEmpty {
+            self.delegate?.addGroupVCDismiss(self)
+        } else {
+            showOKCancelAlert(title: "", message: MESSAGE_DELETE_INPUT, OKAction: {
+                self.delegate?.addGroupVCDismiss(self)
+            })
+        }
     }
     
     /// 保存ボタンの処理
     @IBAction func tapSaveButton(_ sender: Any) {
+        // 入力チェック
+        if titleTextField.text!.isEmpty {
+            showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
+            return
+        }
+        
+        // グループ作成
+        let group = Group()
+        group.title = titleTextField.text!
+        group.color = pickerIndex
+        
+        let realmManager = RealmManager()
+        if !realmManager.createRealm(object: group) {
+            showErrorAlert(message: ERROR_MESSAGE_GROUP_CREATE_FAILED)
+            return
+        }
+        
+        let firebaseManager = FirebaseManager()
+        if Network.isOnline() {
+            firebaseManager.saveGroup(group: group, completion: {
+                self.dismissWithReload(group: group)
+            })
+        } else {
+            self.dismissWithReload(group: group)
+        }
+    }
+    
+    /// TaskVCにグループを追加して閉じる
+    func dismissWithReload(group: Group) {
+        let tabBar = self.presentingViewController as! UITabBarController
+        let navigation = tabBar.selectedViewController as! UINavigationController
+        let taskView = navigation.viewControllers.first as! TaskViewController
+        taskView.insertGroup(group: group)
+        self.delegate?.addGroupVCDismiss(self)
     }
 
 }

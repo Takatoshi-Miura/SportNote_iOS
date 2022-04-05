@@ -29,9 +29,29 @@ class FirebaseManager {
     
     // MARK: - Create
     
-    
-    
-    
+    /// グループデータを保存
+    /// - Parameters:
+    ///    - group: グループデータ
+    ///    - completion: 完了処理
+    func saveGroup(group: Group, completion: @escaping () -> ()) {
+        let db = Firestore.firestore()
+        db.collection("Group").document("\(group.userID)_\(group.groupID)").setData([
+            "userID"        : group.userID,
+            "groupID"       : group.groupID,
+            "title"         : group.title,
+            "color"         : group.color,
+            "order"         : group.order,
+            "isDeleted"     : group.isDeleted,
+            "created_at"    : group.created_at,
+            "updated_at"    : group.updated_at
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                completion()
+            }
+        }
+    }
 
     // MARK: - Select
     

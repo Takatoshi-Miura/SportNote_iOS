@@ -9,6 +9,9 @@
 // MARK: - Common
 "Cancel" = "Cancel";
 "Save" = "Save";
+"Error" = "Error";
+"Delete" = "Delete";
+"DeleteInput" = "The entered content will be deleted.\nAre you sure?";
 "ServerCommunicationMessage" = "During server communication...";
 "White" = "White";
 "Black" = "Black";
@@ -42,3 +45,8 @@
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "Add target and note";
 "AddTargetNoteMessage" = "What do you want to add?";
+
+// MARK: - ErrorMessage
+"EmptyTitle" = "Please input a title.";
+"GroupCreateFailed" = "Failed to create a group.";
+

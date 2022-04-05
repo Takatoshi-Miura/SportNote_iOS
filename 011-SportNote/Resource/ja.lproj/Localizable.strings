@@ -9,6 +9,9 @@
 // MARK: - Common
 "Cancel" = "キャンセル";
 "Save" = "保存";
+"Error" = "エラー";
+"Delete" = "削除";
+"DeleteInput" = "入力した内容が削除されます。\nよろしいですか？";
 "ServerCommunicationMessage" = "通信中";
 "Red" = "レッド";
 "Pink" = "ピンク";
@@ -42,3 +45,7 @@
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "目標・ノートの追加";
 "AddTargetNoteMessage" = "何を追加しますか？";
+
+// MARK: - ErrorMessage
+"EmptyTitle" = "タイトルを入力して下さい。";
+"GroupCreateFailed" = "グループの作成に失敗しました。";

@@ -11,6 +11,9 @@ import UIKit
 // MARK: - Common
 let TITLE_CANCEL = NSLocalizedString("Cancel", comment: "")
 let TITLE_SAVE = NSLocalizedString("Save", comment: "")
+let TITLE_ERROR = NSLocalizedString("Error", comment: "")
+let TITLE_DELETE = NSLocalizedString("Delete", comment: "")
+let MESSAGE_DELETE_INPUT = NSLocalizedString("DeleteInput", comment: "")
 let MESSAGE_SERVER_COMMUNICATION = NSLocalizedString("ServerCommunicationMessage", comment: "")
 let TITLE_RED = NSLocalizedString("Red", comment: "")
 let TITLE_PINK = NSLocalizedString("Pink", comment: "")
@@ -45,3 +48,6 @@ let MESSAGE_GROUP_EXAMPLE = NSLocalizedString("GroupExample", comment: "")
 let TITLE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteTitle", comment: "")
 let MESSAGE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteMessage", comment: "")
 
+// MARK: - ErrorMessage
+let ERROR_MESSAGE_EMPTY_TITLE = NSLocalizedString("EmptyTitle", comment: "")
+let ERROR_MESSAGE_GROUP_CREATE_FAILED = NSLocalizedString("GroupCreateFailed", comment: "")
