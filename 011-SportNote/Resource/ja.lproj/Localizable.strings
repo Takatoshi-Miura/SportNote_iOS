@@ -8,7 +8,17 @@
 
 // MARK: - Common
 "Cancel" = "キャンセル";
+"Save" = "保存";
 "ServerCommunicationMessage" = "通信中";
+"Red" = "レッド";
+"Pink" = "ピンク";
+"Orange" = "オレンジ";
+"Yellow" = "イエロー";
+"Green" = "グリーン";
+"Blue" = "ブルー";
+"Purple" = "パープル";
+"White" = "白";
+"Black" = "黒";
 
 // MARK: - TabBarController
 "Task" = "課題";
@@ -22,6 +32,12 @@
 // MARK: - TaskViewController
 "AddGroupTaskTitle" = "グループ・課題の追加";
 "AddGroupTaskMessage" = "何を追加しますか？";
+
+// MARK: - AddGroupViewController
+"AddGroupTitle" = "グループの追加";
+"Title" = "タイトル(必須)";
+"Color" = "カラー";
+"GroupExample" = "例：フィジカル、メンタル、未分類";
 
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "目標・ノートの追加";

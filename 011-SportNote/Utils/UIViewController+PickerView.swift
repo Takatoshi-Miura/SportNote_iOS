@@ -9,8 +9,6 @@
 import UIKit
 
 public extension UIViewController {
-
-    // MARK: Public Methods
     
     /**
      PickerViewを画面下から出現
@@ -18,24 +16,10 @@ public extension UIViewController {
         - pickerView: PickerVIewを載せたUIView
      */
     func openPicker(_ pickerView:UIView) {
+        view.addSubview(pickerView)
         pickerView.frame.origin.y = UIScreen.main.bounds.size.height
         UIView.animate(withDuration: 0.3) {
             pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height
-        }
-    }
-    
-    /**
-     PickerViewを画面下から出現(スクロール有)
-     - Parameters:
-        - pickerView: PickerVIewを載せたUIView
-        - scrollPosition: 現在のスクロール位置
-        - bottomPadding: SafeArea外の余白
-     */
-    func openPicker(_ pickerView:UIView, _ scrollPosition:CGFloat, _ bottomPadding:CGFloat) {
-        let toolbarHeight:CGFloat = 44
-        pickerView.frame.origin.y = scrollPosition
-        UIView.animate(withDuration: 0.3) {
-            pickerView.frame.origin.y = scrollPosition - pickerView.bounds.size.height - toolbarHeight - bottomPadding
         }
     }
     
@@ -63,7 +47,7 @@ public extension UIViewController {
     func createToolBar(_ doneAction:Selector, _ cancelAction:Selector) -> UIToolbar {
         // ツールバーを作成
         let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
         // ボタン作成＆セット
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: doneAction)
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: cancelAction)
@@ -71,6 +55,21 @@ public extension UIViewController {
         toolbar.setItems([cancelItem,flexibleItem,doneItem], animated: true)
         // 作成したツールバーを返却
         return toolbar
+    }
+    
+    /**
+     PickerViewを画面下から出現(スクロール有)
+     - Parameters:
+        - pickerView: PickerVIewを載せたUIView
+        - scrollPosition: 現在のスクロール位置
+        - bottomPadding: SafeArea外の余白
+     */
+    func openPicker(_ pickerView:UIView, _ scrollPosition:CGFloat, _ bottomPadding:CGFloat) {
+        let toolbarHeight:CGFloat = 44
+        pickerView.frame.origin.y = scrollPosition
+        UIView.animate(withDuration: 0.3) {
+            pickerView.frame.origin.y = scrollPosition - pickerView.bounds.size.height - toolbarHeight - bottomPadding
+        }
     }
     
     /**

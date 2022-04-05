@@ -47,6 +47,9 @@
 		8D57AFD524A44F5A007450BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */; };
 		8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57AFDC24A47FAB007450BF /* QuartzCore.framework */; };
 		8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */; };
+		8D5CFBFD27FBA36A008DF02E /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFBFB27FBA36A008DF02E /* AddGroupViewController.swift */; };
+		8D5CFBFE27FBA36A008DF02E /* AddGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D5CFBFC27FBA36A008DF02E /* AddGroupViewController.xib */; };
+		8D5CFC0127FBAD1B008DF02E /* AddGroupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */; };
 		8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2624A17CD300441B32 /* AppDelegate.swift */; };
 		8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2C24A17CD300441B32 /* Main.storyboard */; };
 		8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2F24A17CD400441B32 /* Assets.xcassets */; };
@@ -129,6 +132,9 @@
 		8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D57AFDC24A47FAB007450BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PickerView.swift"; sourceTree = "<group>"; };
+		8D5CFBFB27FBA36A008DF02E /* AddGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
+		8D5CFBFC27FBA36A008DF02E /* AddGroupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddGroupViewController.xib; sourceTree = "<group>"; };
+		8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupCoordinator.swift; sourceTree = "<group>"; };
 		8D665D2324A17CD300441B32 /* 011-SportNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "011-SportNote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D665D2624A17CD300441B32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D665D2D24A17CD300441B32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -220,6 +226,7 @@
 		8D18E81627F65AF400035E99 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8D5CFBF827FBA30B008DF02E /* Group */,
 				8D18E81B27F65CA200035E99 /* Task */,
 				8D18E81C27F65CAA00035E99 /* Note */,
 				8D481D6F27F98FE30082D956 /* Calendar */,
@@ -231,6 +238,7 @@
 		8D18E81727F65B0000035E99 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8D5CFBF727FBA2FC008DF02E /* Group */,
 				8D3FFE6027F66B210021C9FC /* Task */,
 				8DC1931027F7BDA50097BF07 /* Note */,
 				8D481D7227F990130082D956 /* Calendar */,
@@ -241,6 +249,7 @@
 		8D18E81827F65B0F00035E99 /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
+				8D5CFBFF27FBACF2008DF02E /* Group */,
 				8D3FFE5B27F665F90021C9FC /* Task */,
 				8D3FFE5C27F666000021C9FC /* Note */,
 				8D481D6C27F98F920082D956 /* Calendar */,
@@ -266,13 +275,13 @@
 		8D18E81A27F65B3B00035E99 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8D481D4C27F7D9030082D956 /* Definition.swift */,
+				8D12B0C727F7D01E0040AF3D /* Definition+String.swift */,
+				8D481D6A27F98BF60082D956 /* Network.swift */,
 				8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */,
 				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,
 				8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */,
 				8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */,
-				8D481D4C27F7D9030082D956 /* Definition.swift */,
-				8D12B0C727F7D01E0040AF3D /* Definition+String.swift */,
-				8D481D6A27F98BF60082D956 /* Network.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -397,6 +406,30 @@
 				8D481D7327F990410082D956 /* CalendarViewController.swift */,
 			);
 			path = Calendar;
+			sourceTree = "<group>";
+		};
+		8D5CFBF727FBA2FC008DF02E /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				8D5CFBFB27FBA36A008DF02E /* AddGroupViewController.swift */,
+			);
+			path = Group;
+			sourceTree = "<group>";
+		};
+		8D5CFBF827FBA30B008DF02E /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				8D5CFBFC27FBA36A008DF02E /* AddGroupViewController.xib */,
+			);
+			path = Group;
+			sourceTree = "<group>";
+		};
+		8D5CFBFF27FBACF2008DF02E /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */,
+			);
+			path = Group;
 			sourceTree = "<group>";
 		};
 		8D665D1A24A17CD300441B32 = {
@@ -592,6 +625,7 @@
 				8DC1930D27F7B8690097BF07 /* TaskViewController.xib in Resources */,
 				8D481D7127F98FFD0082D956 /* CalendarViewController.xib in Resources */,
 				8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */,
+				8D5CFBFE27FBA36A008DF02E /* AddGroupViewController.xib in Resources */,
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
 				8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */,
 				8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */,
@@ -661,6 +695,7 @@
 				8DA5338E24CAA77E000ADAFB /* PracticeNoteContentViewController.swift in Sources */,
 				8DA5338C24CAA696000ADAFB /* PracticeNoteDetailViewController.swift in Sources */,
 				8DCF350724F6554900055093 /* Note_old.swift in Sources */,
+				8D5CFBFD27FBA36A008DF02E /* AddGroupViewController.swift in Sources */,
 				8DC1931627F7CB5B0097BF07 /* NoteViewController.swift in Sources */,
 				8DC778A224B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift in Sources */,
 				8DE8B1D424B1BD7F00E1195B /* TaskViewController_old.swift in Sources */,
@@ -691,6 +726,7 @@
 				8D481D4D27F7D9040082D956 /* Definition.swift in Sources */,
 				8D481D5127F7E5470082D956 /* PracticeNote.swift in Sources */,
 				8D01653024AEEBD100F9D69F /* NoteViewController_old.swift in Sources */,
+				8D5CFC0127FBAD1B008DF02E /* AddGroupCoordinator.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
 				8D481D6927F875780082D956 /* Target.swift in Sources */,
 				8D481D5E27F861D50082D956 /* FreeNote.swift in Sources */,

@@ -11,6 +11,8 @@ import GoogleMobileAds
 import PKHUD
 
 protocol TaskViewControllerDelegate: AnyObject {
+    // グループ追加タップ時の処理
+    func taskVCAddGroupDidTap(_ viewController: UIViewController)
 }
 
 class TaskViewController: UIViewController {
@@ -66,7 +68,7 @@ class TaskViewController: UIViewController {
     @IBAction func tapAddButton(_ sender: Any) {
         var alertActions: [UIAlertAction] = []
         let addGroupAction = UIAlertAction(title: TITLE_GROUP, style: .default) { _ in
-//            self.delegate?.taskVCAddGroupDidTap(self)
+            self.delegate?.taskVCAddGroupDidTap(self)
         }
         let addTaskAction = UIAlertAction(title: TITLE_TASK, style: .default) { _ in
 //            self.delegate?.taskVCAddTaskDidTap(self)

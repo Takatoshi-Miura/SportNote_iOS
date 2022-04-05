@@ -8,7 +8,17 @@
 
 // MARK: - Common
 "Cancel" = "Cancel";
+"Save" = "Save";
 "ServerCommunicationMessage" = "During server communication...";
+"White" = "White";
+"Black" = "Black";
+"Red" = "Red";
+"Pink" = "Pink";
+"Orange" = "Orange";
+"Yellow" = "Yellow";
+"Green" = "Green";
+"Blue" = "Blue";
+"Purple" = "Purple";
 
 // MARK: - TabBarController
 "Task" = "Task";
@@ -22,6 +32,12 @@
 // MARK: - TaskViewController
 "AddGroupTaskTitle" = "Add group and task";
 "AddGroupTaskMessage" = "What do you want to add?";
+
+// MARK: - AddGroupViewController
+"AddGroupTitle" = "Add group";
+"Title" = "Title (Required)";
+"Color" = "Color";
+"GroupExample" = "Ex: Physical, Mental, Uncategorized";
 
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "Add target and note";

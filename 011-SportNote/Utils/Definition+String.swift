@@ -10,7 +10,17 @@ import UIKit
 
 // MARK: - Common
 let TITLE_CANCEL = NSLocalizedString("Cancel", comment: "")
+let TITLE_SAVE = NSLocalizedString("Save", comment: "")
 let MESSAGE_SERVER_COMMUNICATION = NSLocalizedString("ServerCommunicationMessage", comment: "")
+let TITLE_RED = NSLocalizedString("Red", comment: "")
+let TITLE_PINK = NSLocalizedString("Pink", comment: "")
+let TITLE_ORANGE = NSLocalizedString("Orange", comment: "")
+let TITLE_YELLOW = NSLocalizedString("Yellow", comment: "")
+let TITLE_GREEN = NSLocalizedString("Green", comment: "")
+let TITLE_BLUE = NSLocalizedString("Blue", comment: "")
+let TITLE_PURPLE = NSLocalizedString("Purple", comment: "")
+let TITLE_WHITE = NSLocalizedString("White", comment: "")
+let TITLE_BLACK = NSLocalizedString("Black", comment: "")
 
 // MARK: - TabBarController
 let TITLE_TASK = NSLocalizedString("Task", comment: "")
@@ -25,6 +35,13 @@ let TITLE_TOURNAMENT_NOTE = NSLocalizedString("TournamentNote", comment: "")
 let TITLE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskTitle", comment: "")
 let MESSAGE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskMessage", comment: "")
 
+// MARK: - AddGroupViewController
+let TITLE_ADD_GROUP = NSLocalizedString("AddGroupTitle", comment: "")
+let TITLE_TITLE = NSLocalizedString("Title", comment: "")
+let TITLE_COLOR = NSLocalizedString("Color", comment: "")
+let MESSAGE_GROUP_EXAMPLE = NSLocalizedString("GroupExample", comment: "")
+
 // MARK: - NoteViewController
 let TITLE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteTitle", comment: "")
 let MESSAGE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteMessage", comment: "")
+
