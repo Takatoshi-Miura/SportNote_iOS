@@ -10,13 +10,157 @@ import Foundation
 
 class DataConverter {
     
+    private let firebaseManager = FirebaseManager()
+    private let realmManager = RealmManager()
+    
+    private var taskArray: [Task] = []
+    private var measuresArray: [Measures] = []
+    private var memoArray: [Memo] = []
+    private var targetArray: [Target] = []
+    private var freeNoteArray: [FreeNote] = []
+    private var noteArray: [Any] = []
+    private var practiceNoteArray: [PracticeNote] = []
+    private var tournamentNoteArray: [TournamentNote] = []
+    
+    /// 旧データを新データに変換してRealmに保存
+    func convertOldToRealm(completion: @escaping () -> ()) {
+        convertOldDataToNewData(completion: {
+            self.createRealmWithUpdate()
+            completion()
+        })
+    }
+    
+    /// 全ての新データをRealmに保存
+    private func createRealmWithUpdate() {
+        var resultArray: [Bool] = []
+        repeat {
+            resultArray = []
+            resultArray.append(realmManager.createRealmWithUpdate(objects: taskArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: measuresArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: memoArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: targetArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: freeNoteArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: practiceNoteArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: tournamentNoteArray))
+        } while resultArray.contains(false) // 成功するまで繰り返す
+    }
+    
+    /// 全ての旧データを変換
+    private func convertOldDataToNewData(completion: @escaping () -> ()) {
+        var completionNumber = 0
+        
+        print("OldTask変換開始")
+        DispatchQueue.global(qos: .default).sync {
+            self.convertOldTask(completion: {
+                print("OldTask変換終了")
+                completionNumber += 1
+                self.convertCompletion(completion: completion, completionNumber: completionNumber)
+            })
+        }
+        
+        print("OldTarget変換開始")
+        DispatchQueue.global(qos: .default).sync {
+            self.convertOldTarget(completion: {
+                print("OldTarget変換終了")
+                completionNumber += 1
+                self.convertCompletion(completion: completion, completionNumber: completionNumber)
+            })
+        }
+        
+        print("OldFreeNote変換開始")
+        DispatchQueue.global(qos: .default).sync {
+            self.convertOldFreeNote(completion: {
+                print("OldFreeNote変換終了")
+                completionNumber += 1
+                self.convertCompletion(completion: completion, completionNumber: completionNumber)
+            })
+        }
+        
+        print("OldNote変換開始")
+        DispatchQueue.global(qos: .default).sync {
+            self.convertOldNote(completion: {
+                print("OldNote変換終了")
+                completionNumber += 1
+                self.convertCompletion(completion: completion, completionNumber: completionNumber)
+            })
+        }
+    }
+    
+    /// 全ての旧課題データを変換&旧データをFIrebaseから削除
+    private func convertOldTask(completion: @escaping () -> ()) {
+        firebaseManager.getOldTask({
+            let oldTaskArray = self.firebaseManager.oldTaskArray
+            for oldTask in oldTaskArray {
+                let dic = self.convertToTaskMeasuresMemo(oldTask: oldTask)
+                self.taskArray.append(contentsOf: dic["task"]!.first as! [Task])
+                self.measuresArray.append(contentsOf: dic["measures"]!.first as! [Measures])
+                self.memoArray.append(contentsOf: dic["memo"]!.first as! [Memo])
+                self.firebaseManager.deleteOldTask(oldTask: oldTask, completion: {})
+            }
+            completion()
+        })
+    }
+    
+    /// 全ての旧目標データを変換&旧データをFIrebaseから削除
+    private func convertOldTarget(completion: @escaping () -> ()) {
+        firebaseManager.getOldTarget({
+            let oldTargetArray = self.firebaseManager.oldTargetArray
+            for oldTarget in oldTargetArray {
+                self.targetArray.append(self.convertToTarget(oldTarget: oldTarget))
+                self.firebaseManager.deleteOldTarget(oldTarget: oldTarget, completion: {})
+            }
+            completion()
+        })
+    }
+    
+    /// 全ての旧フリーノートデータを変換&旧データをFIrebaseから削除
+    private func convertOldFreeNote(completion: @escaping () -> ()) {
+        firebaseManager.getOldFreeNote({
+            let oldFreeNote = self.firebaseManager.oldFreeNote
+            if oldFreeNote.getUserID() != "FreeNoteIsEmpty" {
+                self.freeNoteArray.append(self.convertToFreeNote(oldFreeNote: oldFreeNote))
+                self.firebaseManager.deleteOldFreeNote(oldFreeNote: oldFreeNote, completion: {})
+            }
+            completion()
+        })
+    }
+    
+    /// 全ての旧ノートデータを変換&旧データをFIrebaseから削除
+    private func convertOldNote(completion: @escaping () -> ()) {
+        firebaseManager.getOldNote({
+            let oldNoteArray = self.firebaseManager.oldNoteArray
+            for oldNote in oldNoteArray {
+                let note = self.convertToNote(oldNote: oldNote)
+                self.noteArray.append(note)
+                if note is PracticeNote {
+                    self.practiceNoteArray.append(note as! PracticeNote)
+                } else {
+                    self.tournamentNoteArray.append(note as! TournamentNote)
+                }
+                self.firebaseManager.deleteOldNote(oldNote: oldNote, completion: {})
+            }
+            completion()
+        })
+    }
+    
+    /// 旧データ変換終了後の処理
+    /// - Parameters:
+    ///   - completion: 完了処理
+    ///   - completionNumber: タスク完了数
+    private func convertCompletion(completion: @escaping () -> (), completionNumber: Int) {
+        // 課題、対策、ノート全ての変換が終了した場合のみ完了処理を実行
+        if completionNumber == 4 {
+            completion()
+        }
+    }
+    
     /// 年月日文字列からDate型に変換
     /// - Parameters:
     ///   - year: 年
     ///   - month: 月
     ///   - date: 日
     /// - Returns: Date型の日付
-    func convertToDate(year: Int, month: Int, date: Int) -> Date {
+    private func convertToDate(year: Int, month: Int, date: Int) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy'年'M'月'd'日"
         dateFormatter.locale = Locale(identifier: "ja_JP")
@@ -27,7 +171,7 @@ class DataConverter {
     /// - Parameters:
     ///    - weather: 天気文字列
     /// - Returns: Weather型の天気
-    func convertToWeather(weather: String) -> Int {
+    private func convertToWeather(weather: String) -> Int {
         switch weather {
         case WeatherString.sunny.rawValue:
             return Weather.sunny.rawValue
@@ -39,16 +183,12 @@ class DataConverter {
             return Weather.sunny.rawValue
         }
     }
-
-    /// 旧ノートがRealmに新ノートとして保存されてるかチェックはdeletedで行う
-
-
     
     /// 旧課題を新課題、対策、メモに変換
     /// - Parameters:
     ///   - oldTask: 旧課題データ
     /// - Returns: ["task": 新課題1つ,  "measures": 対策群,  "memo": メモ群]
-    func convertToTaskMeasuresMemo(oldTask: Task_old) -> [String: [Any]] {
+    private func convertToTaskMeasuresMemo(oldTask: Task_old) -> [String: [Any]] {
         // 課題データ作成
         let task = Task()
         task.title = oldTask.getTitle()
@@ -99,7 +239,7 @@ class DataConverter {
     /// - Parameters:
     ///   - oldTarget: 旧目標データ
     /// - Returns: 新目標データ
-    func convertToTarget(oldTarget: Target_old) -> Target {
+    private func convertToTarget(oldTarget: Target_old) -> Target {
         let target = Target()
         target.title = oldTarget.getDetail()
         target.year = oldTarget.getYear()
@@ -113,7 +253,7 @@ class DataConverter {
     /// - Parameters:
     ///   - oldFreeNote: 旧フリーノートデータ
     /// - Returns: 新フリーノートデータ
-    func convertToFreeNote(oldFreeNote: FreeNote_old) -> FreeNote {
+    private func convertToFreeNote(oldFreeNote: FreeNote_old) -> FreeNote {
         let freeNote = FreeNote()
         freeNote.title = oldFreeNote.getTitle()
         freeNote.detail = oldFreeNote.getDetail()
@@ -124,7 +264,7 @@ class DataConverter {
     /// - Parameters:
     ///   - oldNote: 旧ノートデータ
     /// - Returns: 新ノートデータ(PracticeNote or TournamentNote)
-    func convertToNote(oldNote: Note_old) -> Any {
+    private func convertToNote(oldNote: Note_old) -> Any {
         if oldNote.getNoteType() == OldNoteType.practice.rawValue {
             let practiceNote = PracticeNote()
             // 旧ノートのnoteIDは番号だが、対策と紐付ける必要があるため新たにUUIDを付けることはしない
