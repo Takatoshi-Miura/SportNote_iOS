@@ -258,8 +258,8 @@ class FirebaseManager {
                         group.color = collection["color"] as! Int
                         group.order = collection["order"] as! Int
                         group.isDeleted = collection["isDeleted"] as! Bool
-                        group.created_at = collection["created_at"] as! Date
-                        group.updated_at = collection["updated_at"] as! Date
+                        group.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        group.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.groupArray.append(group)
                     }
                     completion()
@@ -291,8 +291,8 @@ class FirebaseManager {
                         task.order = collection["order"] as! Int
                         task.isComplete = collection["isComplete"] as! Bool
                         task.isDeleted = collection["isDeleted"] as! Bool
-                        task.created_at = collection["created_at"] as! Date
-                        task.updated_at = collection["updated_at"] as! Date
+                        task.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        task.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.taskArray.append(task)
                     }
                     completion()
@@ -322,8 +322,8 @@ class FirebaseManager {
                         measures.title = collection["title"] as! String
                         measures.order = collection["order"] as! Int
                         measures.isDeleted = collection["isDeleted"] as! Bool
-                        measures.created_at = collection["created_at"] as! Date
-                        measures.updated_at = collection["updated_at"] as! Date
+                        measures.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        measures.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.measuresArray.append(measures)
                     }
                     completion()
@@ -353,8 +353,8 @@ class FirebaseManager {
                         memo.measuresID = collection["measuresID"] as! String
                         memo.detail = collection["detail"] as! String
                         memo.isDeleted = collection["isDeleted"] as! Bool
-                        memo.created_at = collection["created_at"] as! Date
-                        memo.updated_at = collection["updated_at"] as! Date
+                        memo.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        memo.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.memoArray.append(memo)
                     }
                     completion()
@@ -385,8 +385,8 @@ class FirebaseManager {
                         target.month = collection["month"] as! Int
                         target.isYearlyTarget = collection["isYearlyTarget"] as! Bool
                         target.isDeleted = collection["isDeleted"] as! Bool
-                        target.created_at = collection["created_at"] as! Date
-                        target.updated_at = collection["updated_at"] as! Date
+                        target.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        target.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.targetArray.append(target)
                     }
                     completion()
@@ -414,8 +414,8 @@ class FirebaseManager {
                         freeNote.title = collection["title"] as! String
                         freeNote.detail = collection["detail"] as! String
                         freeNote.isDeleted = collection["isDeleted"] as! Bool
-                        freeNote.created_at = collection["created_at"] as! Date
-                        freeNote.updated_at = collection["updated_at"] as! Date
+                        freeNote.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        freeNote.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.freeNote = freeNote
                     }
                     completion()
@@ -441,7 +441,7 @@ class FirebaseManager {
                         let practiceNote = PracticeNote()
                         practiceNote.userID = collection["userID"] as! String
                         practiceNote.practiceNoteID = collection["practiceNoteID"] as! String
-                        practiceNote.date = collection["date"] as! Date
+                        practiceNote.date = (collection["date"] as! Timestamp).dateValue()
                         practiceNote.weather = collection["weather"] as! Int
                         practiceNote.temperature = collection["temperature"] as! Int
                         practiceNote.condition = collection["condition"] as! String
@@ -449,8 +449,8 @@ class FirebaseManager {
                         practiceNote.detail = collection["detail"] as! String
                         practiceNote.reflection = collection["reflection"] as! String
                         practiceNote.isDeleted = collection["isDeleted"] as! Bool
-                        practiceNote.created_at = collection["created_at"] as! Date
-                        practiceNote.updated_at = collection["updated_at"] as! Date
+                        practiceNote.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        practiceNote.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.practiceNoteArray.append(practiceNote)
                     }
                     completion()
@@ -476,7 +476,7 @@ class FirebaseManager {
                         let tournamentNote = TournamentNote()
                         tournamentNote.userID = collection["userID"] as! String
                         tournamentNote.tournamentNoteID = collection["tournamentNoteID"] as! String
-                        tournamentNote.date = collection["date"] as! Date
+                        tournamentNote.date = (collection["date"] as! Timestamp).dateValue()
                         tournamentNote.weather = collection["weather"] as! Int
                         tournamentNote.temperature = collection["temperature"] as! Int
                         tournamentNote.condition = collection["condition"] as! String
@@ -485,8 +485,8 @@ class FirebaseManager {
                         tournamentNote.result = collection["result"] as! String
                         tournamentNote.reflection = collection["reflection"] as! String
                         tournamentNote.isDeleted = collection["isDeleted"] as! Bool
-                        tournamentNote.created_at = collection["created_at"] as! Date
-                        tournamentNote.updated_at = collection["updated_at"] as! Date
+                        tournamentNote.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        tournamentNote.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
                         self.tournamentNoteArray.append(tournamentNote)
                     }
                     completion()
