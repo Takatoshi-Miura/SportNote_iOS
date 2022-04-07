@@ -19,45 +19,59 @@ class NoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
-    var syncManager = SyncManager()
-    var relamManager = RealmManager()
     
-    var taskArray: [Task] = []
-    var measuresArray: [Measures] = []
-    var memoArray: [Memo] = []
     var targetArray: [Target] = []
     var freeNote = FreeNote()
     var noteArray: [Any] = []
-    
     var delegate: NoteViewControllerDelegate?
     
     // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationController()
-        if Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            // 旧データを新データに変換
-            syncManager.convertOldDataToNew(completion: {
-                // 新データをRealmに保存(確実に成功するまで繰り返し)
-                var result = false
-                repeat {
-                    result = self.syncManager.createRealmWithUpdate()
-                } while result == false
-                
-                self.noteArray.append(contentsOf: self.relamManager.getAllPracticeNote())
-                self.noteArray.append(contentsOf: self.relamManager.getAllTournamentNote())
-                self.tableView.reloadData()
-                HUD.hide()
-            })
-        } else {
-            
-        }
-        
+        initTableView()
+        // 初回のみ旧データ変換後に同期処理
+        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+        let dataConverter = DataConverter()
+        dataConverter.convertOldToRealm(completion: {
+            self.syncData()
+        })
     }
     
     func initNavigationController() {
         self.title = TITLE_NOTE
+    }
+    
+    func initTableView() {
+        tableView.tableFooterView = UIView()
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(syncData), for: .valueChanged)
+//        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: "NoteCell")
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// データの同期処理
+    @objc func syncData() {
+        if Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let syncManager = SyncManager()
+            syncManager.syncDatabase(completion: {
+                let relamManager = RealmManager()
+                // TODO: 日付の降順(新しい順)で表示
+                self.noteArray = []
+                self.noteArray.append(contentsOf: relamManager.getAllPracticeNote())
+                self.noteArray.append(contentsOf: relamManager.getAllTournamentNote())
+                self.tableView.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+                HUD.hide()
+            })
+        } else {
+            tableView.refreshControl?.endRefreshing()
+            tableView.reloadData()
+        }
     }
     
     override func viewDidLayoutSubviews() {
