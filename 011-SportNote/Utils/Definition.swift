@@ -33,6 +33,7 @@ enum Color: Int, CaseIterable {
     case green
     case blue
     case purple
+    case gray
     
     var title: String {
         switch self {
@@ -43,6 +44,7 @@ enum Color: Int, CaseIterable {
         case .green: return TITLE_GREEN
         case .blue: return TITLE_BLUE
         case .purple: return TITLE_PURPLE
+        case .gray: return TITLE_GRAY
         }
     }
     
@@ -55,6 +57,7 @@ enum Color: Int, CaseIterable {
         case .green: return UIColor.systemGreen
         case .blue: return UIColor.systemBlue
         case .purple: return UIColor.systemPurple
+        case .gray: return UIColor.systemGray5
         }
     }
 }

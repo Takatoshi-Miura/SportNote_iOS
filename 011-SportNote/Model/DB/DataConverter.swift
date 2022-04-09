@@ -13,6 +13,7 @@ class DataConverter {
     private let firebaseManager = FirebaseManager()
     private let realmManager = RealmManager()
     
+    private var groupArray: [Group] = []
     private var taskArray: [Task] = []
     private var measuresArray: [Measures] = []
     private var memoArray: [Memo] = []
@@ -25,6 +26,17 @@ class DataConverter {
     /// 旧データを新データに変換してRealmに保存
     func convertOldToRealm(completion: @escaping () -> ()) {
         convertOldDataToNewData(completion: {
+            if self.realmManager.getAllGroup().count == 0 {
+                // 未分類グループを自動生成
+                let group = Group()
+                group.title = TITLE_UNCATEGORIZED
+                group.color = Color.gray.rawValue
+                self.groupArray.append(group)
+                // 課題を未分類グループに所属させる
+                for task in self.taskArray {
+                    task.groupID = group.groupID
+                }
+            }
             self.createRealmWithUpdate()
             completion()
         })
@@ -35,6 +47,7 @@ class DataConverter {
         var resultArray: [Bool] = []
         repeat {
             resultArray = []
+            resultArray.append(realmManager.createRealmWithUpdate(objects: groupArray))
             resultArray.append(realmManager.createRealmWithUpdate(objects: taskArray))
             resultArray.append(realmManager.createRealmWithUpdate(objects: measuresArray))
             resultArray.append(realmManager.createRealmWithUpdate(objects: memoArray))

@@ -20,6 +20,7 @@
 "Green" = "グリーン";
 "Blue" = "ブルー";
 "Purple" = "パープル";
+"Gray" = "グレー";
 "White" = "白";
 "Black" = "黒";
 
@@ -41,6 +42,7 @@
 "Title" = "タイトル(必須)";
 "Color" = "カラー";
 "GroupExample" = "例：フィジカル、メンタル、未分類";
+"Uncategorized" = "未分類";
 
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "目標・ノートの追加";

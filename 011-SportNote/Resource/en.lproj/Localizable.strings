@@ -13,8 +13,6 @@
 "Delete" = "Delete";
 "DeleteInput" = "The entered content will be deleted.\nAre you sure?";
 "ServerCommunicationMessage" = "During server communication...";
-"White" = "White";
-"Black" = "Black";
 "Red" = "Red";
 "Pink" = "Pink";
 "Orange" = "Orange";
@@ -22,6 +20,9 @@
 "Green" = "Green";
 "Blue" = "Blue";
 "Purple" = "Purple";
+"Gray" = "Gray";
+"White" = "White";
+"Black" = "Black";
 
 // MARK: - TabBarController
 "Task" = "Task";
@@ -41,6 +42,7 @@
 "Title" = "Title (Required)";
 "Color" = "Color";
 "GroupExample" = "Ex: Physical, Mental, Uncategorized";
+"Uncategorized" = "Uncategorized";
 
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "Add target and note";
