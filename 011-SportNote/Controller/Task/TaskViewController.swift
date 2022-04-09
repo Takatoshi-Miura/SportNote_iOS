@@ -21,6 +21,8 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
+    private var groupArray: [Group] = []
+    private var taskArray: [[Task]] = []
     private var adMobView: GADBannerView?
     var delegate: TaskViewControllerDelegate?
     
@@ -28,6 +30,13 @@ class TaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationController()
+        initTableView()
+        // 初回のみ旧データ変換後に同期処理
+        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+        let dataConverter = DataConverter()
+        dataConverter.convertOldToRealm(completion: {
+            self.syncData()
+        })
     }
     
     func initNavigationController() {
@@ -38,6 +47,47 @@ class TaskViewController: UIViewController {
                                             target: self,
                                             action: #selector(openSettingView(_:)))
         navigationItem.rightBarButtonItems = [settingButton]
+    }
+    
+    func initTableView() {
+        tableView.tableFooterView = UIView()
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(syncData), for: .valueChanged)
+        tableView.isEditing = true
+        tableView.allowsSelectionDuringEditing = true
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+//        tableView.register(UINib(nibName: String(describing: GroupHeaderView.self), bundle: nil),
+//                           forHeaderFooterViewReuseIdentifier: String(describing: GroupHeaderView.self))
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// データの同期処理
+    @objc func syncData() {
+        let realmManager = RealmManager()
+        if Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let syncManager = SyncManager()
+            syncManager.syncDatabase(completion: {
+                // TODO: 日付の降順(新しい順)で表示
+                self.groupArray = []
+                self.taskArray = []
+                self.groupArray.append(contentsOf: realmManager.getGroupArrayForTaskView())
+                self.taskArray.append(contentsOf: realmManager.getTaskArrayForTaskView())
+                self.tableView.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+                HUD.hide()
+            })
+        } else {
+            self.groupArray = []
+            self.taskArray = []
+            self.groupArray.append(contentsOf: realmManager.getGroupArrayForTaskView())
+            self.taskArray.append(contentsOf: realmManager.getTaskArrayForTaskView())
+            tableView.refreshControl?.endRefreshing()
+            tableView.reloadData()
+        }
     }
     
     @objc func openSettingView(_ sender: UIBarButtonItem) {
@@ -82,18 +132,95 @@ class TaskViewController: UIViewController {
                         frame: addButton.frame)
     }
     
+    /// グループを挿入
+    /// - Parameters:
+    ///    - group: 挿入するグループ
+    func insertGroup(group: Group) {
+        let index: IndexPath = [group.order, 0]
+        groupArray.append(group)
+        taskArray.append([])
+        tableView.insertSections(IndexSet(integer: index.section), with: UITableView.RowAnimation.right)
+    }
+    
 }
 
 extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return groupArray.count
+    }
+    
+    func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String? {
+        return groupArray[section].title
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return taskArray[section].count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        if indexPath.row >= taskArray[indexPath.section].count {
+            // 完了済み課題セル
+            cell.textLabel?.text = TITLE_COMPLETED_TASK
+            cell.textLabel?.textColor = UIColor.systemBlue
+        } else {
+            // 課題セル
+            let task = taskArray[indexPath.section][indexPath.row]
+            cell.textLabel?.text = task.title
+            let realmManager = RealmManager()
+            cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
+            cell.detailTextLabel?.textColor = UIColor.lightGray
+        }
         cell.accessoryType = .disclosureIndicator
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.row >= taskArray[indexPath.section].count {
+            return false    // 解決済みの課題セルは編集不可
+        } else {
+            return true
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.row >= taskArray[indexPath.section].count {
+            return false    // 完了課題セルは並び替え不可
+        } else {
+            return true
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        // 完了課題セルの下に入れようとした場合は課題の最下端に並び替え
+        var destinationIndex = destinationIndexPath
+        let count = taskArray[destinationIndex.section].count
+        if destinationIndex.row >= count {
+            destinationIndex.row = count == 0 ? 0 : count - 1
+        }
+        
+        // 並び順を保存
+        let task = taskArray[sourceIndexPath.section][sourceIndexPath.row]
+        taskArray[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+        taskArray[destinationIndex.section].insert(task, at: destinationIndex.row)
+        // TODO: 並び替え保存
+        //updateTaskOrderRealm(taskArray: taskArray)
+        
+        // グループが変わる場合はグループも更新
+//        if sourceIndexPath.section != destinationIndex.section {
+//            let groupId = groupArray[destinationIndex.section].getGroupID()
+//            updateTaskGroupIdRealm(task: task, ID: groupId)
+//        }
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none    // 削除アイコンを非表示
+    }
+    
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false    // 削除アイコンのスペースを詰める
     }
     
 }

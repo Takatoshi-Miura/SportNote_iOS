@@ -60,6 +60,23 @@ extension RealmManager {
         return groupArray
     }
     
+    /// TaskViewController用Group配列を取得
+    /// - Returns: Group配列
+    func getGroupArrayForTaskView() -> [Group] {
+        var groupArray: [Group] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "order", ascending: true),
+        ]
+        let results = realm.objects(Group.self)
+                            .filter("(isDeleted == false)")
+                            .sorted(by: sortProperties)
+        for group in results {
+            groupArray.append(group)
+        }
+        return groupArray
+    }
+    
     /// Realmのグループを更新
     /// - Parameters:
     ///    - group: Realmオブジェクト
@@ -102,6 +119,38 @@ extension RealmManager {
         let realm = try! Realm()
         let realmArray = realm.objects(Task.self)
         for task in realmArray {
+            taskArray.append(task)
+        }
+        return taskArray
+    }
+    
+    /// TaskViewController用task配列を返却
+    /// - Returns: Task配列[[task][task, task]…]の形
+    func getTaskArrayForTaskView() -> [[Task]] {
+        var taskArray: [[Task]] = [[Task]]()
+        let groupArray: [Group] = getGroupArrayForTaskView()
+        for group in groupArray {
+            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+            taskArray.append(tasks)
+        }
+        return taskArray
+    }
+    
+    /// グループに含まれる課題を取得
+    /// - Parameters:
+    ///   - groupID: グループID
+    ///   - isCompleted: 完了or未完了
+    /// - Returns: グループに含まれる課題
+    func getTasksInGroup(ID groupID: String, isCompleted: Bool) -> [Task] {
+        var taskArray: [Task] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "order", ascending: true),
+        ]
+        let results = realm.objects(Task.self)
+                            .filter("(groupID == '\(groupID)') && (isDeleted == false) && (isComplete == \(String(isCompleted)))")
+                            .sorted(by: sortProperties)
+        for task in results {
             taskArray.append(task)
         }
         return taskArray
@@ -154,6 +203,25 @@ extension RealmManager {
             measuresArray.append(measures)
         }
         return measuresArray
+    }
+    
+    /// 課題に含まれる最優先の対策名を取得
+    /// - Parameters:
+    ///   - taskID: 課題ID
+    /// - Returns: 対策名
+    func getMeasuresTitleInTask(taskID: String) -> String {
+        var measuresArray: [Measures] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "order", ascending: true),
+        ]
+        let results = realm.objects(Measures.self)
+                            .filter("taskID == '\(taskID)' && (isDeleted == false)")
+                            .sorted(by: sortProperties)
+        for measures in results {
+            measuresArray.append(measures)
+        }
+        return measuresArray.first?.title ?? ""
     }
     
     /// Realmの対策を更新

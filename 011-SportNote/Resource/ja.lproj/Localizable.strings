@@ -36,6 +36,8 @@
 // MARK: - TaskViewController
 "AddGroupTaskTitle" = "グループ・課題の追加";
 "AddGroupTaskMessage" = "何を追加しますか？";
+"CompletedTask" = "完了した課題";
+"Measures" = "対策";
 
 // MARK: - AddGroupViewController
 "AddGroupTitle" = "グループの追加";

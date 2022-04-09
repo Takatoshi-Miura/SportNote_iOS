@@ -38,6 +38,8 @@ let TITLE_TOURNAMENT_NOTE = NSLocalizedString("TournamentNote", comment: "")
 // MARK: - TaskViewController
 let TITLE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskTitle", comment: "")
 let MESSAGE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskMessage", comment: "")
+let TITLE_COMPLETED_TASK = NSLocalizedString("CompletedTask", comment: "")
+let TITLE_MEASURES = NSLocalizedString("Measures", comment: "")
 
 // MARK: - AddGroupViewController
 let TITLE_ADD_GROUP = NSLocalizedString("AddGroupTitle", comment: "")

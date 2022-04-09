@@ -36,6 +36,8 @@
 // MARK: - TaskViewController
 "AddGroupTaskTitle" = "Add group and task";
 "AddGroupTaskMessage" = "What do you want to add?";
+"CompletedTask" = "CompletedTask";
+"Measures" = "Measures";
 
 // MARK: - AddGroupViewController
 "AddGroupTitle" = "Add group";
