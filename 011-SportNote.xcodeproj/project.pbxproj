@@ -52,6 +52,9 @@
 		8D5CFC0127FBAD1B008DF02E /* AddGroupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */; };
 		8D5CFC0728024C94008DF02E /* GroupHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */; };
 		8D5CFC0928024CA4008DF02E /* GroupHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0828024CA4008DF02E /* GroupHeaderView.xib */; };
+		8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0A2802D925008DF02E /* GroupViewController.swift */; };
+		8D5CFC0D2802D925008DF02E /* GroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0B2802D925008DF02E /* GroupViewController.xib */; };
+		8D5CFC0F28038D43008DF02E /* GroupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0E28038D43008DF02E /* GroupCoordinator.swift */; };
 		8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2624A17CD300441B32 /* AppDelegate.swift */; };
 		8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2C24A17CD300441B32 /* Main.storyboard */; };
 		8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2F24A17CD400441B32 /* Assets.xcassets */; };
@@ -139,6 +142,9 @@
 		8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupCoordinator.swift; sourceTree = "<group>"; };
 		8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHeaderView.swift; sourceTree = "<group>"; };
 		8D5CFC0828024CA4008DF02E /* GroupHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupHeaderView.xib; sourceTree = "<group>"; };
+		8D5CFC0A2802D925008DF02E /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
+		8D5CFC0B2802D925008DF02E /* GroupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupViewController.xib; sourceTree = "<group>"; };
+		8D5CFC0E28038D43008DF02E /* GroupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCoordinator.swift; sourceTree = "<group>"; };
 		8D665D2324A17CD300441B32 /* 011-SportNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "011-SportNote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D665D2624A17CD300441B32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D665D2D24A17CD300441B32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -416,6 +422,7 @@
 			isa = PBXGroup;
 			children = (
 				8D5CFBFB27FBA36A008DF02E /* AddGroupViewController.swift */,
+				8D5CFC0A2802D925008DF02E /* GroupViewController.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";
@@ -424,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				8D5CFBFC27FBA36A008DF02E /* AddGroupViewController.xib */,
+				8D5CFC0B2802D925008DF02E /* GroupViewController.xib */,
 				8D5CFC0828024CA4008DF02E /* GroupHeaderView.xib */,
 				8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */,
 			);
@@ -434,6 +442,7 @@
 			isa = PBXGroup;
 			children = (
 				8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */,
+				8D5CFC0E28038D43008DF02E /* GroupCoordinator.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";
@@ -631,6 +640,7 @@
 				8DC1930D27F7B8690097BF07 /* TaskViewController.xib in Resources */,
 				8D481D7127F98FFD0082D956 /* CalendarViewController.xib in Resources */,
 				8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */,
+				8D5CFC0D2802D925008DF02E /* GroupViewController.xib in Resources */,
 				8D5CFC0928024CA4008DF02E /* GroupHeaderView.xib in Resources */,
 				8D5CFBFE27FBA36A008DF02E /* AddGroupViewController.xib in Resources */,
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
@@ -737,6 +747,7 @@
 				8D5CFC0127FBAD1B008DF02E /* AddGroupCoordinator.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
 				8D481D6927F875780082D956 /* Target.swift in Sources */,
+				8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */,
 				8D481D5E27F861D50082D956 /* FreeNote.swift in Sources */,
 				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,
 				8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */,
@@ -747,6 +758,7 @@
 				8D7853FE24A6FE0000CCA440 /* TaskDetailViewController.swift in Sources */,
 				8DB0617024BD72E300A08C35 /* TaskTableViewCell.swift in Sources */,
 				8D01653624AF202F00F9D69F /* AddNoteViewController.swift in Sources */,
+				8D5CFC0F28038D43008DF02E /* GroupCoordinator.swift in Sources */,
 				8DCF350824F6554900055093 /* Target_old.swift in Sources */,
 				8D7C676224DD045C005599AD /* TutorialViewController.swift in Sources */,
 				8D7BAB4F24A5B18800BE196B /* AddTaskViewController.swift in Sources */,

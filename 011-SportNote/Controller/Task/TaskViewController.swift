@@ -13,6 +13,8 @@ import PKHUD
 protocol TaskViewControllerDelegate: AnyObject {
     // グループ追加タップ時の処理
     func taskVCAddGroupDidTap(_ viewController: UIViewController)
+    // セクションヘッダータップ時の処理
+    func taskVCHeaderDidTap(group: Group)
 }
 
 class TaskViewController: UIViewController {
@@ -243,14 +245,12 @@ extension TaskViewController: GroupHeaderViewDelegate {
     
     // セクションヘッダータップ時の処理
     func headerDidTap(view: GroupHeaderView) {
-        print("セクションタップ判定")
-//        delegate?.taskVCHeaderDidTap(group: view.group)
+        delegate?.taskVCHeaderDidTap(group: view.group)
     }
     
     // セクションヘッダーのinfoボタンタップ時の処理
     func infoButtonDidTap(view: GroupHeaderView) {
-        print("infoボタンタップ判定")
-//        delegate?.taskVCHeaderDidTap(group: view.group)
+        delegate?.taskVCHeaderDidTap(group: view.group)
     }
     
 }

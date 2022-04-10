@@ -39,12 +39,16 @@
 "CompletedTask" = "CompletedTask";
 "Measures" = "Measures";
 
-// MARK: - AddGroupViewController
+// MARK: - Group
 "AddGroupTitle" = "Add group";
 "Title" = "Title (Required)";
 "Color" = "Color";
 "GroupExample" = "Ex: Physical, Mental, Uncategorized";
 "Uncategorized" = "Uncategorized";
+"GroupTitle" = "Group details";
+"GroupOrder" = "Display order";
+"DeleteGroupMessage" = "Do you want to delete the group?\nDeleting a group also deletes all tasks contained in the group. Once deleted, groups and tasks cannot be restored.";
+"Delete" = "Delete";
 
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "Add target and note";

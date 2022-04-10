@@ -13,6 +13,7 @@ class TaskCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var taskViewController = TaskViewController()
     let addGroupCoordinator = AddGroupCoordinator()
+    let groupCoordinator = GroupCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -34,6 +35,11 @@ extension TaskCoordinator: TaskViewControllerDelegate {
     // TaskVC → AddGroupVC
     func taskVCAddGroupDidTap(_ viewController: UIViewController) {
         addGroupCoordinator.startFlow(in: viewController)
+    }
+    
+    // TaskVC → GroupVC
+    func taskVCHeaderDidTap(group: Group) {
+        groupCoordinator.startFrow(in: navigationController!, withGroup: group)
     }
     
 }

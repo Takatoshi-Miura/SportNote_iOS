@@ -39,12 +39,16 @@
 "CompletedTask" = "完了した課題";
 "Measures" = "対策";
 
-// MARK: - AddGroupViewController
+// MARK: - Group
 "AddGroupTitle" = "グループの追加";
 "Title" = "タイトル(必須)";
 "Color" = "カラー";
 "GroupExample" = "例：フィジカル、メンタル、未分類";
 "Uncategorized" = "未分類";
+"GroupTitle" = "グループの詳細";
+"GroupOrder" = "表示順";
+"DeleteGroupTitle" = "グループの削除";
+"DeleteGroupMessage" = "グループを削除しますか？\nグループを削除するとグループに含まれる課題も全て削除されます。一度削除したグループと課題は復元できません。";
 
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "目標・ノートの追加";
