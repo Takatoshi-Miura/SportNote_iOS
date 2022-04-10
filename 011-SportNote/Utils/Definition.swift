@@ -57,7 +57,7 @@ enum Color: Int, CaseIterable {
         case .green: return UIColor.systemGreen
         case .blue: return UIColor.systemBlue
         case .purple: return UIColor.systemPurple
-        case .gray: return UIColor.systemGray5
+        case .gray: return UIColor.systemGray
         }
     }
 }

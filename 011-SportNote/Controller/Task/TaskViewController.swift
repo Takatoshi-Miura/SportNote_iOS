@@ -57,8 +57,8 @@ class TaskViewController: UIViewController {
         tableView.allowsSelectionDuringEditing = true
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-//        tableView.register(UINib(nibName: String(describing: GroupHeaderView.self), bundle: nil),
-//                           forHeaderFooterViewReuseIdentifier: String(describing: GroupHeaderView.self))
+        tableView.register(UINib(nibName: String(describing: GroupHeaderView.self), bundle: nil),
+                           forHeaderFooterViewReuseIdentifier: String(describing: GroupHeaderView.self))
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
@@ -150,8 +150,22 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
         return groupArray.count
     }
     
-    func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String? {
-        return groupArray[section].title
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: GroupHeaderView.self))
+        if let headerView = view as? GroupHeaderView {
+            headerView.delegate = self
+            headerView.setProperty(group: groupArray[section])
+            return headerView
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: GroupHeaderView.self))
+        if let headerView = view as? GroupHeaderView {
+            return headerView.bounds.height
+        }
+        return tableView.sectionHeaderHeight
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -221,6 +235,22 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false    // 削除アイコンのスペースを詰める
+    }
+    
+}
+
+extension TaskViewController: GroupHeaderViewDelegate {
+    
+    // セクションヘッダータップ時の処理
+    func headerDidTap(view: GroupHeaderView) {
+        print("セクションタップ判定")
+//        delegate?.taskVCHeaderDidTap(group: view.group)
+    }
+    
+    // セクションヘッダーのinfoボタンタップ時の処理
+    func infoButtonDidTap(view: GroupHeaderView) {
+        print("infoボタンタップ判定")
+//        delegate?.taskVCHeaderDidTap(group: view.group)
     }
     
 }
