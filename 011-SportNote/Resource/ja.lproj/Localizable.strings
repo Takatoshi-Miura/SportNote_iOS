@@ -49,6 +49,7 @@
 "GroupOrder" = "表示順";
 "DeleteGroupTitle" = "グループの削除";
 "DeleteGroupMessage" = "グループを削除しますか？\nグループを削除するとグループに含まれる課題も全て削除されます。一度削除したグループと課題は復元できません。";
+"EmptyGroupMessage" = "グループは1つ以上必要です。";
 
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "目標・ノートの追加";

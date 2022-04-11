@@ -48,6 +48,7 @@
 "GroupTitle" = "Group details";
 "GroupOrder" = "Display order";
 "DeleteGroupMessage" = "Do you want to delete the group?\nDeleting a group also deletes all tasks contained in the group. Once deleted, groups and tasks cannot be restored.";
+"EmptyGroupMessage" = "You need at least one group.";
 "Delete" = "Delete";
 
 // MARK: - NoteViewController

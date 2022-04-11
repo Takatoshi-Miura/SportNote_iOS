@@ -50,6 +50,7 @@ let TITLE_UNCATEGORIZED = NSLocalizedString("Uncategorized", comment: "")
 let TITLE_GROUP_DETAIL = NSLocalizedString("GroupTitle", comment: "")
 let TITLE_DELETE_GROUP = NSLocalizedString("DeleteGroupTitle", comment: "")
 let MESSAGE_DELETE_GROUP = NSLocalizedString("DeleteGroupMessage", comment: "")
+let MESSAGE_EMPTY_GROUP = NSLocalizedString("EmptyGroupMessage", comment: "")
 let TITLE_ORDER = NSLocalizedString("GroupOrder", comment: "")
 
 // MARK: - NoteViewController

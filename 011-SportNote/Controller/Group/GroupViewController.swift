@@ -97,12 +97,12 @@ class GroupViewController: UIViewController {
         /// グループ数チェック
         let realmManager = RealmManager()
         if realmManager.getGroupArrayForTaskView().count == 1 {
-            showErrorAlert(message: "")
+            showErrorAlert(message: MESSAGE_EMPTY_GROUP)
             return
         }
         
         showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
-            realmManager.updateGroup(group: self.group)
+            realmManager.updateGroupIsDeleted(group: self.group)
             self.delegate?.groupVCDeleteGroup()
         })
     }
