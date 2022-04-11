@@ -15,6 +15,10 @@ protocol TaskViewControllerDelegate: AnyObject {
     func taskVCAddGroupDidTap(_ viewController: UIViewController)
     // セクションヘッダータップ時の処理
     func taskVCHeaderDidTap(group: Group)
+    // 課題セルタップ時の処理
+    func taskVCTaskCellDidTap(task: Task)
+    // 完了した課題セルタップ時の処理
+    func taskVCCompletedTaskCellDidTap(groupID: String)
 }
 
 class TaskViewController: UIViewController {
@@ -245,6 +249,18 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
 //            updateTaskGroupIdRealm(task: task, ID: groupId)
 //        }
         tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 完了済み課題セル
+        if indexPath.row >= taskArray[indexPath.section].count {
+            let groupID = groupArray[indexPath.section].groupID
+            delegate?.taskVCCompletedTaskCellDidTap(groupID: groupID)
+            return
+        }
+        // 課題セル
+        let task = taskArray[indexPath.section][indexPath.row]
+        delegate?.taskVCTaskCellDidTap(task: task)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
