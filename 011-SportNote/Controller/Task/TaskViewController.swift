@@ -41,6 +41,30 @@ class TaskViewController: UIViewController {
         })
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        showAdMob()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            // 課題が完了or削除されていれば取り除く
+            if selectedIndex.row < taskArray[selectedIndex.section].count {
+                let task = taskArray[selectedIndex.section][selectedIndex.row]
+                if task.isComplete || task.isDeleted {
+                    taskArray[selectedIndex.section].remove(at: selectedIndex.row)
+                    tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                    return
+                }
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
+        } else {
+            // グループから戻る場合はリロード
+            refreshData()
+        }
+    }
+    
     func initNavigationController() {
         self.title = TITLE_TASK
         
@@ -68,37 +92,29 @@ class TaskViewController: UIViewController {
     
     /// データの同期処理
     @objc func syncData() {
-        let realmManager = RealmManager()
         if Network.isOnline() {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let syncManager = SyncManager()
             syncManager.syncDatabase(completion: {
-                // TODO: 日付の降順(新しい順)で表示
-                self.groupArray = []
-                self.taskArray = []
-                self.groupArray.append(contentsOf: realmManager.getGroupArrayForTaskView())
-                self.taskArray.append(contentsOf: realmManager.getTaskArrayForTaskView())
-                self.tableView.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
+                self.refreshData()
                 HUD.hide()
             })
         } else {
-            self.groupArray = []
-            self.taskArray = []
-            self.groupArray.append(contentsOf: realmManager.getGroupArrayForTaskView())
-            self.taskArray.append(contentsOf: realmManager.getTaskArrayForTaskView())
-            tableView.refreshControl?.endRefreshing()
-            tableView.reloadData()
+            self.refreshData()
         }
+    }
+    
+    /// データを再取得
+    func refreshData() {
+        let realmManager = RealmManager()
+        groupArray = realmManager.getGroupArrayForTaskView()
+        taskArray = realmManager.getTaskArrayForTaskView()
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
     
     @objc func openSettingView(_ sender: UIBarButtonItem) {
 //        self.delegate?.taskVCHumburgerMenuButtonDidTap(self)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        showAdMob()
     }
     
     /// バナー広告を表示

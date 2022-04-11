@@ -48,9 +48,8 @@ class GroupViewController: UIViewController {
         super.viewDidDisappear(animated)
         // Firebaseに送信
         if Network.isOnline() {
-            group.title = titleTextField.text!
-            let realmManager = RealmManager()
-            realmManager.updateGroup(group: group)
+            let firebaseManager = FirebaseManager()
+            firebaseManager.updateGroup(group: group)
         }
     }
     
@@ -134,9 +133,10 @@ extension GroupViewController: UITextFieldDelegate {
         }
         
         // グループを更新
-        group.title = textField.text!
         let realmManager = RealmManager()
-        realmManager.updateGroup(group: group)
+        realmManager.updateGroupTitle(groupID: group.groupID, title: textField.text!)
+        groupArray = realmManager.getGroupArrayForTaskView()
+        tableView.reloadData()
         return true
     }
     
@@ -162,6 +162,11 @@ extension GroupViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         closePicker(pickerView)
         colorButton.backgroundColor = Color.allCases[pickerIndex].color
         colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
+        
+        let realmManager = RealmManager()
+        realmManager.updateGroupColor(groupID: group.groupID, color: pickerIndex)
+        groupArray = realmManager.getGroupArrayForTaskView()
+        tableView.reloadData()
     }
     
     @objc func cancelAction() {
@@ -199,20 +204,18 @@ extension GroupViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // 並び順を保存
         let group = groupArray[sourceIndexPath.row]
         groupArray.remove(at: sourceIndexPath.row)
         groupArray.insert(group, at: destinationIndexPath.row)
-//        updateGroupOrderRealm(groupArray: groupArray)
+        
+        let realmManager = RealmManager()
+        realmManager.updateGroupOrder(groupArray: groupArray)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = groupArray[indexPath.row].title
         cell.backgroundColor = UIColor.systemGray6
-        let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 0.3))
-        separatorView.backgroundColor = UIColor.gray
-        cell.addSubview(separatorView)
         return cell
     }
     

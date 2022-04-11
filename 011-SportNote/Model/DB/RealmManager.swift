@@ -93,6 +93,73 @@ extension RealmManager {
         }
     }
     
+    /// グループのタイトルを更新
+    /// - Parameters:
+    ///   - groupID: 更新したいグループのID
+    ///   - title: 新しいタイトル文字列
+    func updateGroupTitle(groupID: String, title: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Group.self).filter("groupID == '\(groupID)'").first
+        try! realm.write {
+            result?.title = title
+            result?.updated_at = Date()
+        }
+    }
+
+    /// グループの色を更新
+    /// - Parameters:
+    ///   - groupID: 更新したいグループのID
+    ///   - color: 新しい色番号
+    func updateGroupColor(groupID: String, color: Int) {
+        let realm = try! Realm()
+        let result = realm.objects(Group.self).filter("groupID == '\(groupID)'").first
+        try! realm.write {
+            result?.color = color
+            result?.updated_at = Date()
+        }
+    }
+
+    /// グループの並び順を更新
+    /// - Parameters:
+    ///   - groupArray: グループ配列
+    func updateGroupOrder(groupArray: [Group]) {
+        let realm = try! Realm()
+        var index = 0
+        for group in groupArray {
+            let result = realm.objects(Group.self).filter("groupID == '\(group.groupID)'").first
+            try! realm.write {
+                result?.order = index
+                result?.updated_at = Date()
+            }
+            index += 1
+        }
+    }
+
+    /// グループの削除フラグを更新
+    /// - Parameters:
+    ///   - group: グループ
+    func updateGroupIsDeleted(group: Group) {
+        let realm = try! Realm()
+        let result = realm.objects(Group.self).filter("groupID == '\(group.groupID)'").first
+        try! realm.write {
+            result?.isDeleted = true
+            result?.updated_at = Date()
+        }
+    }
+
+    /// ユーザーIDを更新
+    /// - Parameters:
+    ///   - userID: ユーザーID
+    func updateGroupUserID(userID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Group.self)
+        for group in result {
+            try! realm.write {
+                group.userID = userID
+            }
+        }
+    }
+    
     /// Realmのグループを全削除
     func deleteAllGroup() {
         let realm = try! Realm()
