@@ -41,6 +41,17 @@ let MESSAGE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskMessage", comment: "
 let TITLE_COMPLETED_TASK = NSLocalizedString("CompletedTask", comment: "")
 let TITLE_MEASURES = NSLocalizedString("Measures", comment: "")
 
+// MARK: - TaskDetailViewController
+let TITLE_TASK_DETAIL = NSLocalizedString("TaskDetailTitle", comment: "")
+let TITLE_DELETE_TASK = NSLocalizedString("DeleteTaskTitle", comment: "")
+let MESSAGE_DELETE_TASK = NSLocalizedString("DeleteTaskMessage", comment: "")
+let TITLE_COMPLETE_TASK = NSLocalizedString("CompleteTaskTitle", comment: "")
+let MESSAGE_COMPLETE_TASK = NSLocalizedString("CompleteTaskMessage", comment: "")
+let MESSAGE_INCOMPLETE_TASK = NSLocalizedString("InCompleteTaskMessage", comment: "")
+let TITLE_ADD_MEASURES = NSLocalizedString("AddMeasuresTitle", comment: "")
+let MESSAGE_ADD_MEASURES = NSLocalizedString("AddMeasuresMessage", comment: "")
+let TITLE_ADD = NSLocalizedString("Add", comment: "")
+
 // MARK: - Group
 let TITLE_ADD_GROUP = NSLocalizedString("AddGroupTitle", comment: "")
 let TITLE_TITLE = NSLocalizedString("Title", comment: "")
@@ -60,3 +71,4 @@ let MESSAGE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteMessage", com
 // MARK: - ErrorMessage
 let ERROR_MESSAGE_EMPTY_TITLE = NSLocalizedString("EmptyTitle", comment: "")
 let ERROR_MESSAGE_GROUP_CREATE_FAILED = NSLocalizedString("GroupCreateFailed", comment: "")
+let ERROR_MESSAGE_TASK_CREATE_FAILED = NSLocalizedString("TaskCreateError", comment: "")

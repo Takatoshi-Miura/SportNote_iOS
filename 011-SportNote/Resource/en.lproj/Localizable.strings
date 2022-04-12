@@ -39,6 +39,19 @@
 "CompletedTask" = "CompletedTask";
 "Measures" = "Measures";
 
+// MARK: - TaskDetailViewController
+"TaskDetailTitle" = "Task details";
+"DeleteTaskTitle" = "Delete task";
+"DeleteTaskMessage" = "Do you want to delete the task?\nIf you delete an task, you cannot restore it.";
+"CompleteTaskTitle" = "Progress of the task";
+"CompleteTaskMessage" = "Do you want to complete the task?";
+"InCompleteTaskMessage" = "Do you want to keep the task in progress?";
+"AddMeasuresTitle" = "Add Measures";
+"AddMeasuresMessage" = "Please enter the measures.";
+"Add" = "Add";
+"DeleteMeasuresTitle" = "Delete measures";
+"DeleteMeasuresMessage" = "Do you want to delete the measure?\nIf you delete the measure, all the related information will be deleted from the note. Once deleted, the measure cannot be restored.";
+
 // MARK: - Group
 "AddGroupTitle" = "Add group";
 "Title" = "Title (Required)";
@@ -58,4 +71,4 @@
 // MARK: - ErrorMessage
 "EmptyTitle" = "Please input a title.";
 "GroupCreateFailed" = "Failed to create a group.";
-
+"TaskCreateError" = "Failed to create a task.";

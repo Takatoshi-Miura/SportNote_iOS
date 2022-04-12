@@ -39,6 +39,19 @@
 "CompletedTask" = "完了した課題";
 "Measures" = "対策";
 
+// MARK: - TaskDetailViewController
+"TaskDetailTitle" = "課題の詳細";
+"DeleteTaskTitle" = "課題の削除";
+"DeleteTaskMessage" = "課題を削除しますか？\n課題を削除すると復元できません。";
+"CompleteTaskTitle" = "課題の進捗";
+"CompleteTaskMessage" = "課題を完了にしますか？";
+"InCompleteTaskMessage" = "課題を未完了にしますか？";
+"AddMeasuresTitle" = "対策の追加";
+"AddMeasuresMessage" = "対策を入力して下さい。";
+"Add" = "追加";
+"DeleteMeasuresTitle" = "対策の削除";
+"DeleteMeasuresMessage" = "対策を削除しますか？\n対策を削除するとノートからも関連する情報が全て削除されます。一度削除した対策は復元できません。";
+
 // MARK: - Group
 "AddGroupTitle" = "グループの追加";
 "Title" = "タイトル(必須)";
@@ -58,3 +71,4 @@
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
 "GroupCreateFailed" = "グループの作成に失敗しました。";
+"TaskCreateError" = "課題の作成に失敗しました。";

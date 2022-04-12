@@ -1,5 +1,5 @@
 //
-//  TaskDetailViewController.swift
+//  TaskDetailViewController_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/06/27.
@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class TaskDetailViewController: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate {
+class TaskDetailViewController_old: UIViewController,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate {
     
     //MARK:- 変数の宣言
     

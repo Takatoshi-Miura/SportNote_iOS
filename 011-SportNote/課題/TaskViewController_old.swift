@@ -290,7 +290,7 @@ class TaskViewController_old: UIViewController, UITableViewDelegate, UITableView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goTaskDetailViewController" {
             // 表示する課題データを課題詳細確認画面へ渡す
-            let taskDetailViewController = segue.destination as! TaskDetailViewController
+            let taskDetailViewController = segue.destination as! TaskDetailViewController_old
             taskDetailViewController.task = dataManager.taskDataArray[index]
             taskDetailViewController.previousControllerName = "TaskViewController"
         } else if segue.identifier == "goResolvedTaskViewController" {

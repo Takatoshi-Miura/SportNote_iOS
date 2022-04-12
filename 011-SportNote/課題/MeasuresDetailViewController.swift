@@ -164,7 +164,7 @@ class MeasuresDetailViewController: UIViewController,UINavigationControllerDeleg
     
     // 前画面に戻るときに呼ばれる処理
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        if viewController is TaskDetailViewController {
+        if viewController is TaskDetailViewController_old {
             updateTaskData()
         }
     }

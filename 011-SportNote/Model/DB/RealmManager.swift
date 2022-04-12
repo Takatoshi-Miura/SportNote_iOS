@@ -241,6 +241,61 @@ extension RealmManager {
         }
     }
     
+    /// 課題のタイトルを更新
+    /// - Parameters:
+    ///    - taskID: 更新したい課題のID
+    ///    - title: 新しいタイトル文字列
+    func updateTaskTitle(taskID: String, title: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+                           .filter("taskID == '\(taskID)'").first
+        try! realm.write {
+            result?.title = title
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// 課題の原因を更新
+    /// - Parameters:
+    ///    - taskID: 更新したい課題のID
+    ///    - cause: 新しい原因の文字列
+    func updateTaskCause(taskID: String, cause: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+                           .filter("taskID == '\(taskID)'").first
+        try! realm.write {
+            result?.cause = cause
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// 課題の完了フラグを更新
+    /// - Parameters:
+    ///   - task: 課題
+    ///   - isCompleted: 完了or未完了
+    func updateTaskIsCompleted(task: Task, isCompleted: Bool) {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+                           .filter("taskID == '\(task.taskID)'").first
+        try! realm.write {
+            result?.isComplete = isCompleted
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// 課題の削除フラグを更新
+    /// - Parameters:
+    ///   - task: 課題
+    func updateTaskIsDeleted(task: Task) {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+                           .filter("taskID == '\(task.taskID)'").first
+        try! realm.write {
+            result?.isDeleted = true
+            result?.updated_at = Date()
+        }
+    }
+    
     /// Realmの課題を全削除
     func deleteAllTask() {
         let realm = try! Realm()
@@ -291,18 +346,67 @@ extension RealmManager {
         return measuresArray.first?.title ?? ""
     }
     
+    /// 課題に含まれる対策を取得
+    /// - Parameters:
+    ///   - taskID: 課題ID
+    /// - Returns: 課題に含まれる対策
+    func getMeasuresInTask(ID taskID: String) -> [Measures] {
+        var measuresArray: [Measures] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "order", ascending: true),
+        ]
+        let results = realm.objects(Measures.self)
+                            .filter("taskID == '\(taskID)' && (isDeleted == false)")
+                            .sorted(by: sortProperties)
+        for measures in results {
+            measuresArray.append(measures)
+        }
+        return measuresArray
+    }
+    
     /// Realmの対策を更新
     /// - Parameters:
     ///    - measures: Realmオブジェクト
     func updateMeasures(measures: Measures) {
         let realm = try! Realm()
         let result = realm.objects(Measures.self)
-            .filter("measuresID == '\(measures.measuresID)'").first
+                           .filter("measuresID == '\(measures.measuresID)'").first
         try! realm.write {
             result?.title = measures.title
             result?.order = measures.order
             result?.isDeleted = measures.isDeleted
             result?.updated_at = measures.updated_at
+        }
+    }
+    
+    /// 対策の並び順を更新
+    /// - Parameters:
+    ///    - measuresArray: 対策配列
+    func updateMeasuresOrder(measuresArray: [Measures]) {
+        let realm = try! Realm()
+        var index = 0
+        for measures in measuresArray {
+            let result = realm.objects(Measures.self)
+                               .filter("measuresID == '\(measures.measuresID)'").first
+            try! realm.write {
+                result?.order = index
+                result?.updated_at = Date()
+            }
+            index += 1
+        }
+    }
+    
+    /// 対策の削除フラグを更新
+    /// - Parameters:
+    ///   - measures: 対策
+    func updateMeasuresIsDeleted(measures: Measures) {
+        let realm = try! Realm()
+        let result = realm.objects(Measures.self)
+                           .filter("measuresID == '\(measures.measuresID)'").first
+        try! realm.write {
+            result?.isDeleted = true
+            result?.updated_at = Date()
         }
     }
     
