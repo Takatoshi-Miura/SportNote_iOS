@@ -38,6 +38,7 @@
 "AddGroupTaskMessage" = "What do you want to add?";
 "CompletedTask" = "CompletedTask";
 "Measures" = "Measures";
+"Cause" = "Cause";
 
 // MARK: - TaskDetailViewController
 "TaskDetailTitle" = "Task details";

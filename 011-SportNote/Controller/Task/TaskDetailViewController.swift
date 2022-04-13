@@ -39,6 +39,7 @@ class TaskDetailViewController: UIViewController {
         addButton.isHidden = task.isComplete ? true : false
         let realmManager = RealmManager()
         measuresArray = realmManager.getMeasuresInTask(ID: task.taskID)
+        initView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -81,11 +82,23 @@ class TaskDetailViewController: UIViewController {
     func initTableView() {
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
-//        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
+    }
+    
+    func initView() {
+        titleLabel.text = TITLE_TITLE
+        causeLabel.text = TITLE_CAUSE
+        measuresLabel.text = TITLE_MEASURES
+        titleTextField.text = task.title
+        causeTextView.text = task.cause
+        causeTextView.layer.borderColor = UIColor.systemGray6.cgColor
+        causeTextView.layer.borderWidth = 1.0
+        causeTextView.layer.cornerRadius = 5.0
+        causeTextView.layer.masksToBounds = true
     }
     
     // MARK: - Action
@@ -105,25 +118,21 @@ class TaskDetailViewController: UIViewController {
         let message = isCompleted ? MESSAGE_INCOMPLETE_TASK : MESSAGE_COMPLETE_TASK
         showOKCancelAlert(title: TITLE_COMPLETE_TASK, message: message, OKAction: {
             let realmManager = RealmManager()
-            realmManager.updateTaskIsCompleted(task: self.task, isCompleted: isCompleted)
+            realmManager.updateTaskIsCompleted(task: self.task, isCompleted: !isCompleted)
             self.delegate?.taskDetailVCCompleteTask(task: self.task)
         })
     }
     
     /// 対策を追加
     @IBAction func tapAddButton(_ sender: Any) {
-        let alert = UIAlertController(title: TITLE_ADD_MEASURES,
-                                      message: MESSAGE_ADD_MEASURES,
-                                      preferredStyle: .alert)
+        let alert = UIAlertController(title: TITLE_ADD_MEASURES, message: MESSAGE_ADD_MEASURES, preferredStyle: .alert)
         
         var alertTextField: UITextField?
         alert.addTextField(configurationHandler: {(textField) -> Void in
             alertTextField = textField
         })
         
-        let OKAction = UIAlertAction(title: TITLE_ADD,
-                                     style: UIAlertAction.Style.default,
-                                     handler: {(action: UIAlertAction) in
+        let OKAction = UIAlertAction(title: TITLE_ADD, style: UIAlertAction.Style.default, handler: {(action: UIAlertAction) in
             if (alertTextField?.text == nil || alertTextField?.text == "") {
                 self.showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
             } else {
@@ -131,9 +140,7 @@ class TaskDetailViewController: UIViewController {
             }
         })
         
-        let cancelAction = UIAlertAction(title: TITLE_CANCEL,
-                                         style: UIAlertAction.Style.cancel,
-                                         handler: nil)
+        let cancelAction = UIAlertAction(title: TITLE_CANCEL, style: UIAlertAction.Style.cancel, handler: nil)
         
         let actions = [OKAction, cancelAction]
         actions.forEach { alert.addAction($0) }
@@ -148,7 +155,7 @@ class TaskDetailViewController: UIViewController {
         measures.title = title
         measures.order = realmManager.getMeasuresInTask(ID: task.taskID).count
         
-        if realmManager.createRealm(object: measures) {
+        if !realmManager.createRealm(object: measures) {
             showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
             return
         }
@@ -209,9 +216,6 @@ extension TaskDetailViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = measuresArray[indexPath.row].title
         cell.backgroundColor = UIColor.systemGray6
-//        let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 0.3))
-//        separatorView.backgroundColor = UIColor.gray
-//        cell.addSubview(separatorView)
         return cell
     }
     

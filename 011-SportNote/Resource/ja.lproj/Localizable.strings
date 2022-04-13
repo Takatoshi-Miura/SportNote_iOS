@@ -38,6 +38,7 @@
 "AddGroupTaskMessage" = "何を追加しますか？";
 "CompletedTask" = "完了した課題";
 "Measures" = "対策";
+"Cause" = "原因";
 
 // MARK: - TaskDetailViewController
 "TaskDetailTitle" = "課題の詳細";

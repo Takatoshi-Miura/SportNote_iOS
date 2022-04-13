@@ -14,6 +14,7 @@ class TaskCoordinator: Coordinator {
     var taskViewController = TaskViewController()
     let addGroupCoordinator = AddGroupCoordinator()
     let groupCoordinator = GroupCoordinator()
+    let taskDetailCoordinator = TaskDetailCoordinator()
     let completedTaskCoordinator = CompletedTaskCoordinator()
     
     func startFlow(in window: UIWindow?) {
@@ -45,7 +46,7 @@ extension TaskCoordinator: TaskViewControllerDelegate {
     
     // TaskVC → TaskDetailVC
     func taskVCTaskCellDidTap(task: Task) {
-//        taskDetailCoordinator.startFrow(in: navigationController!, withTask: task)
+        taskDetailCoordinator.startFrow(in: navigationController!, withTask: task)
     }
     
     // TaskVC → completedTaskVC

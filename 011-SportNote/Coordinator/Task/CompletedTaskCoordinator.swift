@@ -12,7 +12,7 @@ class CompletedTaskCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var completedTaskViewController = CompletedTaskViewController()
-//    let taskDetailCoordinator = TaskDetailCoordinator()
+    let taskDetailCoordinator = TaskDetailCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -38,7 +38,7 @@ extension CompletedTaskCoordinator: CompletedTaskViewControllerDelegate {
     
     // CompletedTaskVC → TaskDetailVC
     func completedTaskVCTaskCellDidTap(task: Task) {
-//        taskDetailCoordinator.startFrow(in: navigationController!, withTask: task)
+        taskDetailCoordinator.startFrow(in: navigationController!, withTask: task)
     }
     
 }

@@ -269,6 +269,20 @@ extension RealmManager {
         }
     }
     
+    /// 課題の並び順を更新
+    /// - Parameters:
+    ///   - task: 課題
+    ///   - order: 並び順
+    func updateTaskOrder(task: Task, order: Int) {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+                           .filter("taskID == '\(task.taskID)'").first
+        try! realm.write {
+            result?.order = order
+            result?.updated_at = Date()
+        }
+    }
+    
     /// 課題の完了フラグを更新
     /// - Parameters:
     ///   - task: 課題

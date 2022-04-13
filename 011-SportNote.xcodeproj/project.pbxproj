@@ -71,6 +71,7 @@
 		8D7C676224DD045C005599AD /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7C676124DD045C005599AD /* TutorialViewController.swift */; };
 		8D91CE712806295C000D3B1F /* TaskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91CE6F2806295C000D3B1F /* TaskDetailViewController.swift */; };
 		8D91CE722806295C000D3B1F /* TaskDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D91CE702806295C000D3B1F /* TaskDetailViewController.xib */; };
+		8D91CE74280777E8000D3B1F /* TaskDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91CE73280777E8000D3B1F /* TaskDetailCoordinator.swift */; };
 		8D941CC42552188400B3A472 /* NoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D941CC22552188400B3A472 /* NoteViewCell.swift */; };
 		8D941CC52552188400B3A472 /* NoteViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D941CC32552188400B3A472 /* NoteViewCell.xib */; };
 		8D9A073C24A9DDC9004F970D /* MeasuresDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */; };
@@ -168,6 +169,7 @@
 		8D7C676124DD045C005599AD /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		8D91CE6F2806295C000D3B1F /* TaskDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
 		8D91CE702806295C000D3B1F /* TaskDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDetailViewController.xib; sourceTree = "<group>"; };
+		8D91CE73280777E8000D3B1F /* TaskDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailCoordinator.swift; sourceTree = "<group>"; };
 		8D941CC22552188400B3A472 /* NoteViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewCell.swift; sourceTree = "<group>"; };
 		8D941CC32552188400B3A472 /* NoteViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteViewCell.xib; sourceTree = "<group>"; };
 		8D9A073B24A9DDC9004F970D /* MeasuresDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresDetailViewController.swift; sourceTree = "<group>"; };
@@ -356,6 +358,7 @@
 			isa = PBXGroup;
 			children = (
 				8D3FFE5E27F666A20021C9FC /* TaskCoordinator.swift */,
+				8D91CE73280777E8000D3B1F /* TaskDetailCoordinator.swift */,
 				8D5CFC142804E809008DF02E /* CompletedTaskCoordinator.swift */,
 			);
 			path = Task;
@@ -765,6 +768,7 @@
 				8D01653024AEEBD100F9D69F /* NoteViewController_old.swift in Sources */,
 				8D5CFC0127FBAD1B008DF02E /* AddGroupCoordinator.swift in Sources */,
 				8D06D5DD24A834A4004D5307 /* SettingViewController.swift in Sources */,
+				8D91CE74280777E8000D3B1F /* TaskDetailCoordinator.swift in Sources */,
 				8D481D6927F875780082D956 /* Target.swift in Sources */,
 				8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */,
 				8D481D5E27F861D50082D956 /* FreeNote.swift in Sources */,

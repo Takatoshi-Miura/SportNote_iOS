@@ -41,19 +41,19 @@
                     </connections>
                 </textField>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDq-HK-FQX">
-                    <rect key="frame" x="16" y="87" width="288" height="21"/>
+                    <rect key="frame" x="16" y="92" width="288" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pop-OP-kkp">
-                    <rect key="frame" x="16" y="220" width="288" height="21"/>
+                    <rect key="frame" x="16" y="230" width="288" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vxK-OD-9Td">
-                    <rect key="frame" x="0.0" y="248" width="320" height="320"/>
+                    <rect key="frame" x="0.0" y="258" width="320" height="310"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="i07-pt-xhG"/>
@@ -69,7 +69,7 @@
                     </connections>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="56p-Dz-Zxc">
-                    <rect key="frame" x="16" y="115" width="288" height="90"/>
+                    <rect key="frame" x="16" y="120" width="288" height="90"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="90" id="AsG-Lw-hOe"/>
@@ -90,7 +90,7 @@
                 <constraint firstItem="vxK-OD-9Td" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="1uv-Ey-Vdl"/>
                 <constraint firstItem="vxK-OD-9Td" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="3wu-Fm-7Cv"/>
                 <constraint firstItem="8Ag-yE-J2A" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="10" id="ATF-aa-wp1"/>
-                <constraint firstItem="Pop-OP-kkp" firstAttribute="top" secondItem="56p-Dz-Zxc" secondAttribute="bottom" constant="15" id="Dcc-im-WnZ"/>
+                <constraint firstItem="Pop-OP-kkp" firstAttribute="top" secondItem="56p-Dz-Zxc" secondAttribute="bottom" constant="20" id="Dcc-im-WnZ"/>
                 <constraint firstItem="DSz-9b-SNV" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="FjG-5z-SIa"/>
                 <constraint firstItem="Pop-OP-kkp" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="Fnm-YV-4XJ"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Pop-OP-kkp" secondAttribute="trailing" constant="16" id="Mx0-7P-x1n"/>
@@ -98,7 +98,7 @@
                 <constraint firstItem="8Ag-yE-J2A" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="ShL-1A-4T2"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="DSz-9b-SNV" secondAttribute="trailing" constant="16" id="UCj-pS-vzY"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="56p-Dz-Zxc" secondAttribute="trailing" constant="16" id="VGW-QZ-dOX"/>
-                <constraint firstItem="wDq-HK-FQX" firstAttribute="top" secondItem="DSz-9b-SNV" secondAttribute="bottom" constant="15" id="VX5-LO-tjK"/>
+                <constraint firstItem="wDq-HK-FQX" firstAttribute="top" secondItem="DSz-9b-SNV" secondAttribute="bottom" constant="20" id="VX5-LO-tjK"/>
                 <constraint firstItem="vxK-OD-9Td" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="b9a-gl-gKB"/>
                 <constraint firstItem="vxK-OD-9Td" firstAttribute="top" secondItem="Pop-OP-kkp" secondAttribute="bottom" constant="7" id="bGA-1y-V5A"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="f7A-Yg-3Hj" secondAttribute="trailing" constant="20" id="bM0-AJ-ucR"/>

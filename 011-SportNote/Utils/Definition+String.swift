@@ -40,6 +40,7 @@ let TITLE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskTitle", comment: "")
 let MESSAGE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskMessage", comment: "")
 let TITLE_COMPLETED_TASK = NSLocalizedString("CompletedTask", comment: "")
 let TITLE_MEASURES = NSLocalizedString("Measures", comment: "")
+let TITLE_CAUSE = NSLocalizedString("Cause", comment: "")
 
 // MARK: - TaskDetailViewController
 let TITLE_TASK_DETAIL = NSLocalizedString("TaskDetailTitle", comment: "")

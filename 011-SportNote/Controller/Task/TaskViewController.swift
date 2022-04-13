@@ -164,6 +164,26 @@ class TaskViewController: UIViewController {
         tableView.insertSections(IndexSet(integer: index.section), with: UITableView.RowAnimation.right)
     }
     
+    /// 課題を挿入(最後尾に追加)
+    /// - Parameters:
+    ///   - task: 挿入する課題
+    func insertTask(task: Task) {
+        var index: IndexPath = [0, 0]
+        for group in groupArray {
+            if task.groupID == group.groupID {
+                // グループに含まれる課題数を並び順にセットする
+                let realmManager = RealmManager()
+                let tasks = realmManager.getTasksInGroup(ID: group.groupID, isCompleted: false)
+                realmManager.updateTaskOrder(task: task, order: tasks.count - 1)
+                // tableViewに課題を追加
+                index = [index.section, tasks.count - 1]
+                taskArray[index.section].append(task)
+                tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
+            }
+            index = [index.section + 1, task.order]
+        }
+    }
+    
 }
 
 extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
