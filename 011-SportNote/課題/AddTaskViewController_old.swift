@@ -1,5 +1,5 @@
 //
-//  AddTaskViewController.swift
+//  AddTaskViewController_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/06/26.
@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class AddTaskViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class AddTaskViewController_old: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     //MARK:- 変数の宣言
     

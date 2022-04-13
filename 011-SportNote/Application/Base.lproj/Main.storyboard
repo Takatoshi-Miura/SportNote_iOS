@@ -1105,7 +1105,7 @@
         <!--課題の追加-->
         <scene sceneID="2CC-J0-Jjo">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="wUj-cO-jPj" customClass="AddTaskViewController" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="wUj-cO-jPj" customClass="AddTaskViewController_old" customModule="_11_SportNote" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YGj-Q2-CFn">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
