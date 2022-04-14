@@ -41,6 +41,9 @@ let MESSAGE_ADD_GROUP_TASK = NSLocalizedString("AddGroupTaskMessage", comment: "
 let TITLE_COMPLETED_TASK = NSLocalizedString("CompletedTask", comment: "")
 let TITLE_MEASURES = NSLocalizedString("Measures", comment: "")
 let TITLE_CAUSE = NSLocalizedString("Cause", comment: "")
+let TITLE_ADD_TASK = NSLocalizedString("AddTaskTitle", comment: "")
+let MASSAGE_TASK_EXAMPLE = NSLocalizedString("TaskExample", comment: "")
+let MASSAGE_MEASURES_EXAMPLE = NSLocalizedString("MeasuresExample", comment: "")
 
 // MARK: - TaskDetailViewController
 let TITLE_TASK_DETAIL = NSLocalizedString("TaskDetailTitle", comment: "")

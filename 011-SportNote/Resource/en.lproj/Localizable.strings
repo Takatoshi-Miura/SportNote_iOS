@@ -39,6 +39,9 @@
 "CompletedTask" = "CompletedTask";
 "Measures" = "Measures";
 "Cause" = "Cause";
+"AddTaskTitle" = "Add task";
+"TaskExample" = "Ex: I'm not motivated to practice";
+"MeasuresExample" = "Ex: Reaffirm your goals";
 
 // MARK: - TaskDetailViewController
 "TaskDetailTitle" = "Task details";

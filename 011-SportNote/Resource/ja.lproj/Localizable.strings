@@ -39,6 +39,9 @@
 "CompletedTask" = "完了した課題";
 "Measures" = "対策";
 "Cause" = "原因";
+"AddTaskTitle" = "課題の追加";
+"TaskExample" = "例：練習のやる気が出ない";
+"MeasuresExample" = "例：目標を再確認する";
 
 // MARK: - TaskDetailViewController
 "TaskDetailTitle" = "課題の詳細";

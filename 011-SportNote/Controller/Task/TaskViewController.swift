@@ -13,6 +13,8 @@ import PKHUD
 protocol TaskViewControllerDelegate: AnyObject {
     // グループ追加タップ時の処理
     func taskVCAddGroupDidTap(_ viewController: UIViewController)
+    // 課題追加タップ時の処理
+    func taskVCAddTaskDidTap(_ viewController: UIViewController)
     // セクションヘッダータップ時の処理
     func taskVCHeaderDidTap(group: Group)
     // 課題セルタップ時の処理
@@ -137,13 +139,14 @@ class TaskViewController: UIViewController {
         self.adView.addSubview(adMobView!)
     }
     
+    /// 追加ボタンの処理
     @IBAction func tapAddButton(_ sender: Any) {
         var alertActions: [UIAlertAction] = []
         let addGroupAction = UIAlertAction(title: TITLE_GROUP, style: .default) { _ in
             self.delegate?.taskVCAddGroupDidTap(self)
         }
         let addTaskAction = UIAlertAction(title: TITLE_TASK, style: .default) { _ in
-//            self.delegate?.taskVCAddTaskDidTap(self)
+            self.delegate?.taskVCAddTaskDidTap(self)
         }
         alertActions.append(addGroupAction)
         alertActions.append(addTaskAction)
