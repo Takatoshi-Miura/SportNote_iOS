@@ -15,15 +15,20 @@ protocol NoteViewControllerDelegate: AnyObject {
 
 class NoteViewController: UIViewController {
     
+    // MARK: UI,Variable
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
-    
-    var targetArray: [Target] = []
-    var freeNote = FreeNote()
-    var noteArray: [Any] = []
+    private var targetArray: [Target] = []
+    private var freeNote = FreeNote()
+    private var noteArray: [Any] = []
     var delegate: NoteViewControllerDelegate?
+    
+    private enum Section: Int {
+        case freeNote = 0
+        case note
+    }
     
     // MARK: LifeCycle
     override func viewDidLoad() {
@@ -36,6 +41,11 @@ class NoteViewController: UIViewController {
         dataConverter.convertOldToRealm(completion: {
             self.syncData()
         })
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        showAdMob()
     }
     
     func initNavigationController() {
@@ -59,11 +69,12 @@ class NoteViewController: UIViewController {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let syncManager = SyncManager()
             syncManager.syncDatabase(completion: {
-                let relamManager = RealmManager()
+                let realmManager = RealmManager()
                 // TODO: 日付の降順(新しい順)で表示
                 self.noteArray = []
-                self.noteArray.append(contentsOf: relamManager.getAllPracticeNote())
-                self.noteArray.append(contentsOf: relamManager.getAllTournamentNote())
+                self.noteArray.append(contentsOf: realmManager.getAllPracticeNote())
+                self.noteArray.append(contentsOf: realmManager.getAllTournamentNote())
+                self.targetArray = realmManager.getAllTarget()
                 self.tableView.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
                 HUD.hide()
@@ -72,11 +83,6 @@ class NoteViewController: UIViewController {
             tableView.refreshControl?.endRefreshing()
             tableView.reloadData()
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        showAdMob()
     }
     
     /// バナー広告を表示
@@ -92,7 +98,7 @@ class NoteViewController: UIViewController {
         adMobView!.load(GADRequest())
         adMobView!.frame.origin = CGPoint(x: 0, y: 0)
         adMobView!.frame.size = CGSize(width: self.view.frame.width, height: adMobView!.frame.height)
-        self.adView.addSubview(adMobView!)
+        adView.addSubview(adMobView!)
     }
     
     @IBAction func tapAddButton(_ sender: Any) {
@@ -120,6 +126,20 @@ class NoteViewController: UIViewController {
 
 extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String?{
+        if targetArray.isEmpty {
+            return ""
+        }
+        return String(targetArray[section].month)   // セクション名を返す
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if targetArray.isEmpty {
+            return 1
+        }
+        return targetArray.count    // セクションの個数を返す
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return noteArray.count
     }
@@ -135,6 +155,22 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+        } else {
+            if indexPath.section == Section.freeNote.rawValue {
+                // TODO: フリーノートへ遷移
+            } else {
+                let note = noteArray[indexPath.row]
+                if note is PracticeNote {
+                    // TODO: 練習ノートへ遷移
+                } else {
+                    // TODO: 大会ノートへ遷移
+                }
+            }
+        }
     }
     
 }
