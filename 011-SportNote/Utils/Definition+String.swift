@@ -56,6 +56,11 @@ let TITLE_ADD_MEASURES = NSLocalizedString("AddMeasuresTitle", comment: "")
 let MESSAGE_ADD_MEASURES = NSLocalizedString("AddMeasuresMessage", comment: "")
 let TITLE_ADD = NSLocalizedString("Add", comment: "")
 
+// MARK: - MeasuresViewController
+let TITLE_MEASURES_DETAIL = NSLocalizedString("MeasuresTitle", comment: "")
+let TITLE_DELETE_MEASURES = NSLocalizedString("DeleteMeasuresTitle", comment: "")
+let MESSAGE_DELETE_MEASURES = NSLocalizedString("DeleteMeasuresMessage", comment: "")
+
 // MARK: - Group
 let TITLE_ADD_GROUP = NSLocalizedString("AddGroupTitle", comment: "")
 let TITLE_TITLE = NSLocalizedString("Title", comment: "")

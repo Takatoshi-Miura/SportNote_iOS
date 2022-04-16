@@ -12,7 +12,7 @@ class TaskDetailCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var taskDetailViewController = TaskDetailViewController()
-//    let measuresCoordinator = MeasuresCoordinator()
+    let measuresCoordinator = MeasuresCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -53,7 +53,7 @@ extension TaskDetailCoordinator: TaskDetailViewControllerDelegate {
     
     // TaskDetailVC → MeasuresVC
     func taskDetailVCMeasuresCellDidTap(measures: Measures) {
-//        measuresCoordinator.startFrow(in: navigationController!, withMeasures: measures)
+        measuresCoordinator.startFrow(in: navigationController!, withMeasures: measures)
     }
     
 }

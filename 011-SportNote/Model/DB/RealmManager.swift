@@ -394,6 +394,20 @@ extension RealmManager {
         }
     }
     
+    /// 対策のタイトルを更新
+    /// - Parameters:
+    ///   - ID: 更新したい対策のID
+    ///   - title: 新しいタイトル文字列
+    func updateMeasuresTitle(measuresID: String, title: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Measures.self)
+                           .filter("measuresID == '\(measuresID)'").first
+        try! realm.write {
+            result?.title = title
+            result?.updated_at = Date()
+        }
+    }
+    
     /// 対策の並び順を更新
     /// - Parameters:
     ///    - measuresArray: 対策配列
@@ -455,6 +469,25 @@ extension RealmManager {
         return memoArray
     }
     
+    /// 対策に含まれるメモを取得
+    /// - Parameters:
+    ///   - measuresID: 対策ID
+    /// - Returns: 対策に含まれるメモ
+    func getMemo(measuresID: String) -> [Memo] {
+        var memoArray: [Memo] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "created_at", ascending: false),
+        ]
+        let results = realm.objects(Memo.self)
+                            .filter("(measuresID == '\(measuresID)') && (isDeleted == false)")
+                            .sorted(by: sortProperties)
+        for memo in results {
+            memoArray.append(memo)
+        }
+        return memoArray
+    }
+    
     /// Realmのメモを更新
     /// - Parameters:
     ///    - memo: Realmオブジェクト
@@ -466,6 +499,32 @@ extension RealmManager {
             result?.detail = memo.detail
             result?.isDeleted = memo.isDeleted
             result?.updated_at = memo.updated_at
+        }
+    }
+    
+    /// メモの内容を更新
+    /// - Parameters:
+    ///   - memo: メモ
+    func updateMemoDetail(memoID: String, detail: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Memo.self)
+                           .filter("memoID == '\(memoID)'").first
+        try! realm.write {
+            result?.detail = detail
+            result?.updated_at = Date()
+        }
+    }
+
+    /// メモの削除フラグを更新
+    /// - Parameters:
+    ///   - memo: メモ
+    func updateMemoIsDeleted(memoID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Memo.self)
+                           .filter("memoID == '\(memoID)'").first
+        try! realm.write {
+            result?.isDeleted = true
+            result?.updated_at = Date()
         }
     }
     

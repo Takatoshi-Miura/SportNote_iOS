@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import RealmSwift
 import GoogleMobileAds
 
 @UIApplicationMain
@@ -23,15 +24,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Google AdMob初期化
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         
+        // Realmファイルの場所
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
         // 初回起動判定(初期値を登録)
         UserDefaults.standard.register(defaults: ["firstLaunch": true])
         
         // ユーザーIDを作成(初期値を登録)
-        let uuid = NSUUID().uuidString
+        let uuid = "fXaDuDnAlJfJpErw555wEDJMwZ72"//NSUUID().uuidString
         UserDefaults.standard.register(defaults: ["userID":uuid])
         
         // アカウント持ちならFirebaseのユーザーIDを使用
-        if let address = UserDefaults.standard.object(forKey: "address") as? String, let password = UserDefaults.standard.object(forKey: "password") as? String {
+        if let address = UserDefaults.standard.object(forKey: "address") as? String,
+           let password = UserDefaults.standard.object(forKey: "password") as? String
+        {
             // ログイン処理
             Auth.auth().signIn(withEmail: address, password: password) { authResult, error in
                 if error == nil {
