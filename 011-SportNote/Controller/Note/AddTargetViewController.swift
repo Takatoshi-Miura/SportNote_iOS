@@ -34,6 +34,7 @@ class AddTargetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        titleTextField.becomeFirstResponder()
     }
     
     /// 画面初期化

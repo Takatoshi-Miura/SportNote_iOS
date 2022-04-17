@@ -40,6 +40,7 @@ class AddTaskViewController: UIViewController {
         realmGroupArray = realmManager.getGroupArrayForTaskView()
         initView()
         initColorPicker()
+        titleTextField.becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
