@@ -127,7 +127,7 @@ class AddNoteViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         case 1:
             // 目標追加画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "AddTargetViewController")
+            let nextView = storyboard.instantiateViewController(withIdentifier: "AddTargetViewController_old")
             self.present(nextView, animated: false, completion: nil)
             break
         case 2:

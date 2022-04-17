@@ -11,6 +11,8 @@ import GoogleMobileAds
 import PKHUD
 
 protocol NoteViewControllerDelegate: AnyObject {
+    // 目標追加ボタンタップ時
+    func taskVCAddTargetDidTap(_ viewController: UIViewController)
 }
 
 class NoteViewController: UIViewController {
@@ -104,7 +106,7 @@ class NoteViewController: UIViewController {
     @IBAction func tapAddButton(_ sender: Any) {
         var alertActions: [UIAlertAction] = []
         let addTargetAction = UIAlertAction(title: TITLE_TARGET, style: .default) { _ in
-//            self.delegate?.taskVCAddGroupDidTap(self)
+            self.delegate?.taskVCAddTargetDidTap(self)
         }
         let addPracticeNoteAction = UIAlertAction(title: TITLE_PRACTICE_NOTE, style: .default) { _ in
 //            self.delegate?.taskVCAddTaskDidTap(self)

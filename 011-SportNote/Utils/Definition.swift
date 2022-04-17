@@ -62,6 +62,38 @@ enum Color: Int, CaseIterable {
     }
 }
 
+enum Month: Int, CaseIterable {
+    case January
+    case February
+    case March
+    case April
+    case May
+    case June
+    case July
+    case August
+    case September
+    case October
+    case November
+    case December
+    
+    var title: String {
+        switch self {
+        case .January: return TITLE_JANUARY
+        case .February: return TITLE_FEBRUARY
+        case .March: return TITLE_MARCH
+        case .April: return TITLE_APRIL
+        case .May: return TITLE_MAY
+        case .June: return TITLE_JUNE
+        case .July: return TITLE_JULY
+        case .August: return TITLE_AUGUST
+        case .September: return TITLE_SEPTEMBER
+        case .October: return TITLE_OCTOBER
+        case .November: return TITLE_NOVEMBER
+        case .December: return TITLE_DECEMBER
+        }
+    }
+}
+
 /// iPad判定
 func isiPad() -> Bool {
     if UIDevice.current.userInterfaceIdiom == .pad {

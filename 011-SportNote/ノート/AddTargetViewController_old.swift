@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class AddTargetViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate {
+class AddTargetViewController_old: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate {
     
     //MARK:- ライフサイクルメソッド
     

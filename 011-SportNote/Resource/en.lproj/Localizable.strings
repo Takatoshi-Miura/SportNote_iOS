@@ -13,6 +13,8 @@
 "Delete" = "Delete";
 "DeleteInput" = "The entered content will be deleted.\nAre you sure?";
 "ServerCommunicationMessage" = "During server communication...";
+
+// MARK: - Color
 "Red" = "Red";
 "Pink" = "Pink";
 "Orange" = "Orange";
@@ -23,6 +25,20 @@
 "Gray" = "Gray";
 "White" = "White";
 "Black" = "Black";
+
+// MARK: - Month
+"January" = "January";
+"February" = "February";
+"March" = "March";
+"April" = "April";
+"May" = "May";
+"June" = "June";
+"July" = "July";
+"August" = "August";
+"September" = "September";
+"October" = "October";
+"November" = "November";
+"December" = "December";
 
 // MARK: - TabBarController
 "Task" = "Task";
@@ -75,7 +91,13 @@
 "AddTargetNoteTitle" = "Add target and note";
 "AddTargetNoteMessage" = "What do you want to add?";
 
+// MARK: - Target
+"AddTarget" = "Add target";
+"YearlyTarget" = "Yearly target";
+"TargetExample" = "Ex: Complete a full marathon";
+
 // MARK: - ErrorMessage
 "EmptyTitle" = "Please input a title.";
 "GroupCreateFailed" = "Failed to create a group.";
 "TaskCreateError" = "Failed to create a task.";
+"TargetCreateError" = "Failed to create a target.";

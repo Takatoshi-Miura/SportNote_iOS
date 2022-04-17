@@ -13,6 +13,8 @@
 "Delete" = "削除";
 "DeleteInput" = "入力した内容が削除されます。\nよろしいですか？";
 "ServerCommunicationMessage" = "通信中";
+
+// MARK: - Color
 "Red" = "レッド";
 "Pink" = "ピンク";
 "Orange" = "オレンジ";
@@ -23,6 +25,20 @@
 "Gray" = "グレー";
 "White" = "白";
 "Black" = "黒";
+
+// MARK: - Month
+"January" = "1月";
+"February" = "2月";
+"March" = "3月";
+"April" = "4月";
+"May" = "5月";
+"June" = "6月";
+"July" = "7月";
+"August" = "8月";
+"September" = "9月";
+"October" = "10月";
+"November" = "11月";
+"December" = "12月";
 
 // MARK: - TabBarController
 "Task" = "課題";
@@ -76,7 +92,13 @@
 "AddTargetNoteTitle" = "目標・ノートの追加";
 "AddTargetNoteMessage" = "何を追加しますか？";
 
+// MARK: - Target
+"AddTarget" = "目標の追加";
+"YearlyTarget" = "年間目標";
+"TargetExample" = "例：フルマラソンを完走する";
+
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
 "GroupCreateFailed" = "グループの作成に失敗しました。";
 "TaskCreateError" = "課題の作成に失敗しました。";
+"TargetCreateError" = "目標の作成に失敗しました。";

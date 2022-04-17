@@ -15,6 +15,8 @@ let TITLE_ERROR = NSLocalizedString("Error", comment: "")
 let TITLE_DELETE = NSLocalizedString("Delete", comment: "")
 let MESSAGE_DELETE_INPUT = NSLocalizedString("DeleteInput", comment: "")
 let MESSAGE_SERVER_COMMUNICATION = NSLocalizedString("ServerCommunicationMessage", comment: "")
+
+// MARK: - Color
 let TITLE_RED = NSLocalizedString("Red", comment: "")
 let TITLE_PINK = NSLocalizedString("Pink", comment: "")
 let TITLE_ORANGE = NSLocalizedString("Orange", comment: "")
@@ -25,6 +27,20 @@ let TITLE_PURPLE = NSLocalizedString("Purple", comment: "")
 let TITLE_GRAY = NSLocalizedString("Gray", comment: "")
 let TITLE_WHITE = NSLocalizedString("White", comment: "")
 let TITLE_BLACK = NSLocalizedString("Black", comment: "")
+
+// MARK: - Month
+let TITLE_JANUARY = NSLocalizedString("January", comment: "")
+let TITLE_FEBRUARY = NSLocalizedString("February", comment: "")
+let TITLE_MARCH = NSLocalizedString("March", comment: "")
+let TITLE_APRIL = NSLocalizedString("April", comment: "")
+let TITLE_MAY = NSLocalizedString("May", comment: "")
+let TITLE_JUNE = NSLocalizedString("June", comment: "")
+let TITLE_JULY = NSLocalizedString("July", comment: "")
+let TITLE_AUGUST = NSLocalizedString("August", comment: "")
+let TITLE_SEPTEMBER = NSLocalizedString("September", comment: "")
+let TITLE_OCTOBER = NSLocalizedString("October", comment: "")
+let TITLE_NOVEMBER = NSLocalizedString("November", comment: "")
+let TITLE_DECEMBER = NSLocalizedString("December", comment: "")
 
 // MARK: - TabBarController
 let TITLE_TASK = NSLocalizedString("Task", comment: "")
@@ -77,7 +93,13 @@ let TITLE_ORDER = NSLocalizedString("GroupOrder", comment: "")
 let TITLE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteTitle", comment: "")
 let MESSAGE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteMessage", comment: "")
 
+// MARK: - Target
+let TITLE_ADD_TARGET = NSLocalizedString("AddTarget", comment: "")
+let TITLE_YEARLY_TARGET = NSLocalizedString("YearlyTarget", comment: "")
+let MESSAGE_TARGET_EXAMPLE = NSLocalizedString("TargetExample", comment: "")
+
 // MARK: - ErrorMessage
 let ERROR_MESSAGE_EMPTY_TITLE = NSLocalizedString("EmptyTitle", comment: "")
 let ERROR_MESSAGE_GROUP_CREATE_FAILED = NSLocalizedString("GroupCreateFailed", comment: "")
 let ERROR_MESSAGE_TASK_CREATE_FAILED = NSLocalizedString("TaskCreateError", comment: "")
+let ERROR_MESSAGE_TARGET_CREATE_FAILED = NSLocalizedString("TargetCreateError", comment: "")

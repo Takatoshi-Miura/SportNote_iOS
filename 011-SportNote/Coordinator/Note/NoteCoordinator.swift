@@ -12,6 +12,7 @@ class NoteCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var noteViewController = NoteViewController()
+    let addTargetCoordinator = AddTargetCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -29,6 +30,11 @@ class NoteCoordinator: Coordinator {
 }
 
 extension NoteCoordinator: NoteViewControllerDelegate {
+    
+    // NoteVC → AddTargetVC
+    func taskVCAddTargetDidTap(_ viewController: UIViewController) {
+        addTargetCoordinator.startFlow(in: viewController)
+    }
     
 }
 
