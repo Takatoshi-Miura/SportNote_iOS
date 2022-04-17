@@ -13,6 +13,7 @@ class NoteCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var noteViewController = NoteViewController()
     let addTargetCoordinator = AddTargetCoordinator()
+    let addTournamentNoteCoordinator = AddTournamentNoteCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -32,8 +33,13 @@ class NoteCoordinator: Coordinator {
 extension NoteCoordinator: NoteViewControllerDelegate {
     
     // NoteVC → AddTargetVC
-    func taskVCAddTargetDidTap(_ viewController: UIViewController) {
+    func noteVCAddTargetDidTap(_ viewController: UIViewController) {
         addTargetCoordinator.startFlow(in: viewController)
+    }
+    
+    // NoteVC → AddTournamentVC
+    func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController) {
+        addTournamentNoteCoordinator.startFlow(in: viewController)
     }
     
 }
