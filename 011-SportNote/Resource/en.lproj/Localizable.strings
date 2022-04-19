@@ -26,6 +26,11 @@
 "White" = "White";
 "Black" = "Black";
 
+// MARK: - Weather
+"Sunny" = "Sunny";
+"Cloudy" = "Cloudy";
+"Rainy" = "Rainy";
+
 // MARK: - Month
 "January" = "January";
 "February" = "February";
@@ -90,6 +95,12 @@
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "Add target and note";
 "AddTargetNoteMessage" = "What do you want to add?";
+
+// MARK: - Note
+"Condition" = "Condition";
+"Consciousness" = "Consciousness";
+"Result" = "Result";
+"Reflection" = "Reflection";
 
 // MARK: - Target
 "AddTarget" = "Add target";

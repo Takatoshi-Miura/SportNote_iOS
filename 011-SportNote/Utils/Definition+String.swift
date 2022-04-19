@@ -28,6 +28,11 @@ let TITLE_GRAY = NSLocalizedString("Gray", comment: "")
 let TITLE_WHITE = NSLocalizedString("White", comment: "")
 let TITLE_BLACK = NSLocalizedString("Black", comment: "")
 
+// MARK: - Weather
+let TITLE_SUNNY = NSLocalizedString("Sunny", comment: "")
+let TITLE_CLOUDY = NSLocalizedString("Cloudy", comment: "")
+let TITLE_RAINY = NSLocalizedString("Rainy", comment: "")
+
 // MARK: - Month
 let TITLE_JANUARY = NSLocalizedString("January", comment: "")
 let TITLE_FEBRUARY = NSLocalizedString("February", comment: "")
@@ -92,6 +97,12 @@ let TITLE_ORDER = NSLocalizedString("GroupOrder", comment: "")
 // MARK: - NoteViewController
 let TITLE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteTitle", comment: "")
 let MESSAGE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteMessage", comment: "")
+
+// MARK: - Note
+let TITLE_CONDITION = NSLocalizedString("Condition", comment: "")
+let TITLE_CONSCIOUSNESS = NSLocalizedString("Consciousness", comment: "")
+let TITLE_RESULT = NSLocalizedString("Result", comment: "")
+let TITLE_REFLECTION = NSLocalizedString("Reflection", comment: "")
 
 // MARK: - Target
 let TITLE_ADD_TARGET = NSLocalizedString("AddTarget", comment: "")

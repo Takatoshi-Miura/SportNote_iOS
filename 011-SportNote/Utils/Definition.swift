@@ -8,10 +8,18 @@
 
 import UIKit
 
-enum Weather: Int {
-    case sunny = 0
+enum Weather: Int, CaseIterable {
+    case sunny
     case cloudy
     case rainy
+    
+    var title: String {
+        switch self {
+        case .sunny: return TITLE_SUNNY
+        case .cloudy: return TITLE_CLOUDY
+        case .rainy: return TITLE_RAINY
+        }
+    }
 }
 
 enum WeatherString: String {

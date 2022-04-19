@@ -26,6 +26,11 @@
 "White" = "白";
 "Black" = "黒";
 
+// MARK: - Weather
+"Sunny" = "晴れ";
+"Cloudy" = "くもり";
+"Rainy" = "雨";
+
 // MARK: - Month
 "January" = "1月";
 "February" = "2月";
@@ -91,6 +96,12 @@
 // MARK: - NoteViewController
 "AddTargetNoteTitle" = "目標・ノートの追加";
 "AddTargetNoteMessage" = "何を追加しますか？";
+
+// MARK: - Note
+"Condition" = "体調";
+"Consciousness" = "意識すること";
+"Result" = "結果";
+"Reflection" = "反省";
 
 // MARK: - Target
 "AddTarget" = "目標の追加";
