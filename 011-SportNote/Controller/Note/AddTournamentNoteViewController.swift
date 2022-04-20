@@ -35,6 +35,8 @@ class AddTournamentNoteViewController: UIViewController {
     private var datePicker = UIDatePicker()
     private var weatherPicker = UIPickerView()
     private let temperature:[Int] = (-40...40).map { $0 }
+    private var selectedDate = Date()
+    private var selectedWeather: [String : Int] = [TITLE_WEATHER: 0 ,TITLE_TEMPERATURE: 0]
     
     private enum CellType: Int, CaseIterable {
         case date
@@ -46,6 +48,7 @@ class AddTournamentNoteViewController: UIViewController {
         super.viewDidLoad()
         initView()
         initTableView()
+        initDatePicker()
         initWeatherPicker()
     }
     
@@ -58,7 +61,7 @@ class AddTournamentNoteViewController: UIViewController {
     
     /// 画面初期化
     private func initView() {
-        naviItem.title = TITLE_ADD_TASK
+        naviItem.title = TITLE_ADD_TOURNAMENT_NOTE
         conditionLabel.text = TITLE_CONDITION
         targetLabel.text = TITLE_TARGET
         consciousnessLabel.text = TITLE_CONSCIOUSNESS
@@ -71,22 +74,32 @@ class AddTournamentNoteViewController: UIViewController {
         resultTextView.text = ""
         reflectionTextView.text = ""
         
-        addBorder(textView: conditionTextView)
-        addBorder(textView: targetTextView)
-        addBorder(textView: consciousnessTextView)
-        addBorder(textView: resultTextView)
-        addBorder(textView: reflectionTextView)
+        initTextView(textView: conditionTextView)
+        initTextView(textView: targetTextView)
+        initTextView(textView: consciousnessTextView)
+        initTextView(textView: resultTextView)
+        initTextView(textView: reflectionTextView)
         
         saveButton.setTitle(TITLE_SAVE, for: .normal)
         cancelButton.setTitle(TITLE_CANCEL, for: .normal)
     }
     
-    /// TextViewの枠線付与
-    private func addBorder(textView: UITextView) {
-        textView.layer.borderColor = UIColor.systemGray6.cgColor
+    /// TextView初期化
+    private func initTextView(textView: UITextView) {
+        textView.layer.borderColor = UIColor.systemGray5.cgColor
         textView.layer.borderWidth = 1.0
         textView.layer.cornerRadius = 5.0
         textView.layer.masksToBounds = true
+        textView.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
+    }
+    
+    /// キーボード、Pickerを隠す
+    @objc func tapOkButton(_ sender: UIButton){
+        self.view.endEditing(true)
+        closePicker(pickerView)
+        if let index = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: index, animated: true)
+        }
     }
     
     private func initTableView() {
@@ -107,7 +120,6 @@ class AddTournamentNoteViewController: UIViewController {
     @IBAction func tapCancelButton(_ sender: Any) {
     }
     
-    
 }
 
 extension AddTournamentNoteViewController: UITableViewDataSource, UITableViewDelegate {
@@ -117,34 +129,36 @@ extension AddTournamentNoteViewController: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
         cell.detailTextLabel?.textColor = UIColor.systemGray
+        cell.accessoryType = .disclosureIndicator
         
         switch CellType.allCases[indexPath.row] {
         case .date:
-            cell.textLabel!.text = "日付"
-            cell.detailTextLabel!.text = ""
+            cell.textLabel!.text = TITLE_DATE
+            cell.detailTextLabel!.text = getDatePickerDate(datePicker: datePicker, format: "yyyy/M/d (E)")
         case .weather:
-            cell.textLabel!.text = "天気"
-            cell.detailTextLabel!.text = ""
+            cell.textLabel!.text = TITLE_WEATHER
+            cell.detailTextLabel!.text = "\(Weather.allCases[selectedWeather[TITLE_WEATHER]!].title) \(temperature[selectedWeather[TITLE_TEMPERATURE]!])℃"
         }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.view.endEditing(true)
         switch CellType.allCases[indexPath.row] {
         case .date:
             closePicker(pickerView)
             pickerView = UIView(frame: datePicker.bounds)
             pickerView.addSubview(datePicker)
-            pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
+            pickerView.addSubview(createToolBar(#selector(datePickerDoneAction), #selector(datePickerCancelAction)))
             openPicker(pickerView)
         case .weather:
             closePicker(pickerView)
             pickerView = UIView(frame: weatherPicker.bounds)
             pickerView.addSubview(weatherPicker)
-            pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
+            pickerView.addSubview(createToolBar(#selector(weatherPickerDoneAction), #selector(weatherPickerCancelAction)))
             openPicker(pickerView)
         }
     }
@@ -169,8 +183,35 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         if component == 0 {
             return Weather.allCases[row].title
         } else {
-            return String(temperature[row])
+            return "\(temperature[row])℃"
         }
+    }
+    
+    /// DatePicker初期化
+    private func initDatePicker() {
+        datePicker = UIDatePicker()
+        datePicker.date = Date()
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ja")
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        datePicker.backgroundColor = UIColor.systemGray5
+        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + 44)
+    }
+    
+    @objc func datePickerDoneAction() {
+        // 選択したIndexを取得して閉じる
+        selectedDate = datePicker.date
+        closePicker(pickerView)
+        tableView.reloadData()
+    }
+    
+    @objc func datePickerCancelAction() {
+        // Indexを元に戻して閉じる
+        datePicker.date = selectedDate
+        closePicker(pickerView)
+        tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
     }
     
     /// Picker初期化
@@ -179,21 +220,25 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         weatherPicker.dataSource = self
         weatherPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: weatherPicker.bounds.size.height + 44)
         weatherPicker.backgroundColor = UIColor.systemGray5
+        weatherPicker.selectRow(60, inComponent: 1, animated: true)
+        selectedWeather[TITLE_WEATHER] = weatherPicker.selectedRow(inComponent: 0)
+        selectedWeather[TITLE_TEMPERATURE] = weatherPicker.selectedRow(inComponent: 1)
     }
     
-    @objc func doneAction() {
+    @objc func weatherPickerDoneAction() {
         // 選択したIndexを取得して閉じる
-//        pickerIndex = weatherPicker.selectedRow(inComponent: 0)
-//        pickerIndex = weatherPicker.selectedRow(inComponent: 1)
+        selectedWeather[TITLE_WEATHER] = weatherPicker.selectedRow(inComponent: 0)
+        selectedWeather[TITLE_TEMPERATURE] = weatherPicker.selectedRow(inComponent: 1)
         closePicker(pickerView)
-//        colorButton.backgroundColor = Color.allCases[realmGroupArray[pickerIndex].color].color
-//        colorButton.setTitle(realmGroupArray[pickerIndex].title, for: .normal)
+        tableView.reloadData()
     }
     
-    @objc func cancelAction() {
+    @objc func weatherPickerCancelAction() {
         // Indexを元に戻して閉じる
-//        weatherPicker.selectRow(pickerIndex, inComponent: 0, animated: false)
+        weatherPicker.selectRow(selectedWeather[TITLE_WEATHER]!, inComponent: 0, animated: false)
+        weatherPicker.selectRow(selectedWeather[TITLE_TEMPERATURE]!, inComponent: 1, animated: false)
         closePicker(pickerView)
+        tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
     }
     
 }

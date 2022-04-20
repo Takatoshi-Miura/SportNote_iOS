@@ -27,11 +27,14 @@
 "Black" = "Black";
 
 // MARK: - Weather
+"Weather" = "Weather";
+"Temperature" = "Temperature";
 "Sunny" = "Sunny";
 "Cloudy" = "Cloudy";
 "Rainy" = "Rainy";
 
 // MARK: - Month
+"Date" = "Date";
 "January" = "January";
 "February" = "February";
 "March" = "March";
@@ -97,6 +100,7 @@
 "AddTargetNoteMessage" = "What do you want to add?";
 
 // MARK: - Note
+"AddTournamentNoteTitle" = "Add Tournament Note";
 "Condition" = "Condition";
 "Consciousness" = "Consciousness";
 "Result" = "Result";

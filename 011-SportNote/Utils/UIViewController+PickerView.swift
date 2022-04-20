@@ -92,5 +92,18 @@ public extension UIViewController {
         // 作成したツールバーを返却
         return toolbar
     }
+    
+    /// DatePickerから日付を取得
+    /// - Parameters:
+    ///   - datePicker: UIDatePicker
+    ///   - format: 文字列フォーマット yyyy/M/d (E)等
+    /// - Returns: フォーマットに変換された日付文字列
+    func getDatePickerDate(datePicker: UIDatePicker, format: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = format
+        let returnText = dateFormatter.string(from: datePicker.date)
+        return returnText
+    }
 
 }

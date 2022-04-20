@@ -27,11 +27,14 @@
 "Black" = "黒";
 
 // MARK: - Weather
+"Weather" = "天気";
+"Temperature" = "気温";
 "Sunny" = "晴れ";
 "Cloudy" = "くもり";
 "Rainy" = "雨";
 
 // MARK: - Month
+"Date" = "日付";
 "January" = "1月";
 "February" = "2月";
 "March" = "3月";
@@ -98,6 +101,7 @@
 "AddTargetNoteMessage" = "何を追加しますか？";
 
 // MARK: - Note
+"AddTournamentNoteTitle" = "大会ノートの追加";
 "Condition" = "体調";
 "Consciousness" = "意識すること";
 "Result" = "結果";
