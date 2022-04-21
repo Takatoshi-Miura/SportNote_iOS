@@ -24,12 +24,11 @@ class NoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
-    private var targetArray: [Target] = []
     private var freeNote = FreeNote()
     private var noteArray: [Any] = []
     var delegate: NoteViewControllerDelegate?
     
-    private enum Section: Int {
+    private enum Section: Int, CaseIterable {
         case freeNote = 0
         case note
     }
@@ -78,7 +77,6 @@ class NoteViewController: UIViewController {
                 self.noteArray = []
                 self.noteArray.append(contentsOf: realmManager.getAllPracticeNote())
                 self.noteArray.append(contentsOf: realmManager.getAllTournamentNote())
-                self.targetArray = realmManager.getAllTarget()
                 self.tableView.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
                 HUD.hide()
@@ -131,42 +129,55 @@ class NoteViewController: UIViewController {
 extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String?{
-        if targetArray.isEmpty {
-            return ""
+        switch Section.allCases[section] {
+        case .freeNote:
+            return "フリーノート"
+        case .note:
+            return TITLE_NOTE
         }
-        return String(targetArray[section].month)   // セクション名を返す
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if targetArray.isEmpty {
-            return 1
-        }
-        return targetArray.count    // セクションの個数を返す
+        return 2    // セクションの個数
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return noteArray.count
+        switch Section.allCases[section] {
+        case .freeNote:
+            return 1
+        case .note:
+            return noteArray.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         cell.accessoryType = .disclosureIndicator
-        if !noteArray.isEmpty {
-            if noteArray[indexPath.row] is PracticeNote {
-                cell.textLabel?.text = PracticeNote(value: noteArray[indexPath.row]).detail
-            } else {
-                cell.textLabel?.text = TournamentNote(value: noteArray[indexPath.row]).target
+        
+        switch Section.allCases[indexPath.section] {
+        case .freeNote:
+            cell.detailTextLabel?.text = "フリーノート"
+            return cell
+        case .note:
+            if !noteArray.isEmpty {
+                if noteArray[indexPath.row] is PracticeNote {
+                    cell.textLabel?.text = PracticeNote(value: noteArray[indexPath.row]).detail
+                } else {
+                    cell.textLabel?.text = TournamentNote(value: noteArray[indexPath.row]).target
+                }
             }
+            return cell
         }
-        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
         } else {
-            if indexPath.section == Section.freeNote.rawValue {
+            switch Section.allCases[indexPath.section] {
+            case .freeNote:
                 // TODO: フリーノートへ遷移
-            } else {
+                print("フリーノートへ遷移")
+            case .note:
                 let note = noteArray[indexPath.row]
                 if note is PracticeNote {
                     // TODO: 練習ノートへ遷移
