@@ -116,3 +116,4 @@
 "GroupCreateFailed" = "Failed to create a group.";
 "TaskCreateError" = "Failed to create a task.";
 "TargetCreateError" = "Failed to create a target.";
+"NoteCreateError" = "Failed to create a note.";

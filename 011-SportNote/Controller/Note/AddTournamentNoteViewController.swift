@@ -9,7 +9,8 @@
 import UIKit
 
 protocol AddTournamentNoteViewControllerDelegate: AnyObject {
-    
+    // モーダルを閉じる時の処理
+    func addTournamentNoteVCDismiss(_ viewController: UIViewController)
 }
 
 class AddTournamentNoteViewController: UIViewController {
@@ -114,10 +115,47 @@ class AddTournamentNoteViewController: UIViewController {
     
     /// 保存ボタンタップ時の処理
     @IBAction func tapSaveButton(_ sender: Any) {
+        // 大会ノートデータを作成＆保存
+        let realmManager = RealmManager()
+        let tournamentNote = TournamentNote()
+        tournamentNote.date = selectedDate
+        tournamentNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
+        tournamentNote.temperature = selectedWeather[TITLE_TEMPERATURE]!
+        tournamentNote.condition = conditionTextView.text
+        tournamentNote.target = targetTextView.text
+        tournamentNote.consciousness = consciousnessTextView.text
+        tournamentNote.result = resultTextView.text
+        tournamentNote.reflection = reflectionTextView.text
+        
+        if !realmManager.createRealm(object: tournamentNote) {
+            showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
+            return
+        }
+        
+        // Firebaseに送信
+        if Network.isOnline() {
+            let firebaseManager = FirebaseManager()
+            firebaseManager.saveTournamentNote(tournamentNote: tournamentNote, completion: {})
+        }
+        
+        // TODO: NoteVCにアニメーション付きで追加
+        self.delegate?.addTournamentNoteVCDismiss(self)
     }
     
     /// キャンセルボタンタップ時の処理
     @IBAction func tapCancelButton(_ sender: Any) {
+        if conditionTextView.text.isEmpty &&
+            targetTextView.text.isEmpty &&
+            consciousnessTextView.text.isEmpty &&
+            resultTextView.text.isEmpty &&
+            reflectionTextView.text.isEmpty
+        {
+            self.delegate?.addTournamentNoteVCDismiss(self)
+        } else {
+            showOKCancelAlert(title: "", message: MESSAGE_DELETE_INPUT, OKAction: {
+                self.delegate?.addTournamentNoteVCDismiss(self)
+            })
+        }
     }
     
 }

@@ -34,4 +34,9 @@ class AddTournamentNoteCoordinator: Coordinator {
 
 extension AddTournamentNoteCoordinator: AddTournamentNoteViewControllerDelegate {
     
+    // NoteVC ← AddTournamentNoteVC
+    func addTournamentNoteVCDismiss(_ viewController: UIViewController) {
+        viewController.dismiss(animated: true, completion: nil)
+    }
+    
 }
