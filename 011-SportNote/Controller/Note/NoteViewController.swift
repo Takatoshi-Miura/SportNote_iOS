@@ -103,6 +103,7 @@ class NoteViewController: UIViewController {
                 self.noteArray = []
                 self.noteArray.append(contentsOf: realmManager.getAllPracticeNote())
                 self.noteArray.append(contentsOf: realmManager.getAllTournamentNote())
+                self.freeNote = realmManager.getFreeNote()
                 self.tableView.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
                 HUD.hide()
@@ -179,7 +180,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch Section.allCases[indexPath.section] {
         case .freeNote:
-            cell.detailTextLabel?.text = freeNote.title
+            cell.textLabel?.text = freeNote.title
             return cell
         case .note:
             if !noteArray.isEmpty {

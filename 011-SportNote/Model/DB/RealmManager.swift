@@ -616,6 +616,34 @@ extension RealmManager {
         }
     }
     
+    /// フリーノートのタイトルを更新
+    /// - Parameters:
+    ///   - ID: 更新したいフリーノートのID
+    ///   - title: 新しいタイトル文字列
+    func updateFreeNoteTitle(freeNoteID: String, title: String) {
+        let realm = try! Realm()
+        let result = realm.objects(FreeNote.self)
+                           .filter("freeNoteID == '\(freeNoteID)'").first
+        try! realm.write {
+            result?.title = title
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// フリーノートの内容を更新
+    /// - Parameters:
+    ///   - ID: 更新したいフリーノートのID
+    ///   - title: 新しいタイトル文字列
+    func updateFreeNoteDetail(freeNoteID: String, detail: String) {
+        let realm = try! Realm()
+        let result = realm.objects(FreeNote.self)
+                           .filter("freeNoteID == '\(freeNoteID)'").first
+        try! realm.write {
+            result?.detail = detail
+            result?.updated_at = Date()
+        }
+    }
+    
     /// Realmのフリーノートを削除
     func deleteFreeNote() {
         let realm = try! Realm()
