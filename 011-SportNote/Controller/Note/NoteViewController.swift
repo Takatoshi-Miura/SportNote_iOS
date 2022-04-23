@@ -13,6 +13,8 @@ import PKHUD
 protocol NoteViewControllerDelegate: AnyObject {
     // 大会ノート追加ボタンタップ時
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController)
+    // フリーノートタップ時
+    func noteVCFreeNoteDidTap(freeNote: FreeNote)
 }
 
 class NoteViewController: UIViewController {
@@ -47,6 +49,32 @@ class NoteViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         showAdMob()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            switch Section.allCases[selectedIndex.section] {
+            case .freeNote:
+                break
+            case .note:
+                // ノートが削除されていれば取り除く
+                let note = noteArray[selectedIndex.row]
+                if note is PracticeNote {
+                    if (note as! PracticeNote).isDeleted {
+                        noteArray.remove(at: selectedIndex.row)
+                        tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                    }
+                } else {
+                    if (note as! TournamentNote).isDeleted {
+                        noteArray.remove(at: selectedIndex.row)
+                        tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                    }
+                }
+                break
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
+        }
     }
     
     func initNavigationController() {
@@ -126,7 +154,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String?{
         switch Section.allCases[section] {
         case .freeNote:
-            return "フリーノート"
+            return TITLE_FREE_NOTE
         case .note:
             return TITLE_NOTE
         }
@@ -151,7 +179,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch Section.allCases[indexPath.section] {
         case .freeNote:
-            cell.detailTextLabel?.text = "フリーノート"
+            cell.detailTextLabel?.text = freeNote.title
             return cell
         case .note:
             if !noteArray.isEmpty {
@@ -170,8 +198,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             switch Section.allCases[indexPath.section] {
             case .freeNote:
-                // TODO: フリーノートへ遷移
-                print("フリーノートへ遷移")
+                self.delegate?.noteVCFreeNoteDidTap(freeNote: freeNote)
             case .note:
                 let note = noteArray[indexPath.row]
                 if note is PracticeNote {

@@ -387,7 +387,7 @@ class calendarViewController: UIViewController,UITableViewDelegate,UITableViewDa
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goFreeNoteView" {
             // フリーノートデータを渡す
-            let freeNoteViewController = segue.destination as! FreeNoteViewController
+            let freeNoteViewController = segue.destination as! FreeNoteViewController_old
             freeNoteViewController.dataManager.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailView" {
             // 練習ノートデータを確認画面へ渡す

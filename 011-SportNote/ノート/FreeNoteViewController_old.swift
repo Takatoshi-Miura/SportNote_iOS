@@ -1,5 +1,5 @@
 //
-//  FreeNoteViewController.swift
+//  FreeNoteViewController_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/03.
@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class FreeNoteViewController: UIViewController,UINavigationControllerDelegate,UITextFieldDelegate,UITextViewDelegate {
+class FreeNoteViewController_old: UIViewController,UINavigationControllerDelegate,UITextFieldDelegate,UITextViewDelegate {
 
     //MARK:- ライフサイクルメソッド
 

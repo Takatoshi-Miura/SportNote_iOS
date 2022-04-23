@@ -99,6 +99,7 @@
 // MARK: - NoteViewController
 "AddNoteTitle" = "ノートの追加";
 "AddMessage" = "何を追加しますか？";
+"FreeNote" = "フリーノート";
 
 // MARK: - Note
 "AddTournamentNoteTitle" = "大会ノートの追加";

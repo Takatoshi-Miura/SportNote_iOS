@@ -100,6 +100,7 @@ let TITLE_ORDER = NSLocalizedString("GroupOrder", comment: "")
 // MARK: - NoteViewController
 let TITLE_ADD_NOTE = NSLocalizedString("AddNoteTitle", comment: "")
 let MESSAGE_ADD_NOTE = NSLocalizedString("AddMessage", comment: "")
+let TITLE_FREE_NOTE = NSLocalizedString("FreeNote", comment: "")
 
 // MARK: - Note
 let TITLE_ADD_TOURNAMENT_NOTE = NSLocalizedString("AddTournamentNoteTitle", comment: "")

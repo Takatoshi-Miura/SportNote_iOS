@@ -376,7 +376,7 @@ class NoteViewController_old: UIViewController, UITableViewDelegate, UITableView
     // 画面遷移時に呼ばれる処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goFreeNoteViewController" {
-            let freeNoteViewController = segue.destination as! FreeNoteViewController
+            let freeNoteViewController = segue.destination as! FreeNoteViewController_old
             freeNoteViewController.dataManager.freeNoteData = dataManager.freeNoteData
         } else if segue.identifier == "goPracticeNoteDetailViewController" {
             let noteDetailViewController = segue.destination as! PracticeNoteDetailViewController
