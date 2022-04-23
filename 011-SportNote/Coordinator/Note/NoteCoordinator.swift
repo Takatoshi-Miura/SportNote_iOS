@@ -32,11 +32,6 @@ class NoteCoordinator: Coordinator {
 
 extension NoteCoordinator: NoteViewControllerDelegate {
     
-    // NoteVC → AddTargetVC
-    func noteVCAddTargetDidTap(_ viewController: UIViewController) {
-        addTargetCoordinator.startFlow(in: viewController)
-    }
-    
     // NoteVC → AddTournamentVC
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController) {
         addTournamentNoteCoordinator.startFlow(in: viewController)

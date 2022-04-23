@@ -98,8 +98,8 @@ let MESSAGE_EMPTY_GROUP = NSLocalizedString("EmptyGroupMessage", comment: "")
 let TITLE_ORDER = NSLocalizedString("GroupOrder", comment: "")
 
 // MARK: - NoteViewController
-let TITLE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteTitle", comment: "")
-let MESSAGE_ADD_TARGET_NOTE_TASK = NSLocalizedString("AddTargetNoteMessage", comment: "")
+let TITLE_ADD_NOTE = NSLocalizedString("AddNoteTitle", comment: "")
+let MESSAGE_ADD_NOTE = NSLocalizedString("AddMessage", comment: "")
 
 // MARK: - Note
 let TITLE_ADD_TOURNAMENT_NOTE = NSLocalizedString("AddTournamentNoteTitle", comment: "")

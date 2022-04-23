@@ -96,8 +96,8 @@
 "Delete" = "Delete";
 
 // MARK: - NoteViewController
-"AddTargetNoteTitle" = "Add target and note";
-"AddTargetNoteMessage" = "What do you want to add?";
+"AddNoteTitle" = "Add note";
+"AddMessage" = "What do you want to add?";
 
 // MARK: - Note
 "AddTournamentNoteTitle" = "Add Tournament Note";

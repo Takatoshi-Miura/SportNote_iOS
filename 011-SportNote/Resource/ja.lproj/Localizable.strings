@@ -97,8 +97,8 @@
 "EmptyGroupMessage" = "グループは1つ以上必要です。";
 
 // MARK: - NoteViewController
-"AddTargetNoteTitle" = "目標・ノートの追加";
-"AddTargetNoteMessage" = "何を追加しますか？";
+"AddNoteTitle" = "ノートの追加";
+"AddMessage" = "何を追加しますか？";
 
 // MARK: - Note
 "AddTournamentNoteTitle" = "大会ノートの追加";

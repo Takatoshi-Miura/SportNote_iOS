@@ -11,15 +11,13 @@ import GoogleMobileAds
 import PKHUD
 
 protocol NoteViewControllerDelegate: AnyObject {
-    // 目標追加ボタンタップ時
-    func noteVCAddTargetDidTap(_ viewController: UIViewController)
     // 大会ノート追加ボタンタップ時
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController)
 }
 
 class NoteViewController: UIViewController {
     
-    // MARK: UI,Variable
+    // MARK: - UI,Variable
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
@@ -33,7 +31,7 @@ class NoteViewController: UIViewController {
         case note
     }
     
-    // MARK: LifeCycle
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationController()
@@ -103,23 +101,20 @@ class NoteViewController: UIViewController {
         adView.addSubview(adMobView!)
     }
     
+    /// 追加ボタンの処理
     @IBAction func tapAddButton(_ sender: Any) {
         var alertActions: [UIAlertAction] = []
-        let addTargetAction = UIAlertAction(title: TITLE_TARGET, style: .default) { _ in
-            self.delegate?.noteVCAddTargetDidTap(self)
-        }
         let addPracticeNoteAction = UIAlertAction(title: TITLE_PRACTICE_NOTE, style: .default) { _ in
 //            self.delegate?.taskVCAddTaskDidTap(self)
         }
         let addTournamentNoteAction = UIAlertAction(title: TITLE_TOURNAMENT_NOTE, style: .default) { _ in
             self.delegate?.noteVCAddTournamentNoteDidTap(self)
         }
-        alertActions.append(addTargetAction)
         alertActions.append(addPracticeNoteAction)
         alertActions.append(addTournamentNoteAction)
         
-        showActionSheet(title: TITLE_ADD_TARGET_NOTE_TASK,
-                        message: MESSAGE_ADD_TARGET_NOTE_TASK,
+        showActionSheet(title: TITLE_ADD_NOTE,
+                        message: MESSAGE_ADD_NOTE,
                         actions: alertActions,
                         frame: addButton.frame)
     }

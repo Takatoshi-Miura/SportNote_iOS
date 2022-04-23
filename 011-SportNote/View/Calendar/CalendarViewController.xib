@@ -30,25 +30,25 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jQm-OW-Ppf">
-                    <rect key="frame" x="10" y="420" width="300" height="88"/>
+                    <rect key="frame" x="10" y="320" width="300" height="188"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="88" id="hdc-0J-h7a"/>
-                    </constraints>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="JCr-gU-6ga"/>
                         <outlet property="delegate" destination="-1" id="3Yd-hr-nis"/>
                     </connections>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Wi-jE-WWY" customClass="FSCalendar">
-                    <rect key="frame" x="10" y="10" width="300" height="400"/>
+                    <rect key="frame" x="10" y="10" width="300" height="300"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="300" id="VQp-jW-BXa"/>
+                    </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="firstWeekday">
                             <integer key="value" value="1"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="headerHeight">
-                            <real key="value" value="80"/>
+                            <real key="value" value="40"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="weekdayHeight">
                             <real key="value" value="20"/>
