@@ -34,15 +34,16 @@ class AddTargetCoordinator: Coordinator {
 
 extension AddTargetCoordinator: AddTargetViewControllerDelegate {
     
-    // NoteVC ← AddTargetVC
+    // CalendarVC ← AddTargetVC
     func addTargetVCDismiss(_ viewController: UIViewController) {
         viewController.dismiss(animated: true, completion: nil)
     }
     
-    // NoteVC ← AddTargetVC
+    // CalendarVC ← AddTargetVC
     func addTargetVCDismissWithReload(_ viewController: UIViewController) {
-        if previousViewController is NoteViewController {
-            (previousViewController as! NoteViewController).tableView.reloadData()
+        if previousViewController is CalendarViewController {
+            // TODO: 画面初期化処理
+            (previousViewController as! CalendarViewController).tableView.reloadData()
         }
         viewController.dismiss(animated: true, completion: nil)
     }

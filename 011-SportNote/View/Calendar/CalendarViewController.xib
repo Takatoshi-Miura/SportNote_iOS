@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarViewController" customModule="_11_SportNote" customModuleProvider="target">
             <connections>
                 <outlet property="adView" destination="lmL-I1-uTC" id="sSs-9S-ebB"/>
+                <outlet property="addButton" destination="aBM-IS-EsU" id="AZ6-c5-Mj1"/>
                 <outlet property="calendar" destination="7Wi-jE-WWY" id="YaJ-E9-Fcd"/>
                 <outlet property="monthlyTargetLabel" destination="VxI-NL-mZo" id="QcB-LC-7z4"/>
                 <outlet property="tableView" destination="jQm-OW-Ppf" id="l2E-pj-VP8"/>
@@ -39,38 +40,6 @@
                         <outlet property="delegate" destination="-1" id="3Yd-hr-nis"/>
                     </connections>
                 </tableView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tq6-fB-DXl">
-                    <rect key="frame" x="10" y="10" width="300" height="30"/>
-                    <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="2j6-k7-9oJ"/>
-                    </constraints>
-                    <attributedString key="attributedText">
-                        <fragment content="Label">
-                            <attributes>
-                                <font key="NSFont" metaFont="system" size="17"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="10" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                    </attributedString>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VxI-NL-mZo">
-                    <rect key="frame" x="10" y="40" width="300" height="30"/>
-                    <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="VaZ-tI-Kbe"/>
-                    </constraints>
-                    <attributedString key="attributedText">
-                        <fragment content="Label">
-                            <attributes>
-                                <font key="NSFont" metaFont="system" size="17"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="10" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                    </attributedString>
-                    <nil key="highlightedColor"/>
-                </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Wi-jE-WWY" customClass="FSCalendar">
                     <rect key="frame" x="10" y="80" width="300" height="300"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -106,6 +75,46 @@
                         <outlet property="delegate" destination="-1" id="vFd-ME-bMG"/>
                     </connections>
                 </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tq6-fB-DXl">
+                    <rect key="frame" x="10" y="10" width="300" height="30"/>
+                    <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="2j6-k7-9oJ"/>
+                    </constraints>
+                    <attributedString key="attributedText">
+                        <fragment content="Label">
+                            <attributes>
+                                <font key="NSFont" metaFont="system" size="17"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="10" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VxI-NL-mZo">
+                    <rect key="frame" x="10" y="40" width="300" height="30"/>
+                    <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="VaZ-tI-Kbe"/>
+                    </constraints>
+                    <attributedString key="attributedText">
+                        <fragment content="Label">
+                            <attributes>
+                                <font key="NSFont" metaFont="system" size="17"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="10" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aBM-IS-EsU">
+                    <rect key="frame" x="244.5" y="442.5" width="55.5" height="55.5"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="Plus_Button"/>
+                    <connections>
+                        <action selector="tapAddButton:" destination="-1" eventType="touchUpInside" id="SZL-9c-tMM"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBlueColor"/>
@@ -114,8 +123,10 @@
                 <constraint firstItem="jQm-OW-Ppf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="B2y-Qo-FRx"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="VxI-NL-mZo" secondAttribute="trailing" constant="10" id="Dme-5I-KBr"/>
                 <constraint firstItem="VxI-NL-mZo" firstAttribute="top" secondItem="Tq6-fB-DXl" secondAttribute="bottom" id="FCS-z0-Bcg"/>
+                <constraint firstItem="lmL-I1-uTC" firstAttribute="top" secondItem="aBM-IS-EsU" secondAttribute="bottom" constant="20" id="GXr-CH-rrw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Tq6-fB-DXl" secondAttribute="trailing" constant="10" id="Ka0-9Y-2R5"/>
                 <constraint firstItem="jQm-OW-Ppf" firstAttribute="top" secondItem="7Wi-jE-WWY" secondAttribute="bottom" constant="10" id="O7E-o4-SMa"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="aBM-IS-EsU" secondAttribute="trailing" constant="20" id="Pdq-PZ-ejr"/>
                 <constraint firstItem="lmL-I1-uTC" firstAttribute="top" secondItem="jQm-OW-Ppf" secondAttribute="bottom" constant="10" id="Uqe-nX-jYY"/>
                 <constraint firstItem="lmL-I1-uTC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Xia-P8-9Ai"/>
                 <constraint firstItem="7Wi-jE-WWY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="Xiw-fT-tcJ"/>
@@ -131,6 +142,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Plus_Button" width="55.5" height="55.5"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

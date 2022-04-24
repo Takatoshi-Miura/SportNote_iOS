@@ -12,6 +12,7 @@ class CalendarCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var calendarViewController = CalendarViewController()
+    let addTargetCoordinator = AddTargetCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -29,5 +30,10 @@ class CalendarCoordinator: Coordinator {
 }
 
 extension CalendarCoordinator: CalendarViewControllerDelegate {
+    
+    // CalendarVC → AddTargetVC
+    func calendarVCAddTargetDidTap(_ viewController: UIViewController) {
+        addTargetCoordinator.startFlow(in: viewController)
+    }
     
 }

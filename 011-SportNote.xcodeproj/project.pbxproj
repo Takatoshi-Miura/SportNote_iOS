@@ -355,7 +355,6 @@
 			children = (
 				8DC1931727F7CB9B0097BF07 /* NoteViewController.xib */,
 				8D91CE8E28138239000D3B1F /* FreeNoteViewController.xib */,
-				8D91CE82280BA800000D3B1F /* AddTargetViewController.xib */,
 				8D91CE88280CC80C000D3B1F /* AddTournamentNoteViewController.xib */,
 			);
 			path = Note;
@@ -406,7 +405,6 @@
 			children = (
 				8DC1931327F7BE320097BF07 /* NoteCoordinator.swift */,
 				8D91CE9128138668000D3B1F /* FreeNoteCoordinator.swift */,
-				8D91CE85280BBBA9000D3B1F /* AddTargetCoordinator.swift */,
 				8D91CE8B280CCC79000D3B1F /* AddTournamentNoteCoordinator.swift */,
 			);
 			path = Note;
@@ -458,6 +456,7 @@
 			isa = PBXGroup;
 			children = (
 				8D481D6D27F98FAF0082D956 /* CalendarCoordinator.swift */,
+				8D91CE85280BBBA9000D3B1F /* AddTargetCoordinator.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -466,6 +465,7 @@
 			isa = PBXGroup;
 			children = (
 				8D481D7027F98FFD0082D956 /* CalendarViewController.xib */,
+				8D91CE82280BA800000D3B1F /* AddTargetViewController.xib */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -474,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				8D481D7327F990410082D956 /* CalendarViewController.swift */,
+				8D91CE81280BA800000D3B1F /* AddTargetViewController.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -550,7 +551,6 @@
 				8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */,
 				8D91CE8D28138239000D3B1F /* FreeNoteViewController.swift */,
 				8D91CE87280CC80C000D3B1F /* AddTournamentNoteViewController.swift */,
-				8D91CE81280BA800000D3B1F /* AddTargetViewController.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";

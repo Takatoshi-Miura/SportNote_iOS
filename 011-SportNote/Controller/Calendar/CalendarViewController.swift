@@ -13,6 +13,8 @@ import FSCalendar
 import CalculateCalendarLogic
 
 protocol CalendarViewControllerDelegate: AnyObject {
+    // 目標追加ボタンタップ時
+    func calendarVCAddTargetDidTap(_ viewController: UIViewController)
 }
 
 class CalendarViewController: UIViewController {
@@ -21,6 +23,7 @@ class CalendarViewController: UIViewController {
     @IBOutlet weak var yearlyTargetLabel: UILabel!
     @IBOutlet weak var monthlyTargetLabel: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
+    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
@@ -40,6 +43,7 @@ class CalendarViewController: UIViewController {
         showAdMob()
     }
     
+    /// 画面初期化
     private func initView() {
         self.title = TITLE_TARGET
         yearlyTargetLabel.text = "年：\(targetArray[3].title)"
@@ -60,6 +64,13 @@ class CalendarViewController: UIViewController {
         adMobView!.frame.origin = CGPoint(x: 0, y: 0)
         adMobView!.frame.size = CGSize(width: self.view.frame.width, height: adMobView!.frame.height)
         self.adView.addSubview(adMobView!)
+    }
+    
+    // MARK: - Action
+    
+    /// 追加ボタンの処理
+    @IBAction func tapAddButton(_ sender: Any) {
+        self.delegate?.calendarVCAddTargetDidTap(self)
     }
     
 }
