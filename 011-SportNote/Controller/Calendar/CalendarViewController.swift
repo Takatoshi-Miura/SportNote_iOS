@@ -27,14 +27,11 @@ class CalendarViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
-    private var targetArray = [Target]()
     var delegate: CalendarViewControllerDelegate?
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let realmManager = RealmManager()
-        targetArray = realmManager.getAllTarget()
         initView()
     }
     
@@ -46,8 +43,7 @@ class CalendarViewController: UIViewController {
     /// 画面初期化
     private func initView() {
         self.title = TITLE_TARGET
-        yearlyTargetLabel.text = "年：\(targetArray[3].title)"
-        monthlyTargetLabel.text = "月：\(targetArray[2].title)"
+        printTarget()
     }
     
     /// バナー広告を表示
@@ -86,6 +82,36 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
         print("\(year) / \(month) / \(day)")
     }
     
+    /// カレンダーをフリックした時の処理
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        printTarget()
+    }
+    
+    /// 現在のページの年月目標を取得＆ラベル表示
+    private func printTarget() {
+        let yearFormatter = DateFormatter()
+        yearFormatter.dateFormat = "yyyy"
+        let year = Int(yearFormatter.string(from: calendar.currentPage))!
+        
+        let monthFormatter = DateFormatter()
+        monthFormatter.dateFormat = "M"
+        let month = Int(monthFormatter.string(from: calendar.currentPage))!
+        
+        let realmManager = RealmManager()
+        
+        if let yearlyTarget = realmManager.getTarget(year: year, month: month, isYearlyTarget: true) {
+            yearlyTargetLabel.text = "\(TITLE_YEARLY)\(yearlyTarget.title)"
+        } else {
+            yearlyTargetLabel.text = "\(TITLE_YEARLY)\(MESSAGE_TARGET_EMPTY)"
+        }
+        
+        if let monthlyTarget = realmManager.getTarget(year: year, month: month, isYearlyTarget: false) {
+            monthlyTargetLabel.text = "\(TITLE_MONTHLY)\(monthlyTarget.title)"
+        } else {
+            monthlyTargetLabel.text = "\(TITLE_MONTHLY)\(MESSAGE_TARGET_EMPTY)"
+        }
+    }
+    
     /// 土日や祝日の日の文字色を変える
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         // 祝日判定（祝日は赤色で表示する）
@@ -114,7 +140,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     /// - Parameters:
     ///     - date: 日付
     /// - Returns: true→祝日、false→祝日以外
-    func judgeHoliday(_ date : Date) -> Bool {
+    private func judgeHoliday(_ date : Date) -> Bool {
         let tmpCalendar = Calendar(identifier: .gregorian)
         let year = tmpCalendar.component(.year, from: date)
         let month = tmpCalendar.component(.month, from: date)
@@ -127,7 +153,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     /// - Parameters:
     ///     - date: 日付
     /// - Returns: 曜日番号
-    func getWeekIdx(_ date: Date) -> Int{
+    private func getWeekIdx(_ date: Date) -> Int{
         let tmpCalendar = Calendar(identifier: .gregorian)
         return tmpCalendar.component(.weekday, from: date)
     }

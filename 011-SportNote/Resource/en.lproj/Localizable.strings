@@ -111,6 +111,9 @@
 "AddTarget" = "Add target";
 "YearlyTarget" = "Yearly target";
 "TargetExample" = "Ex: Complete a full marathon";
+"Yearly" = "Yearly: ";
+"Monthly" = "Monthly: ";
+"TargetEmpty" = "No target has been set.";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "Please input a title.";

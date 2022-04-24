@@ -112,6 +112,9 @@
 "AddTarget" = "目標の追加";
 "YearlyTarget" = "年間目標";
 "TargetExample" = "例：フルマラソンを完走する";
+"Yearly" = "年: ";
+"Monthly" = "月: ";
+"TargetEmpty" = "目標が未設定です";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
