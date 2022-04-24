@@ -102,6 +102,40 @@ enum Month: Int, CaseIterable {
     }
 }
 
+enum WeekDay: Int, CaseIterable {
+    case sunday = 1
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    
+    var title: String {
+        switch self {
+        case .sunday:   return "Sun"
+        case .monday:   return "Mon"
+        case .tuesday:  return "Tue"
+        case .wednesday:return "Wed"
+        case .thursday: return "Thu"
+        case .friday:   return "Fri"
+        case .saturday: return "Sat"
+        }
+    }
+    
+    var color: UIColor {
+        switch self {
+        case .sunday:   return UIColor.red
+        case .monday:   return UIColor.label
+        case .tuesday:  return UIColor.label
+        case .wednesday:return UIColor.label
+        case .thursday: return UIColor.label
+        case .friday:   return UIColor.label
+        case .saturday: return UIColor.blue
+        }
+    }
+}
+
 /// iPad判定
 func isiPad() -> Bool {
     if UIDevice.current.userInterfaceIdiom == .pad {

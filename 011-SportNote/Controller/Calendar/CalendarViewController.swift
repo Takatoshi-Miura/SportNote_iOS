@@ -18,20 +18,21 @@ protocol CalendarViewControllerDelegate: AnyObject {
 class CalendarViewController: UIViewController {
     
     // MARK: - UI,Variable
+    @IBOutlet weak var yearlyTargetLabel: UILabel!
+    @IBOutlet weak var monthlyTargetLabel: UILabel!
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
+    private var targetArray = [Target]()
     var delegate: CalendarViewControllerDelegate?
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        initNavigationController()
-    }
-    
-    func initNavigationController() {
-        self.title = TITLE_CALENDAR
+        let realmManager = RealmManager()
+        targetArray = realmManager.getAllTarget()
+        initView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -39,8 +40,14 @@ class CalendarViewController: UIViewController {
         showAdMob()
     }
     
+    private func initView() {
+        self.title = TITLE_TARGET
+        yearlyTargetLabel.text = "年：\(targetArray[3].title)"
+        monthlyTargetLabel.text = "月：\(targetArray[2].title)"
+    }
+    
     /// バナー広告を表示
-    func showAdMob() {
+    private func showAdMob() {
         if let adMobView = adMobView {
             adMobView.frame.size = CGSize(width: self.view.frame.width, height: adMobView.frame.height)
             return
@@ -58,16 +65,6 @@ class CalendarViewController: UIViewController {
 }
 
 extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
-    
-    enum WeekDay: Int {
-        case sunday = 1
-        case monday
-        case tuesday
-        case wednesday
-        case thursday
-        case friday
-        case saturday
-    }
     
     /// 日付がタップされた時の処理
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -88,27 +85,16 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
         // 土日の判定（土曜日は青色、日曜日は赤色で表示する）
         let weekday = self.getWeekIdx(date)
         if weekday == WeekDay.sunday.rawValue {
-            return UIColor.red
+            return WeekDay.sunday.color
         } else if weekday == WeekDay.saturday.rawValue {
-            return UIColor.blue
+            return WeekDay.saturday.color
         }
         
-        // 曜日ラベルの色を変更
-        calendar.calendarWeekdayView.weekdayLabels[0].textColor = UIColor.red
-        calendar.calendarWeekdayView.weekdayLabels[1].textColor = UIColor.label
-        calendar.calendarWeekdayView.weekdayLabels[2].textColor = UIColor.label
-        calendar.calendarWeekdayView.weekdayLabels[3].textColor = UIColor.label
-        calendar.calendarWeekdayView.weekdayLabels[4].textColor = UIColor.label
-        calendar.calendarWeekdayView.weekdayLabels[5].textColor = UIColor.label
-        
-        // 曜日ラベルの文字列を変更
-        calendar.calendarWeekdayView.weekdayLabels[0].text = "Sun"
-        calendar.calendarWeekdayView.weekdayLabels[1].text = "Mon"
-        calendar.calendarWeekdayView.weekdayLabels[2].text = "Tue"
-        calendar.calendarWeekdayView.weekdayLabels[3].text = "Wed"
-        calendar.calendarWeekdayView.weekdayLabels[4].text = "Thu"
-        calendar.calendarWeekdayView.weekdayLabels[5].text = "Fri"
-        calendar.calendarWeekdayView.weekdayLabels[6].text = "Sat"
+        // 曜日ラベルの色,文字列を変更
+        for index in 0...6 {
+            calendar.calendarWeekdayView.weekdayLabels[index].textColor = WeekDay.allCases[index].color
+            calendar.calendarWeekdayView.weekdayLabels[index].text = WeekDay.allCases[index].title
+        }
         
         return nil
     }

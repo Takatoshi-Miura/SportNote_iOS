@@ -69,12 +69,6 @@ class AddTournamentNoteViewController: UIViewController {
         resultLabel.text = TITLE_RESULT
         reflectionLabel.text = TITLE_REFLECTION
         
-        conditionTextView.text = ""
-        targetTextView.text = ""
-        consciousnessTextView.text = ""
-        resultTextView.text = ""
-        reflectionTextView.text = ""
-        
         initTextView(textView: conditionTextView)
         initTextView(textView: targetTextView)
         initTextView(textView: consciousnessTextView)
@@ -87,6 +81,7 @@ class AddTournamentNoteViewController: UIViewController {
     
     /// TextView初期化
     private func initTextView(textView: UITextView) {
+        textView.text = ""
         textView.layer.borderColor = UIColor.systemGray5.cgColor
         textView.layer.borderWidth = 1.0
         textView.layer.cornerRadius = 5.0

@@ -12,7 +12,7 @@ enum TabBarPage {
     
     case task
     case note
-    case calendar
+    case target
 
     init?(index: Int) {
         switch index {
@@ -21,7 +21,7 @@ enum TabBarPage {
         case 1:
             self = .note
         case 2:
-            self = .calendar
+            self = .target
         default:
             return nil
         }
@@ -35,8 +35,8 @@ enum TabBarPage {
             return TITLE_TASK
         case .note:
             return TITLE_NOTE
-        case .calendar:
-            return TITLE_CALENDAR
+        case .target:
+            return TITLE_TARGET
         }
     }
     
@@ -48,7 +48,7 @@ enum TabBarPage {
             return 0
         case .note:
             return 1
-        case .calendar:
+        case .target:
             return 2
         }
     }
@@ -61,7 +61,7 @@ enum TabBarPage {
             return UIImage(systemName: "list.bullet.indent")!
         case .note:
             return UIImage(systemName: "book")!
-        case .calendar:
+        case .target:
             return UIImage(systemName: "calendar")!
         }
     }
@@ -92,7 +92,7 @@ class TabCoordinator: NSObject, Coordinator {
     }
     
     func startFlow(in window: UIWindow?) {
-        let pages: [TabBarPage] = [.task, .note, .calendar]
+        let pages: [TabBarPage] = [.task, .note, .target]
             .sorted(by: { $0.pageOrderNumber() < $1.pageOrderNumber() })
         let controllers: [UINavigationController] = pages.map({ getTabController($0) })
         prepareTabBarController(withTabControllers: controllers)
@@ -130,7 +130,7 @@ class TabCoordinator: NSObject, Coordinator {
             taskCoordinator.startFlow(in: navController)
         case .note:
             noteCoordinator.startFlow(in: navController)
-        case .calendar:
+        case .target:
             calendarCoordinator.startFlow(in: navController)
         }
         
