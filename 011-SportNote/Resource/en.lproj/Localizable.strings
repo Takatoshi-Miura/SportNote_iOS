@@ -120,4 +120,5 @@
 "GroupCreateFailed" = "Failed to create a group.";
 "TaskCreateError" = "Failed to create a task.";
 "TargetCreateError" = "Failed to create a target.";
+"TargetExistError" = "The target already exists. Are you sure you want to overwrite it?";
 "NoteCreateError" = "Failed to create a note.";

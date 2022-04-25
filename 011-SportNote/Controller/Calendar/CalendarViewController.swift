@@ -88,7 +88,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     }
     
     /// 現在のページの年月目標を取得＆ラベル表示
-    private func printTarget() {
+    func printTarget() {
         let yearFormatter = DateFormatter()
         yearFormatter.dateFormat = "yyyy"
         let year = Int(yearFormatter.string(from: calendar.currentPage))!

@@ -121,4 +121,5 @@
 "GroupCreateFailed" = "グループの作成に失敗しました。";
 "TaskCreateError" = "課題の作成に失敗しました。";
 "TargetCreateError" = "目標の作成に失敗しました。";
+"TargetExistError" = "目標が既に存在します。上書きしてもよろしいですか？";
 "NoteCreateError" = "ノートの作成に失敗しました。";

@@ -17,7 +17,7 @@ protocol AddTargetViewControllerDelegate: AnyObject {
 
 class AddTargetViewController: UIViewController {
 
-    // MARK: UI,Variable
+    // MARK: - UI,Variable
     @IBOutlet weak var naviItem: UINavigationItem!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var targetLabel: UILabel!
@@ -30,7 +30,7 @@ class AddTargetViewController: UIViewController {
     private let months = Month.allCases.map { $0 }
     var delegate: AddTargetViewControllerDelegate?
     
-    // MARK: LifeCycle
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -49,7 +49,7 @@ class AddTargetViewController: UIViewController {
         cancelButton.setTitle(TITLE_CANCEL, for: .normal)
     }
     
-    // MARK: Action
+    // MARK: - Action
     
     /// 年間目標スイッチの処理
     @IBAction func tapYearlyTargetSwitch(_ sender: Any) {
@@ -69,14 +69,29 @@ class AddTargetViewController: UIViewController {
         // 目標作成
         let target = Target()
         target.title = titleTextField.text!
-        target.year = pickerView.selectedRow(inComponent: 0)
+        target.year = years[pickerView.selectedRow(inComponent: 0)]
         if yearlyTargetSwitch.isOn {
             target.isYearlyTarget = true
         } else {
-            target.month = pickerView.selectedRow(inComponent: 1)
+            target.month = months[pickerView.selectedRow(inComponent: 1)].rawValue
+        }
+        
+        // 目標の重複チェック
+        let realmManager = RealmManager()
+        if let realmTarget = realmManager.getTarget(year: target.year, month: target.month, isYearlyTarget: target.isYearlyTarget) {
+            showOKCancelAlert(title: "", message: ERROR_MESSAGE_TARGET_EXIST, OKAction: {
+                realmManager.updateTargetIsDeleted(targetID: realmTarget.targetID)
+                self.saveTarget(target: target)
+            })
+            return
         }
         
         // 保存
+        saveTarget(target: target)
+    }
+    
+    /// 目標データ保存＆送信処理
+    private func saveTarget(target: Target) {
         let realmManager = RealmManager()
         if !realmManager.createRealm(object: target) {
             showErrorAlert(message: ERROR_MESSAGE_TARGET_CREATE_FAILED)

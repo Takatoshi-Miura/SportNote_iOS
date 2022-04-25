@@ -71,7 +71,7 @@ enum Color: Int, CaseIterable {
 }
 
 enum Month: Int, CaseIterable {
-    case January
+    case January = 1
     case February
     case March
     case April

@@ -42,8 +42,7 @@ extension AddTargetCoordinator: AddTargetViewControllerDelegate {
     // CalendarVC ← AddTargetVC
     func addTargetVCDismissWithReload(_ viewController: UIViewController) {
         if previousViewController is CalendarViewController {
-            // TODO: 画面初期化処理
-            (previousViewController as! CalendarViewController).tableView.reloadData()
+            (previousViewController as! CalendarViewController).printTarget()
         }
         viewController.dismiss(animated: true, completion: nil)
     }

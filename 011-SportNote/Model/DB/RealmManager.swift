@@ -568,7 +568,7 @@ extension RealmManager {
     func getTarget(year: Int, month: Int, isYearlyTarget: Bool) -> Target? {
         let realm = try! Realm()
         let result = realm.objects(Target.self)
-            .filter("(year == \(year)) && (month == \(month)) && (isYearlyTarget == \(isYearlyTarget))").first
+            .filter("(year == \(year)) && (month == \(month)) && (isYearlyTarget == \(isYearlyTarget)) && (isDeleted == false)").first
         return result
     }
     
@@ -586,6 +586,19 @@ extension RealmManager {
             result?.isYearlyTarget = target.isYearlyTarget
             result?.isDeleted = target.isDeleted
             result?.updated_at = target.updated_at
+        }
+    }
+    
+    /// 目標の削除フラグを更新
+    /// - Parameters:
+    ///    - target: Realmオブジェクト
+    func updateTargetIsDeleted(targetID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Target.self)
+                           .filter("targetID == '\(targetID)'").first
+        try! realm.write {
+            result?.isDeleted = true
+            result?.updated_at = Date()
         }
     }
     
