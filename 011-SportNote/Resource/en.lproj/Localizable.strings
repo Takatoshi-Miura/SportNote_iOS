@@ -114,6 +114,7 @@
 "Yearly" = "Yearly: ";
 "Monthly" = "Monthly: ";
 "TargetEmpty" = "No target has been set.";
+"Today" = "Today";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "Please input a title.";

@@ -116,6 +116,7 @@ let MESSAGE_TARGET_EXAMPLE = NSLocalizedString("TargetExample", comment: "")
 let TITLE_YEARLY = NSLocalizedString("Yearly", comment: "")
 let TITLE_MONTHLY = NSLocalizedString("Monthly", comment: "")
 let MESSAGE_TARGET_EMPTY = NSLocalizedString("TargetEmpty", comment: "")
+let TITLE_TODAY = NSLocalizedString("Today", comment: "")
 
 // MARK: - ErrorMessage
 let ERROR_MESSAGE_EMPTY_TITLE = NSLocalizedString("EmptyTitle", comment: "")

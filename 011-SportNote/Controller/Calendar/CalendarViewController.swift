@@ -43,6 +43,8 @@ class CalendarViewController: UIViewController {
     /// 画面初期化
     private func initView() {
         self.title = TITLE_TARGET
+        let todayButton = UIBarButtonItem(title: TITLE_TODAY, style: .plain, target: self, action: #selector(tapTodayButton(_:)))
+        navigationItem.rightBarButtonItems = [todayButton]
         printTarget()
     }
     
@@ -67,6 +69,11 @@ class CalendarViewController: UIViewController {
     /// 追加ボタンの処理
     @IBAction func tapAddButton(_ sender: Any) {
         self.delegate?.calendarVCAddTargetDidTap(self)
+    }
+    
+    /// 「今日」ボタンの処理
+    @objc func tapTodayButton(_ sender: UIBarButtonItem) {
+        calendar.select(Date())
     }
     
 }
@@ -170,6 +177,9 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.text = "ノートがありません。"
         cell.accessoryType = .disclosureIndicator
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     
 }

@@ -115,6 +115,7 @@
 "Yearly" = "年: ";
 "Monthly" = "月: ";
 "TargetEmpty" = "目標が未設定です";
+"Today" = "今日";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
