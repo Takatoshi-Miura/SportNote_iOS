@@ -25,8 +25,6 @@ class AddTaskViewController: UIViewController {
     @IBOutlet weak var causeTextView: UITextView!
     @IBOutlet weak var measuresTextField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
     private var realmGroupArray: [Group] = []
     private var pickerView = UIView()
     private let colorPicker = UIPickerView()
@@ -67,8 +65,6 @@ class AddTaskViewController: UIViewController {
         measuresTextField.placeholder = MASSAGE_MEASURES_EXAMPLE
         colorButton.backgroundColor = Color.allCases[realmGroupArray.first!.color].color
         colorButton.setTitle(realmGroupArray.first!.title, for: .normal)
-        saveButton.setTitle(TITLE_SAVE, for: .normal)
-        cancelButton.setTitle(TITLE_CANCEL, for: .normal)
     }
     
     /// カラーボタンの処理

@@ -24,8 +24,6 @@ class AddTargetViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var yearlyTargetSwitch: UISwitch!
     @IBOutlet weak var pickerView: UIPickerView!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
     private let years  = (1950...2200).map { $0 }
     private let months = Month.allCases.map { $0 }
     var delegate: AddTargetViewControllerDelegate?
@@ -45,8 +43,6 @@ class AddTargetViewController: UIViewController {
         targetLabel.text = TITLE_YEARLY_TARGET
         pickerView.backgroundColor = UIColor.systemGray6
         pickerView.selectRow(72, inComponent: 0, animated: false)
-        saveButton.setTitle(TITLE_SAVE, for: .normal)
-        cancelButton.setTitle(TITLE_CANCEL, for: .normal)
     }
     
     // MARK: - Action

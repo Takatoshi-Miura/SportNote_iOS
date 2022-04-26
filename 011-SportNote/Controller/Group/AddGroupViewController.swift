@@ -21,8 +21,6 @@ class AddGroupViewController: UIViewController {
     @IBOutlet weak var colorLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
     private var pickerView = UIView()
     private let colorPicker = UIPickerView()
     private var pickerIndex: Int = 0
@@ -51,8 +49,6 @@ class AddGroupViewController: UIViewController {
         titleTextField.placeholder = MESSAGE_GROUP_EXAMPLE
         colorButton.backgroundColor = Color.allCases[pickerIndex].color
         colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
-        saveButton.setTitle(TITLE_SAVE, for: .normal)
-        cancelButton.setTitle(TITLE_CANCEL, for: .normal)
     }
     
     /// Picker初期化

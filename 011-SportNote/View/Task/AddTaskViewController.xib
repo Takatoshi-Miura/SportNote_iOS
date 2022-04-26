@@ -11,7 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddTaskViewController" customModule="_11_SportNote" customModuleProvider="target">
             <connections>
-                <outlet property="cancelButton" destination="fWo-x1-JmR" id="emj-z5-afC"/>
                 <outlet property="causeLabel" destination="xE6-1i-HLb" id="wgG-nG-zFf"/>
                 <outlet property="causeTextView" destination="Dbv-AS-Ap9" id="0vk-rQ-2Bf"/>
                 <outlet property="colorButton" destination="qAD-Fm-gu4" id="ekY-hJ-diJ"/>
@@ -19,7 +18,6 @@
                 <outlet property="measuresLabel" destination="og5-d0-u5r" id="cgM-ch-6tt"/>
                 <outlet property="measuresTextField" destination="iz2-1U-AIS" id="nfk-In-3Ft"/>
                 <outlet property="naviItem" destination="Ias-Hi-RPc" id="Pbd-19-mfl"/>
-                <outlet property="saveButton" destination="THy-5k-XiC" id="tnf-3V-3q0"/>
                 <outlet property="titleLabel" destination="drt-jk-673" id="0cV-Qj-DCD"/>
                 <outlet property="titleTextField" destination="nF7-W3-7gI" id="ayV-Ck-9ns"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -67,7 +65,18 @@
                 <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3an-I7-r9o">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <items>
-                        <navigationItem title="Title" id="Ias-Hi-RPc"/>
+                        <navigationItem title="Title" id="Ias-Hi-RPc">
+                            <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="kRS-Cm-eK7">
+                                <connections>
+                                    <action selector="tapCancelButton:" destination="-1" id="8fs-s6-VO5"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="t9w-ri-FpH">
+                                <connections>
+                                    <action selector="tapSaveButton:" destination="-1" id="PAj-W0-7U1"/>
+                                </connections>
+                            </barButtonItem>
+                        </navigationItem>
                     </items>
                     <navigationBarAppearance key="compactAppearance"/>
                 </navigationBar>
@@ -116,31 +125,6 @@
                         <action selector="tapAddColorButton:" destination="-1" eventType="touchUpInside" id="wai-Eq-q2t"/>
                     </connections>
                 </button>
-                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="cMe-y7-5Wd">
-                    <rect key="frame" x="16" y="482" width="288" height="31"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fWo-x1-JmR">
-                            <rect key="frame" x="0.0" y="0.0" width="134" height="31"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="gray" title="Button"/>
-                            <connections>
-                                <action selector="tapCancelButton:" destination="-1" eventType="touchUpInside" id="fQA-5H-8gx"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="THy-5k-XiC">
-                            <rect key="frame" x="154" y="0.0" width="134" height="31"/>
-                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="filled" title="Button"/>
-                            <connections>
-                                <action selector="tapSaveButton:" destination="-1" eventType="touchUpInside" id="Wvb-md-GiQ"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="31" id="PTX-UQ-Ses"/>
-                    </constraints>
-                </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -150,7 +134,6 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Dbv-AS-Ap9" secondAttribute="trailing" constant="16" id="8xk-rI-gFQ"/>
                 <constraint firstItem="og5-d0-u5r" firstAttribute="top" secondItem="Dbv-AS-Ap9" secondAttribute="bottom" constant="30" id="BnY-Kg-nBJ"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="r6C-Ge-UAG" secondAttribute="trailing" constant="16" id="Hp3-vg-zst"/>
-                <constraint firstItem="cMe-y7-5Wd" firstAttribute="top" secondItem="qAD-Fm-gu4" secondAttribute="bottom" constant="30" id="IUA-ch-09v"/>
                 <constraint firstItem="xE6-1i-HLb" firstAttribute="top" secondItem="nF7-W3-7gI" secondAttribute="bottom" constant="30" id="KMq-ia-kCT"/>
                 <constraint firstItem="r6C-Ge-UAG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="Mrx-Jt-eyL"/>
                 <constraint firstItem="iz2-1U-AIS" firstAttribute="top" secondItem="og5-d0-u5r" secondAttribute="bottom" id="NVD-Tk-YYD"/>
@@ -166,9 +149,7 @@
                 <constraint firstItem="iz2-1U-AIS" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="Ywe-BB-IsG"/>
                 <constraint firstItem="xE6-1i-HLb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="bWE-Fq-piq"/>
                 <constraint firstItem="3an-I7-r9o" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="cOy-T2-kra"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="cMe-y7-5Wd" secondAttribute="trailing" constant="16" id="cam-uP-MVl"/>
                 <constraint firstItem="3an-I7-r9o" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="eju-f6-HyZ"/>
-                <constraint firstItem="cMe-y7-5Wd" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="gPH-C3-0Mr"/>
                 <constraint firstItem="qAD-Fm-gu4" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="jwG-0m-STo"/>
                 <constraint firstItem="nF7-W3-7gI" firstAttribute="top" secondItem="drt-jk-673" secondAttribute="bottom" id="pM6-HX-foy"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="iz2-1U-AIS" secondAttribute="trailing" constant="16" id="pZW-eq-7oV"/>

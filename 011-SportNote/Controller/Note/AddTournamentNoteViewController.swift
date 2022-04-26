@@ -28,8 +28,6 @@ class AddTournamentNoteViewController: UIViewController {
     @IBOutlet weak var consciousnessTextView: UITextView!
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var reflectionTextView: UITextView!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
     var delegate: AddTournamentNoteViewControllerDelegate?
     
     private var pickerView = UIView()
@@ -74,9 +72,6 @@ class AddTournamentNoteViewController: UIViewController {
         initTextView(textView: consciousnessTextView)
         initTextView(textView: resultTextView)
         initTextView(textView: reflectionTextView)
-        
-        saveButton.setTitle(TITLE_SAVE, for: .normal)
-        cancelButton.setTitle(TITLE_CANCEL, for: .normal)
     }
     
     /// TextView初期化
