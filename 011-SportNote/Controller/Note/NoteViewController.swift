@@ -11,6 +11,8 @@ import GoogleMobileAds
 import PKHUD
 
 protocol NoteViewControllerDelegate: AnyObject {
+    // 練習ノート追加ボタンタップ時
+    func noteVCAddPracticeNoteDidTap(_ viewController: UIViewController)
     // 大会ノート追加ボタンタップ時
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController)
     // フリーノートタップ時
@@ -39,11 +41,15 @@ class NoteViewController: UIViewController {
         initNavigationController()
         initTableView()
         // 初回のみ旧データ変換後に同期処理
-        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-        let dataConverter = DataConverter()
-        dataConverter.convertOldToRealm(completion: {
+        if Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let dataConverter = DataConverter()
+            dataConverter.convertOldToRealm(completion: {
+                self.syncData()
+            })
+        } else {
             self.syncData()
-        })
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,7 +140,7 @@ class NoteViewController: UIViewController {
     @IBAction func tapAddButton(_ sender: Any) {
         var alertActions: [UIAlertAction] = []
         let addPracticeNoteAction = UIAlertAction(title: TITLE_PRACTICE_NOTE, style: .default) { _ in
-//            self.delegate?.taskVCAddTaskDidTap(self)
+            self.delegate?.noteVCAddPracticeNoteDidTap(self)
         }
         let addTournamentNoteAction = UIAlertAction(title: TITLE_TOURNAMENT_NOTE, style: .default) { _ in
             self.delegate?.noteVCAddTournamentNoteDidTap(self)

@@ -1,5 +1,5 @@
 //
-//  AddPracticeNoteViewController.swift
+//  AddPracticeNoteViewController_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/06.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddPracticeNoteViewController: UIViewController, UINavigationControllerDelegate,UIScrollViewDelegate {
+class AddPracticeNoteViewController_old: UIViewController, UINavigationControllerDelegate,UIScrollViewDelegate {
     
     //MARK:- ライフサイクルメソッド
     

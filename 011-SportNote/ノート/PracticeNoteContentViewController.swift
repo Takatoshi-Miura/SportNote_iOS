@@ -63,7 +63,7 @@ class PracticeNoteContentViewController: UIViewController,UITableViewDelegate,UI
     func editButton() {
         // 練習記録追加画面を取得
         let storyboard: UIStoryboard = self.storyboard!
-        let nextView = storyboard.instantiateViewController(withIdentifier: "AddPracticeNoteViewController") as! AddPracticeNoteViewController
+        let nextView = storyboard.instantiateViewController(withIdentifier: "AddPracticeNoteViewController") as! AddPracticeNoteViewController_old
         
         // ノートデータの受け渡し
         nextView.noteData = self.noteData

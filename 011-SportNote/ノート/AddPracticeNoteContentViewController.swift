@@ -1,5 +1,5 @@
 //
-//  AddPracticeNoteViewController.swift
+//  AddPracticeNoteViewController_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/06.
@@ -623,7 +623,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
                 
                 // AddPracticeNoteViewControllerオブジェクトを取得
-                let obj = self.parent as! AddPracticeNoteViewController
+                let obj = self.parent as! AddPracticeNoteViewController_old
                 
                 // containerViewの高さを設定
                 obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
@@ -638,7 +638,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
     // Pickerを画面下から開くメソッド
     func openPicker(pickerView picker:UIView) {
         // 現在のスクロール位置（最下点）,Pickerの座標を取得
-        let obj = self.parent as! AddPracticeNoteViewController
+        let obj = self.parent as! AddPracticeNoteViewController_old
         let scrollPotiton = obj.getScrollPosition()
         
         // 下からPickerを出す
@@ -685,7 +685,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             self.taskTableViewHeight.constant = CGFloat(self.taskTableView.contentSize.height)
             
             // AddPracticeNoteViewControllerオブジェクトを取得
-            if let obj:AddPracticeNoteViewController = self.parent as? AddPracticeNoteViewController {
+            if let obj:AddPracticeNoteViewController_old = self.parent as? AddPracticeNoteViewController_old {
                 // containerViewの高さを設定
                 obj.setContainerViewHeight(height: self.taskTableView.contentSize.height)
                 
@@ -911,7 +911,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         }
         
         // 現在のスクロール位置（最下点）,キーボードの高さを取得
-        let obj = self.parent as! AddPracticeNoteViewController
+        let obj = self.parent as! AddPracticeNoteViewController_old
         let scrollPotiton = obj.getScrollPosition()
         let keyboardHeight = rect.size.height
         

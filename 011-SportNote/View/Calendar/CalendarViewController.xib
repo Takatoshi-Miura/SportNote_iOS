@@ -57,7 +57,7 @@
                             <real key="value" value="20"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="headerTitleTextSize">
-                            <real key="value" value="14"/>
+                            <real key="value" value="18"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="color" keyPath="headerTitleColor">
                             <color key="value" systemColor="labelColor"/>
