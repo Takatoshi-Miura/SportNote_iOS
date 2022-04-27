@@ -67,21 +67,11 @@ class AddTournamentNoteViewController: UIViewController {
         resultLabel.text = TITLE_RESULT
         reflectionLabel.text = TITLE_REFLECTION
         
-        initTextView(textView: conditionTextView)
-        initTextView(textView: targetTextView)
-        initTextView(textView: consciousnessTextView)
-        initTextView(textView: resultTextView)
-        initTextView(textView: reflectionTextView)
-    }
-    
-    /// TextView初期化
-    private func initTextView(textView: UITextView) {
-        textView.text = ""
-        textView.layer.borderColor = UIColor.systemGray5.cgColor
-        textView.layer.borderWidth = 1.0
-        textView.layer.cornerRadius = 5.0
-        textView.layer.masksToBounds = true
-        textView.inputAccessoryView = createToolBar(#selector(tapOkButton(_:)), #selector(tapOkButton(_:)))
+        initTextView(textView: conditionTextView, doneAction: #selector(tapOkButton(_:)))
+        initTextView(textView: targetTextView, doneAction: #selector(tapOkButton(_:)))
+        initTextView(textView: consciousnessTextView, doneAction: #selector(tapOkButton(_:)))
+        initTextView(textView: resultTextView, doneAction: #selector(tapOkButton(_:)))
+        initTextView(textView: reflectionTextView, doneAction: #selector(tapOkButton(_:)))
     }
     
     /// キーボード、Pickerを隠す

@@ -58,6 +58,23 @@ public extension UIViewController {
     }
     
     /**
+     ツールバーを作成(完了ボタン)
+     - Parameters:
+        - doneAction: 完了ボタンの処理
+     - Returns: ツールバー
+     */
+    func createToolBar(_ doneAction: Selector) -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
+        
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: doneAction)
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([flexibleItem, doneItem], animated: true)
+        
+        return toolbar
+    }
+    
+    /**
      PickerViewを画面下から出現(スクロール有)
      - Parameters:
         - pickerView: PickerVIewを載せたUIView

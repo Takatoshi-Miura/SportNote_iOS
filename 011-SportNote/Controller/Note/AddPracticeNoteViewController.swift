@@ -15,6 +15,7 @@ protocol AddPracticeNoteViewControllerDelegate: AnyObject {
 
 class AddPracticeNoteViewController: UIViewController {
     
+    // MARK: - UI,Variable
     @IBOutlet weak var naviItem: UINavigationItem!
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var purposeLabel: UILabel!
@@ -30,13 +31,28 @@ class AddPracticeNoteViewController: UIViewController {
     @IBOutlet weak var taskTableView: UITableView!
     var delegate: AddPracticeNoteViewControllerDelegate?
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        initView()
     }
     
+    func initView() {
+        naviItem.title = ""
+        
+        conditionLabel.text = TITLE_CONDITION
+        purposeLabel.text = ""
+        detailLabel.text = ""
+        taskLabel.text = ""
+        reflectionLabel.text = TITLE_REFLECTION
+        
+        initTextView(textView: conditionTextView)
+        initTextView(textView: purposeTextView)
+        initTextView(textView: detailTextView)
+        initTextView(textView: reflectionTextView)
+    }
     
+    // MARK: - Action
     @IBAction func tapAddButton(_ sender: Any) {
     }
     
