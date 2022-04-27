@@ -101,6 +101,10 @@
 "FreeNote" = "FreeNote";
 
 // MARK: - Note
+"AddPracticeNoteTitle" = "Add Practice Note";
+"PracticePurpose" = "Purpose";
+"Detail" = "Detail";
+"TackledTask" = "TackledTask";
 "AddTournamentNoteTitle" = "Add Tournament Note";
 "Condition" = "Condition";
 "Consciousness" = "Consciousness";

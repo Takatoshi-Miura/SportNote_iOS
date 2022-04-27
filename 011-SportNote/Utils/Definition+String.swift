@@ -103,6 +103,10 @@ let MESSAGE_ADD_NOTE = NSLocalizedString("AddMessage", comment: "")
 let TITLE_FREE_NOTE = NSLocalizedString("FreeNote", comment: "")
 
 // MARK: - Note
+let TITLE_ADD_PRACTICE_NOTE = NSLocalizedString("AddPracticeNoteTitle", comment: "")
+let TITLE_PRACTICE_PURPOSE = NSLocalizedString("PracticePurpose", comment: "")
+let TITLE_DETAIL = NSLocalizedString("Detail", comment: "")
+let TITLE_TACKLED_TASK = NSLocalizedString("TackledTask", comment: "")
 let TITLE_ADD_TOURNAMENT_NOTE = NSLocalizedString("AddTournamentNoteTitle", comment: "")
 let TITLE_CONDITION = NSLocalizedString("Condition", comment: "")
 let TITLE_CONSCIOUSNESS = NSLocalizedString("Consciousness", comment: "")

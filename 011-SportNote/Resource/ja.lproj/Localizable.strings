@@ -102,6 +102,10 @@
 "FreeNote" = "フリーノート";
 
 // MARK: - Note
+"AddPracticeNoteTitle" = "練習ノートの追加";
+"PracticePurpose" = "練習の目的";
+"Detail" = "練習内容";
+"TackledTask" = "取り組んだ課題";
 "AddTournamentNoteTitle" = "大会ノートの追加";
 "Condition" = "体調";
 "Consciousness" = "意識すること";
