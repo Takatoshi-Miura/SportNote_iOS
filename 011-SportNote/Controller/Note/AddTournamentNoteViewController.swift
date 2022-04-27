@@ -100,7 +100,7 @@ class AddTournamentNoteViewController: UIViewController {
         let tournamentNote = TournamentNote()
         tournamentNote.date = selectedDate
         tournamentNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
-        tournamentNote.temperature = selectedWeather[TITLE_TEMPERATURE]!
+        tournamentNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
         tournamentNote.condition = conditionTextView.text
         tournamentNote.target = targetTextView.text
         tournamentNote.consciousness = consciousnessTextView.text

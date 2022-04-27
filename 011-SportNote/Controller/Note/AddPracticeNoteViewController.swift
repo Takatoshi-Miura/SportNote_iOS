@@ -112,7 +112,7 @@ class AddPracticeNoteViewController: UIViewController {
         let practiceNote = PracticeNote()
         practiceNote.date = selectedDate
         practiceNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
-        practiceNote.temperature = selectedWeather[TITLE_TEMPERATURE]!
+        practiceNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
         practiceNote.condition = conditionTextView.text
         practiceNote.purpose = purposeTextView.text
         practiceNote.detail = detailTextView.text
