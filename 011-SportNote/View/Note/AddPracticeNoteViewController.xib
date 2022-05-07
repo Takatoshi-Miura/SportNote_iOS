@@ -17,6 +17,7 @@
                 <outlet property="dateTableView" destination="QFY-KT-lBj" id="NXf-mg-Qlz"/>
                 <outlet property="detailLabel" destination="AIA-Ob-FVq" id="zAv-d7-Xee"/>
                 <outlet property="detailTextView" destination="XV1-5w-oOS" id="yha-SS-Uka"/>
+                <outlet property="naviBar" destination="4lE-Q2-jcp" id="clc-v5-1qe"/>
                 <outlet property="naviItem" destination="3do-Sr-XeQ" id="yPK-u4-GXE"/>
                 <outlet property="purposeLabel" destination="d3u-NF-Psh" id="Wls-rJ-HXZ"/>
                 <outlet property="purposeTextView" destination="m3s-x7-xh5" id="Rxv-7I-sEz"/>

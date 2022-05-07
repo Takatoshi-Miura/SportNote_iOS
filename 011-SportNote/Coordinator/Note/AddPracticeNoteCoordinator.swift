@@ -20,6 +20,15 @@ class AddPracticeNoteCoordinator: Coordinator {
     func startFlow(in navigationController: UINavigationController) {
     }
     
+    func startFrow(in navigationController: UINavigationController, withNote note: Note) {
+        // Viewer
+        self.navigationController = navigationController
+        addPracticeNoteViewController = AddPracticeNoteViewController()
+        addPracticeNoteViewController.realmNote = note
+        addPracticeNoteViewController.isViewer = true
+        navigationController.pushViewController(addPracticeNoteViewController, animated: true)
+    }
+    
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
         addPracticeNoteViewController = AddPracticeNoteViewController()

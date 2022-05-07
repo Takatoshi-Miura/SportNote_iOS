@@ -17,6 +17,8 @@ protocol NoteViewControllerDelegate: AnyObject {
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController)
     // フリーノートタップ時
     func noteVCFreeNoteDidTap(freeNote: Note)
+    // 練習ノートタップ時
+    func noteVCPracticeNoteDidTap(practiceNote: Note)
     // 大会ノートタップ時
     func noteVCTournamentNoteDidTap(tournamentNote: Note)
 }
@@ -180,7 +182,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
                 self.delegate?.noteVCFreeNoteDidTap(freeNote: noteArray[indexPath.row])
                 break
             case .practice:
-                // TODO: 練習ノートへ遷移
+                self.delegate?.noteVCPracticeNoteDidTap(practiceNote: noteArray[indexPath.row])
                 break
             case .tournament:
                 self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: noteArray[indexPath.row])

@@ -17,6 +17,7 @@ class AddPracticeNoteViewController: UIViewController {
     
     // MARK: - UI,Variable
     @IBOutlet weak var naviItem: UINavigationItem!
+    @IBOutlet weak var naviBar: UINavigationBar!
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var purposeLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
@@ -30,6 +31,8 @@ class AddPracticeNoteViewController: UIViewController {
     @IBOutlet weak var dateTableView: UITableView!
     @IBOutlet weak var taskTableView: UITableView!
     var delegate: AddPracticeNoteViewControllerDelegate?
+    var isViewer = false
+    var realmNote = Note()
     
     private var pickerView = UIView()
     private var datePicker = UIDatePicker()
@@ -64,6 +67,19 @@ class AddPracticeNoteViewController: UIViewController {
         weatherPicker.frame.size.width = self.view.bounds.size.width
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isViewer {
+            // TODO: 更新処理
+            
+            // Firebaseに送信
+            if Network.isOnline() {
+                let firebaseManager = FirebaseManager()
+                firebaseManager.updateNote(note: realmNote)
+            }
+        }
+    }
+    
     /// 画面初期化
     private func initView() {
         naviItem.title = TITLE_ADD_PRACTICE_NOTE
@@ -72,10 +88,20 @@ class AddPracticeNoteViewController: UIViewController {
         detailLabel.text = TITLE_DETAIL
         taskLabel.text = TITLE_TACKLED_TASK
         reflectionLabel.text = TITLE_REFLECTION
+        
         initTextView(textView: conditionTextView)
         initTextView(textView: purposeTextView)
         initTextView(textView: detailTextView)
         initTextView(textView: reflectionTextView)
+        
+        if isViewer {
+            naviBar.isHidden = true
+            // TODO: レイアウト要修正
+            conditionTextView.text = realmNote.condition
+            purposeTextView.text = realmNote.purpose
+            detailTextView.text = realmNote.detail
+            reflectionTextView.text = realmNote.reflection
+        }
     }
     
     private func initTableView() {
@@ -225,7 +251,6 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
     /// DatePicker初期化
     private func initDatePicker() {
         datePicker = UIDatePicker()
-        datePicker.date = Date()
         datePicker.datePickerMode = .date
         datePicker.locale = Locale(identifier: "ja")
         if #available(iOS 13.4, *) {
@@ -233,6 +258,11 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         }
         datePicker.backgroundColor = UIColor.systemGray5
         datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + 44)
+        if isViewer {
+            datePicker.date = realmNote.date
+        } else {
+            datePicker.date = Date()
+        }
     }
     
     @objc func datePickerDoneAction() {
@@ -255,7 +285,13 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         weatherPicker.dataSource = self
         weatherPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: weatherPicker.bounds.size.height + 44)
         weatherPicker.backgroundColor = UIColor.systemGray5
-        weatherPicker.selectRow(60, inComponent: 1, animated: true)
+        
+        if isViewer {
+            weatherPicker.selectRow(realmNote.weather ,inComponent: 0, animated: true)
+            weatherPicker.selectRow(realmNote.temperature + 40, inComponent: 1, animated: true)
+        } else {
+            weatherPicker.selectRow(60, inComponent: 1, animated: true)
+        }
         selectedWeather[TITLE_WEATHER] = weatherPicker.selectedRow(inComponent: 0)
         selectedWeather[TITLE_TEMPERATURE] = weatherPicker.selectedRow(inComponent: 1)
     }
