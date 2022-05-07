@@ -646,8 +646,12 @@ extension RealmManager {
     func getPracticeTournamentNote() -> [Note] {
         var noteArray: [Note] = []
         let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "date", ascending: false),
+        ]
         let result = realm.objects(Note.self)
             .filter("(noteType == \(NoteType.practice.rawValue)) || (noteType == \(NoteType.tournament.rawValue))")
+            .sorted(by: sortProperties)
         for note in result {
             noteArray.append(note)
         }

@@ -22,7 +22,7 @@ enum Weather: Int, CaseIterable {
     }
 }
 
-enum NoteType: Int {
+enum NoteType: Int, CaseIterable {
     case free
     case practice
     case tournament

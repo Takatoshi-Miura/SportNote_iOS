@@ -26,14 +26,8 @@ class NoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
-    private var freeNote = Note()
     private var noteArray: [Note] = []
     var delegate: NoteViewControllerDelegate?
-    
-    private enum Section: Int, CaseIterable {
-        case freeNote = 0
-        case note
-    }
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -60,17 +54,11 @@ class NoteViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let selectedIndex = tableView.indexPathForSelectedRow {
-            switch Section.allCases[selectedIndex.section] {
-            case .freeNote:
-                break
-            case .note:
-                // ノートが削除されていれば取り除く
-                let note = noteArray[selectedIndex.row]
-                if note.isDeleted {
-                    noteArray.remove(at: selectedIndex.row)
-                    tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
-                }
-                break
+            // ノートが削除されていれば取り除く
+            let note = noteArray[selectedIndex.row]
+            if note.isDeleted {
+                noteArray.remove(at: selectedIndex.row)
+                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
             }
             tableView.reloadRows(at: [selectedIndex], with: .none)
         }
@@ -97,18 +85,21 @@ class NoteViewController: UIViewController {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let syncManager = SyncManager()
             syncManager.syncDatabase(completion: {
-                let realmManager = RealmManager()
-                // TODO: 日付の降順(新しい順)で表示
-                self.noteArray = realmManager.getPracticeTournamentNote()
-                self.freeNote = realmManager.getFreeNote()
-                self.tableView.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
+                self.refreshData()
                 HUD.hide()
             })
         } else {
-            tableView.refreshControl?.endRefreshing()
-            tableView.reloadData()
+            refreshData()
         }
+    }
+    
+    /// データを取得
+    func refreshData() {
+        let realmManager = RealmManager()
+        noteArray = realmManager.getPracticeTournamentNote()
+        noteArray.insert(realmManager.getFreeNote(), at: 0)
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
     
     /// バナー広告を表示
@@ -149,57 +140,49 @@ class NoteViewController: UIViewController {
 
 extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView:UITableView, titleForHeaderInSection section:Int) -> String?{
-        switch Section.allCases[section] {
-        case .freeNote:
-            return TITLE_FREE_NOTE
-        case .note:
-            return TITLE_NOTE
-        }
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2    // セクションの個数
+        return 1    // セクションの個数
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch Section.allCases[section] {
-        case .freeNote:
-            return 1
-        case .note:
-            return noteArray.count
-        }
+        return noteArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         cell.accessoryType = .disclosureIndicator
         
-        switch Section.allCases[indexPath.section] {
-        case .freeNote:
-            cell.textLabel?.text = freeNote.title
-            return cell
-        case .note:
-            if !noteArray.isEmpty {
-                cell.textLabel?.text = noteArray[indexPath.row].detail
-            }
+        if noteArray.isEmpty {
             return cell
         }
+        
+        switch NoteType.allCases[noteArray[indexPath.row].noteType] {
+        case .free:
+            cell.textLabel?.text = noteArray[indexPath.row].title
+            break
+        case .practice:
+            cell.textLabel?.text = noteArray[indexPath.row].detail
+            break
+        case .tournament:
+            cell.textLabel?.text = noteArray[indexPath.row].target
+            break
+        }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
         } else {
-            switch Section.allCases[indexPath.section] {
-            case .freeNote:
-                self.delegate?.noteVCFreeNoteDidTap(freeNote: freeNote)
-            case .note:
-                let note = noteArray[indexPath.row]
-                if note.noteType == NoteType.practice.rawValue {
-                    // TODO: 練習ノートへ遷移
-                } else {
-                    // TODO: 大会ノートへ遷移
-                }
+            switch NoteType.allCases[noteArray[indexPath.row].noteType] {
+            case .free:
+                self.delegate?.noteVCFreeNoteDidTap(freeNote: noteArray[indexPath.row])
+                break
+            case .practice:
+                // TODO: 練習ノートへ遷移
+                break
+            case .tournament:
+                // TODO: 大会ノートへ遷移
+                break
             }
         }
     }
