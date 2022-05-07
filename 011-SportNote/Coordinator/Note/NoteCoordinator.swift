@@ -49,5 +49,10 @@ extension NoteCoordinator: NoteViewControllerDelegate {
         freeNoteCoordinator.startFrow(in: navigationController!, withFreeNote: freeNote)
     }
     
+    // NoteVC → TournamentNoteVC
+    func noteVCTournamentNoteDidTap(tournamentNote: Note) {
+        addTournamentNoteCoordinator.startFrow(in: navigationController!, withNote: tournamentNote)
+    }
+    
 }
 

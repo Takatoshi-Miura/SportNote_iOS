@@ -17,6 +17,7 @@ class AddTournamentNoteViewController: UIViewController {
     
     // MARK: - UI,Variable
     @IBOutlet weak var naviItem: UINavigationItem!
+    @IBOutlet weak var naviBar: UINavigationBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var targetLabel: UILabel!
@@ -29,6 +30,8 @@ class AddTournamentNoteViewController: UIViewController {
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var reflectionTextView: UITextView!
     var delegate: AddTournamentNoteViewControllerDelegate?
+    var isViewer = false
+    var realmNote = Note()
     
     private var pickerView = UIView()
     private var datePicker = UIDatePicker()
@@ -58,6 +61,19 @@ class AddTournamentNoteViewController: UIViewController {
         weatherPicker.frame.size.width = self.view.bounds.size.width
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isViewer {
+            // TODO: 更新処理
+            
+            // Firebaseに送信
+            if Network.isOnline() {
+                let firebaseManager = FirebaseManager()
+                firebaseManager.updateNote(note: realmNote)
+            }
+        }
+    }
+    
     /// 画面初期化
     private func initView() {
         naviItem.title = TITLE_ADD_TOURNAMENT_NOTE
@@ -72,6 +88,16 @@ class AddTournamentNoteViewController: UIViewController {
         initTextView(textView: consciousnessTextView, doneAction: #selector(tapOkButton(_:)))
         initTextView(textView: resultTextView, doneAction: #selector(tapOkButton(_:)))
         initTextView(textView: reflectionTextView, doneAction: #selector(tapOkButton(_:)))
+        
+        if isViewer {
+            naviBar.isHidden = true
+            // TODO: レイアウト要修正
+            conditionTextView.text = realmNote.condition
+            targetTextView.text = realmNote.target
+            consciousnessTextView.text = realmNote.consciousness
+            resultTextView.text = realmNote.result
+            reflectionTextView.text = realmNote.reflection
+        }
     }
     
     /// キーボード、Pickerを隠す
@@ -208,7 +234,6 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
     /// DatePicker初期化
     private func initDatePicker() {
         datePicker = UIDatePicker()
-        datePicker.date = Date()
         datePicker.datePickerMode = .date
         datePicker.locale = Locale(identifier: "ja")
         if #available(iOS 13.4, *) {
@@ -216,6 +241,11 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         }
         datePicker.backgroundColor = UIColor.systemGray5
         datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + 44)
+        if isViewer {
+            datePicker.date = realmNote.date
+        } else {
+            datePicker.date = Date()
+        }
     }
     
     @objc func datePickerDoneAction() {
@@ -238,7 +268,13 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         weatherPicker.dataSource = self
         weatherPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: weatherPicker.bounds.size.height + 44)
         weatherPicker.backgroundColor = UIColor.systemGray5
-        weatherPicker.selectRow(60, inComponent: 1, animated: true)
+        
+        if isViewer {
+            weatherPicker.selectRow(realmNote.weather ,inComponent: 0, animated: true)
+            weatherPicker.selectRow(realmNote.temperature + 40, inComponent: 1, animated: true)
+        } else {
+            weatherPicker.selectRow(60, inComponent: 1, animated: true)
+        }
         selectedWeather[TITLE_WEATHER] = weatherPicker.selectedRow(inComponent: 0)
         selectedWeather[TITLE_TEMPERATURE] = weatherPicker.selectedRow(inComponent: 1)
     }

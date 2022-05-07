@@ -20,7 +20,17 @@ class AddTournamentNoteCoordinator: Coordinator {
     func startFlow(in navigationController: UINavigationController) {
     }
     
+    func startFrow(in navigationController: UINavigationController, withNote note: Note) {
+        // Viewer
+        self.navigationController = navigationController
+        addTournamentNoteViewController = AddTournamentNoteViewController()
+        addTournamentNoteViewController.realmNote = note
+        addTournamentNoteViewController.isViewer = true
+        navigationController.pushViewController(addTournamentNoteViewController, animated: true)
+    }
+    
     func startFlow(in viewController: UIViewController) {
+        // 新規作成
         previousViewController = viewController
         addTournamentNoteViewController = AddTournamentNoteViewController()
         addTournamentNoteViewController.delegate = self

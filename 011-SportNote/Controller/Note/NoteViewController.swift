@@ -17,6 +17,8 @@ protocol NoteViewControllerDelegate: AnyObject {
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController)
     // フリーノートタップ時
     func noteVCFreeNoteDidTap(freeNote: Note)
+    // 大会ノートタップ時
+    func noteVCTournamentNoteDidTap(tournamentNote: Note)
 }
 
 class NoteViewController: UIViewController {
@@ -181,7 +183,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
                 // TODO: 練習ノートへ遷移
                 break
             case .tournament:
-                // TODO: 大会ノートへ遷移
+                self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: noteArray[indexPath.row])
                 break
             }
         }

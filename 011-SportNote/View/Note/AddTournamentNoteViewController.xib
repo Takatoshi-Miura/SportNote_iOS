@@ -15,6 +15,7 @@
                 <outlet property="conditionTextView" destination="dtU-s3-0KJ" id="GAV-Y9-h58"/>
                 <outlet property="consciousnessLabel" destination="OTO-db-eSU" id="XuR-gG-IrF"/>
                 <outlet property="consciousnessTextView" destination="7vf-5j-vVi" id="vy0-L4-ueJ"/>
+                <outlet property="naviBar" destination="MP8-Jk-wU2" id="SC0-Hn-nli"/>
                 <outlet property="naviItem" destination="aYM-oQ-uO6" id="GUm-eG-T1B"/>
                 <outlet property="reflectionLabel" destination="IlP-sA-wP2" id="yoq-KQ-ZVi"/>
                 <outlet property="reflectionTextView" destination="lms-kj-In8" id="H56-fs-Pta"/>
