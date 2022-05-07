@@ -70,28 +70,10 @@ class SyncManager {
             })
         }
         
-        print("フリーノート同期開始")
+        print("ノート同期開始")
         DispatchQueue.global(qos: .default).sync {
-            syncFreeNote(completion: {
-                print("フリーノート同期終了")
-                completionNumber += 1
-                self.syncDatabaseCompletion(completion: completion, completionNumber: completionNumber)
-            })
-        }
-        
-        print("練習ノート同期開始")
-        DispatchQueue.global(qos: .default).sync {
-            syncPracticeNote(completion: {
-                print("練習ノート同期終了")
-                completionNumber += 1
-                self.syncDatabaseCompletion(completion: completion, completionNumber: completionNumber)
-            })
-        }
-        
-        print("大会ノート同期開始")
-        DispatchQueue.global(qos: .default).sync {
-            syncTournamentNote(completion: {
-                print("大会ノート同期終了")
+            syncNote(completion: {
+                print("ノート同期終了")
                 completionNumber += 1
                 self.syncDatabaseCompletion(completion: completion, completionNumber: completionNumber)
             })
@@ -105,8 +87,8 @@ class SyncManager {
         - completionNumber: タスク完了数
      */
     private func syncDatabaseCompletion(completion: @escaping () -> (), completionNumber: Int) {
-        // グループ、課題、対策、メモ、目標、フリー、練習、大会全ての同期が終了した場合のみ完了処理を実行
-        if completionNumber == 8 {
+        // グループ、課題、対策、メモ、目標、ノート全ての同期が終了した場合のみ完了処理を実行
+        if completionNumber == 6 {
             completion()
         }
     }
@@ -481,49 +463,49 @@ class SyncManager {
         return array.filter{ $0.targetID.contains(ID) }.first!
     }
     
-    // MARK: - FreeNote同期用
+    // MARK: - Note同期用
     
-    /// フリーノートを同期
+    /// ノートを同期
     /// - Parameters:
     ///   - completion: 完了処理
-    private func syncFreeNote(completion: @escaping () -> ()) {
-        // Realmのフリーノートを全取得
-        let realmFreeNoteArray: [FreeNote] = [realmManager.getFreeNote()]
+    private func syncNote(completion: @escaping () -> ()) {
+        // Realmのノートを全取得
+        let realmNoteArray = realmManager.getAllNote()
         
-        // Firebaseのフリーノートを全取得
-        firebaseManager.getAllFreeNote(completion: {
+        // Firebaseのノートを全取得
+        firebaseManager.getAllNote(completion: {
             // FirebaseもしくはRealmにしか存在しないデータを抽出
-            let firebaseFreeNoteIDArray = self.getFreeNoteIDArray(array: [self.firebaseManager.freeNote])
-            let realmFreeNoteIDArray = self.getFreeNoteIDArray(array: realmFreeNoteArray)
-            let onlyRealmID = realmFreeNoteIDArray.subtracting(firebaseFreeNoteIDArray)
-            let onlyFirebaseID = firebaseFreeNoteIDArray.subtracting(realmFreeNoteIDArray)
+            let firebaseNoteIDArray = self.getNoteIDArray(array: self.firebaseManager.noteArray)
+            let realmNoteIDArray = self.getNoteIDArray(array: realmNoteArray)
+            let onlyRealmID = realmNoteIDArray.subtracting(firebaseNoteIDArray)
+            let onlyFirebaseID = firebaseNoteIDArray.subtracting(realmNoteIDArray)
             
             // Realmにしか存在しないデータをFirebaseに保存
-            for freeNoteID in onlyRealmID {
-                let freeNote = self.getFreeNoteWithID(array: realmFreeNoteArray, ID: freeNoteID)
-                self.firebaseManager.saveFreeNote(freeNote: freeNote, completion: {})
+            for noteID in onlyRealmID {
+                let note = self.getNoteWithID(array: realmNoteArray, ID: noteID)
+                self.firebaseManager.saveNote(note: note, completion: {})
             }
             
             // Firebaseにしか存在しないデータをRealmに保存
-            for freeNoteID in onlyFirebaseID {
-                let freeNote = self.getFreeNoteWithID(array: [self.firebaseManager.freeNote], ID: freeNoteID)
-                if self.realmManager.createRealm(object: freeNote) {
+            for noteID in onlyFirebaseID {
+                let note = self.getNoteWithID(array: self.firebaseManager.noteArray, ID: noteID)
+                if self.realmManager.createRealm(object: note) {
                     return
                 }
             }
             
             // どちらにも存在するデータの更新日時を比較し新しい方に更新する
-            let commonID = realmFreeNoteIDArray.subtracting(onlyRealmID)
-            for freeNoteID in commonID {
-                let realmFreeNote = self.getFreeNoteWithID(array: realmFreeNoteArray, ID: freeNoteID)
-                let firebaseFreeNote = self.getFreeNoteWithID(array: [self.firebaseManager.freeNote], ID: freeNoteID)
+            let commonID = realmNoteIDArray.subtracting(onlyRealmID)
+            for noteID in commonID {
+                let realmNote = self.getNoteWithID(array: realmNoteArray, ID: noteID)
+                let firebaseNote = self.getNoteWithID(array: self.firebaseManager.noteArray, ID: noteID)
                 
-                if realmFreeNote.updated_at > firebaseFreeNote.updated_at {
+                if realmNote.updated_at > firebaseNote.updated_at {
                     // Realmデータの方が新しい
-                    self.firebaseManager.updateFreeNote(freeNote: realmFreeNote)
-                } else if firebaseFreeNote.updated_at > realmFreeNote.updated_at  {
+                    self.firebaseManager.updateNote(note: realmNote)
+                } else if firebaseNote.updated_at > realmNote.updated_at  {
                     // Firebaseデータの方が新しい
-                    self.realmManager.updateFreeNote(freeNote: firebaseFreeNote)
+                    self.realmManager.updateNote(note: firebaseNote)
                 }
             }
             completion()
@@ -531,176 +513,28 @@ class SyncManager {
     }
 
     /**
-     FreeNote配列からfreeNoteID配列を作成
+     Note配列からnoteID配列を作成
      - Parameters:
-        - array: FreeNote配列
-     - Returns: freeNoteID配列
+        - array: Note配列
+     - Returns: NoteID配列
      */
-    private func getFreeNoteIDArray(array: [FreeNote]) -> [String] {
-        var freeNoteIDArray: [String] = []
-        for freeNote in array {
-            freeNoteIDArray.append(freeNote.freeNoteID)
+    private func getNoteIDArray(array: [Note]) -> [String] {
+        var noteIDArray: [String] = []
+        for note in array {
+            noteIDArray.append(note.noteID)
         }
-        return freeNoteIDArray
+        return noteIDArray
     }
 
     /**
-     FreeNote配列からFreeNoteを取得(freeNoteID指定)
+     Note配列からNoteを取得(NoteID指定)
      - Parameters:
-        - array: 検索対象のFreeNote配列
-        - ID: 取得したいfreeNoteID
-     - Returns: FreeNoteデータ
+        - array: 検索対象のNote配列
+        - ID: 取得したいNoteID
+     - Returns: Noteデータ
     */
-    private func getFreeNoteWithID(array :[FreeNote], ID: String) -> FreeNote {
-        return array.filter{ $0.freeNoteID.contains(ID) }.first!
-    }
-    
-    // MARK: - PracticeNote同期用
-    
-    /// 練習ノートを同期
-    /// - Parameters:
-    ///   - completion: 完了処理
-    private func syncPracticeNote(completion: @escaping () -> ()) {
-        // Realmの練習ノートを全取得
-        let realmPracticeNoteArray: [PracticeNote] = realmManager.getAllPracticeNote()
-        
-        // Firebaseの練習ノートを全取得
-        firebaseManager.getAllPracticeNote(completion: {
-            // FirebaseもしくはRealmにしか存在しないデータを抽出
-            let firebasePracticeNoteIDArray = self.getPracticeNoteIDArray(array: self.firebaseManager.practiceNoteArray)
-            let realmPracticeNoteIDArray = self.getPracticeNoteIDArray(array: realmPracticeNoteArray)
-            let onlyRealmID = realmPracticeNoteIDArray.subtracting(firebasePracticeNoteIDArray)
-            let onlyFirebaseID = firebasePracticeNoteIDArray.subtracting(realmPracticeNoteIDArray)
-            
-            // Realmにしか存在しないデータをFirebaseに保存
-            for practiceNoteID in onlyRealmID {
-                let practiceNote = self.getPracticeNoteWithID(array: realmPracticeNoteArray, ID: practiceNoteID)
-                self.firebaseManager.savePracticeNote(practiceNote: practiceNote, completion: {})
-            }
-            
-            // Firebaseにしか存在しないデータをRealmに保存
-            for practiceNoteID in onlyFirebaseID {
-                let practiceNote = self.getPracticeNoteWithID(array: self.firebaseManager.practiceNoteArray, ID: practiceNoteID)
-                if self.realmManager.createRealm(object: practiceNote) {
-                    return
-                }
-            }
-            
-            // どちらにも存在するデータの更新日時を比較し新しい方に更新する
-            let commonID = realmPracticeNoteIDArray.subtracting(onlyRealmID)
-            for practiceNoteID in commonID {
-                let realmPracticeNote = self.getPracticeNoteWithID(array: realmPracticeNoteArray, ID: practiceNoteID)
-                let firebasePracticeNote = self.getPracticeNoteWithID(array: self.firebaseManager.practiceNoteArray, ID: practiceNoteID)
-                
-                if realmPracticeNote.updated_at > firebasePracticeNote.updated_at {
-                    // Realmデータの方が新しい
-                    self.firebaseManager.updatePracticeNote(practiceNote: realmPracticeNote)
-                } else if firebasePracticeNote.updated_at > realmPracticeNote.updated_at  {
-                    // Firebaseデータの方が新しい
-                    self.realmManager.updatePracticeNote(practiceNote: firebasePracticeNote)
-                }
-            }
-            completion()
-        })
-    }
-
-    /**
-     PracticeNote配列からpracticeNoteID配列を作成
-     - Parameters:
-        - array: PracticeNote配列
-     - Returns: practiceNoteID配列
-     */
-    private func getPracticeNoteIDArray(array: [PracticeNote]) -> [String] {
-        var practiceNoteIDArray: [String] = []
-        for practiceNote in array {
-            practiceNoteIDArray.append(practiceNote.practiceNoteID)
-        }
-        return practiceNoteIDArray
-    }
-
-    /**
-     PracticeNote配列からPracticeNoteを取得(practiceNoteID指定)
-     - Parameters:
-        - array: 検索対象のPracticeNote配列
-        - ID: 取得したいpracticeNoteID
-     - Returns: PracticeNoteデータ
-    */
-    private func getPracticeNoteWithID(array :[PracticeNote], ID: String) -> PracticeNote {
-        return array.filter{ $0.practiceNoteID.contains(ID) }.first!
-    }
-    
-    // MARK: - TournamentNote同期用
-    
-    /// 大会ノートを同期
-    /// - Parameters:
-    ///   - completion: 完了処理
-    private func syncTournamentNote(completion: @escaping () -> ()) {
-        // Realmの大会ノートを全取得
-        let realmTournamentNoteArray: [TournamentNote] = realmManager.getAllTournamentNote()
-        
-        // Firebaseの大会ノートを全取得
-        firebaseManager.getAllTournamentNote(completion: {
-            // FirebaseもしくはRealmにしか存在しないデータを抽出
-            let firebaseTournamentNoteIDArray = self.getTournamentNoteIDArray(array: self.firebaseManager.tournamentNoteArray)
-            let realmTournamentNoteIDArray = self.getTournamentNoteIDArray(array: realmTournamentNoteArray)
-            let onlyRealmID = realmTournamentNoteIDArray.subtracting(firebaseTournamentNoteIDArray)
-            let onlyFirebaseID = firebaseTournamentNoteIDArray.subtracting(realmTournamentNoteIDArray)
-            
-            // Realmにしか存在しないデータをFirebaseに保存
-            for tournamentNoteID in onlyRealmID {
-                let tournamentNote = self.getTournamentNoteWithID(array: realmTournamentNoteArray, ID: tournamentNoteID)
-                self.firebaseManager.saveTournamentNote(tournamentNote: tournamentNote, completion: {})
-            }
-            
-            // Firebaseにしか存在しないデータをRealmに保存
-            for tournamentNoteID in onlyFirebaseID {
-                let tournamentNote = self.getTournamentNoteWithID(array: self.firebaseManager.tournamentNoteArray, ID: tournamentNoteID)
-                if self.realmManager.createRealm(object: tournamentNote) {
-                    return
-                }
-            }
-            
-            // どちらにも存在するデータの更新日時を比較し新しい方に更新する
-            let commonID = realmTournamentNoteIDArray.subtracting(onlyRealmID)
-            for tournamentNoteID in commonID {
-                let realmTournamentNote = self.getTournamentNoteWithID(array: realmTournamentNoteArray, ID: tournamentNoteID)
-                let firebaseTournamentNote = self.getTournamentNoteWithID(array: self.firebaseManager.tournamentNoteArray, ID: tournamentNoteID)
-                
-                if realmTournamentNote.updated_at > firebaseTournamentNote.updated_at {
-                    // Realmデータの方が新しい
-                    self.firebaseManager.updateTournamentNote(tournamentNote: realmTournamentNote)
-                } else if firebaseTournamentNote.updated_at > realmTournamentNote.updated_at  {
-                    // Firebaseデータの方が新しい
-                    self.realmManager.updateTournamentNote(tournamentNote: firebaseTournamentNote)
-                }
-            }
-            completion()
-        })
-    }
-
-    /**
-     TournamentNote配列からtournamentNoteID配列を作成
-     - Parameters:
-        - array: TournamentNote配列
-     - Returns: tournamentNoteID配列
-     */
-    private func getTournamentNoteIDArray(array: [TournamentNote]) -> [String] {
-        var tournamentNoteIDArray: [String] = []
-        for tournamentNote in array {
-            tournamentNoteIDArray.append(tournamentNote.tournamentNoteID)
-        }
-        return tournamentNoteIDArray
-    }
-
-    /**
-     TournamentNote配列からTournamentNoteを取得(tournamentNoteID指定)
-     - Parameters:
-        - array: 検索対象のTournamentNote配列
-        - ID: 取得したいtournamentNoteID
-     - Returns: TournamentNoteデータ
-    */
-    private func getTournamentNoteWithID(array :[TournamentNote], ID: String) -> TournamentNote {
-        return array.filter{ $0.tournamentNoteID.contains(ID) }.first!
+    private func getNoteWithID(array :[Note], ID: String) -> Note {
+        return array.filter{ $0.noteID.contains(ID) }.first!
     }
     
 }

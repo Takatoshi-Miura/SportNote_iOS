@@ -16,7 +16,7 @@ protocol NoteViewControllerDelegate: AnyObject {
     // 大会ノート追加ボタンタップ時
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController)
     // フリーノートタップ時
-    func noteVCFreeNoteDidTap(freeNote: FreeNote)
+    func noteVCFreeNoteDidTap(freeNote: Note)
 }
 
 class NoteViewController: UIViewController {
@@ -26,8 +26,8 @@ class NoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
-    private var freeNote = FreeNote()
-    private var noteArray: [Any] = []
+    private var freeNote = Note()
+    private var noteArray: [Note] = []
     var delegate: NoteViewControllerDelegate?
     
     private enum Section: Int, CaseIterable {
@@ -66,16 +66,9 @@ class NoteViewController: UIViewController {
             case .note:
                 // ノートが削除されていれば取り除く
                 let note = noteArray[selectedIndex.row]
-                if note is PracticeNote {
-                    if (note as! PracticeNote).isDeleted {
-                        noteArray.remove(at: selectedIndex.row)
-                        tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
-                    }
-                } else {
-                    if (note as! TournamentNote).isDeleted {
-                        noteArray.remove(at: selectedIndex.row)
-                        tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
-                    }
+                if note.isDeleted {
+                    noteArray.remove(at: selectedIndex.row)
+                    tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
                 }
                 break
             }
@@ -106,9 +99,7 @@ class NoteViewController: UIViewController {
             syncManager.syncDatabase(completion: {
                 let realmManager = RealmManager()
                 // TODO: 日付の降順(新しい順)で表示
-                self.noteArray = []
-                self.noteArray.append(contentsOf: realmManager.getAllPracticeNote())
-                self.noteArray.append(contentsOf: realmManager.getAllTournamentNote())
+                self.noteArray = realmManager.getPracticeTournamentNote()
                 self.freeNote = realmManager.getFreeNote()
                 self.tableView.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
@@ -190,11 +181,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .note:
             if !noteArray.isEmpty {
-                if noteArray[indexPath.row] is PracticeNote {
-                    cell.textLabel?.text = PracticeNote(value: noteArray[indexPath.row]).detail
-                } else {
-                    cell.textLabel?.text = TournamentNote(value: noteArray[indexPath.row]).target
-                }
+                cell.textLabel?.text = noteArray[indexPath.row].detail
             }
             return cell
         }
@@ -208,7 +195,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
                 self.delegate?.noteVCFreeNoteDidTap(freeNote: freeNote)
             case .note:
                 let note = noteArray[indexPath.row]
-                if note is PracticeNote {
+                if note.noteType == NoteType.practice.rawValue {
                     // TODO: 練習ノートへ遷移
                 } else {
                     // TODO: 大会ノートへ遷移

@@ -616,40 +616,76 @@ extension RealmManager {
     }
 }
 
-// MARK: - FreeNote
+// MARK: - Note
 
 extension RealmManager {
     
-    /// Realmのフリーノートを取得
-    /// - Returns: フリーノートデータ
-    func getFreeNote() -> FreeNote {
+    /// Realmのノートを取得
+    /// - Returns: ノートデータ
+    func getAllNote() -> [Note] {
+        var noteArray: [Note] = []
         let realm = try! Realm()
-        return realm.objects(FreeNote.self).first ?? FreeNote()
+        let result = realm.objects(Note.self)
+        for note in result {
+            noteArray.append(note)
+        }
+        return noteArray
     }
     
-    /// Realmのフリーノートを更新
-    /// - Parameters:
-    ///    - freeNote: Realmオブジェクト
-    func updateFreeNote(freeNote: FreeNote) {
+    /// Realmのフリーノートを取得
+    /// - Returns: フリーノートデータ
+    func getFreeNote() -> Note {
         let realm = try! Realm()
-        let result = realm.objects(FreeNote.self)
-            .filter("freeNoteID == '\(freeNote.freeNoteID)'").first
+        let result = realm.objects(Note.self)
+            .filter("noteType == \(NoteType.free.rawValue)").first
+        return result ?? Note()
+    }
+    
+    /// Realmのノート(練習、大会)を取得
+    /// - Returns: ノートデータ
+    func getPracticeTournamentNote() -> [Note] {
+        var noteArray: [Note] = []
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+            .filter("(noteType == \(NoteType.practice.rawValue)) || (noteType == \(NoteType.tournament.rawValue))")
+        for note in result {
+            noteArray.append(note)
+        }
+        return noteArray
+    }
+    
+    /// Realmのノートを更新(同期用)
+    /// - Parameters:
+    ///    - note: Realmオブジェクト
+    func updateNote(note: Note) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+            .filter("noteID == '\(note.noteID)'").first
         try! realm.write {
-            result?.title = freeNote.title
-            result?.detail = freeNote.detail
-            result?.isDeleted = freeNote.isDeleted
-            result?.updated_at = freeNote.updated_at
+            result?.isDeleted = note.isDeleted
+            result?.updated_at = note.updated_at
+            result?.title = note.title
+            result?.date = note.date
+            result?.weather = note.weather
+            result?.temperature = note.temperature
+            result?.condition = note.condition
+            result?.reflection = note.reflection
+            result?.purpose = note.purpose
+            result?.detail = note.detail
+            result?.target = note.target
+            result?.consciousness = note.consciousness
+            result?.result = note.result
         }
     }
     
     /// フリーノートのタイトルを更新
     /// - Parameters:
-    ///   - ID: 更新したいフリーノートのID
+    ///   - noteID: 更新したいノートのID
     ///   - title: 新しいタイトル文字列
-    func updateFreeNoteTitle(freeNoteID: String, title: String) {
+    func updateNoteTitle(noteID: String, title: String) {
         let realm = try! Realm()
-        let result = realm.objects(FreeNote.self)
-                           .filter("freeNoteID == '\(freeNoteID)'").first
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
         try! realm.write {
             result?.title = title
             result?.updated_at = Date()
@@ -658,128 +694,25 @@ extension RealmManager {
     
     /// フリーノートの内容を更新
     /// - Parameters:
-    ///   - ID: 更新したいフリーノートのID
-    ///   - title: 新しいタイトル文字列
-    func updateFreeNoteDetail(freeNoteID: String, detail: String) {
+    ///   - noteID: 更新したいフリーノートのID
+    ///   - detail: 新しい内容の文字列
+    func updateNoteDetail(noteID: String, detail: String) {
         let realm = try! Realm()
-        let result = realm.objects(FreeNote.self)
-                           .filter("freeNoteID == '\(freeNoteID)'").first
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
         try! realm.write {
             result?.detail = detail
             result?.updated_at = Date()
         }
     }
     
-    /// Realmのフリーノートを削除
-    func deleteFreeNote() {
+    /// Realmのノートを全削除
+    func deleteAllNote() {
         let realm = try! Realm()
-        let freeNotes = realm.objects(FreeNote.self)
+        let Notes = realm.objects(Note.self)
         do{
           try realm.write{
-            realm.delete(freeNotes)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
-    
-}
-
-// MARK: - PracticeNote
-
-extension RealmManager {
-    
-    /// Realmの練習ノートを全取得
-    /// - Returns: 全練習ノートデータ
-    func getAllPracticeNote() -> [PracticeNote] {
-        var practiceNoteArray: [PracticeNote] = []
-        let realm = try! Realm()
-        let realmArray = realm.objects(PracticeNote.self)
-        for practiceNote in realmArray {
-            practiceNoteArray.append(practiceNote)
-        }
-        return practiceNoteArray
-    }
-    
-    /// Realmの練習ノートを更新
-    /// - Parameters:
-    ///    - practiceNote: Realmオブジェクト
-    func updatePracticeNote(practiceNote: PracticeNote) {
-        let realm = try! Realm()
-        let result = realm.objects(PracticeNote.self)
-            .filter("practiceNoteID == '\(practiceNote.practiceNoteID)'").first
-        try! realm.write {
-            result?.date = practiceNote.date
-            result?.weather = practiceNote.weather
-            result?.temperature = practiceNote.temperature
-            result?.condition = practiceNote.condition
-            result?.purpose = practiceNote.purpose
-            result?.detail = practiceNote.detail
-            result?.reflection = practiceNote.reflection
-            result?.isDeleted = practiceNote.isDeleted
-            result?.updated_at = practiceNote.updated_at
-        }
-    }
-    
-    /// Realmの練習ノートを削除
-    func deleteAllPracticeNote() {
-        let realm = try! Realm()
-        let practiceNotes = realm.objects(PracticeNote.self)
-        do{
-          try realm.write{
-            realm.delete(practiceNotes)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
-    
-}
-
-// MARK: - TournamentNote
-
-extension RealmManager {
-    
-    /// Realmの大会ノートを全取得
-    /// - Returns: 全大会ノートデータ
-    func getAllTournamentNote() -> [TournamentNote] {
-        var tournamentNoteArray: [TournamentNote] = []
-        let realm = try! Realm()
-        let realmArray = realm.objects(TournamentNote.self)
-        for tournamentNote in realmArray {
-            tournamentNoteArray.append(tournamentNote)
-        }
-        return tournamentNoteArray
-    }
-    
-    /// Realmの大会ノートを更新
-    /// - Parameters:
-    ///    - tournamentNote: Realmオブジェクト
-    func updateTournamentNote(tournamentNote: TournamentNote) {
-        let realm = try! Realm()
-        let result = realm.objects(TournamentNote.self)
-            .filter("tournamentNoteID == '\(tournamentNote.tournamentNoteID)'").first
-        try! realm.write {
-            result?.date = tournamentNote.date
-            result?.weather = tournamentNote.weather
-            result?.temperature = tournamentNote.temperature
-            result?.condition = tournamentNote.condition
-            result?.target = tournamentNote.target
-            result?.consciousness = tournamentNote.consciousness
-            result?.result = tournamentNote.result
-            result?.reflection = tournamentNote.reflection
-            result?.isDeleted = tournamentNote.isDeleted
-            result?.updated_at = tournamentNote.updated_at
-        }
-    }
-    
-    /// Realmの大会ノートを削除
-    func deleteAllTournamentNote() {
-        let realm = try! Realm()
-        let tournamentNotes = realm.objects(TournamentNote.self)
-        do{
-          try realm.write{
-            realm.delete(tournamentNotes)
+            realm.delete(Notes)
           }
         }catch {
           print("Error \(error)")

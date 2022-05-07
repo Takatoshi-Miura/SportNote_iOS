@@ -18,10 +18,7 @@ class DataConverter {
     private var measuresArray: [Measures] = []
     private var memoArray: [Memo] = []
     private var targetArray: [Target] = []
-    private var freeNoteArray: [FreeNote] = []
-    private var noteArray: [Any] = []
-    private var practiceNoteArray: [PracticeNote] = []
-    private var tournamentNoteArray: [TournamentNote] = []
+    private var noteArray: [Note] = []
     
     /// 旧データを新データに変換してRealmに保存
     func convertOldToRealm(completion: @escaping () -> ()) {
@@ -52,9 +49,7 @@ class DataConverter {
             resultArray.append(realmManager.createRealmWithUpdate(objects: measuresArray))
             resultArray.append(realmManager.createRealmWithUpdate(objects: memoArray))
             resultArray.append(realmManager.createRealmWithUpdate(objects: targetArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: freeNoteArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: practiceNoteArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: tournamentNoteArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: noteArray))
         } while resultArray.contains(false) // 成功するまで繰り返す
     }
     
@@ -131,7 +126,7 @@ class DataConverter {
         firebaseManager.getOldFreeNote({
             let oldFreeNote = self.firebaseManager.oldFreeNote
             if oldFreeNote.getUserID() != "FreeNoteIsEmpty" {
-                self.freeNoteArray.append(self.convertToFreeNote(oldFreeNote: oldFreeNote))
+                self.noteArray.append(self.convertToFreeNote(oldFreeNote: oldFreeNote))
                 self.firebaseManager.deleteOldFreeNote(oldFreeNote: oldFreeNote, completion: {})
             }
             completion()
@@ -145,11 +140,6 @@ class DataConverter {
             for oldNote in oldNoteArray {
                 let note = self.convertToNote(oldNote: oldNote)
                 self.noteArray.append(note)
-                if note is PracticeNote {
-                    self.practiceNoteArray.append(note as! PracticeNote)
-                } else {
-                    self.tournamentNoteArray.append(note as! TournamentNote)
-                }
                 self.firebaseManager.deleteOldNote(oldNote: oldNote, completion: {})
             }
             completion()
@@ -266,44 +256,40 @@ class DataConverter {
     /// - Parameters:
     ///   - oldFreeNote: 旧フリーノートデータ
     /// - Returns: 新フリーノートデータ
-    private func convertToFreeNote(oldFreeNote: FreeNote_old) -> FreeNote {
-        let freeNote = FreeNote()
-        freeNote.title = oldFreeNote.getTitle()
-        freeNote.detail = oldFreeNote.getDetail()
-        return freeNote
+    private func convertToFreeNote(oldFreeNote: FreeNote_old) -> Note {
+        let note = Note()
+        note.noteType = NoteType.free.rawValue
+        note.title = oldFreeNote.getTitle()
+        note.detail = oldFreeNote.getDetail()
+        return note
     }
 
-    /// 旧ノートを新ノートに変換
+    /// 旧ノート(練習、大会)を新ノートに変換
     /// - Parameters:
     ///   - oldNote: 旧ノートデータ
-    /// - Returns: 新ノートデータ(PracticeNote or TournamentNote)
-    private func convertToNote(oldNote: Note_old) -> Any {
+    /// - Returns: 新ノートデータ
+    private func convertToNote(oldNote: Note_old) -> Note {
+        let note = Note()
+        // 旧ノートのnoteIDは番号だが、対策と紐付ける必要があるため新たにUUIDを付けることはしない
+        // 新ノートからUUIDでID付けを行う
+        note.noteID = String(oldNote.getNoteID())
+        note.weather = convertToWeather(weather: oldNote.getWeather())
+        note.temperature = oldNote.getTemperature()
+        note.condition = oldNote.getPhysicalCondition()
+        note.reflection = oldNote.getReflection()
+        note.date = convertToDate(year: oldNote.getYear(), month: oldNote.getMonth(), date: oldNote.getDate())
+        
         if oldNote.getNoteType() == OldNoteType.practice.rawValue {
-            let practiceNote = PracticeNote()
-            // 旧ノートのnoteIDは番号だが、対策と紐付ける必要があるため新たにUUIDを付けることはしない
-            // 新ノートからUUIDでID付けを行う
-            practiceNote.practiceNoteID = String(oldNote.getNoteID())
-            practiceNote.weather = convertToWeather(weather: oldNote.getWeather())
-            practiceNote.temperature = oldNote.getTemperature()
-            practiceNote.condition = oldNote.getPhysicalCondition()
-            practiceNote.purpose = oldNote.getPurpose()
-            practiceNote.detail = oldNote.getDetail()
-            practiceNote.reflection = oldNote.getReflection()
-            practiceNote.date = convertToDate(year: oldNote.getYear(), month: oldNote.getMonth(), date: oldNote.getDate())
-            return practiceNote
+            note.noteType = NoteType.practice.rawValue
+            note.purpose = oldNote.getPurpose()
+            note.detail = oldNote.getDetail()
         } else {
-            let tournamentNote = TournamentNote()
-            tournamentNote.tournamentNoteID = String(oldNote.getNoteID())
-            tournamentNote.weather = convertToWeather(weather: oldNote.getWeather())
-            tournamentNote.temperature = oldNote.getTemperature()
-            tournamentNote.condition = oldNote.getPhysicalCondition()
-            tournamentNote.target = oldNote.getTarget()
-            tournamentNote.consciousness = oldNote.getConsciousness()
-            tournamentNote.result = oldNote.getResult()
-            tournamentNote.reflection = oldNote.getReflection()
-            tournamentNote.date = convertToDate(year: oldNote.getYear(), month: oldNote.getMonth(), date: oldNote.getDate())
-            return tournamentNote
+            note.noteType = NoteType.tournament.rawValue
+            note.target = oldNote.getTarget()
+            note.consciousness = oldNote.getConsciousness()
+            note.result = oldNote.getResult()
         }
+        return note
     }
 
 }

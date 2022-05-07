@@ -19,7 +19,7 @@ class FreeNoteCoordinator: Coordinator {
     func startFlow(in navigationController: UINavigationController) {
     }
     
-    func startFrow(in navigationController: UINavigationController, withFreeNote freeNote: FreeNote) {
+    func startFrow(in navigationController: UINavigationController, withFreeNote freeNote: Note) {
         self.navigationController = navigationController
         freeNoteViewController = FreeNoteViewController()
         freeNoteViewController.freeNote = freeNote

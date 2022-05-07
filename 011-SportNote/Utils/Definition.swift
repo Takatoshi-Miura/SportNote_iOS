@@ -22,6 +22,12 @@ enum Weather: Int, CaseIterable {
     }
 }
 
+enum NoteType: Int {
+    case free
+    case practice
+    case tournament
+}
+
 enum WeatherString: String {
     case sunny = "晴れ"
     case cloudy = "くもり"

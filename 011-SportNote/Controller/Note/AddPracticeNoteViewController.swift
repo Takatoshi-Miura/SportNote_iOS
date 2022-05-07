@@ -109,7 +109,8 @@ class AddPracticeNoteViewController: UIViewController {
     
     @IBAction func tapSaveButton(_ sender: Any) {
         // 練習ノートデータを作成＆保存
-        let practiceNote = PracticeNote()
+        let practiceNote = Note()
+        practiceNote.noteType = NoteType.practice.rawValue
         practiceNote.date = selectedDate
         practiceNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
         practiceNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
@@ -129,7 +130,7 @@ class AddPracticeNoteViewController: UIViewController {
         // Firebaseに送信
         if Network.isOnline() {
             let firebaseManager = FirebaseManager()
-            firebaseManager.savePracticeNote(practiceNote: practiceNote, completion: {})
+            firebaseManager.saveNote(note: practiceNote, completion: {})
         }
         
         // TODO: NoteVCにアニメーション付きで追加

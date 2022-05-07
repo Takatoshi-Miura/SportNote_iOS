@@ -97,7 +97,7 @@ class AddTournamentNoteViewController: UIViewController {
     @IBAction func tapSaveButton(_ sender: Any) {
         // 大会ノートデータを作成＆保存
         let realmManager = RealmManager()
-        let tournamentNote = TournamentNote()
+        let tournamentNote = Note()
         tournamentNote.date = selectedDate
         tournamentNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
         tournamentNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
@@ -115,7 +115,7 @@ class AddTournamentNoteViewController: UIViewController {
         // Firebaseに送信
         if Network.isOnline() {
             let firebaseManager = FirebaseManager()
-            firebaseManager.saveTournamentNote(tournamentNote: tournamentNote, completion: {})
+            firebaseManager.saveNote(note: tournamentNote, completion: {})
         }
         
         // TODO: NoteVCにアニメーション付きで追加

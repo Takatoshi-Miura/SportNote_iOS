@@ -24,9 +24,7 @@ class FirebaseManager {
     var measuresArray = [Measures]()
     var memoArray = [Memo]()
     var targetArray = [Target]()
-    var freeNote = FreeNote()
-    var practiceNoteArray = [PracticeNote]()
-    var tournamentNoteArray = [TournamentNote]()
+    var noteArray = [Note]()
     
     // MARK: - Create
     
@@ -153,77 +151,30 @@ class FirebaseManager {
         }
     }
     
-    /// フリーノートデータを保存
+    /// ノート(フリー、練習、大会)を保存
     /// - Parameters:
-    ///   - freeNote: フリーノートデータ
+    ///   - note: ノートデータ
     ///   - completion: 完了処理
-    func saveFreeNote(freeNote: FreeNote, completion: @escaping () -> ()) {
+    func saveNote(note: Note, completion: @escaping () -> ()) {
         let db = Firestore.firestore()
-        db.collection("FreeNote").document("\(freeNote.userID)_\(freeNote.freeNoteID)").setData([
-            "userID"        : freeNote.userID,
-            "freeNoteID"    : freeNote.freeNoteID,
-            "title"         : freeNote.title,
-            "detail"        : freeNote.detail,
-            "isDeleted"     : freeNote.isDeleted,
-            "created_at"    : freeNote.created_at,
-            "updated_at"    : freeNote.updated_at
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                completion()
-            }
-        }
-    }
-    
-    /// 練習ノートデータを保存
-    /// - Parameters:
-    ///   - practiceNote: 練習ノートデータ
-    ///   - completion: 完了処理
-    func savePracticeNote(practiceNote: PracticeNote, completion: @escaping () -> ()) {
-        let db = Firestore.firestore()
-        db.collection("PracticeNote").document("\(practiceNote.userID)_\(practiceNote.practiceNoteID)").setData([
-            "userID"        : practiceNote.userID,
-            "practiceNoteID": practiceNote.practiceNoteID,
-            "date"          : practiceNote.date,
-            "weather"       : practiceNote.weather,
-            "temperature"   : practiceNote.temperature,
-            "condition"     : practiceNote.condition,
-            "purpose"       : practiceNote.purpose,
-            "detail"        : practiceNote.detail,
-            "reflection"    : practiceNote.reflection,
-            "isDeleted"     : practiceNote.isDeleted,
-            "created_at"    : practiceNote.created_at,
-            "updated_at"    : practiceNote.updated_at
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                completion()
-            }
-        }
-    }
-    
-    /// 大会ノートデータを保存
-    /// - Parameters:
-    ///   - tournamentNote: 大会ノートデータ
-    ///   - completion: 完了処理
-    func saveTournamentNote(tournamentNote: TournamentNote, completion: @escaping () -> ()) {
-        let db = Firestore.firestore()
-        db.collection("TournamentNote").document("\(tournamentNote.userID)_\(tournamentNote.tournamentNoteID)").setData([
-            "userID"            : tournamentNote.userID,
-            "tournamentNoteID"  : tournamentNote.tournamentNoteID,
-            "date"              : tournamentNote.date,
-            "weather"           : tournamentNote.weather,
-            "temperature"       : tournamentNote.temperature,
-            "condition"         : tournamentNote.condition,
-            "target"            : tournamentNote.target,
-            "consciousness"     : tournamentNote.consciousness,
-            "result"            : tournamentNote.result,
-            "reflection"        : tournamentNote.reflection,
-            "isDeleted"         : tournamentNote.isDeleted,
-            "created_at"        : tournamentNote.created_at,
-            "updated_at"        : tournamentNote.updated_at
+        db.collection("Note").document("\(note.userID)_\(note.noteID)").setData([
+            "userID"        : note.userID,
+            "noteID"        : note.noteID,
+            "noteType"      : note.noteType,
+            "isDeleted"     : note.isDeleted,
+            "created_at"    : note.created_at,
+            "updated_at"    : note.updated_at,
+            "title"         : note.title,
+            "date"          : note.date,
+            "weather"       : note.weather,
+            "temperature"   : note.temperature,
+            "condition"     : note.condition,
+            "reflection"    : note.reflection,
+            "purpose"       : note.purpose,
+            "detail"        : note.detail,
+            "target"        : note.target,
+            "consciousness" : note.consciousness,
+            "result"        : note.result
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -394,100 +345,40 @@ class FirebaseManager {
             }
     }
     
-    /// フリーノートデータを取得
+    /// ノート(フリー、練習、大会)を取得
     /// - Parameters:
     ///   - completion: 完了処理
-    func getAllFreeNote(completion: @escaping () -> ()) {
+    func getAllNote(completion: @escaping () -> ()) {
         let db = Firestore.firestore()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        db.collection("FreeNote")
+        db.collection("Note")
             .whereField("userID", isEqualTo: userID)
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {
                     print("Error getting documents: \(err)")
                 } else {
+                    self.noteArray = []
                     for document in querySnapshot!.documents {
                         let collection = document.data()
-                        let freeNote = FreeNote()
-                        freeNote.userID = collection["userID"] as! String
-                        freeNote.freeNoteID = collection["freeNoteID"] as! String
-                        freeNote.title = collection["title"] as! String
-                        freeNote.detail = collection["detail"] as! String
-                        freeNote.isDeleted = collection["isDeleted"] as! Bool
-                        freeNote.created_at = (collection["created_at"] as! Timestamp).dateValue()
-                        freeNote.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
-                        self.freeNote = freeNote
-                    }
-                    completion()
-                }
-            }
-    }
-    
-    /// 練習ノートデータを取得
-    /// - Parameters:
-    ///   - completion: 完了処理
-    func getAllPracticeNote(completion: @escaping () -> ()) {
-        let db = Firestore.firestore()
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        db.collection("PracticeNote")
-            .whereField("userID", isEqualTo: userID)
-            .getDocuments() { (querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                } else {
-                    self.practiceNoteArray = []
-                    for document in querySnapshot!.documents {
-                        let collection = document.data()
-                        let practiceNote = PracticeNote()
-                        practiceNote.userID = collection["userID"] as! String
-                        practiceNote.practiceNoteID = collection["practiceNoteID"] as! String
-                        practiceNote.date = (collection["date"] as! Timestamp).dateValue()
-                        practiceNote.weather = collection["weather"] as! Int
-                        practiceNote.temperature = collection["temperature"] as! Int
-                        practiceNote.condition = collection["condition"] as! String
-                        practiceNote.purpose = collection["purpose"] as! String
-                        practiceNote.detail = collection["detail"] as! String
-                        practiceNote.reflection = collection["reflection"] as! String
-                        practiceNote.isDeleted = collection["isDeleted"] as! Bool
-                        practiceNote.created_at = (collection["created_at"] as! Timestamp).dateValue()
-                        practiceNote.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
-                        self.practiceNoteArray.append(practiceNote)
-                    }
-                    completion()
-                }
-            }
-    }
-    
-    /// 大会ノートデータを取得
-    /// - Parameters:
-    ///   - completion: 完了処理
-    func getAllTournamentNote(completion: @escaping () -> ()) {
-        let db = Firestore.firestore()
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        db.collection("TournamentNote")
-            .whereField("userID", isEqualTo: userID)
-            .getDocuments() { (querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                } else {
-                    self.tournamentNoteArray = []
-                    for document in querySnapshot!.documents {
-                        let collection = document.data()
-                        let tournamentNote = TournamentNote()
-                        tournamentNote.userID = collection["userID"] as! String
-                        tournamentNote.tournamentNoteID = collection["tournamentNoteID"] as! String
-                        tournamentNote.date = (collection["date"] as! Timestamp).dateValue()
-                        tournamentNote.weather = collection["weather"] as! Int
-                        tournamentNote.temperature = collection["temperature"] as! Int
-                        tournamentNote.condition = collection["condition"] as! String
-                        tournamentNote.target = collection["target"] as! String
-                        tournamentNote.consciousness = collection["consciousness"] as! String
-                        tournamentNote.result = collection["result"] as! String
-                        tournamentNote.reflection = collection["reflection"] as! String
-                        tournamentNote.isDeleted = collection["isDeleted"] as! Bool
-                        tournamentNote.created_at = (collection["created_at"] as! Timestamp).dateValue()
-                        tournamentNote.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
-                        self.tournamentNoteArray.append(tournamentNote)
+                        let note = Note()
+                        note.userID = collection["userID"] as! String
+                        note.noteID = collection["noteID"] as! String
+                        note.noteType = collection["noteType"] as! Int
+                        note.isDeleted = collection["isDeleted"] as! Bool
+                        note.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                        note.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
+                        note.title = collection["title"] as! String
+                        note.date = (collection["date"] as! Timestamp).dateValue()
+                        note.weather = collection["weather"] as! Int
+                        note.temperature = collection["temperature"] as! Int
+                        note.condition = collection["condition"] as! String
+                        note.reflection = collection["reflection"] as! String
+                        note.purpose = collection["purpose"] as! String
+                        note.detail = collection["detail"] as! String
+                        note.target = collection["target"] as! String
+                        note.consciousness = collection["consciousness"] as! String
+                        note.result = collection["result"] as! String
+                        self.noteArray.append(note)
                     }
                     completion()
                 }
@@ -756,69 +647,27 @@ class FirebaseManager {
         }
     }
     
-    /// フリーノートを更新
+    /// ノート(フリー、練習、大会)を更新
     /// - Parameters:
-    ///   - freeNote: フリーノート
-    func updateFreeNote(freeNote: FreeNote) {
+    ///   - note: ノート
+    func updateNote(note: Note) {
         let db = Firestore.firestore()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        let database = db.collection("FreeNote").document("\(userID)_\(freeNote.freeNoteID)")
+        let database = db.collection("Note").document("\(userID)_\(note.noteID)")
         database.updateData([
-            "title"         : freeNote.title,
-            "detail"        : freeNote.detail,
-            "isDeleted"     : freeNote.isDeleted,
-            "updated_at"    : freeNote.updated_at
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-            }
-        }
-    }
-    
-    /// 練習ノートを更新
-    /// - Parameters:
-    ///   - freeNote: 練習ノート
-    func updatePracticeNote(practiceNote: PracticeNote) {
-        let db = Firestore.firestore()
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        let database = db.collection("PracticeNote").document("\(userID)_\(practiceNote.practiceNoteID)")
-        database.updateData([
-            "date"          : practiceNote.date,
-            "weather"       : practiceNote.weather,
-            "temperature"   : practiceNote.temperature,
-            "condition"     : practiceNote.condition,
-            "purpose"       : practiceNote.purpose,
-            "detail"        : practiceNote.detail,
-            "reflection"    : practiceNote.reflection,
-            "isDeleted"     : practiceNote.isDeleted,
-            "updated_at"    : practiceNote.updated_at
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-            }
-        }
-    }
-    
-    /// 大会ノートを更新
-    /// - Parameters:
-    ///   - freeNote: 大会ノート
-    func updateTournamentNote(tournamentNote: TournamentNote) {
-        let db = Firestore.firestore()
-        let userID = UserDefaults.standard.object(forKey: "userID") as! String
-        let database = db.collection("TournamentNote").document("\(userID)_\(tournamentNote.tournamentNoteID)")
-        database.updateData([
-            "date"          : tournamentNote.date,
-            "weather"       : tournamentNote.weather,
-            "temperature"   : tournamentNote.temperature,
-            "condition"     : tournamentNote.condition,
-            "target"        : tournamentNote.target,
-            "consciousness" : tournamentNote.consciousness,
-            "result"        : tournamentNote.result,
-            "reflection"    : tournamentNote.reflection,
-            "isDeleted"     : tournamentNote.isDeleted,
-            "updated_at"    : tournamentNote.updated_at
+            "isDeleted"     : note.isDeleted,
+            "updated_at"    : note.updated_at,
+            "title"         : note.title,
+            "date"          : note.date,
+            "weather"       : note.weather,
+            "temperature"   : note.temperature,
+            "condition"     : note.condition,
+            "reflection"    : note.reflection,
+            "purpose"       : note.purpose,
+            "detail"        : note.detail,
+            "target"        : note.target,
+            "consciousness" : note.consciousness,
+            "result"        : note.result
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")

@@ -45,7 +45,7 @@ extension NoteCoordinator: NoteViewControllerDelegate {
     }
     
     // NoteVC → FreeNoteVC
-    func noteVCFreeNoteDidTap(freeNote: FreeNote) {
+    func noteVCFreeNoteDidTap(freeNote: Note) {
         freeNoteCoordinator.startFrow(in: navigationController!, withFreeNote: freeNote)
     }
     

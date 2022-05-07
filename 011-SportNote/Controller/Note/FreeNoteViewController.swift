@@ -15,7 +15,7 @@ class FreeNoteViewController: UIViewController {
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var detailTextView: UITextView!
-    var freeNote = FreeNote()
+    var freeNote = Note()
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -29,7 +29,7 @@ class FreeNoteViewController: UIViewController {
         // Firebaseに送信
         if Network.isOnline() {
             let firebaseManager = FirebaseManager()
-            firebaseManager.updateFreeNote(freeNote: freeNote)
+            firebaseManager.updateNote(note: freeNote)
         }
     }
     
@@ -76,7 +76,7 @@ extension FreeNoteViewController: UITextFieldDelegate {
         }
         
         let realmManager = RealmManager()
-        realmManager.updateFreeNoteTitle(freeNoteID: freeNote.freeNoteID, title: textField.text!)
+        realmManager.updateNoteTitle(noteID: freeNote.noteID, title: textField.text!)
         return true
     }
     
@@ -91,7 +91,7 @@ extension FreeNoteViewController: UITextViewDelegate {
         }
         
         let realmManager = RealmManager()
-        realmManager.updateFreeNoteDetail(freeNoteID: freeNote.freeNoteID, detail: textView.text!)
+        realmManager.updateNoteDetail(noteID: freeNote.noteID, detail: textView.text!)
     }
     
 }
