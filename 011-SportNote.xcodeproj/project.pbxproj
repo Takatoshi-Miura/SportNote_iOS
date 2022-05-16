@@ -320,6 +320,7 @@
 			isa = PBXGroup;
 			children = (
 				8DB9E58924DEBDFC0042A7A2 /* 011-SportNoteRelease.entitlements */,
+				8D12B0C727F7D01E0040AF3D /* Definition+String.swift */,
 				8D481D4A27F7D2870082D956 /* Localizable.strings */,
 				8D665D2F24A17CD400441B32 /* Assets.xcassets */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
@@ -332,7 +333,6 @@
 			isa = PBXGroup;
 			children = (
 				8D481D4C27F7D9030082D956 /* Definition.swift */,
-				8D12B0C727F7D01E0040AF3D /* Definition+String.swift */,
 				8D481D6A27F98BF60082D956 /* Network.swift */,
 				8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */,
 				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,

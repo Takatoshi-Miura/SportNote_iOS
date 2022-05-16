@@ -26,6 +26,7 @@ protocol NoteViewControllerDelegate: AnyObject {
 class NoteViewController: UIViewController {
     
     // MARK: - UI,Variable
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
@@ -37,6 +38,7 @@ class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationController()
+        initSearchBar()
         initTableView()
         // 初回のみ旧データ変換後に同期処理
         if Network.isOnline() {
@@ -70,6 +72,10 @@ class NoteViewController: UIViewController {
     
     func initNavigationController() {
         self.title = TITLE_NOTE
+    }
+    
+    func initSearchBar() {
+        searchBar.searchTextField.placeholder = TITLE_SEARCH_NOTE
     }
     
     func initTableView() {
@@ -138,6 +144,23 @@ class NoteViewController: UIViewController {
                         message: MESSAGE_ADD_NOTE,
                         actions: alertActions,
                         frame: addButton.frame)
+    }
+    
+}
+
+extension NoteViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // 未入力の場合は全検索
+        if searchBar.text == "" {
+            
+        }
+        // TODO: 検索機能の実装
+        
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
     
 }

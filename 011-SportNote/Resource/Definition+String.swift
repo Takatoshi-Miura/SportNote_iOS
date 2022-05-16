@@ -101,6 +101,7 @@ let TITLE_ORDER = NSLocalizedString("GroupOrder", comment: "")
 let TITLE_ADD_NOTE = NSLocalizedString("AddNoteTitle", comment: "")
 let MESSAGE_ADD_NOTE = NSLocalizedString("AddMessage", comment: "")
 let TITLE_FREE_NOTE = NSLocalizedString("FreeNote", comment: "")
+let TITLE_SEARCH_NOTE = NSLocalizedString("SearchNoteTitle", comment: "")
 
 // MARK: - Note
 let TITLE_ADD_PRACTICE_NOTE = NSLocalizedString("AddPracticeNoteTitle", comment: "")

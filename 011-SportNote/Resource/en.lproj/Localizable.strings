@@ -99,6 +99,7 @@
 "AddNoteTitle" = "Add note";
 "AddMessage" = "What do you want to add?";
 "FreeNote" = "FreeNote";
+"SearchNoteTitle" = "Search note";
 
 // MARK: - Note
 "AddPracticeNoteTitle" = "Add Practice Note";

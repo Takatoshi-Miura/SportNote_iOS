@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="adView" destination="pKa-ZZ-T5q" id="oGo-7s-aIj"/>
                 <outlet property="addButton" destination="1df-oQ-f21" id="xRp-bO-YVP"/>
+                <outlet property="searchBar" destination="6Jp-u5-Mcw" id="P64-pH-pBN"/>
                 <outlet property="tableView" destination="Mrm-5e-xpt" id="Zdw-mA-1mE"/>
                 <outlet property="view" destination="iN0-l3-epB" id="7WE-z6-chL"/>
             </connections>
@@ -23,13 +24,20 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Mrm-5e-xpt">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="518"/>
+                    <rect key="frame" x="0.0" y="51" width="320" height="467"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Ljc-qL-iBe"/>
                         <outlet property="delegate" destination="-1" id="lSE-ex-oQk"/>
                     </connections>
                 </tableView>
+                <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="6Jp-u5-Mcw">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="Vw9-4n-eFd"/>
+                    </connections>
+                </searchBar>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pKa-ZZ-T5q">
                     <rect key="frame" x="0.0" y="518" width="320" height="50"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -49,15 +57,18 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="Mrm-5e-xpt" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="0hL-fj-cLH"/>
                 <constraint firstItem="Mrm-5e-xpt" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="3dR-qX-pKt"/>
                 <constraint firstItem="pKa-ZZ-T5q" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="55R-bQ-7Yx"/>
+                <constraint firstItem="6Jp-u5-Mcw" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="I5g-IE-Fyw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Mrm-5e-xpt" secondAttribute="bottom" constant="50" id="Pvr-Xi-AZK"/>
+                <constraint firstItem="6Jp-u5-Mcw" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="So7-M6-1uJ"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Mrm-5e-xpt" secondAttribute="trailing" id="TEd-0q-mw9"/>
+                <constraint firstItem="6Jp-u5-Mcw" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Taj-rx-sBl"/>
                 <constraint firstItem="pKa-ZZ-T5q" firstAttribute="top" secondItem="1df-oQ-f21" secondAttribute="bottom" constant="20" id="Vb4-gv-8na"/>
                 <constraint firstItem="pKa-ZZ-T5q" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="bhY-Xb-ret"/>
                 <constraint firstItem="pKa-ZZ-T5q" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="dbB-Mo-ngf"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="1df-oQ-f21" secondAttribute="trailing" constant="20" id="h32-VL-qDb"/>
+                <constraint firstItem="Mrm-5e-xpt" firstAttribute="top" secondItem="6Jp-u5-Mcw" secondAttribute="bottom" id="rru-ho-04f"/>
             </constraints>
             <point key="canvasLocation" x="138.75" y="103.52112676056338"/>
         </view>
