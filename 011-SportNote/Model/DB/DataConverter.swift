@@ -28,6 +28,7 @@ class DataConverter {
                 let group = Group()
                 group.title = TITLE_UNCATEGORIZED
                 group.color = Color.gray.rawValue
+                self.groupArray = []
                 self.groupArray.append(group)
                 // 課題を未分類グループに所属させる
                 for task in self.taskArray {

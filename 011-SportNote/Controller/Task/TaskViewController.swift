@@ -40,11 +40,15 @@ class TaskViewController: UIViewController {
         initNavigationController()
         initTableView()
         // 初回のみ旧データ変換後に同期処理
-        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-        let dataConverter = DataConverter()
-        dataConverter.convertOldToRealm(completion: {
+        if Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let dataConverter = DataConverter()
+            dataConverter.convertOldToRealm(completion: {
+                self.syncData()
+            })
+        } else {
             self.syncData()
-        })
+        }
     }
     
     override func viewDidLayoutSubviews() {

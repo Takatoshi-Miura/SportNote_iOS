@@ -119,7 +119,7 @@ class SyncManager {
             // Firebaseにしか存在しないデータをRealmに保存
             for groupID in onlyFirebaseID {
                 let group = self.getGroupWithID(array: self.firebaseManager.groupArray, ID: groupID)
-                if self.realmManager.createRealm(object: group) {
+                if !self.realmManager.createRealm(object: group) {
                     return
                 }
             }
@@ -193,7 +193,7 @@ class SyncManager {
             // Firebaseにしか存在しないデータをRealmに保存
             for taskID in onlyFirebaseID {
                 let task = self.getTaskWithID(array: self.firebaseManager.taskArray, ID: taskID)
-                if self.realmManager.createRealm(object: task) {
+                if !self.realmManager.createRealm(object: task) {
                     return
                 }
             }
@@ -267,7 +267,7 @@ class SyncManager {
             // Firebaseにしか存在しないデータをRealmに保存
             for measuresID in onlyFirebaseID {
                 let measures = self.getMeasuresWithID(array: self.firebaseManager.measuresArray, ID: measuresID)
-                if self.realmManager.createRealm(object: measures) {
+                if !self.realmManager.createRealm(object: measures) {
                     return
                 }
             }
@@ -341,7 +341,7 @@ class SyncManager {
             // Firebaseにしか存在しないデータをRealmに保存
             for memoID in onlyFirebaseID {
                 let memo = self.getMemoWithID(array: self.firebaseManager.memoArray, ID: memoID)
-                if self.realmManager.createRealm(object: memo) {
+                if !self.realmManager.createRealm(object: memo) {
                     return
                 }
             }
@@ -415,7 +415,7 @@ class SyncManager {
             // Firebaseにしか存在しないデータをRealmに保存
             for targetID in onlyFirebaseID {
                 let target = self.getTargetWithID(array: self.firebaseManager.targetArray, ID: targetID)
-                if self.realmManager.createRealm(object: target) {
+                if !self.realmManager.createRealm(object: target) {
                     return
                 }
             }
@@ -489,7 +489,7 @@ class SyncManager {
             // Firebaseにしか存在しないデータをRealmに保存
             for noteID in onlyFirebaseID {
                 let note = self.getNoteWithID(array: self.firebaseManager.noteArray, ID: noteID)
-                if self.realmManager.createRealm(object: note) {
+                if !self.realmManager.createRealm(object: note) {
                     return
                 }
             }
