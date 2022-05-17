@@ -16,15 +16,19 @@ class TaskCoordinator: Coordinator {
     let addTaskCoordinator = AddTaskCoordinator()
     let groupCoordinator = GroupCoordinator()
     let taskDetailCoordinator = TaskDetailCoordinator()
-    let completedTaskCoordinator = CompletedTaskCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
     
     func startFlow(in navigationController: UINavigationController) {
+    }
+    
+    func startFlow(in navigationController: UINavigationController, isCompleted: Bool, groupID: String) {
         self.navigationController = navigationController
         taskViewController = TaskViewController()
         taskViewController.delegate = self
+        taskViewController.isCompleted = isCompleted
+        taskViewController.groupID = groupID
         navigationController.pushViewController(taskViewController, animated: true)
     }
     
@@ -55,9 +59,10 @@ extension TaskCoordinator: TaskViewControllerDelegate {
         taskDetailCoordinator.startFrow(in: navigationController!, withTask: task)
     }
     
-    // TaskVC → completedTaskVC
+    // TaskVC → CompletedTaskVC
     func taskVCCompletedTaskCellDidTap(groupID: String) {
-        completedTaskCoordinator.startFrow(in: navigationController!, withGroupID: groupID)
+        let taskCoordinator = TaskCoordinator()
+        taskCoordinator.startFlow(in: navigationController!, isCompleted: true, groupID: groupID)
     }
     
 }

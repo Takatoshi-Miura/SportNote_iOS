@@ -34,13 +34,17 @@ class TaskViewController: UIViewController {
     private var adMobView: GADBannerView?
     var delegate: TaskViewControllerDelegate?
     
+    var isCompleted = false
+    var groupID = ""
+    private var completedTaskArray: [Task] = []
+    
     // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        initNavigationController()
+        initView()
         initTableView()
         // 初回のみ旧データ変換後に同期処理
-        if Network.isOnline() {
+        if !isCompleted && Network.isOnline() {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let dataConverter = DataConverter()
             dataConverter.convertOldToRealm(completion: {
@@ -59,13 +63,22 @@ class TaskViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let selectedIndex = tableView.indexPathForSelectedRow {
-            // 課題が完了or削除されていれば取り除く
-            if selectedIndex.row < taskArray[selectedIndex.section].count {
-                let task = taskArray[selectedIndex.section][selectedIndex.row]
-                if task.isComplete || task.isDeleted {
-                    taskArray[selectedIndex.section].remove(at: selectedIndex.row)
+            // 課題が完了状態が更新or削除されていれば取り除く
+            if isCompleted {
+                let task = completedTaskArray[selectedIndex.row]
+                if !task.isComplete || task.isDeleted {
+                    completedTaskArray.remove(at: selectedIndex.row)
                     tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
                     return
+                }
+            } else {
+                if selectedIndex.row < taskArray[selectedIndex.section].count {
+                    let task = taskArray[selectedIndex.section][selectedIndex.row]
+                    if task.isComplete || task.isDeleted {
+                        taskArray[selectedIndex.section].remove(at: selectedIndex.row)
+                        tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                        return
+                    }
                 }
             }
             tableView.reloadRows(at: [selectedIndex], with: .none)
@@ -75,14 +88,19 @@ class TaskViewController: UIViewController {
         }
     }
     
-    func initNavigationController() {
-        self.title = TITLE_TASK
-        
-        let settingButton = UIBarButtonItem(image: UIImage(systemName: "gear"),
-                                            style: .plain,
-                                            target: self,
-                                            action: #selector(openSettingView(_:)))
-        navigationItem.rightBarButtonItems = [settingButton]
+    /// 画面初期化
+    func initView() {
+        if isCompleted {
+            self.title = TITLE_COMPLETED_TASK
+            addButton.isHidden = true
+        } else {
+            self.title = TITLE_TASK
+            let settingButton = UIBarButtonItem(image: UIImage(systemName: "gear"),
+                                                style: .plain,
+                                                target: self,
+                                                action: #selector(openSettingView(_:)))
+            navigationItem.rightBarButtonItems = [settingButton]
+        }
     }
     
     func initTableView() {
@@ -102,7 +120,7 @@ class TaskViewController: UIViewController {
     
     /// データの同期処理
     @objc func syncData() {
-        if Network.isOnline() {
+        if !isCompleted && Network.isOnline() {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let syncManager = SyncManager()
             syncManager.syncDatabase(completion: {
@@ -117,8 +135,12 @@ class TaskViewController: UIViewController {
     /// データを再取得
     func refreshData() {
         let realmManager = RealmManager()
-        groupArray = realmManager.getGroupArrayForTaskView()
-        taskArray = realmManager.getTaskArrayForTaskView()
+        if isCompleted {
+            completedTaskArray = realmManager.getTasksInGroup(ID: groupID, isCompleted: isCompleted)
+        } else {
+            groupArray = realmManager.getGroupArrayForTaskView()
+            taskArray = realmManager.getTaskArrayForTaskView()
+        }
         tableView.refreshControl?.endRefreshing()
         tableView.reloadData()
     }
@@ -196,10 +218,16 @@ class TaskViewController: UIViewController {
 extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return groupArray.count
+        if isCompleted {
+            return 1
+        } else {
+            return groupArray.count
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if isCompleted { return nil }
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: GroupHeaderView.self))
         if let headerView = view as? GroupHeaderView {
             headerView.delegate = self
@@ -210,6 +238,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if isCompleted { return 0.1 }
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: GroupHeaderView.self))
         if let headerView = view as? GroupHeaderView {
             return headerView.bounds.height
@@ -218,28 +247,42 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskArray[section].count + 1
+        if isCompleted {
+            return completedTaskArray.count
+        } else {
+            return taskArray[section].count + 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        if indexPath.row >= taskArray[indexPath.section].count {
-            // 完了済み課題セル
-            cell.textLabel?.text = TITLE_COMPLETED_TASK
-            cell.textLabel?.textColor = UIColor.systemBlue
-        } else {
+        if isCompleted {
             // 課題セル
-            let task = taskArray[indexPath.section][indexPath.row]
-            cell.textLabel?.text = task.title
+            let task = completedTaskArray[indexPath.row]
             let realmManager = RealmManager()
+            cell.textLabel?.text = task.title
             cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
             cell.detailTextLabel?.textColor = UIColor.lightGray
+        } else {
+            if indexPath.row >= taskArray[indexPath.section].count {
+                // 完了済み課題セル
+                cell.textLabel?.text = TITLE_COMPLETED_TASK
+                cell.textLabel?.textColor = UIColor.systemBlue
+            } else {
+                // 課題セル
+                let task = taskArray[indexPath.section][indexPath.row]
+                let realmManager = RealmManager()
+                cell.textLabel?.text = task.title
+                cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
+                cell.detailTextLabel?.textColor = UIColor.lightGray
+            }
         }
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if isCompleted { return false }
         if indexPath.row >= taskArray[indexPath.section].count {
             return false    // 解決済みの課題セルは編集不可
         } else {
@@ -248,6 +291,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        if isCompleted { return false }
         if indexPath.row >= taskArray[indexPath.section].count {
             return false    // 完了課題セルは並び替え不可
         } else {
@@ -279,15 +323,21 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 完了済み課題セル
-        if indexPath.row >= taskArray[indexPath.section].count {
-            let groupID = groupArray[indexPath.section].groupID
-            delegate?.taskVCCompletedTaskCellDidTap(groupID: groupID)
-            return
+        if isCompleted {
+            // 課題セル
+            let task = completedTaskArray[indexPath.row]
+            delegate?.taskVCTaskCellDidTap(task: task)
+        } else {
+            // 完了済み課題セル
+            if indexPath.row >= taskArray[indexPath.section].count {
+                let groupID = groupArray[indexPath.section].groupID
+                delegate?.taskVCCompletedTaskCellDidTap(groupID: groupID)
+                return
+            }
+            // 課題セル
+            let task = taskArray[indexPath.section][indexPath.row]
+            delegate?.taskVCTaskCellDidTap(task: task)
         }
-        // 課題セル
-        let task = taskArray[indexPath.section][indexPath.row]
-        delegate?.taskVCTaskCellDidTap(task: task)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

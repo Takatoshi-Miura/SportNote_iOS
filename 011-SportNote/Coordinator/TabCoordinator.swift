@@ -127,7 +127,7 @@ class TabCoordinator: NSObject, Coordinator {
         
         switch page {
         case .task:
-            taskCoordinator.startFlow(in: navController)
+            taskCoordinator.startFlow(in: navController, isCompleted: false, groupID: "")
         case .note:
             noteCoordinator.startFlow(in: navController)
         case .target:
