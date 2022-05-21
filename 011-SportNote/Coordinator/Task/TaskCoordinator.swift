@@ -11,11 +11,6 @@ import UIKit
 class TaskCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
-    var taskViewController = TaskViewController()
-    let addGroupCoordinator = AddGroupCoordinator()
-    let addTaskCoordinator = AddTaskCoordinator()
-    let groupCoordinator = GroupCoordinator()
-    let taskDetailCoordinator = TaskDetailCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -25,7 +20,7 @@ class TaskCoordinator: Coordinator {
     
     func startFlow(in navigationController: UINavigationController, isCompleted: Bool, groupID: String) {
         self.navigationController = navigationController
-        taskViewController = TaskViewController()
+        let taskViewController = TaskViewController()
         taskViewController.delegate = self
         taskViewController.isCompleted = isCompleted
         taskViewController.groupID = groupID
@@ -41,21 +36,25 @@ extension TaskCoordinator: TaskViewControllerDelegate {
     
     // TaskVC → AddGroupVC
     func taskVCAddGroupDidTap(_ viewController: UIViewController) {
+        let addGroupCoordinator = AddGroupCoordinator()
         addGroupCoordinator.startFlow(in: viewController)
     }
     
     // TaskVC → AddTaskVC
     func taskVCAddTaskDidTap(_ viewController: UIViewController) {
+        let addTaskCoordinator = AddTaskCoordinator()
         addTaskCoordinator.startFlow(in: viewController)
     }
     
     // TaskVC → GroupVC
     func taskVCHeaderDidTap(group: Group) {
+        let groupCoordinator = GroupCoordinator()
         groupCoordinator.startFrow(in: navigationController!, withGroup: group)
     }
     
     // TaskVC → TaskDetailVC
     func taskVCTaskCellDidTap(task: Task) {
+        let taskDetailCoordinator = TaskDetailCoordinator()
         taskDetailCoordinator.startFrow(in: navigationController!, withTask: task)
     }
     
@@ -63,6 +62,12 @@ extension TaskCoordinator: TaskViewControllerDelegate {
     func taskVCCompletedTaskCellDidTap(groupID: String) {
         let taskCoordinator = TaskCoordinator()
         taskCoordinator.startFlow(in: navigationController!, isCompleted: true, groupID: groupID)
+    }
+    
+    // TaskVC → SettingVC
+    func taskVCSettingDidTap(_ viewController: UIViewController) {
+        let settingCoordinator = SettingCoordinator()
+        settingCoordinator.startFlow(in: viewController)
     }
     
 }

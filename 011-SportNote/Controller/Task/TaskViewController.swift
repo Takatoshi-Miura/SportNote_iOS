@@ -21,11 +21,13 @@ protocol TaskViewControllerDelegate: AnyObject {
     func taskVCTaskCellDidTap(task: Task)
     // 完了した課題セルタップ時の処理
     func taskVCCompletedTaskCellDidTap(groupID: String)
+    // 設定ボタンタップ時の処理
+    func taskVCSettingDidTap(_ viewController: UIViewController)
 }
 
 class TaskViewController: UIViewController {
     
-    // MARK: UI,Variable
+    // MARK: - UI,Variable
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
@@ -38,7 +40,7 @@ class TaskViewController: UIViewController {
     var groupID = ""
     private var completedTaskArray: [Task] = []
     
-    // MARK: LifeCycle
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -99,7 +101,7 @@ class TaskViewController: UIViewController {
                                                 style: .plain,
                                                 target: self,
                                                 action: #selector(openSettingView(_:)))
-            navigationItem.rightBarButtonItems = [settingButton]
+            navigationItem.leftBarButtonItems = [settingButton]
         }
     }
     
@@ -145,8 +147,9 @@ class TaskViewController: UIViewController {
         tableView.reloadData()
     }
     
+    /// 設定タップ時の処理
     @objc func openSettingView(_ sender: UIBarButtonItem) {
-//        self.delegate?.taskVCHumburgerMenuButtonDidTap(self)
+        delegate?.taskVCSettingDidTap(self)
     }
     
     /// バナー広告を表示

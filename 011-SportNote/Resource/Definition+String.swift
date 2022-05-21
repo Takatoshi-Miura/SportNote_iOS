@@ -123,6 +123,9 @@ let TITLE_MONTHLY = NSLocalizedString("Monthly", comment: "")
 let MESSAGE_TARGET_EMPTY = NSLocalizedString("TargetEmpty", comment: "")
 let TITLE_TODAY = NSLocalizedString("Today", comment: "")
 
+// MARK: - Setting
+let TITLE_SETTING = NSLocalizedString("Setting", comment: "")
+
 // MARK: - ErrorMessage
 let ERROR_MESSAGE_EMPTY_TITLE = NSLocalizedString("EmptyTitle", comment: "")
 let ERROR_MESSAGE_GROUP_CREATE_FAILED = NSLocalizedString("GroupCreateFailed", comment: "")

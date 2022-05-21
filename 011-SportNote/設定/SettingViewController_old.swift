@@ -11,7 +11,7 @@ import Firebase
 import SVProgressHUD
 import MessageUI
 
-class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,MFMailComposeViewControllerDelegate {
+class SettingViewController_old: UIViewController,UITableViewDelegate,UITableViewDataSource,MFMailComposeViewControllerDelegate {
     
     //MARK:- ライフサイクルメソッド
     

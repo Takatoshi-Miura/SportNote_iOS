@@ -121,6 +121,9 @@
 "TargetEmpty" = "No target has been set.";
 "Today" = "Today";
 
+// MARK: - Setting
+"Setting" = "Setting";
+
 // MARK: - ErrorMessage
 "EmptyTitle" = "Please input a title.";
 "GroupCreateFailed" = "Failed to create a group.";

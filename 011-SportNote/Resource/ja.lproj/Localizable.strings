@@ -122,6 +122,9 @@
 "TargetEmpty" = "目標が未設定です";
 "Today" = "今日";
 
+// MARK: - Setting
+"Setting" = "設定";
+
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
 "GroupCreateFailed" = "グループの作成に失敗しました。";
