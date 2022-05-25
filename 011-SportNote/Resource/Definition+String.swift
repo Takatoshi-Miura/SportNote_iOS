@@ -123,8 +123,23 @@ let TITLE_MONTHLY = NSLocalizedString("Monthly", comment: "")
 let MESSAGE_TARGET_EMPTY = NSLocalizedString("TargetEmpty", comment: "")
 let TITLE_TODAY = NSLocalizedString("Today", comment: "")
 
-// MARK: - Setting
+// MARK: - SettingViewController
 let TITLE_SETTING = NSLocalizedString("Setting", comment: "")
+let TITLE_BASIC_CONFIGURATION = NSLocalizedString("Basic configuration", comment: "")
+let TITLE_DATA = NSLocalizedString("Data", comment: "")
+let TITLE_HELP = NSLocalizedString("Help", comment: "")
+let TITLE_THEME = NSLocalizedString("Theme", comment: "")
+let TITLE_NOTIFICATION = NSLocalizedString("Notification", comment: "")
+let TITLE_DATA_TRANSFER = NSLocalizedString("Data transfer", comment: "")
+let TITLE_HOW_TO_USE_THIS_APP = NSLocalizedString("How to use this App?", comment: "")
+let TITLE_INQUIRY = NSLocalizedString("Inquiry", comment: "")
+let TITLE_SUCCESS = NSLocalizedString("Success", comment: "")
+let MESSAGE_INTERNET_ERROR = NSLocalizedString("Internet Error", comment: "")
+let MESSAGE_MAILER_ERROR = NSLocalizedString("Mailer Error", comment: "")
+let TITLE_MAIL_SUBJECT = NSLocalizedString("Mail Subject", comment: "")
+let TITLE_MAIL_MESSAGE = NSLocalizedString("Mail Message", comment: "")
+let MESSAGE_MAIL_SEND_SUCCESS = NSLocalizedString("Mail Send Success", comment: "")
+let MESSAGE_MAIL_SEND_FAILED = NSLocalizedString("Mail Send Failed", comment: "")
 
 // MARK: - ErrorMessage
 let ERROR_MESSAGE_EMPTY_TITLE = NSLocalizedString("EmptyTitle", comment: "")

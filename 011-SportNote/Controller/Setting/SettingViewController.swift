@@ -19,7 +19,39 @@ class SettingViewController: UIViewController {
     @IBOutlet weak var naviItem: UINavigationItem!
     @IBOutlet weak var cancel: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
+    private var cells: [[Cell]] = [[Cell.dataTransfer], [Cell.help, Cell.inquiry]]
     var delegate: SettingViewControllerDelegate?
+    
+    private enum Section: Int, CaseIterable {
+        case data
+        case help
+        var title: String {
+            switch self {
+            case .data: return TITLE_DATA
+            case .help: return TITLE_HELP
+            }
+        }
+    }
+    
+    private enum Cell: Int, CaseIterable {
+        case dataTransfer
+        case help
+        case inquiry
+        var title: String {
+            switch self {
+            case .dataTransfer: return TITLE_DATA_TRANSFER
+            case .help: return TITLE_HOW_TO_USE_THIS_APP
+            case .inquiry: return TITLE_INQUIRY
+            }
+        }
+        var image: UIImage {
+            switch self {
+            case .dataTransfer: return UIImage(systemName: "icloud.and.arrow.up")!
+            case .help: return UIImage(systemName: "questionmark.circle")!
+            case .inquiry: return UIImage(systemName: "envelope")!
+            }
+        }
+    }
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -51,13 +83,42 @@ class SettingViewController: UIViewController {
 
 extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        return cell
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return Section.allCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return Section.allCases[section].title
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return cells[section].count
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        cell.imageView?.image = cells[indexPath.section][indexPath.row].image
+        cell.textLabel?.text = cells[indexPath.section][indexPath.row].title
+        cell.accessoryType = .disclosureIndicator
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch cells[indexPath.section][indexPath.row] {
+        // TODO: 定義
+        case .dataTransfer:
+            print("引き継ぎ")
+            break
+        case .help:
+            print("使い方")
+            break
+        case .inquiry:
+            print("問い合わせ")
+            break
+        }
+    }
 }

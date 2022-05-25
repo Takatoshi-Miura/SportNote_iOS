@@ -123,6 +123,22 @@
 
 // MARK: - Setting
 "Setting" = "Setting";
+"Basic configuration" = "Basic Configuration";
+"Data" = "Data";
+"Help" = "Help";
+"Theme" = "Theme";
+"Notification" = "Notification";
+"Data transfer" = "Data transfer";
+"How to use this App?" = "How to use this App?";
+"Inquiry" = "Inquiry";
+"Error" = "Error";
+"Success" = "Success";
+"Internet Error" = "Internet connection is offline.";
+"Mailer Error" = "The email account has not been set.Set up an account with Apple's mail app.";
+"Mail Subject" = "Example: Bug report";
+"Mail Message" = "Please fill in the content of your inquiry.";
+"Mail Send Success" = "The email was sent successfully. Please wait for the reply from the developer.";
+"Mail Send Failed" = "The email could not be sent.";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "Please input a title.";

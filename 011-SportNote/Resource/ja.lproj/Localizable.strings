@@ -124,6 +124,22 @@
 
 // MARK: - Setting
 "Setting" = "設定";
+"Basic configuration" = "基本設定";
+"Data" = "データ";
+"Help" = "ヘルプ";
+"Theme" = "テーマ";
+"Notification" = "通知";
+"Data transfer" = "データの引継ぎ";
+"How to use this App?" = "アプリの使い方";
+"Inquiry" = "お問い合わせ";
+"Error" = "エラー";
+"Success" = "成功";
+"Internet Error" = "インターネット接続がオフラインです。";
+"Mailer Error" = "メールアカウントが未設定です。\nApple社の「メール」アプリでアカウントを設定して下さい。";
+"Mail Subject" = "例：バグの報告";
+"Mail Message" = "お問い合わせ内容をご記入下さい";
+"Mail Send Success" = "メールを送信しました。\n開発者からの返信をお待ち下さい。";
+"Mail Send Failed" = "メールを送信できませんでした。";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
