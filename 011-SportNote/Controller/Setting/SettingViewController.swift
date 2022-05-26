@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 protocol SettingViewControllerDelegate: AnyObject {
     // キャンセルタップ時の処理
@@ -117,8 +118,47 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
             print("使い方")
             break
         case .inquiry:
-            print("問い合わせ")
+            startMailer()
             break
         }
     }
+    
+}
+
+extension SettingViewController: MFMailComposeViewControllerDelegate {
+    
+    /// メーラーを起動
+    private func startMailer() {
+        if MFMailComposeViewController.canSendMail() == false {
+            showErrorAlert(message: MESSAGE_MAILER_ERROR)
+            return
+        }
+        let mailViewController = MFMailComposeViewController()
+        mailViewController.mailComposeDelegate = self
+        mailViewController.setToRecipients(["SportsNote開発者<it6210ge@gmail.com>"])
+        mailViewController.setSubject(TITLE_MAIL_SUBJECT)
+        mailViewController.setMessageBody(TITLE_MAIL_MESSAGE, isHTML: false)
+        self.present(mailViewController, animated: true, completion: nil)
+    }
+    
+    /// メーラーを終了
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+        
+        switch result {
+        case .cancelled:
+            break
+        case .saved:
+            break
+        case .sent:
+            showOKAlert(title: TITLE_SUCCESS, message: MESSAGE_MAIL_SEND_SUCCESS)
+            break
+        case .failed:
+            showErrorAlert(message: MESSAGE_MAIL_SEND_FAILED)
+            break
+        default:
+            break
+        }
+    }
+    
 }
