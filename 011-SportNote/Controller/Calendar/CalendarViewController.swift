@@ -106,7 +106,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
         
         let realmManager = RealmManager()
         
-        if let yearlyTarget = realmManager.getTarget(year: year, month: month, isYearlyTarget: true) {
+        if let yearlyTarget = realmManager.getTarget(year: year) {
             yearlyTargetLabel.text = "\(TITLE_YEARLY)\(yearlyTarget.title)"
         } else {
             yearlyTargetLabel.text = "\(TITLE_YEARLY)\(MESSAGE_TARGET_EMPTY)"

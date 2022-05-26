@@ -74,12 +74,22 @@ class AddTargetViewController: UIViewController {
         
         // 目標の重複チェック
         let realmManager = RealmManager()
-        if let realmTarget = realmManager.getTarget(year: target.year, month: target.month, isYearlyTarget: target.isYearlyTarget) {
-            showOKCancelAlert(title: "", message: ERROR_MESSAGE_TARGET_EXIST, OKAction: {
-                realmManager.updateTargetIsDeleted(targetID: realmTarget.targetID)
-                self.saveTarget(target: target)
-            })
-            return
+        if target.isYearlyTarget {
+            if let realmTarget = realmManager.getTarget(year: target.year) {
+                showOKCancelAlert(title: "", message: ERROR_MESSAGE_TARGET_EXIST, OKAction: {
+                    realmManager.updateTargetIsDeleted(targetID: realmTarget.targetID)
+                    self.saveTarget(target: target)
+                })
+                return
+            }
+        } else {
+            if let realmTarget = realmManager.getTarget(year: target.year, month: target.month, isYearlyTarget: target.isYearlyTarget) {
+                showOKCancelAlert(title: "", message: ERROR_MESSAGE_TARGET_EXIST, OKAction: {
+                    realmManager.updateTargetIsDeleted(targetID: realmTarget.targetID)
+                    self.saveTarget(target: target)
+                })
+                return
+            }
         }
         
         // 保存

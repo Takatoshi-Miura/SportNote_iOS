@@ -559,6 +559,20 @@ extension RealmManager {
         return targetArray
     }
     
+    /// 目標を取得(年指定)
+    /// - Parameters:
+    ///    - year: 年
+    /// - Returns: 目標データ
+    func getTarget(year: Int) -> Target? {
+        let realm = try! Realm()
+        let result = realm.objects(Target.self)
+            .filter("(year == \(year))")
+            .filter("(isYearlyTarget == true)")
+            .filter("(isDeleted == false)")
+            .first
+        return result
+    }
+    
     /// 目標を取得(年月指定)
     /// - Parameters:
     ///    - year: 年
