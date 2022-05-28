@@ -111,6 +111,7 @@
 "Consciousness" = "Consciousness";
 "Result" = "Result";
 "Reflection" = "Reflection";
+"EmptyNote" = "There are no notes.";
 
 // MARK: - Target
 "AddTarget" = "Add target";

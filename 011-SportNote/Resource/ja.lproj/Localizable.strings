@@ -112,6 +112,7 @@
 "Consciousness" = "意識すること";
 "Result" = "結果";
 "Reflection" = "反省";
+"EmptyNote" = "ノートがありません。";
 
 // MARK: - Target
 "AddTarget" = "目標の追加";

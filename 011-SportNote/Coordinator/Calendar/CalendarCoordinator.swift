@@ -12,7 +12,6 @@ class CalendarCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var calendarViewController = CalendarViewController()
-    let addTargetCoordinator = AddTargetCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -33,7 +32,20 @@ extension CalendarCoordinator: CalendarViewControllerDelegate {
     
     // CalendarVC → AddTargetVC
     func calendarVCAddTargetDidTap(_ viewController: UIViewController) {
+        let addTargetCoordinator = AddTargetCoordinator()
         addTargetCoordinator.startFlow(in: viewController)
+    }
+    
+    // CalendarVC → PracticeNoteVC
+    func calendarVCPracticeNoteDidTap(practiceNote: Note) {
+        let addPracticeNoteCoordinator = AddPracticeNoteCoordinator()
+        addPracticeNoteCoordinator.startFrow(in: navigationController!, withNote: practiceNote)
+    }
+    
+    // CalendarVC → TournamentNoteVC
+    func calendarVCTournamentNoteDidTap(tournamentNote: Note) {
+        let addTournamentNoteCoordinator = AddTournamentNoteCoordinator()
+        addTournamentNoteCoordinator.startFrow(in: navigationController!, withNote: tournamentNote)
     }
     
 }

@@ -161,6 +161,17 @@ func getCurrentTime() -> String {
     return dateFormatter.string(from: now)
 }
 
+/// 時刻を変換
+/// - Parameters:
+///    - date: 変換したいDate
+/// - Returns: 現在時刻（yyyy/MM/dd）
+func formatDate(date: Date) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "ja_JP")
+    dateFormatter.dateFormat = "yyyy/MM/dd"
+    return dateFormatter.string(from: date)
+}
+
 extension Array where Element: Equatable {
     typealias E = Element
 

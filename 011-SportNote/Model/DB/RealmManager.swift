@@ -672,6 +672,21 @@ extension RealmManager {
         return noteArray
     }
     
+    /// Realmのノートを取得(日付指定)
+    /// - Parameters:
+    ///    - date: 取得したいノートの日付
+    /// - Returns: ノートデータ
+    func getNote(date: Date) -> [Note] {
+        var noteArray: [Note] = []
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                          .filter("date == %@", date)
+        for note in result {
+            noteArray.append(note)
+        }
+        return noteArray
+    }
+    
     /// Realmのノートを更新(同期用)
     /// - Parameters:
     ///    - note: Realmオブジェクト

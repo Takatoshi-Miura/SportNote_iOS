@@ -15,6 +15,10 @@ import CalculateCalendarLogic
 protocol CalendarViewControllerDelegate: AnyObject {
     // 目標追加ボタンタップ時
     func calendarVCAddTargetDidTap(_ viewController: UIViewController)
+    // 練習ノートタップ時
+    func calendarVCPracticeNoteDidTap(practiceNote: Note)
+    // 大会ノートタップ時
+    func calendarVCTournamentNoteDidTap(tournamentNote: Note)
 }
 
 class CalendarViewController: UIViewController {
@@ -27,17 +31,33 @@ class CalendarViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
+    private var noteArray: [Note] = []
+    private var selectedNoteArray: [Note] = []
     var delegate: CalendarViewControllerDelegate?
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        syncData()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         showAdMob()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            // ノートが削除されていれば取り除く
+            let note = noteArray[selectedIndex.row]
+            if note.isDeleted {
+                noteArray.remove(at: selectedIndex.row)
+                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
+        }
     }
     
     /// 画面初期化
@@ -64,6 +84,27 @@ class CalendarViewController: UIViewController {
         self.adView.addSubview(adMobView!)
     }
     
+    /// データの同期処理
+    private func syncData() {
+        if Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let syncManager = SyncManager()
+            syncManager.syncDatabase(completion: {
+                self.refreshData()
+                HUD.hide()
+            })
+        } else {
+            refreshData()
+        }
+    }
+    
+    /// データを取得
+    private func refreshData() {
+        let realmManager = RealmManager()
+        noteArray = realmManager.getPracticeTournamentNote()
+        tableView.reloadData()
+    }
+    
     // MARK: - Action
     
     /// 追加ボタンの処理
@@ -74,6 +115,10 @@ class CalendarViewController: UIViewController {
     /// 「今日」ボタンの処理
     @objc func tapTodayButton(_ sender: UIBarButtonItem) {
         calendar.select(Date())
+        // 選択された日付のノートを取得
+        let realmManager = RealmManager()
+        selectedNoteArray = realmManager.getNote(date: Date())
+        tableView.reloadData()
     }
     
 }
@@ -82,11 +127,29 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     
     /// 日付がタップされた時の処理
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        let tmpDate = Calendar(identifier: .gregorian)
-        let year = tmpDate.component(.year, from: date)
-        let month = tmpDate.component(.month, from: date)
-        let day = tmpDate.component(.day, from: date)
-        print("\(year) / \(month) / \(day)")
+        // 選択された日付のノートを取得
+        let realmManager = RealmManager()
+        selectedNoteArray = realmManager.getNote(date: date)
+        tableView.reloadData()
+    }
+    
+    /// ノートが存在する日付のセルを色付ける
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        let da = formatter.string(from: date)
+        
+        // ノートデータがある日付のセルを色付け
+        for note in noteArray {
+            if da == formatDate(date: note.date) {
+                if note.noteType == NoteType.practice.rawValue {
+                    return UIColor.systemGreen
+                } else {
+                    return UIColor.systemRed
+                }
+            }
+        }
+        return nil
     }
     
     /// カレンダーをフリックした時の処理
@@ -119,14 +182,24 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
         }
     }
     
-    /// 土日や祝日の日の文字色を変える
+    /// 日付の文字色を変える
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-        // 祝日判定（祝日は赤色で表示する）
+        // ノートがある日付（白色）
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        let da = formatter.string(from: date)
+        for note in noteArray {
+            if da == formatDate(date: note.date) {
+                return UIColor.white
+            }
+        }
+        
+        // 祝日判定（祝日は赤色）
         if self.judgeHoliday(date){
             return UIColor.red
         }
         
-        // 土日の判定（土曜日は青色、日曜日は赤色で表示する）
+        // 土日の判定（土曜日は青色、日曜日は赤色）
         let weekday = self.getWeekIdx(date)
         if weekday == WeekDay.sunday.rawValue {
             return WeekDay.sunday.color
@@ -169,17 +242,45 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
 extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if selectedNoteArray.isEmpty {
+            return 1
+        } else {
+            return selectedNoteArray.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        cell.textLabel?.text = "ノートがありません。"
-        cell.accessoryType = .disclosureIndicator
-        return cell
+        if selectedNoteArray.isEmpty {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+            cell.textLabel?.text = MESSAGE_EMPTY_NOTE
+            return cell
+        } else {
+            let note = selectedNoteArray[indexPath.row]
+            if note.noteType == NoteType.practice.rawValue {
+                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+                cell.textLabel?.text = note.detail
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            } else {
+                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+                cell.textLabel?.text = note.target
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if selectedNoteArray.isEmpty {
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        } else {
+            let note = selectedNoteArray[indexPath.row]
+            if note.noteType == NoteType.practice.rawValue {
+                delegate?.calendarVCPracticeNoteDidTap(practiceNote: note)
+            } else {
+                delegate?.calendarVCTournamentNoteDidTap(tournamentNote: note)
+            }
+        }
     }
     
 }
