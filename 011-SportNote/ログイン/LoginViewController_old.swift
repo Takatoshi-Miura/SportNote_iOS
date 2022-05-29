@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SVProgressHUD
 
-class LoginViewController: UIViewController {
+class LoginViewController_old: UIViewController {
 
     //MARK:- ライフサイクルメソッド
     

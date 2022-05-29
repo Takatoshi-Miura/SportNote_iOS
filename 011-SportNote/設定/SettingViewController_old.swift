@@ -55,7 +55,7 @@ class SettingViewController_old: UIViewController,UITableViewDelegate,UITableVie
         case "データの引継ぎ":
             // ログイン画面へ遷移
             let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+            let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController_old")
             self.present(nextView, animated: true, completion: nil)
         case "お問い合わせ":
             // メーラーを起動

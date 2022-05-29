@@ -57,7 +57,7 @@ class PasswordResetViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                     // ログイン画面に遷移
                     let storyboard: UIStoryboard = self.storyboard!
-                    let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+                    let nextView = storyboard.instantiateViewController(withIdentifier: "LoginViewController_old")
                     self.present(nextView, animated: true, completion: nil)
                 }
             } else {

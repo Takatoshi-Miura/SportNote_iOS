@@ -12,6 +12,8 @@ import MessageUI
 protocol SettingViewControllerDelegate: AnyObject {
     // キャンセルタップ時の処理
     func settingVCCancelDidTap(_ viewController: UIViewController)
+    // データの引継ぎタップ時の処理
+    func settingVCDataTransferDidTap(_ viewController: UIViewController)
 }
 
 class SettingViewController: UIViewController {
@@ -112,7 +114,7 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
         switch cells[indexPath.section][indexPath.row] {
         // TODO: 定義
         case .dataTransfer:
-            print("引き継ぎ")
+            delegate?.settingVCDataTransferDidTap(self)
             break
         case .help:
             print("使い方")

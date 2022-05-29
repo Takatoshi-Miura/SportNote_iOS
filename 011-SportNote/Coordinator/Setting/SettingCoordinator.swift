@@ -39,4 +39,10 @@ extension SettingCoordinator: SettingViewControllerDelegate {
         viewController.dismiss(animated: true, completion: nil)
     }
     
+    /// SettingVC → LoginVC
+    func settingVCDataTransferDidTap(_ viewController: UIViewController) {
+        let loginCoordinator = LoginCoordinator()
+        loginCoordinator.startFlow(in: viewController)
+    }
+    
 }
