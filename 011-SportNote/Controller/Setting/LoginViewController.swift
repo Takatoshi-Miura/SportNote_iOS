@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol LoginViewControllerDelegate: AnyObject {
+    // キャンセルタップ時の処理
+    func loginVCCancelDidTap(_ viewController: UIViewController)
+}
+
 class LoginViewController: UIViewController {
     
     // MARK: - UI,Variable
@@ -18,6 +23,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordChangeButton: UIButton!
     @IBOutlet weak var createAccountButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    var delegate: LoginViewControllerDelegate?
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -36,6 +42,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func tapCancelButton(_ sender: Any) {
+        delegate?.loginVCCancelDidTap(self)
     }
     
 }

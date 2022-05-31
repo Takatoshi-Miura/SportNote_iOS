@@ -23,11 +23,20 @@ class LoginCoordinator: Coordinator {
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
         loginViewController = LoginViewController()
-//        loginViewController.delegate = self
+        loginViewController.delegate = self
         if #available(iOS 13.0, *) {
             loginViewController.isModalInPresentation = true
         }
         previousViewController!.present(loginViewController, animated: true)
+    }
+    
+}
+
+extension LoginCoordinator: LoginViewControllerDelegate {
+    
+    // SettingVC ← LoginVC
+    func loginVCCancelDidTap(_ viewController: UIViewController) {
+        viewController.dismiss(animated: true, completion: nil)
     }
     
 }

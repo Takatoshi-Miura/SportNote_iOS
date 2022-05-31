@@ -111,6 +111,7 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         switch cells[indexPath.section][indexPath.row] {
         // TODO: 定義
         case .dataTransfer:
