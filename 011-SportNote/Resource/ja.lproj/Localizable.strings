@@ -142,6 +142,36 @@
 "Mail Send Success" = "メールを送信しました。\n開発者からの返信をお待ち下さい。";
 "Mail Send Failed" = "メールを送信できませんでした。";
 
+// MARK: - LoginViewController
+"LoginHelp" = "アカウントを作成し、別の端末からログインするとデータを引継ぐことができます。";
+"AlreadyLogin" = "下記アカウントでログイン済み";
+"MailAddress" = "メールアドレス";
+"Password" = "パスワード(6文字以上)";
+"Login" = "ログイン";
+"Logout" = "ログアウト";
+"Forgot password" = "パスワードを忘れた場合";
+"Create account" = "アカウント作成";
+"EmptyTextError" = "メールアドレスまたはパスワードが未入力です。";
+"EmptyTextErrorPasswordReset" = "パスワードリセットメール送信先のメールアドレスを入力してください。";
+"DuringLoginProcess" = "ログインしています";
+"LoginSuccessful" = "ログインしました";
+"InvalidEmail" = "メールアドレスが間違っています。";
+"WrongPassword" = "パスワードが間違っています。";
+"LoginError" = "ログインに失敗しました。入力内容を確認して下さい。";
+"LogoutSuccessful" = "ログアウトしました";
+"LogoutError" = "ログアウトに失敗しました。";
+"PasswordResetTitle" = "パスワードリセット";
+"PasswordResetMessage" = "入力したメールアドレス宛にパスワードリセットメールを送信します。よろしいですか？";
+"MailSendError" = "メールの送信に失敗しました。入力内容を確認して下さい。";
+"MailSendSuccessful" = "メールを送信しました。";
+"CreateAccountTitle" = "アカウント作成";
+"CreateAccountMessage" = "入力した内容でアカウントを作成します。よろしいですか？";
+"DuringCreateAccountProcess" = "アカウントを作成しています";
+"EmailAlreadyInUse" = "既にこのメールアドレスは使われています。";
+"WeakPassword" = "パスワードは6文字以上で入力してください。";
+"CreateAccountError" = "アカウントの作成に失敗しました。時間をおいて再度お試し下さい。";
+"DataTransferSuccessful" = "データの引継ぎが完了しました。";
+
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
 "GroupCreateFailed" = "グループの作成に失敗しました。";
