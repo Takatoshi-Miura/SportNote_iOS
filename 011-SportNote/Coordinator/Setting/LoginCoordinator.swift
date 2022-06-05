@@ -34,7 +34,14 @@ class LoginCoordinator: Coordinator {
 
 extension LoginCoordinator: LoginViewControllerDelegate {
     
-    // SettingVC ← LoginVC
+    /// SettingVC ← LoginVC
+    func loginVCUserDidLogin(_ viewController: UIViewController) {
+        viewController.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
+        })
+    }
+    
+    /// SettingVC ← LoginVC
     func loginVCCancelDidTap(_ viewController: UIViewController) {
         viewController.dismiss(animated: true, completion: nil)
     }

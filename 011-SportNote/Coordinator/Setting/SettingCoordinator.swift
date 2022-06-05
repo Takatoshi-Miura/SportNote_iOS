@@ -26,6 +26,7 @@ class SettingCoordinator: Coordinator {
         settingViewController.delegate = self
         if #available(iOS 13.0, *) {
             settingViewController.isModalInPresentation = true
+            settingViewController.modalPresentationStyle = .fullScreen
         }
         previousViewController!.present(settingViewController, animated: true)
     }

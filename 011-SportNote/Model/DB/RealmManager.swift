@@ -42,6 +42,28 @@ class RealmManager {
         return true
     }
     
+    /// RealmのデータのUserIDを一括変更
+    /// - Parameters:
+    ///    - userID: ユーザーID
+    func updateAllRealmUserID(userID: String) {
+        updateGroupUserID(userID: userID)
+        updateTaskUserID(userID: userID)
+        updateMeasuresUserID(userID: userID)
+        updateMemoUserID(userID: userID)
+        updateTargetUserID(userID: userID)
+        updateNoteUserID(userID: userID)
+    }
+    
+    /// Realmのデータを全削除
+    func deleteAllRealmData() {
+        deleteAllGroup()
+        deleteAllTask()
+        deleteAllMeasures()
+        deleteAllMemo()
+        deleteAllTarget()
+        deleteAllNote()
+    }
+    
 }
 
 // MARK: - Group
@@ -150,7 +172,7 @@ extension RealmManager {
     /// ユーザーIDを更新
     /// - Parameters:
     ///   - userID: ユーザーID
-    func updateGroupUserID(userID: String) {
+    private func updateGroupUserID(userID: String) {
         let realm = try! Realm()
         let result = realm.objects(Group.self)
         for group in result {
@@ -161,7 +183,7 @@ extension RealmManager {
     }
     
     /// Realmのグループを全削除
-    func deleteAllGroup() {
+    private func deleteAllGroup() {
         let realm = try! Realm()
         let groups = realm.objects(Group.self)
         do{
@@ -310,8 +332,21 @@ extension RealmManager {
         }
     }
     
+    /// ユーザーIDを更新
+    /// - Parameters:
+    ///   - userID: ユーザーID
+    private func updateTaskUserID(userID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+        for task in result {
+            try! realm.write {
+                task.userID = userID
+            }
+        }
+    }
+    
     /// Realmの課題を全削除
-    func deleteAllTask() {
+    private func deleteAllTask() {
         let realm = try! Realm()
         let tasks = realm.objects(Task.self)
         do{
@@ -438,8 +473,21 @@ extension RealmManager {
         }
     }
     
+    /// ユーザーIDを更新
+    /// - Parameters:
+    ///    - userID: ユーザーID
+    private func updateMeasuresUserID(userID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Measures.self)
+        for measures in result {
+            try! realm.write {
+                measures.userID = userID
+            }
+        }
+    }
+    
     /// Realmの対策を全削除
-    func deleteAllMeasures() {
+    private func deleteAllMeasures() {
         let realm = try! Realm()
         let measures = realm.objects(Measures.self)
         do{
@@ -528,8 +576,21 @@ extension RealmManager {
         }
     }
     
+    /// ユーザーIDを更新
+    /// - Parameters:
+    ///    - userID: ユーザーID
+    private func updateMemoUserID(userID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Memo.self)
+        for memo in result {
+            try! realm.write {
+                memo.userID = userID
+            }
+        }
+    }
+    
     /// Realmのメモを全削除
-    func deleteAllMemo() {
+    private func deleteAllMemo() {
         let realm = try! Realm()
         let memos = realm.objects(Memo.self)
         do{
@@ -616,8 +677,21 @@ extension RealmManager {
         }
     }
     
+    /// ユーザーIDを更新
+    /// - Parameters:
+    ///    - userID: ユーザーID
+    private func updateTargetUserID(userID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Target.self)
+        for target in result {
+            try! realm.write {
+                target.userID = userID
+            }
+        }
+    }
+    
     /// Realmの目標を全削除
-    func deleteAllTarget() {
+    private func deleteAllTarget() {
         let realm = try! Realm()
         let targets = realm.objects(Target.self)
         do{
@@ -739,8 +813,21 @@ extension RealmManager {
         }
     }
     
+    /// ユーザーIDを更新
+    /// - Parameters:
+    ///    - userID: ユーザーID
+    private func updateNoteUserID(userID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+        for note in result {
+            try! realm.write {
+                note.userID = userID
+            }
+        }
+    }
+    
     /// Realmのノートを全削除
-    func deleteAllNote() {
+    private func deleteAllNote() {
         let realm = try! Realm()
         let Notes = realm.objects(Note.self)
         do{

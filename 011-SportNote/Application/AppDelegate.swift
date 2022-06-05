@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.register(defaults: ["firstLaunch": true])
         
         // ユーザーIDを作成(初期値を登録)
-        let uuid = "fXaDuDnAlJfJpErw555wEDJMwZ72"//NSUUID().uuidString
+        let uuid = NSUUID().uuidString // "cwB6mzM1xiXTibZMlnaM3UtYYeA2"
         UserDefaults.standard.register(defaults: ["userID":uuid])
         
         // アカウント持ちならFirebaseのユーザーIDを使用

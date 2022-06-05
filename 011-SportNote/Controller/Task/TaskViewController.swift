@@ -45,6 +45,7 @@ class TaskViewController: UIViewController {
         super.viewDidLoad()
         initView()
         initTableView()
+        initNotification()
         // 初回のみ旧データ変換後に同期処理
         if !isCompleted && Network.isOnline() {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
@@ -118,6 +119,15 @@ class TaskViewController: UIViewController {
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
+    }
+    
+    /// 通知設定
+    private func initNotification() {
+        // ログイン、ログアウト時のリロード用
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.syncData),
+                                               name: NSNotification.Name(rawValue: "dataUpdated"),
+                                               object: nil)
     }
     
     /// データの同期処理
