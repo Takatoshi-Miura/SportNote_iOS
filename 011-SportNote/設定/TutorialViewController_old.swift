@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TutorialViewController: UIViewController {
+class TutorialViewController_old: UIViewController {
 
     //MARK:- ライフサイクルメソッド
     

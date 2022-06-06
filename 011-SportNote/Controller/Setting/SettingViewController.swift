@@ -14,6 +14,8 @@ protocol SettingViewControllerDelegate: AnyObject {
     func settingVCCancelDidTap(_ viewController: UIViewController)
     // データの引継ぎタップ時の処理
     func settingVCDataTransferDidTap(_ viewController: UIViewController)
+    // アプリの使い方タップ時の処理
+    func settingVCTutorialDidTap(_ viewController: UIViewController)
 }
 
 class SettingViewController: UIViewController {
@@ -113,12 +115,11 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch cells[indexPath.section][indexPath.row] {
-        // TODO: 定義
         case .dataTransfer:
             delegate?.settingVCDataTransferDidTap(self)
             break
         case .help:
-            print("使い方")
+            delegate?.settingVCTutorialDidTap(self)
             break
         case .inquiry:
             startMailer()

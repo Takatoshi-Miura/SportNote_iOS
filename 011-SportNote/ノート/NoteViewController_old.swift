@@ -48,7 +48,7 @@ class NoteViewController_old: UIViewController, UITableViewDelegate, UITableView
                 UserDefaultsKey.agree.set(value: true)
                 // 同意後、チュートリアル画面に遷移
                 let storyboard: UIStoryboard = self.storyboard!
-                let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+                let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController_old
                 self.present(nextView, animated: true, completion: nil)
             })
         }

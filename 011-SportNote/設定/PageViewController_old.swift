@@ -1,5 +1,5 @@
 //
-//  PageViewController.swift
+//  PageViewController_old.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/08/07.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
+class PageViewController_old: UIPageViewController, UIPageViewControllerDelegate {
 
     //MARK:- ライフサイクルメソッド
     
@@ -16,18 +16,18 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
         super.viewDidLoad()
         
         // ViewControllerを配列に登録
-        let VC1 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        let VC2 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        let VC3 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        let VC4 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        let VC5 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        let VC6 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
-        let VC7 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController
+        let VC1 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController_old
+        let VC2 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController_old
+        let VC3 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController_old
+        let VC4 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController_old
+        let VC5 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController_old
+        let VC6 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController_old
+        let VC7 = storyboard!.instantiateViewController(withIdentifier: "TutorialViewController") as! TutorialViewController_old
         self.controllers = [VC1,VC2,VC3,VC4,VC5,VC6,VC7]
         
         // 各画面にチュートリアルデータを渡す
         for num in 0...self.controllers.count - 1 {
-            let VC = self.controllers[num] as! TutorialViewController
+            let VC = self.controllers[num] as! TutorialViewController_old
             VC.titleText  = titleArray[num]
             VC.detailText = detailArray[num]
             VC.image = imageArray[num]!
@@ -140,7 +140,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate {
 
 
 // MARK: - UIPageViewController DataSource
-extension PageViewController: UIPageViewControllerDataSource {
+extension PageViewController_old: UIPageViewControllerDataSource {
 
     // ページ数
     func presentationCount(for pageViewController: UIPageViewController) -> Int {

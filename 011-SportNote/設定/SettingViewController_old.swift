@@ -50,7 +50,7 @@ class SettingViewController_old: UIViewController,UITableViewDelegate,UITableVie
         case "このアプリの使い方":
             // チュートリアル画面に遷移
             let storyboard: UIStoryboard = self.storyboard!
-            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+            let nextView = storyboard.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController_old
             self.present(nextView, animated: true, completion: nil)
         case "データの引継ぎ":
             // ログイン画面へ遷移

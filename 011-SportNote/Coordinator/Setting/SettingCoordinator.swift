@@ -46,4 +46,10 @@ extension SettingCoordinator: SettingViewControllerDelegate {
         loginCoordinator.startFlow(in: viewController)
     }
     
+    /// SettingVC → TutorialVC
+    func settingVCTutorialDidTap(_ viewController: UIViewController) {
+        let pageViewCoordinator = PageViewCoordinator()
+        pageViewCoordinator.startFlow(in: viewController)
+    }
+    
 }
