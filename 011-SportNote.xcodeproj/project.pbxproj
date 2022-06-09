@@ -19,6 +19,8 @@
 		8D2BE0C7284EB238009AC672 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C5284EB238009AC672 /* PageViewController.swift */; };
 		8D2BE0C8284EB238009AC672 /* PageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C6284EB238009AC672 /* PageViewController.xib */; };
 		8D2BE0CA284EB7CB009AC672 /* PageViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C9284EB7CB009AC672 /* PageViewCoordinator.swift */; };
+		8D2BE0CD2852A09C009AC672 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0CB2852A09C009AC672 /* TutorialViewController.swift */; };
+		8D2BE0CE2852A09C009AC672 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2BE0CC2852A09C009AC672 /* TutorialViewController.xib */; };
 		8D3585A724AB224300882A32 /* ResolvedTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */; };
 		8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */; };
 		8D3AE8A226AD2AD00007D873 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3AE8A026AD2AD00007D873 /* TaskCell.swift */; };
@@ -136,6 +138,8 @@
 		8D2BE0C5284EB238009AC672 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		8D2BE0C6284EB238009AC672 /* PageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageViewController.xib; sourceTree = "<group>"; };
 		8D2BE0C9284EB7CB009AC672 /* PageViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewCoordinator.swift; sourceTree = "<group>"; };
+		8D2BE0CB2852A09C009AC672 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		8D2BE0CC2852A09C009AC672 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		8D3585A624AB224300882A32 /* ResolvedTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedTaskViewController.swift; sourceTree = "<group>"; };
 		8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+TextFIeld.swift"; sourceTree = "<group>"; };
 		8D3AE8A026AD2AD00007D873 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
@@ -388,6 +392,7 @@
 				8DC8DE9E28399E8F00BD7F70 /* SettingViewController.xib */,
 				8DB579D22844207E00245025 /* LoginViewController.xib */,
 				8D2BE0C6284EB238009AC672 /* PageViewController.xib */,
+				8D2BE0CC2852A09C009AC672 /* TutorialViewController.xib */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -584,6 +589,7 @@
 				8DC8DE9D28399E8F00BD7F70 /* SettingViewController.swift */,
 				8DB579D12844207E00245025 /* LoginViewController.swift */,
 				8D2BE0C5284EB238009AC672 /* PageViewController.swift */,
+				8D2BE0CB2852A09C009AC672 /* TutorialViewController.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -761,6 +767,7 @@
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
 				8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */,
 				8D91CE96281896E6000D3B1F /* AddPracticeNoteViewController.xib in Resources */,
+				8D2BE0CE2852A09C009AC672 /* TutorialViewController.xib in Resources */,
 				8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */,
 				8D5CFC132804E515008DF02E /* CompletedTaskViewController.xib in Resources */,
 			);
@@ -845,6 +852,7 @@
 				8D941CC42552188400B3A472 /* NoteViewCell.swift in Sources */,
 				8D7C676024DD03F6005599AD /* PageViewController_old.swift in Sources */,
 				8D3FFE5A27F665650021C9FC /* TabCoordinator.swift in Sources */,
+				8D2BE0CD2852A09C009AC672 /* TutorialViewController.swift in Sources */,
 				8D69FC9824B7085900DFECB3 /* TaskMeasuresTableViewCell.swift in Sources */,
 				8D481D5527F808090082D956 /* FirebaseManager.swift in Sources */,
 				8DCF350A24F6554900055093 /* Task_old.swift in Sources */,

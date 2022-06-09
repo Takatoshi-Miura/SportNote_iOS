@@ -28,11 +28,25 @@ class PageViewController: UIPageViewController {
     
     /// PageView初期化
     private func initPageView() {
-        // TODO: チュートリアル画面を指定
-        let settingVC = SettingViewController()
-        let settingVC2 = SettingViewController()
-        let settingVC3 = SettingViewController()
-        self.controllers = [settingVC, settingVC2, settingVC3]
+        // チュートリアル画面を追加
+        let titleArray:[String]  = ["SportsNoteとは","課題の管理①","課題の管理②","ノートを作成","課題データと連動①","課題データと連動②","目標を設定"]
+        
+        let detailArray:[String] = ["課題解決に特化したノートアプリです。\n原因と対策を考えて実践し、反省を通して、\n解決を目指すことができます。",
+                                    "課題を一覧で管理できます。\n＋ボタンで課題を追加、左右のスワイプで\n解決済みや削除ができます。",
+                                    "課題ごとに原因と対策を登録できます。\n「最有力の対策」に設定した対策は\nノートに読み込まれるようになります。",
+                                    "練習記録、大会記録を作成できます。\n作成したノートはノート一覧、\nまたはカレンダー画面で確認できます。",
+                                    "練習記録には未解決の課題が表示されます。\n「最有力の対策」の有効性を記録できます。\nコメントを課題データにも追記できます。",
+                                    "課題データに追記した有効性コメントは\n課題の対策画面に追加されます。\nタップで該当するノートを確認できます。",
+                                    "年間目標、月間目標を作成できます。\n設定した目標はノート一覧、\nまたはカレンダー画面で確認できます。"]
+        
+        let imageArray:[UIImage?] = [UIImage(named: "①概要"),UIImage(named: "②課題の管理"),UIImage(named: "③課題の管理"),
+                                     UIImage(named: "④ノート追加"),UIImage(named: "⑤課題と連動"),UIImage(named: "⑥課題と連動"),UIImage(named: "⑦目標設定")]
+        
+        for index in 0...titleArray.count - 1 {
+            let tutorialVC = TutorialViewController()
+            tutorialVC.initView(title: titleArray[index], detail: detailArray[index], image: imageArray[index]!)
+            self.controllers.append(tutorialVC)
+        }
         
         // pageViewController追加
         let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
