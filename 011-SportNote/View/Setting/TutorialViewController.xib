@@ -23,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SportsNoteとは" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CN9-0x-9Tb">
-                    <rect key="frame" x="0.0" y="20" width="320" height="21"/>
+                    <rect key="frame" x="0.0" y="60" width="320" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="IMs-Tu-Yk1"/>
                     </constraints>
@@ -32,7 +32,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題解決に特化したノートアプリです。課題の原因と対策を考え、あああああああああああああああああああああああああああ" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V16-e3-CGp">
-                    <rect key="frame" x="40" y="61" width="240" height="50"/>
+                    <rect key="frame" x="40" y="101" width="240" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="rO1-Tk-RFx"/>
                     </constraints>
@@ -41,7 +41,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2wy-LZ-TDD">
-                    <rect key="frame" x="16" y="131" width="288" height="417"/>
+                    <rect key="frame" x="16" y="171" width="288" height="347"/>
                 </imageView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Cdt-iW-dvc"/>
@@ -49,10 +49,10 @@
             <constraints>
                 <constraint firstItem="2wy-LZ-TDD" firstAttribute="leading" secondItem="Cdt-iW-dvc" secondAttribute="leading" constant="16" id="AfB-cY-XN5"/>
                 <constraint firstItem="V16-e3-CGp" firstAttribute="top" secondItem="CN9-0x-9Tb" secondAttribute="bottom" constant="20" id="F05-Q8-s7d"/>
-                <constraint firstItem="Cdt-iW-dvc" firstAttribute="bottom" secondItem="2wy-LZ-TDD" secondAttribute="bottom" constant="20" id="NOF-fO-qRI"/>
+                <constraint firstItem="Cdt-iW-dvc" firstAttribute="bottom" secondItem="2wy-LZ-TDD" secondAttribute="bottom" constant="50" id="NOF-fO-qRI"/>
                 <constraint firstItem="Cdt-iW-dvc" firstAttribute="trailing" secondItem="CN9-0x-9Tb" secondAttribute="trailing" id="f2v-l2-oQR"/>
                 <constraint firstItem="CN9-0x-9Tb" firstAttribute="leading" secondItem="Cdt-iW-dvc" secondAttribute="leading" id="fHS-KY-9Xa"/>
-                <constraint firstItem="CN9-0x-9Tb" firstAttribute="top" secondItem="Cdt-iW-dvc" secondAttribute="top" constant="20" id="fVM-my-MUn"/>
+                <constraint firstItem="CN9-0x-9Tb" firstAttribute="top" secondItem="Cdt-iW-dvc" secondAttribute="top" constant="60" id="fVM-my-MUn"/>
                 <constraint firstItem="Cdt-iW-dvc" firstAttribute="trailing" secondItem="2wy-LZ-TDD" secondAttribute="trailing" constant="16" id="gGb-3T-UBx"/>
                 <constraint firstItem="V16-e3-CGp" firstAttribute="leading" secondItem="Cdt-iW-dvc" secondAttribute="leading" constant="40" id="jQr-If-dRI"/>
                 <constraint firstItem="Cdt-iW-dvc" firstAttribute="trailing" secondItem="V16-e3-CGp" secondAttribute="trailing" constant="40" id="seD-FJ-W4A"/>
