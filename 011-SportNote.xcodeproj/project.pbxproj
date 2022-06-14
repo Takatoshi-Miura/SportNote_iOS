@@ -106,6 +106,9 @@
 		8DB579D32844207E00245025 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB579D12844207E00245025 /* LoginViewController.swift */; };
 		8DB579D42844207E00245025 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DB579D22844207E00245025 /* LoginViewController.xib */; };
 		8DB579D6284428F400245025 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB579D5284428F400245025 /* LoginCoordinator.swift */; };
+		8DBE025F285938D90047C751 /* NoteFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBE025D285938D90047C751 /* NoteFilterViewController.swift */; };
+		8DBE0260285938D90047C751 /* NoteFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DBE025E285938D90047C751 /* NoteFilterViewController.xib */; };
+		8DBE026228593BDE0047C751 /* NoteFilterCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBE026128593BDE0047C751 /* NoteFilterCoordinator.swift */; };
 		8DC1930D27F7B8690097BF07 /* TaskViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DC1930C27F7B8690097BF07 /* TaskViewController.xib */; };
 		8DC1931427F7BE320097BF07 /* NoteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC1931327F7BE320097BF07 /* NoteCoordinator.swift */; };
 		8DC1931627F7CB5B0097BF07 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */; };
@@ -231,6 +234,9 @@
 		8DB579D22844207E00245025 /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		8DB579D5284428F400245025 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
 		8DB9E58924DEBDFC0042A7A2 /* 011-SportNoteRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "011-SportNoteRelease.entitlements"; sourceTree = "<group>"; };
+		8DBE025D285938D90047C751 /* NoteFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteFilterViewController.swift; sourceTree = "<group>"; };
+		8DBE025E285938D90047C751 /* NoteFilterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteFilterViewController.xib; sourceTree = "<group>"; };
+		8DBE026128593BDE0047C751 /* NoteFilterCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteFilterCoordinator.swift; sourceTree = "<group>"; };
 		8DC1930C27F7B8690097BF07 /* TaskViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskViewController.xib; sourceTree = "<group>"; };
 		8DC1931327F7BE320097BF07 /* NoteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCoordinator.swift; sourceTree = "<group>"; };
 		8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
@@ -379,6 +385,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC1931727F7CB9B0097BF07 /* NoteViewController.xib */,
+				8DBE025E285938D90047C751 /* NoteFilterViewController.xib */,
 				8D91CE8E28138239000D3B1F /* FreeNoteViewController.xib */,
 				8D91CE94281896E6000D3B1F /* AddPracticeNoteViewController.xib */,
 				8D91CE88280CC80C000D3B1F /* AddTournamentNoteViewController.xib */,
@@ -431,6 +438,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC1931327F7BE320097BF07 /* NoteCoordinator.swift */,
+				8DBE026128593BDE0047C751 /* NoteFilterCoordinator.swift */,
 				8D91CE9128138668000D3B1F /* FreeNoteCoordinator.swift */,
 				8D91CE9728189EF9000D3B1F /* AddPracticeNoteCoordinator.swift */,
 				8D91CE8B280CCC79000D3B1F /* AddTournamentNoteCoordinator.swift */,
@@ -576,6 +584,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */,
+				8DBE025D285938D90047C751 /* NoteFilterViewController.swift */,
 				8D91CE8D28138239000D3B1F /* FreeNoteViewController.swift */,
 				8D91CE93281896E6000D3B1F /* AddPracticeNoteViewController.swift */,
 				8D91CE87280CC80C000D3B1F /* AddTournamentNoteViewController.swift */,
@@ -767,6 +776,7 @@
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
 				8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */,
 				8D91CE96281896E6000D3B1F /* AddPracticeNoteViewController.xib in Resources */,
+				8DBE0260285938D90047C751 /* NoteFilterViewController.xib in Resources */,
 				8D2BE0CE2852A09C009AC672 /* TutorialViewController.xib in Resources */,
 				8DB0617124BD72E300A08C35 /* TaskTableViewCell.xib in Resources */,
 				8D5CFC132804E515008DF02E /* CompletedTaskViewController.xib in Resources */,
@@ -828,6 +838,7 @@
 				8DCF350924F6554900055093 /* FreeNote_old.swift in Sources */,
 				8D665D3B24A17D9A00441B32 /* LoginViewController_old.swift in Sources */,
 				8D3AE8A226AD2AD00007D873 /* TaskCell.swift in Sources */,
+				8DBE026228593BDE0047C751 /* NoteFilterCoordinator.swift in Sources */,
 				8DE6E10825F461DE0012DA54 /* UIViewController+UserDefaults.swift in Sources */,
 				8D3FFE5827F665170021C9FC /* AppCoordinator.swift in Sources */,
 				8D481D6427F865D70082D956 /* Measures.swift in Sources */,
@@ -888,6 +899,7 @@
 				8D91CE74280777E8000D3B1F /* TaskDetailCoordinator.swift in Sources */,
 				8DB579D6284428F400245025 /* LoginCoordinator.swift in Sources */,
 				8D481D6927F875780082D956 /* Target.swift in Sources */,
+				8DBE025F285938D90047C751 /* NoteFilterViewController.swift in Sources */,
 				8DC8DEA42839A36400BD7F70 /* SettingCoordinator.swift in Sources */,
 				8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */,
 				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,

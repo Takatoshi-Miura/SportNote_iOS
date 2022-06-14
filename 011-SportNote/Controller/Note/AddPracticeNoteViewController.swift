@@ -89,6 +89,8 @@ class AddPracticeNoteViewController: UIViewController {
         taskLabel.text = TITLE_TACKLED_TASK
         reflectionLabel.text = TITLE_REFLECTION
         
+        addButton.setTitle(TITLE_ADD, for: .normal)
+        
         initTextView(textView: conditionTextView)
         initTextView(textView: purposeTextView)
         initTextView(textView: detailTextView)

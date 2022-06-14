@@ -21,6 +21,8 @@ protocol NoteViewControllerDelegate: AnyObject {
     func noteVCPracticeNoteDidTap(practiceNote: Note)
     // 大会ノートタップ時
     func noteVCTournamentNoteDidTap(tournamentNote: Note)
+    // フィルタータップ時
+    func noteVCFilterDidTap(_ viewController: UIViewController)
 }
 
 class NoteViewController: UIViewController {
@@ -32,6 +34,7 @@ class NoteViewController: UIViewController {
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
     private var noteArray: [Note] = []
+    private var isFiltered: Bool = false
     var delegate: NoteViewControllerDelegate?
     
     // MARK: - LifeCycle
@@ -72,6 +75,12 @@ class NoteViewController: UIViewController {
     
     func initNavigationController() {
         self.title = TITLE_NOTE
+        let iconImage = isFiltered ? UIImage(named: "icon_filter_fill")! : UIImage(named: "icon_filter_empty")!
+        let filterButton = UIBarButtonItem(image: iconImage,
+                                           style: .done,
+                                           target: self,
+                                           action: #selector(moveNoteFilterVC))
+        navigationItem.rightBarButtonItems = [filterButton]
     }
     
     func initSearchBar() {
@@ -126,6 +135,18 @@ class NoteViewController: UIViewController {
         adMobView!.frame.origin = CGPoint(x: 0, y: 0)
         adMobView!.frame.size = CGSize(width: self.view.frame.width, height: adMobView!.frame.height)
         adView.addSubview(adMobView!)
+    }
+    
+    // MARK: - Action
+    
+    /// ノートの検索フィルタ画面へ遷移
+    @objc func moveNoteFilterVC() {
+        delegate?.noteVCFilterDidTap(self)
+    }
+    
+    /// 検索フィルタによる検索
+    func searchNoteWithFilter() {
+        
     }
     
     /// 追加ボタンの処理

@@ -12,10 +12,6 @@ class NoteCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var noteViewController = NoteViewController()
-    let freeNoteCoordinator = FreeNoteCoordinator()
-    let addTargetCoordinator = AddTargetCoordinator()
-    let addPracticeNoteCoordinator = AddPracticeNoteCoordinator()
-    let addTournamentNoteCoordinator = AddTournamentNoteCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -36,27 +32,38 @@ extension NoteCoordinator: NoteViewControllerDelegate {
     
     // NoteVC → AddPracticeNoteVC
     func noteVCAddPracticeNoteDidTap(_ viewController: UIViewController) {
+        let addPracticeNoteCoordinator = AddPracticeNoteCoordinator()
         addPracticeNoteCoordinator.startFlow(in: viewController)
     }
     
     // NoteVC → AddTournamentNoteVC
     func noteVCAddTournamentNoteDidTap(_ viewController: UIViewController) {
+        let addTournamentNoteCoordinator = AddTournamentNoteCoordinator()
         addTournamentNoteCoordinator.startFlow(in: viewController)
     }
     
     // NoteVC → FreeNoteVC
     func noteVCFreeNoteDidTap(freeNote: Note) {
+        let freeNoteCoordinator = FreeNoteCoordinator()
         freeNoteCoordinator.startFrow(in: navigationController!, withFreeNote: freeNote)
     }
     
     // NoteVC → PracticeNoteVC
     func noteVCPracticeNoteDidTap(practiceNote: Note) {
+        let addPracticeNoteCoordinator = AddPracticeNoteCoordinator()
         addPracticeNoteCoordinator.startFrow(in: navigationController!, withNote: practiceNote)
     }
     
     // NoteVC → TournamentNoteVC
     func noteVCTournamentNoteDidTap(tournamentNote: Note) {
+        let addTournamentNoteCoordinator = AddTournamentNoteCoordinator()
         addTournamentNoteCoordinator.startFrow(in: navigationController!, withNote: tournamentNote)
+    }
+    
+    // NoteVC → NoteFilterVC
+    func noteVCFilterDidTap(_ viewController: UIViewController) {
+        let noteFilterCoordinator = NoteFilterCoordinator()
+        noteFilterCoordinator.startFlow(in: viewController)
     }
     
 }
