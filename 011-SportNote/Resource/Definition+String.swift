@@ -103,6 +103,13 @@ let MESSAGE_ADD_NOTE = NSLocalizedString("AddMessage", comment: "")
 let TITLE_FREE_NOTE = NSLocalizedString("FreeNote", comment: "")
 let TITLE_SEARCH_NOTE = NSLocalizedString("SearchNoteTitle", comment: "")
 
+// MARK: - NoteFilterViewController
+let TITLE_FILTER_NOTE = NSLocalizedString("FilterNote", comment: "")
+let TITLE_PERIOD = NSLocalizedString("Period", comment: "")
+let TITLE_SHOW_ALL = NSLocalizedString("ShowAll", comment: "")
+let TITLE_CLEAR = NSLocalizedString("Clear", comment: "")
+let TITLE_APPLY = NSLocalizedString("Apply", comment: "")
+
 // MARK: - Note
 let TITLE_ADD_PRACTICE_NOTE = NSLocalizedString("AddPracticeNoteTitle", comment: "")
 let TITLE_PRACTICE_PURPOSE = NSLocalizedString("PracticePurpose", comment: "")

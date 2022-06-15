@@ -22,12 +22,32 @@ class NoteFilterViewController: UIViewController {
     @IBOutlet weak var clearButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var applyButton: UIButton!
+    private var groupArray: [Group] = []
+    private var taskArray: [Task] = []
     var delegate: NoteFilterViewControllerDelegate?
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        initView()
+        initData()
     }
+    
+    /// 画面初期化
+    private func initView() {
+        naviItem.title = TITLE_FILTER_NOTE
+        clearButton.title = TITLE_CLEAR
+        applyButton.setTitle(TITLE_APPLY, for: .normal)
+    }
+    
+    private func initData() {
+        let realmManager = RealmManager()
+        groupArray = realmManager.getGroupArrayForTaskView()
+        for group in groupArray {
+            taskArray.append(contentsOf: realmManager.getTasksInGroup(ID: group.groupID))
+        }
+    }
+    
     
     // MARK: - Action
     @IBAction func tapCancelButton(_ sender: Any) {
@@ -46,20 +66,31 @@ class NoteFilterViewController: UIViewController {
 extension NoteFilterViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return groupArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?{
+        return groupArray[section].title
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        let realmManager = RealmManager()
+        let tasks = realmManager.getTasksInGroup(ID: groupArray[section].groupID)
+        return tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let realmManager = RealmManager()
+        let tasks = realmManager.getTasksInGroup(ID: groupArray[indexPath.section].groupID)
+        
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
+        cell.textLabel?.text = tasks[indexPath.row].title
+        cell.accessoryType = .checkmark
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

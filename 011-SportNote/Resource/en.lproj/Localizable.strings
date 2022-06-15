@@ -101,6 +101,13 @@
 "FreeNote" = "FreeNote";
 "SearchNoteTitle" = "Search note";
 
+// MARK: - NoteFilterViewController
+"FilterNote" = "Search filter";
+"Period" = "Period";
+"ShowAll" = "Show all";
+"Clear" = "Clear";
+"Apply" = "Apply";
+
 // MARK: - Note
 "AddPracticeNoteTitle" = "Add Practice Note";
 "PracticePurpose" = "Purpose";

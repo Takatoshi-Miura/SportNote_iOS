@@ -245,6 +245,25 @@ extension RealmManager {
         return taskArray
     }
     
+    /// グループに含まれる課題を取得
+    /// - Parameters:
+    ///   - groupID: グループID
+    /// - Returns: グループに含まれる課題
+    func getTasksInGroup(ID groupID: String) -> [Task] {
+        var taskArray: [Task] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "order", ascending: true),
+        ]
+        let results = realm.objects(Task.self)
+                            .filter("(groupID == '\(groupID)') && (isDeleted == false)")
+                            .sorted(by: sortProperties)
+        for task in results {
+            taskArray.append(task)
+        }
+        return taskArray
+    }
+    
     /// Realmの課題を更新
     /// - Parameters:
     ///    - task: Realmオブジェクト

@@ -12,7 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NoteFilterViewController" customModule="_11_SportNote" customModuleProvider="target">
             <connections>
                 <outlet property="applyButton" destination="T1g-YF-8ta" id="X27-84-rBu"/>
-                <outlet property="clearButton" destination="MMJ-tx-SKQ" id="oQ6-oA-a9W"/>
+                <outlet property="clearButton" destination="MMJ-tx-SKQ" id="OUu-wp-Xax"/>
                 <outlet property="naviItem" destination="1uj-qF-lyy" id="pcw-K4-ELC"/>
                 <outlet property="tableView" destination="zhf-ot-Dcz" id="Gtm-Ql-O1N"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -32,13 +32,7 @@
                                     <action selector="tapCancelButton:" destination="-1" id="wTR-Ej-hlA"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem key="rightBarButtonItem" style="plain" id="MMJ-tx-SKQ">
-                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="hNX-kq-4c8">
-                                    <rect key="frame" x="229" y="5" width="75" height="34.5"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                </button>
+                            <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="MMJ-tx-SKQ">
                                 <connections>
                                     <action selector="tapClearButton:" destination="-1" id="ESS-Gd-jHd"/>
                                 </connections>
@@ -46,7 +40,7 @@
                         </navigationItem>
                     </items>
                 </navigationBar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zhf-ot-Dcz">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="30" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zhf-ot-Dcz">
                     <rect key="frame" x="0.0" y="44" width="320" height="404"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>

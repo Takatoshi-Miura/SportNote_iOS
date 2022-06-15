@@ -102,6 +102,13 @@
 "FreeNote" = "フリーノート";
 "SearchNoteTitle" = "ノートを検索";
 
+// MARK: - NoteFilterViewController
+"FilterNote" = "検索フィルタ";
+"Period" = "期間";
+"ShowAll" = "すべて表示";
+"Clear" = "クリア";
+"Apply" = "適用";
+
 // MARK: - Note
 "AddPracticeNoteTitle" = "練習ノートの追加";
 "PracticePurpose" = "練習の目的";
