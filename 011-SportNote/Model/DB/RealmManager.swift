@@ -225,6 +225,18 @@ extension RealmManager {
         return taskArray
     }
     
+    /// NoteFilterViewController用task配列を返却
+    /// - Returns: Task配列[[task][task, task]…]の形
+    func getTaskArrayForNoteFilterView() -> [[Task]] {
+        var taskArray: [[Task]] = [[Task]]()
+        let groupArray: [Group] = getGroupArrayForTaskView()
+        for group in groupArray {
+            let tasks = getTasksInGroup(ID: group.groupID)
+            taskArray.append(tasks)
+        }
+        return taskArray
+    }
+    
     /// グループに含まれる課題を取得
     /// - Parameters:
     ///   - groupID: グループID

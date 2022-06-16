@@ -23,7 +23,7 @@ class NoteFilterViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var applyButton: UIButton!
     private var groupArray: [Group] = []
-    private var taskArray: [Task] = []
+    private var taskArray: [[Task]] = [[Task]]()
     var delegate: NoteFilterViewControllerDelegate?
     
     // MARK: - LifeCycle
@@ -43,9 +43,7 @@ class NoteFilterViewController: UIViewController {
     private func initData() {
         let realmManager = RealmManager()
         groupArray = realmManager.getGroupArrayForTaskView()
-        for group in groupArray {
-            taskArray.append(contentsOf: realmManager.getTasksInGroup(ID: group.groupID))
-        }
+        taskArray = realmManager.getTaskArrayForNoteFilterView()
     }
     
     
@@ -69,28 +67,30 @@ extension NoteFilterViewController: UITableViewDelegate, UITableViewDataSource {
         return groupArray.count
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?{
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return groupArray[section].title
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let realmManager = RealmManager()
-        let tasks = realmManager.getTasksInGroup(ID: groupArray[section].groupID)
-        return tasks.count
+        return taskArray[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let realmManager = RealmManager()
-        let tasks = realmManager.getTasksInGroup(ID: groupArray[indexPath.section].groupID)
-        
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
-        cell.textLabel?.text = tasks[indexPath.row].title
+        cell.textLabel?.text = taskArray[indexPath.section][indexPath.row].title
         cell.accessoryType = .checkmark
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let task = taskArray[indexPath.section][indexPath.row]
+        let cell = tableView.cellForRow(at: indexPath)
+        if cell?.accessoryType == .checkmark {
+            cell?.accessoryType = .none
+        } else {
+            cell?.accessoryType = .checkmark
+        }
     }
     
 }
