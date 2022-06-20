@@ -17,6 +17,7 @@ public extension UIViewController {
         case address     = "address"        // アカウントのメールアドレス
         case password    = "password"       // アカウントのパスワード
         case agree       = "agree"          // 利用規約への同意状況
+        case filterTaskID  = "filterTaskID"     // 検索フィルタ(課題)
         
         // 保存＆取得
         func set(value: Int) {

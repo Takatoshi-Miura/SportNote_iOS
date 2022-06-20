@@ -27,3 +27,33 @@ class Task: Object {
     }
     
 }
+
+/// NoteFilterVC用の構造体
+struct FilteredTask {
+    
+    let taskID: String
+    let userID: String
+    let groupID: String
+    let title: String
+    let cause: String
+    let order: Int
+    let isComplete: Bool
+    let isDeleted: Bool
+    let created_at: Date
+    let updated_at: Date
+    var isFilter: Bool
+    
+    init(task: Task) {
+        self.taskID = task.taskID
+        self.userID = task.userID
+        self.groupID = task.groupID
+        self.title = task.title
+        self.cause = task.cause
+        self.order = task.order
+        self.isComplete = task.isComplete
+        self.isDeleted = task.isDeleted
+        self.created_at = task.created_at
+        self.updated_at = task.updated_at
+        self.isFilter = true
+    }
+}

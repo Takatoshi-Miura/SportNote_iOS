@@ -23,7 +23,7 @@ class NoteFilterViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var applyButton: UIButton!
     private var groupArray: [Group] = []
-    private var taskArray: [[Task]] = [[Task]]()
+    private var taskArray: [[FilteredTask]] = [[FilteredTask]]()
     var delegate: NoteFilterViewControllerDelegate?
     
     // MARK: - LifeCycle
@@ -43,19 +43,42 @@ class NoteFilterViewController: UIViewController {
     private func initData() {
         let realmManager = RealmManager()
         groupArray = realmManager.getGroupArrayForTaskView()
-        taskArray = realmManager.getTaskArrayForNoteFilterView()
+        taskArray = realmManager.getTaskArrayForNoteFilterView(isFilter: true)
+        tableView.reloadData()
     }
     
     
     // MARK: - Action
+    
+    /// キャンセル
     @IBAction func tapCancelButton(_ sender: Any) {
         delegate?.noteFilterVCCancelDidTap(self)
     }
     
+    /// クリア
     @IBAction func tapClearButton(_ sender: Any) {
+        let realmManager = RealmManager()
+        taskArray = realmManager.getTaskArrayForNoteFilterView(isFilter: false)
+        tableView.reloadData()
     }
     
+    /// 適用
     @IBAction func tapApplyButton(_ sender: Any) {
+        // isFilter = false のTaskIDを保存
+        var filteredTaskArray = [String]()
+        for tasks in taskArray {
+            let searchFilteredTask = tasks.filter {
+                $0.isFilter == false
+            }
+            for task in searchFilteredTask {
+                filteredTaskArray.append(task.taskID)
+            }
+        }
+        if filteredTaskArray.isEmpty {
+            UserDefaultsKey.filterTaskID.remove()
+        } else {
+            UserDefaultsKey.filterTaskID.set(value: filteredTaskArray)
+        }
         delegate?.noteFilterVCApplyDidTap(self)
     }
     
@@ -77,20 +100,20 @@ extension NoteFilterViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
-        cell.textLabel?.text = taskArray[indexPath.section][indexPath.row].title
-        cell.accessoryType = .checkmark
+        let task = taskArray[indexPath.section][indexPath.row]
+        
+        cell.textLabel?.text = task.title
+        if task.isFilter {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let task = taskArray[indexPath.section][indexPath.row]
-        let cell = tableView.cellForRow(at: indexPath)
-        if cell?.accessoryType == .checkmark {
-            cell?.accessoryType = .none
-        } else {
-            cell?.accessoryType = .checkmark
-        }
+        taskArray[indexPath.section][indexPath.row].isFilter.toggle()
+        tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
 }

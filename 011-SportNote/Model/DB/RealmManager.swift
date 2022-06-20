@@ -225,16 +225,34 @@ extension RealmManager {
         return taskArray
     }
     
-    /// NoteFilterViewController用task配列を返却
-    /// - Returns: Task配列[[task][task, task]…]の形
-    func getTaskArrayForNoteFilterView() -> [[Task]] {
-        var taskArray: [[Task]] = [[Task]]()
-        let groupArray: [Group] = getGroupArrayForTaskView()
-        for group in groupArray {
-            let tasks = getTasksInGroup(ID: group.groupID)
-            taskArray.append(tasks)
+    /// NoteFilterViewController用FilteredTask配列を返却
+    /// - Parameters:
+    ///   - isFilter: チェックの保存状態を反映するか否か
+    /// - Returns: Task配列[[FilteredTask][FilteredTask, FilteredTask]…]の形
+    func getTaskArrayForNoteFilterView(isFilter: Bool) -> [[FilteredTask]] {
+        var filteredTaskArray: [[FilteredTask]] = [[FilteredTask]]()
+        let userDefaults = UserDefaults.standard
+        var filterTaskIDArray = [String]()
+        if let idArray = userDefaults.array(forKey: "filterTaskID") {
+            filterTaskIDArray = idArray as! [String]
         }
-        return taskArray
+        let groupArray: [Group] = getGroupArrayForTaskView()
+        
+        for group in groupArray {
+            var array = [FilteredTask]()
+            let tasks = getTasksInGroup(ID: group.groupID)
+            for task in tasks {
+                var filteredTask = FilteredTask(task: task)
+                // チェックの保存状態を反映
+                if isFilter && filterTaskIDArray.contains(filteredTask.taskID) {
+                    filteredTask.isFilter = false
+                }
+                array.append(filteredTask)
+            }
+            filteredTaskArray.append(array)
+        }
+        
+        return filteredTaskArray
     }
     
     /// グループに含まれる課題を取得
