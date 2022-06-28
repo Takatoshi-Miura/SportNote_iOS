@@ -244,7 +244,7 @@ extension RealmManager {
             for task in tasks {
                 var filteredTask = FilteredTask(task: task)
                 // チェックの保存状態を反映
-                if isFilter && filterTaskIDArray.contains(filteredTask.taskID) {
+                if isFilter && !filterTaskIDArray.contains(filteredTask.taskID) {
                     filteredTask.isFilter = false
                 }
                 array.append(filteredTask)
@@ -769,6 +769,17 @@ extension RealmManager {
         return noteArray
     }
     
+    /// Realmのノートを取得
+    /// - Returns: ノートデータ
+    private func getNote(ID: String) -> Note {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+            .filter("noteID == '\(ID)'")
+            .filter("(isDeleted == false)")
+            .first
+        return result ?? Note()
+    }
+    
     /// Realmのフリーノートを取得
     /// - Returns: フリーノートデータ
     func getFreeNote() -> Note {
@@ -792,6 +803,46 @@ extension RealmManager {
         for note in result {
             noteArray.append(note)
         }
+        return noteArray
+    }
+    
+    /// Realmのノート(練習、大会)を取得
+    /// - Parameters:
+    ///    - taskIDs: ノートに含まれる課題
+    /// - Returns: ノートデータ
+    func getPracticeTournamentNote(taskIDs: [String]) -> [Note] {
+        var noteArray = [Note]()
+        
+        // 課題に含まれる対策IDを取得
+        var measuresIDArray = [String]()
+        for taskID in taskIDs {
+            let measuresArray = getMeasuresInTask(ID: taskID)
+            for measures in measuresArray {
+                measuresIDArray.append(measures.measuresID)
+            }
+        }
+        
+        // 対策を含むメモを取得
+        var memoArray = [Memo]()
+        for measuresID in measuresIDArray {
+            memoArray.append(contentsOf: getMemo(measuresID: measuresID))
+        }
+        
+        // メモを含むノートIDを取得(重複削除)
+        var noteIDArray = [String]()
+        for memo in memoArray {
+            noteIDArray.append(memo.noteID)
+        }
+        noteIDArray = Array(Set(noteIDArray))
+        
+        // ノートを取得
+        for noteID in noteIDArray {
+            noteArray.append(getNote(ID: noteID))
+        }
+        
+        // 日付の新しい順に並び替え
+        noteArray.sort(by: {$0.date > $1.date})
+        
         return noteArray
     }
     

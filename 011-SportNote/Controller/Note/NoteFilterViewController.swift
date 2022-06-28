@@ -64,11 +64,11 @@ class NoteFilterViewController: UIViewController {
     
     /// 適用
     @IBAction func tapApplyButton(_ sender: Any) {
-        // isFilter = false のTaskIDを保存
+        // isFilter = true のTaskIDを保存
         var filteredTaskArray = [String]()
         for tasks in taskArray {
             let searchFilteredTask = tasks.filter {
-                $0.isFilter == false
+                $0.isFilter == true
             }
             for task in searchFilteredTask {
                 filteredTaskArray.append(task.taskID)

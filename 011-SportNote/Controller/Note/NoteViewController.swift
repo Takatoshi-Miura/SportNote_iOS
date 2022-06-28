@@ -73,7 +73,7 @@ class NoteViewController: UIViewController {
         }
     }
     
-    func initNavigationController() {
+    private func initNavigationController() {
         self.title = TITLE_NOTE
         let iconImage = isFiltered ? UIImage(named: "icon_filter_fill")! : UIImage(named: "icon_filter_empty")!
         let filterButton = UIBarButtonItem(image: iconImage,
@@ -83,11 +83,11 @@ class NoteViewController: UIViewController {
         navigationItem.rightBarButtonItems = [filterButton]
     }
     
-    func initSearchBar() {
+    private func initSearchBar() {
         searchBar.searchTextField.placeholder = TITLE_SEARCH_NOTE
     }
     
-    func initTableView() {
+    private func initTableView() {
         tableView.tableFooterView = UIView()
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(syncData), for: .valueChanged)
@@ -113,7 +113,7 @@ class NoteViewController: UIViewController {
     }
     
     /// データを取得
-    func refreshData() {
+    private func refreshData() {
         let realmManager = RealmManager()
         noteArray = realmManager.getPracticeTournamentNote()
         noteArray.insert(realmManager.getFreeNote(), at: 0)
@@ -122,7 +122,7 @@ class NoteViewController: UIViewController {
     }
     
     /// バナー広告を表示
-    func showAdMob() {
+    private func showAdMob() {
         if let adMobView = adMobView {
             adMobView.frame.size = CGSize(width: self.view.frame.width, height: adMobView.frame.height)
             return
@@ -146,7 +146,21 @@ class NoteViewController: UIViewController {
     
     /// 検索フィルタによる検索
     func searchNoteWithFilter() {
-        
+        // TODO: 空のノートがヒットするから要対策
+        // フィルタ状態取得
+        if let filterTaskIDArray = UserDefaults.standard.array(forKey: UserDefaultsKey.filterTaskID.rawValue) as? [String] {
+            isFiltered = true
+            initNavigationController()
+            let realmManager = RealmManager()
+            noteArray = realmManager.getPracticeTournamentNote(taskIDs: filterTaskIDArray)
+            noteArray.insert(realmManager.getFreeNote(), at: 0)
+            tableView.reloadData()
+            return
+        }
+        // フィルタなしの場合は全検索
+        isFiltered = false
+        initNavigationController()
+        refreshData()
     }
     
     /// 追加ボタンの処理
@@ -210,9 +224,13 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
             break
         case .practice:
             cell.textLabel?.text = noteArray[indexPath.row].detail
+            cell.detailTextLabel?.text = formatDate(date: noteArray[indexPath.row].date)
+            cell.detailTextLabel?.textColor = UIColor.systemGray
             break
         case .tournament:
             cell.textLabel?.text = noteArray[indexPath.row].target
+            cell.detailTextLabel?.text = formatDate(date: noteArray[indexPath.row].date)
+            cell.detailTextLabel?.textColor = UIColor.systemGray
             break
         }
         return cell
