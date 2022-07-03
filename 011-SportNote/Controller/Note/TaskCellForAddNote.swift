@@ -1,5 +1,5 @@
 //
-//  TaskMeasuresTableViewCell.swift
+//  TaskCellForAddNote.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2020/07/09.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TaskMeasuresTableViewCell: UITableViewCell {
+class TaskCellForAddNote: UITableViewCell {
 
     // MARK: - UI
     

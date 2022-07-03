@@ -129,7 +129,7 @@ class AddPracticeNoteViewController: UIViewController {
         dateTableView.tag = TableViewType.date.rawValue
         taskTableView.tag = TableViewType.task.rawValue
         dateTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        taskTableView.register(UINib(nibName: "TaskMeasuresTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
+        taskTableView.register(UINib(nibName: "TaskCellForAddNote", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
         if #available(iOS 15.0, *) {
             dateTableView.sectionHeaderTopPadding = 0
             taskTableView.sectionHeaderTopPadding = 0
@@ -246,7 +246,7 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
             return cell
         case .task:
             let task = displayTaskArray[indexPath.row]
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForAddNote", for: indexPath) as! TaskCellForAddNote
             cell.printInfo(task: task)
             return cell
         }

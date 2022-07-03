@@ -31,7 +31,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         navigationController?.delegate = self
         
         // セルの登録
-        self.taskTableView.register(UINib(nibName: "TaskMeasuresTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
+        self.taskTableView.register(UINib(nibName: "TaskCellForAddNote", bundle: nil), forCellReuseIdentifier: "TaskCellForAddNote")
         
         // Pickerのタグ付け
         typePicker.tag    = 0
@@ -155,7 +155,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 対策の有効性コメントの記入チェック
         if self.practiceNoteData.getTaskTitle().count != 0 {
             for num in 0...self.practiceNoteData.getTaskTitle().count - 1 {
-//                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+//                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskCellForAddNote
 //                if cell.effectivenessTextView.text.isEmpty && cell.checkBox.isSelected {
 //                    SVProgressHUD.showError(withStatus: "対策の有効性欄が未記入です")
 //                    return
@@ -305,7 +305,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
             }
         } else {
             // 未解決の課題セルを返却
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForAddNote", for: indexPath) as! TaskCellForAddNote
 //            cell.addTextViewBorder()
 //            cell.initCheckBox()
 //            cell.printTaskData(noteData: self.practiceNoteData, at: indexPath.row)
@@ -721,7 +721,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         } else {
             for num in 0...self.practiceNoteData.getTaskTitle().count - 1 {
                 // 対策の有効性コメントをセット
-                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskCellForAddNote
                 measuresEffectiveness.append(cell.effectivenessTextView.text)
                 
                 // チェックが入っていればTaskDataの有効性コメントに追加
