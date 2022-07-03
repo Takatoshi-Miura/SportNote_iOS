@@ -16,6 +16,7 @@ protocol AddPracticeNoteViewControllerDelegate: AnyObject {
 class AddPracticeNoteViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var naviItem: UINavigationItem!
     @IBOutlet weak var naviBar: UINavigationBar!
     @IBOutlet weak var conditionLabel: UILabel!
@@ -30,6 +31,7 @@ class AddPracticeNoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dateTableView: UITableView!
     @IBOutlet weak var taskTableView: UITableView!
+    
     private var taskArray = [TaskForAddNote]()
     private var displayTaskArray = [TaskForAddNote]()
     var delegate: AddPracticeNoteViewControllerDelegate?
@@ -61,6 +63,7 @@ class AddPracticeNoteViewController: UIViewController {
     }
     
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -113,6 +116,7 @@ class AddPracticeNoteViewController: UIViewController {
         
         if isViewer {
             naviBar.isHidden = true
+            addButton.isHidden = true
             // TODO: レイアウト要修正
             conditionTextView.text = realmNote.condition
             purposeTextView.text = realmNote.purpose
@@ -125,7 +129,7 @@ class AddPracticeNoteViewController: UIViewController {
         dateTableView.tag = TableViewType.date.rawValue
         taskTableView.tag = TableViewType.task.rawValue
         dateTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        taskTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        taskTableView.register(UINib(nibName: "TaskMeasuresTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
         if #available(iOS 15.0, *) {
             dateTableView.sectionHeaderTopPadding = 0
             taskTableView.sectionHeaderTopPadding = 0
@@ -179,18 +183,17 @@ class AddPracticeNoteViewController: UIViewController {
         practiceNote.detail = detailTextView.text
         practiceNote.reflection = reflectionTextView.text
         
-        // TODO: メモを作成＆保存
-        // 入力されているtaskTableViewのセルのtaskから対策を割り出す（対策IDを知りたい）
-        // それがわかればnoteIDと対策IDでメモを作成できる。
-        if !taskArray.isEmpty {
-            
-        }
-        
-        
         let realmManager = RealmManager()
         if !realmManager.createRealm(object: practiceNote) {
             showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
             return
+        }
+        
+        // TODO: メモを作成＆保存
+        // 入力されているtaskTableViewのセルのtaskから対策を割り出す（対策IDを知りたい）
+        // それがわかればnoteIDと対策IDでメモを作成できる。
+        if !displayTaskArray.isEmpty {
+            
         }
         
         // Firebaseに送信
@@ -216,6 +219,15 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch TableViewType.allCases[tableView.tag] {
+        case .date:
+            return 44
+        case .task:
+            return 220
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch TableViewType.allCases[tableView.tag] {
         case .date:
@@ -233,12 +245,9 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
             }
             return cell
         case .task:
-            let realmManager = RealmManager()
             let task = displayTaskArray[indexPath.row]
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-            cell.textLabel?.text = task.title
-            cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
-            cell.detailTextLabel?.textColor = UIColor.systemGray
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
+            cell.printInfo(task: task)
             return cell
         }
     }
@@ -248,7 +257,11 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
         case .date:
             return false
         case .task:
-            return true // 未解決の課題セルのみ編集可能
+            if isViewer {
+                return false
+            } else {
+                return true // 未解決の課題セルのみ編集可能
+            }
         }
     }
     

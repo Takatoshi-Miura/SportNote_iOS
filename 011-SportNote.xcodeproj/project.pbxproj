@@ -389,6 +389,7 @@
 				8D91CE8E28138239000D3B1F /* FreeNoteViewController.xib */,
 				8D91CE94281896E6000D3B1F /* AddPracticeNoteViewController.xib */,
 				8D91CE88280CC80C000D3B1F /* AddTournamentNoteViewController.xib */,
+				8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -588,6 +589,7 @@
 				8D91CE8D28138239000D3B1F /* FreeNoteViewController.swift */,
 				8D91CE93281896E6000D3B1F /* AddPracticeNoteViewController.swift */,
 				8D91CE87280CC80C000D3B1F /* AddTournamentNoteViewController.swift */,
+				8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -670,8 +672,6 @@
 				8DC778A124B5AEFD0031DF66 /* AddPracticeNoteContentViewController.swift */,
 				8DA6350D24B416B000186358 /* AddCompetitionNoteViewController.swift */,
 				8DC778A324B5B66A0031DF66 /* AddCompetitionNoteContentViewController.swift */,
-				8D69FC9624B7085900DFECB3 /* TaskMeasuresTableViewCell.swift */,
-				8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */,
 				8DB0616E24BD72E300A08C35 /* TaskTableViewCell.swift */,
 				8DB0616F24BD72E300A08C35 /* TaskTableViewCell.xib */,
 				8D941CC22552188400B3A472 /* NoteViewCell.swift */,

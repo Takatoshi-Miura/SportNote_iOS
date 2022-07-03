@@ -213,6 +213,19 @@ extension RealmManager {
         return taskArray
     }
     
+    /// Realmの課題を取得
+    /// - Parameters:
+    ///   - taskID: 課題ID
+    /// - Returns: 課題データ
+    func getTask(taskID: String) -> Task {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+            .filter("taskID == '\(taskID)'")
+            .filter("(isDeleted == false)")
+            .first
+        return result ?? Task()
+    }
+    
     /// TaskViewController用task配列を返却
     /// - Returns: Task配列[[task][task, task]…]の形
     func getTaskArrayForTaskView() -> [[Task]] {
@@ -438,6 +451,19 @@ extension RealmManager {
             measuresArray.append(measures)
         }
         return measuresArray
+    }
+    
+    /// Realmの対策を取得
+    /// - Parameters:
+    ///   - measuresID: 対策ID
+    /// - Returns: 対策データ
+    func getMeasures(measuresID: String) -> Measures {
+        let realm = try! Realm()
+        let result = realm.objects(Measures.self)
+            .filter("measuresID == '\(measuresID)'")
+            .filter("(isDeleted == false)")
+            .first
+        return result ?? Measures()
     }
     
     /// 課題に含まれる最優先の対策名を取得

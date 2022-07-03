@@ -155,11 +155,11 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         // 対策の有効性コメントの記入チェック
         if self.practiceNoteData.getTaskTitle().count != 0 {
             for num in 0...self.practiceNoteData.getTaskTitle().count - 1 {
-                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
-                if cell.effectivenessTextView.text.isEmpty && cell.checkBox.isSelected {
-                    SVProgressHUD.showError(withStatus: "対策の有効性欄が未記入です")
-                    return
-                }
+//                let cell = taskTableView.cellForRow(at: [0,num]) as! TaskMeasuresTableViewCell
+//                if cell.effectivenessTextView.text.isEmpty && cell.checkBox.isSelected {
+//                    SVProgressHUD.showError(withStatus: "対策の有効性欄が未記入です")
+//                    return
+//                }
             }
         }
         
@@ -306,10 +306,10 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
         } else {
             // 未解決の課題セルを返却
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskMeasuresTableViewCell", for: indexPath) as! TaskMeasuresTableViewCell
-            cell.addTextViewBorder()
-            cell.initCheckBox()
-            cell.printTaskData(noteData: self.practiceNoteData, at: indexPath.row)
-            cell.createToolBar()
+//            cell.addTextViewBorder()
+//            cell.initCheckBox()
+//            cell.printTaskData(noteData: self.practiceNoteData, at: indexPath.row)
+//            cell.createToolBar()
             return cell
         }
     }
@@ -725,7 +725,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                 measuresEffectiveness.append(cell.effectivenessTextView.text)
                 
                 // チェックが入っていればTaskDataの有効性コメントに追加
-                if cell.checkBox.isSelected {
+//                if cell.checkBox.isSelected {
                     // 課題タイトルの配列を作成
                     var taskTitleArray:[String] = []
                     if self.dataManager.taskDataArray.count <= 0 {
@@ -748,7 +748,7 @@ class AddPracticeNoteContentViewController: UIViewController, UIPickerViewDelega
                     
                     // データ更新
                     self.updateTaskData(task: self.dataManager.taskDataArray[index])
-                }
+//                }
             }
         }
         practiceNoteData.setMeasuresEffectiveness(measuresEffectiveness)

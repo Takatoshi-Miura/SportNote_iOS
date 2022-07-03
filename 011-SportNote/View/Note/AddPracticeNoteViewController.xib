@@ -37,7 +37,7 @@
                     <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PhG-6k-TNq">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="1200"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="1400"/>
                             <subviews>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="QFY-KT-lBj">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
@@ -129,10 +129,10 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lXN-uR-sOr">
-                                    <rect key="frame" x="0.0" y="510" width="320" height="128"/>
+                                    <rect key="frame" x="0.0" y="510" width="320" height="300"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="128" id="HbG-gk-YX4"/>
+                                        <constraint firstAttribute="height" constant="300" id="HbG-gk-YX4"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="dataSource" destination="-1" id="G4m-W8-Xfw"/>
@@ -152,7 +152,7 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KJx-sX-bAK">
-                                    <rect key="frame" x="16" y="668" width="288" height="30"/>
+                                    <rect key="frame" x="16" y="840" width="288" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="NNu-HX-M1h"/>
                                     </constraints>
@@ -161,7 +161,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GoB-uC-TIp">
-                                    <rect key="frame" x="16" y="698" width="288" height="100"/>
+                                    <rect key="frame" x="16" y="870" width="288" height="100"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="100" id="g45-HU-TJs"/>
@@ -187,7 +187,7 @@
                                 <constraint firstItem="0dL-ZF-scs" firstAttribute="leading" secondItem="PhG-6k-TNq" secondAttribute="leading" constant="16" id="BGy-Nk-Xuy"/>
                                 <constraint firstAttribute="trailing" secondItem="AIA-Ob-FVq" secondAttribute="trailing" constant="16" id="Flu-Kx-aja"/>
                                 <constraint firstAttribute="trailing" secondItem="GoB-uC-TIp" secondAttribute="trailing" constant="16" id="G94-uZ-EZo"/>
-                                <constraint firstAttribute="height" constant="1200" id="H7w-mp-IEl"/>
+                                <constraint firstAttribute="height" constant="1400" id="H7w-mp-IEl"/>
                                 <constraint firstItem="GoB-uC-TIp" firstAttribute="leading" secondItem="PhG-6k-TNq" secondAttribute="leading" constant="16" id="HOy-bd-m9f"/>
                                 <constraint firstAttribute="trailing" secondItem="d3u-NF-Psh" secondAttribute="trailing" constant="16" id="KGW-Bi-S5P"/>
                                 <constraint firstItem="KJx-sX-bAK" firstAttribute="leading" secondItem="PhG-6k-TNq" secondAttribute="leading" constant="16" id="LSm-bu-5Pp"/>
