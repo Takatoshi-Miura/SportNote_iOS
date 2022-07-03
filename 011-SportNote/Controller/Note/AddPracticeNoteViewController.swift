@@ -30,6 +30,8 @@ class AddPracticeNoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dateTableView: UITableView!
     @IBOutlet weak var taskTableView: UITableView!
+    private var taskArray = [TaskForAddNote]()
+    private var displayTaskArray = [TaskForAddNote]()
     var delegate: AddPracticeNoteViewControllerDelegate?
     var isViewer = false
     var realmNote = Note()
@@ -37,6 +39,7 @@ class AddPracticeNoteViewController: UIViewController {
     private var pickerView = UIView()
     private var datePicker = UIDatePicker()
     private var weatherPicker = UIPickerView()
+    private var taskPicker = UIPickerView()
     private let temperature: [Int] = (-40...40).map { $0 }
     private var selectedDate = Date()
     private var selectedWeather: [String : Int] = [TITLE_WEATHER: 0 ,TITLE_TEMPERATURE: 0]
@@ -51,6 +54,12 @@ class AddPracticeNoteViewController: UIViewController {
         case task
     }
     
+    private enum PickerType: Int, CaseIterable {
+        case date
+        case weather
+        case task
+    }
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +67,11 @@ class AddPracticeNoteViewController: UIViewController {
         initTableView()
         initDatePicker()
         initWeatherPicker()
+        initTaskPicker()
+        // 未解決の課題を取得
+        let realmManager = RealmManager()
+        taskArray = realmManager.getTaskArrayForAddNoteView()
+        displayTaskArray = realmManager.getTaskArrayForAddNoteView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -65,6 +79,7 @@ class AddPracticeNoteViewController: UIViewController {
         // マルチタスクビュー対策
         datePicker.frame.size.width = self.view.bounds.size.width
         weatherPicker.frame.size.width = self.view.bounds.size.width
+        taskPicker.frame.size.width = self.view.bounds.size.width
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -117,10 +132,26 @@ class AddPracticeNoteViewController: UIViewController {
         }
     }
     
+    
     // MARK: - Action
+    
+    /// 課題追加ボタン
     @IBAction func tapAddButton(_ sender: Any) {
+        // 未解決の課題が一つもない場合はアラート
+        if taskArray.isEmpty {
+            showErrorAlert(message: TASK_EMPTY_ERROR)
+            return
+        }
+        
+        // 課題Pickerを開く
+        closePicker(pickerView)
+        pickerView = UIView(frame: taskPicker.bounds)
+        pickerView.addSubview(taskPicker)
+        pickerView.addSubview(createToolBar(#selector(taskPickerDoneAction), #selector(taskPickerCancelAction)))
+        openPicker(pickerView)
     }
     
+    /// キャンセルボタン
     @IBAction func tapCancelButton(_ sender: Any) {
         if conditionTextView.text.isEmpty &&
             purposeTextView.text.isEmpty &&
@@ -135,6 +166,7 @@ class AddPracticeNoteViewController: UIViewController {
         }
     }
     
+    /// 保存ボタン
     @IBAction func tapSaveButton(_ sender: Any) {
         // 練習ノートデータを作成＆保存
         let practiceNote = Note()
@@ -148,6 +180,12 @@ class AddPracticeNoteViewController: UIViewController {
         practiceNote.reflection = reflectionTextView.text
         
         // TODO: メモを作成＆保存
+        // 入力されているtaskTableViewのセルのtaskから対策を割り出す（対策IDを知りたい）
+        // それがわかればnoteIDと対策IDでメモを作成できる。
+        if !taskArray.isEmpty {
+            
+        }
+        
         
         let realmManager = RealmManager()
         if !realmManager.createRealm(object: practiceNote) {
@@ -174,7 +212,7 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
         case .date:
             return 2
         case .task:
-            return 0
+            return displayTaskArray.count
         }
     }
     
@@ -195,26 +233,54 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
             }
             return cell
         case .task:
-            let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
+            let realmManager = RealmManager()
+            let task = displayTaskArray[indexPath.row]
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+            cell.textLabel?.text = task.title
+            cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
             cell.detailTextLabel?.textColor = UIColor.systemGray
-            cell.accessoryType = .disclosureIndicator
             return cell
         }
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        switch TableViewType.allCases[tableView.tag] {
+        case .date:
+            return false
+        case .task:
+            return true // 未解決の課題セルのみ編集可能
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        switch TableViewType.allCases[tableView.tag] {
+        case .date:
+            break
+        case .task:
+            // 左スワイプでセルを削除
+            if editingStyle == UITableViewCell.EditingStyle.delete {
+                let task = displayTaskArray[indexPath.row]
+                let index = taskArray.firstIndex(where: { $0.taskID == task.taskID })
+                taskArray[index!].isDisplay = false
+                displayTaskArray.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.view.endEditing(true)
-        
         switch TableViewType.allCases[tableView.tag] {
         case .date:
             switch CellType.allCases[indexPath.row] {
             case .date:
+                // datePickerを開く
                 closePicker(pickerView)
                 pickerView = UIView(frame: datePicker.bounds)
                 pickerView.addSubview(datePicker)
                 pickerView.addSubview(createToolBar(#selector(datePickerDoneAction), #selector(datePickerCancelAction)))
                 openPicker(pickerView)
             case .weather:
+                // weatherPickerを開く
                 closePicker(pickerView)
                 pickerView = UIView(frame: weatherPicker.bounds)
                 pickerView.addSubview(weatherPicker)
@@ -222,6 +288,7 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
                 openPicker(pickerView)
             }
         case .task:
+            tableView.deselectRow(at: indexPath, animated: false)
             break
         }
     }
@@ -231,22 +298,43 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
 extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 2 // 天気、気温
+        switch PickerType.allCases[pickerView.tag] {
+        case .date:
+            return 3
+        case .weather:
+            return 2 // 天気、気温
+        case .task:
+            return 1
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0 {
-            return Weather.allCases.count
-        } else {
-            return temperature.count
+        switch PickerType.allCases[pickerView.tag] {
+        case .date:
+            return 1
+        case .weather:
+            if component == 0 {
+                return Weather.allCases.count
+            } else {
+                return temperature.count
+            }
+        case .task:
+            return taskArray.count
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if component == 0 {
-            return Weather.allCases[row].title
-        } else {
-            return "\(temperature[row])℃"
+        switch PickerType.allCases[pickerView.tag] {
+        case .date:
+            return nil
+        case .weather:
+            if component == 0 {
+                return Weather.allCases[row].title
+            } else {
+                return "\(temperature[row])℃"
+            }
+        case .task:
+            return taskArray[row].title
         }
     }
     
@@ -255,6 +343,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.locale = Locale(identifier: "ja")
+        datePicker.tag = PickerType.date.rawValue
         if #available(iOS 13.4, *) {
             datePicker.preferredDatePickerStyle = .wheels
         }
@@ -281,12 +370,13 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         dateTableView.deselectRow(at: dateTableView.indexPathForSelectedRow!, animated: true)
     }
     
-    /// Picker初期化
+    /// WeatherPicker初期化
     private func initWeatherPicker() {
         weatherPicker.delegate = self
         weatherPicker.dataSource = self
         weatherPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: weatherPicker.bounds.size.height + 44)
         weatherPicker.backgroundColor = UIColor.systemGray5
+        weatherPicker.tag = PickerType.weather.rawValue
         
         if isViewer {
             weatherPicker.selectRow(realmNote.weather ,inComponent: 0, animated: true)
@@ -312,6 +402,34 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         weatherPicker.selectRow(selectedWeather[TITLE_TEMPERATURE]!, inComponent: 1, animated: false)
         closePicker(pickerView)
         dateTableView.deselectRow(at: dateTableView.indexPathForSelectedRow!, animated: true)
+    }
+    
+    /// TaskPicker初期化
+    private func initTaskPicker() {
+        taskPicker.delegate = self
+        taskPicker.dataSource = self
+        taskPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: taskPicker.bounds.size.height + 44)
+        taskPicker.backgroundColor = UIColor.systemGray5
+        taskPicker.tag = PickerType.task.rawValue
+    }
+    
+    @objc func taskPickerDoneAction() {
+        let index = taskPicker.selectedRow(inComponent: 0)
+        let selectedTask = taskArray[index]
+        
+        // 非表示の課題が選択された場合のみtaskTableに追加
+        if selectedTask.isDisplay {
+            showErrorAlert(message: TASK_EXIST_ERROR)
+        } else {
+            taskArray[index].isDisplay = true
+            displayTaskArray.append(taskArray[index])
+            taskTableView.insertRows(at: [IndexPath(row: displayTaskArray.count - 1, section: 0)], with: .right)
+        }
+        closePicker(pickerView)
+    }
+    
+    @objc func taskPickerCancelAction() {
+        closePicker(pickerView)
     }
     
 }

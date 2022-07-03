@@ -225,6 +225,21 @@ extension RealmManager {
         return taskArray
     }
     
+    /// AddPracticeNoteViewController用task配列を返却(未解決の課題をグループ関係なく取得)
+    /// - Returns: Task配列[task, task…]の形
+    func getTaskArrayForAddNoteView() -> [TaskForAddNote] {
+        var taskArray = [TaskForAddNote]()
+        let groupArray: [Group] = getGroupArrayForTaskView()
+        for group in groupArray {
+            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+            for task in tasks {
+                let taskForAddNote = TaskForAddNote(task: task)
+                taskArray.append(taskForAddNote)
+            }
+        }
+        return taskArray
+    }
+    
     /// NoteFilterViewController用FilteredTask配列を返却
     /// - Parameters:
     ///   - isFilter: チェックの保存状態を反映するか否か

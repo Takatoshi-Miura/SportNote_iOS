@@ -57,3 +57,33 @@ struct FilteredTask {
         self.isFilter = true
     }
 }
+
+/// AddPracticeNoteVC用の構造体
+struct TaskForAddNote {
+    
+    let taskID: String
+    let userID: String
+    let groupID: String
+    let title: String
+    let cause: String
+    let order: Int
+    let isComplete: Bool
+    let isDeleted: Bool
+    let created_at: Date
+    let updated_at: Date
+    var isDisplay: Bool // ノート追加画面に表示されているか否か
+    
+    init(task: Task) {
+        self.taskID = task.taskID
+        self.userID = task.userID
+        self.groupID = task.groupID
+        self.title = task.title
+        self.cause = task.cause
+        self.order = task.order
+        self.isComplete = task.isComplete
+        self.isDeleted = task.isDeleted
+        self.created_at = task.created_at
+        self.updated_at = task.updated_at
+        self.isDisplay = true
+    }
+}

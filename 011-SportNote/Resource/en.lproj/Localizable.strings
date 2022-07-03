@@ -119,6 +119,8 @@
 "Result" = "Result";
 "Reflection" = "Reflection";
 "EmptyNote" = "There are no notes.";
+"TaskExistError" = "It is already displayed.";
+"TaskEmptyError" = "There are no unresolved tasks.";
 
 // MARK: - Target
 "AddTarget" = "Add target";

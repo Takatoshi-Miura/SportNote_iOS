@@ -121,6 +121,8 @@ let TITLE_CONSCIOUSNESS = NSLocalizedString("Consciousness", comment: "")
 let TITLE_RESULT = NSLocalizedString("Result", comment: "")
 let TITLE_REFLECTION = NSLocalizedString("Reflection", comment: "")
 let MESSAGE_EMPTY_NOTE = NSLocalizedString("EmptyNote", comment: "")
+let TASK_EXIST_ERROR = NSLocalizedString("TaskExistError", comment: "")
+let TASK_EMPTY_ERROR = NSLocalizedString("TaskEmptyError", comment: "")
 
 // MARK: - Target
 let TITLE_ADD_TARGET = NSLocalizedString("AddTarget", comment: "")

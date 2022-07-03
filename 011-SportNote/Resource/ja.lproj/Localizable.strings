@@ -120,6 +120,8 @@
 "Result" = "結果";
 "Reflection" = "反省";
 "EmptyNote" = "ノートがありません。";
+"TaskExistError" = "既に表示されています。";
+"TaskEmptyError" = "未解決の課題がありません。";
 
 // MARK: - Target
 "AddTarget" = "目標の追加";
