@@ -45,6 +45,14 @@ class AddTournamentNoteViewController: UIViewController {
         case weather
     }
     
+    private enum TextViewType: Int, CaseIterable {
+        case condition
+        case target
+        case consciousness
+        case result
+        case reflection
+    }
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,8 +72,6 @@ class AddTournamentNoteViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if isViewer {
-            // TODO: 更新処理
-            
             // Firebaseに送信
             if Network.isOnline() {
                 let firebaseManager = FirebaseManager()
@@ -88,6 +94,11 @@ class AddTournamentNoteViewController: UIViewController {
         initTextView(textView: consciousnessTextView, doneAction: #selector(tapOkButton(_:)))
         initTextView(textView: resultTextView, doneAction: #selector(tapOkButton(_:)))
         initTextView(textView: reflectionTextView, doneAction: #selector(tapOkButton(_:)))
+        conditionTextView.tag = TextViewType.condition.rawValue
+        targetTextView.tag = TextViewType.target.rawValue
+        consciousnessTextView.tag = TextViewType.consciousness.rawValue
+        resultTextView.tag = TextViewType.result.rawValue
+        reflectionTextView.tag = TextViewType.reflection.rawValue
         
         if isViewer {
             naviBar.isHidden = true
@@ -253,6 +264,12 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         selectedDate = datePicker.date
         closePicker(pickerView)
         tableView.reloadData()
+        
+        if isViewer {
+            // 日付を更新
+            let realmManager = RealmManager()
+            realmManager.updateNoteDate(noteID: realmNote.noteID, date: selectedDate)
+        }
     }
     
     @objc func datePickerCancelAction() {
@@ -285,6 +302,13 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         selectedWeather[TITLE_TEMPERATURE] = weatherPicker.selectedRow(inComponent: 1)
         closePicker(pickerView)
         tableView.reloadData()
+        
+        if isViewer {
+            // 天気と気温を更新
+            let realmManager = RealmManager()
+            realmManager.updateNoteWeather(noteID: realmNote.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
+            realmManager.updateNoteTemperature(noteID: realmNote.noteID, temperature: temperature[selectedWeather[TITLE_TEMPERATURE]!])
+        }
     }
     
     @objc func weatherPickerCancelAction() {
@@ -300,6 +324,34 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
 extension AddTournamentNoteViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
+        if !isViewer {
+            return
+        }
+        
+        // 差分がなければ何もしない
+        let realmManager = RealmManager()
+        switch TextViewType.allCases[textView.tag] {
+        case .condition:
+            if textView.text! != realmNote.condition {
+                realmManager.updateNoteCondition(noteID: realmNote.noteID, condition: textView.text!)
+            }
+        case .target:
+            if textView.text! != realmNote.target {
+                realmManager.updateNoteTarget(noteID: realmNote.noteID, target: textView.text!)
+            }
+        case .consciousness:
+            if textView.text! != realmNote.consciousness {
+                realmManager.updateNoteConsciousness(noteID: realmNote.noteID, consciousness: textView.text!)
+            }
+        case .result:
+            if textView.text! != realmNote.result {
+                realmManager.updateNoteResult(noteID: realmNote.noteID, result: textView.text!)
+            }
+        case .reflection:
+            if textView.text! != realmNote.reflection {
+                realmManager.updateNoteReflection(noteID: realmNote.noteID, reflection: textView.text!)
+            }
+        }
     }
     
 }

@@ -37,6 +37,7 @@ class AddPracticeNoteViewController: UIViewController {
     var delegate: AddPracticeNoteViewControllerDelegate?
     var isViewer = false
     var realmNote = Note()
+    private var realmMemoArray = [Memo]()
     
     private var pickerView = UIView()
     private var datePicker = UIDatePicker()
@@ -62,6 +63,13 @@ class AddPracticeNoteViewController: UIViewController {
         case task
     }
     
+    private enum TextViewType: Int, CaseIterable {
+        case condition
+        case purpose
+        case detail
+        case reflection
+    }
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -71,10 +79,7 @@ class AddPracticeNoteViewController: UIViewController {
         initDatePicker()
         initWeatherPicker()
         initTaskPicker()
-        // 未解決の課題を取得
-        let realmManager = RealmManager()
-        taskArray = realmManager.getTaskArrayForAddNoteView()
-        displayTaskArray = realmManager.getTaskArrayForAddNoteView()
+        initTaskData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -87,14 +92,31 @@ class AddPracticeNoteViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if isViewer {
-            // TODO: 更新処理
-            
-            // Firebaseに送信
-            if Network.isOnline() {
-                let firebaseManager = FirebaseManager()
-                firebaseManager.updateNote(note: realmNote)
+        if !isViewer {
+            return
+        }
+        // メモの更新(追加はできない仕様)
+        if !realmMemoArray.isEmpty {
+            for (index, memo) in realmMemoArray.enumerated() {
+                // 入力されている場合のみ作成
+                let cell = taskTableView.cellForRow(at: [0, index]) as! TaskCellForAddNote
+                if cell.effectivenessTextView.text.isEmpty {
+                    continue
+                } else {
+                    let realmManager = RealmManager()
+                    realmManager.updateMemoDetail(memoID: memo.memoID, detail: cell.effectivenessTextView.text!)
+                    // Firebaseに送信
+                    if Network.isOnline() {
+                        let firebaseManager = FirebaseManager()
+                        firebaseManager.updateMemo(memo: memo)
+                    }
+                }
             }
+        }
+        // Firebaseに送信
+        if Network.isOnline() {
+            let firebaseManager = FirebaseManager()
+            firebaseManager.updateNote(note: realmNote)
         }
     }
     
@@ -106,18 +128,22 @@ class AddPracticeNoteViewController: UIViewController {
         detailLabel.text = TITLE_DETAIL
         taskLabel.text = TITLE_TACKLED_TASK
         reflectionLabel.text = TITLE_REFLECTION
-        
         addButton.setTitle(TITLE_ADD, for: .normal)
         
         initTextView(textView: conditionTextView)
         initTextView(textView: purposeTextView)
         initTextView(textView: detailTextView)
         initTextView(textView: reflectionTextView)
+        conditionTextView.tag = TextViewType.condition.rawValue
+        purposeTextView.tag = TextViewType.purpose.rawValue
+        detailTextView.tag = TextViewType.detail.rawValue
+        reflectionTextView.tag = TextViewType.reflection.rawValue
         
         if isViewer {
             naviBar.isHidden = true
             addButton.isHidden = true
             // TODO: レイアウト要修正
+            // ノート内容を反映
             conditionTextView.text = realmNote.condition
             purposeTextView.text = realmNote.purpose
             detailTextView.text = realmNote.detail
@@ -129,10 +155,25 @@ class AddPracticeNoteViewController: UIViewController {
         dateTableView.tag = TableViewType.date.rawValue
         taskTableView.tag = TableViewType.task.rawValue
         dateTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        taskTableView.register(UINib(nibName: "TaskCellForAddNote", bundle: nil), forCellReuseIdentifier: "TaskMeasuresTableViewCell")
+        taskTableView.register(UINib(nibName: "TaskCellForAddNote", bundle: nil), forCellReuseIdentifier: "TaskCellForAddNote")
         if #available(iOS 15.0, *) {
             dateTableView.sectionHeaderTopPadding = 0
             taskTableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 課題データの取得
+    private func initTaskData() {
+        let realmManager = RealmManager()
+        taskArray = realmManager.getTaskArrayForAddNoteView()
+        
+        if isViewer {
+            // ノートと連動している課題を取得
+            displayTaskArray = realmManager.getTaskArrayForAddNoteView(noteID: realmNote.noteID)
+            realmMemoArray = realmManager.getMemo(noteID: realmNote.noteID)
+        } else {
+            // 未解決の課題を取得
+            displayTaskArray = realmManager.getTaskArrayForAddNoteView()
         }
     }
     
@@ -188,18 +229,34 @@ class AddPracticeNoteViewController: UIViewController {
             showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
             return
         }
-        
-        // TODO: メモを作成＆保存
-        // 入力されているtaskTableViewのセルのtaskから対策を割り出す（対策IDを知りたい）
-        // それがわかればnoteIDと対策IDでメモを作成できる。
-        if !displayTaskArray.isEmpty {
-            
-        }
-        
-        // Firebaseに送信
         if Network.isOnline() {
             let firebaseManager = FirebaseManager()
             firebaseManager.saveNote(note: practiceNote, completion: {})
+        }
+        
+        // メモを作成＆保存
+        if !displayTaskArray.isEmpty {
+            for (index, _) in displayTaskArray.enumerated() {
+                // 入力されている場合のみ作成
+                let cell = taskTableView.cellForRow(at: [0, index]) as! TaskCellForAddNote
+                if cell.effectivenessTextView.text.isEmpty {
+                    continue
+                } else {
+                    let memo = Memo()
+                    memo.measuresID = cell.measures.measuresID
+                    memo.noteID = practiceNote.noteID
+                    memo.detail = cell.effectivenessTextView.text
+                    
+                    if !realmManager.createRealm(object: memo) {
+                        showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
+                        return
+                    }
+                    if Network.isOnline() {
+                        let firebaseManager = FirebaseManager()
+                        firebaseManager.saveMemo(memo: memo, completion: {})
+                    }
+                }
+            }
         }
         
         // TODO: NoteVCにアニメーション付きで追加
@@ -245,9 +302,11 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
             }
             return cell
         case .task:
-            let task = displayTaskArray[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForAddNote", for: indexPath) as! TaskCellForAddNote
-            cell.printInfo(task: task)
+            cell.printInfo(task: displayTaskArray[indexPath.row])
+            if isViewer {
+                cell.printMemo(memo: realmMemoArray[indexPath.row])
+            }
             return cell
         }
     }
@@ -374,6 +433,12 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         selectedDate = datePicker.date
         closePicker(pickerView)
         dateTableView.reloadData()
+        
+        if isViewer {
+            // 日付を更新
+            let realmManager = RealmManager()
+            realmManager.updateNoteDate(noteID: realmNote.noteID, date: selectedDate)
+        }
     }
     
     @objc func datePickerCancelAction() {
@@ -407,6 +472,13 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         selectedWeather[TITLE_TEMPERATURE] = weatherPicker.selectedRow(inComponent: 1)
         closePicker(pickerView)
         dateTableView.reloadData()
+        
+        if isViewer {
+            // 天気と気温を更新
+            let realmManager = RealmManager()
+            realmManager.updateNoteWeather(noteID: realmNote.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
+            realmManager.updateNoteWeather(noteID: realmNote.noteID, weather: temperature[selectedWeather[TITLE_TEMPERATURE]!])
+        }
     }
     
     @objc func weatherPickerCancelAction() {
@@ -443,6 +515,37 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
     
     @objc func taskPickerCancelAction() {
         closePicker(pickerView)
+    }
+    
+}
+
+extension AddPracticeNoteViewController: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if !isViewer {
+            return
+        }
+        
+        // 差分がなければ何もしない
+        let realmManager = RealmManager()
+        switch TextViewType.allCases[textView.tag] {
+        case .condition:
+            if textView.text! != realmNote.condition {
+                realmManager.updateNoteCondition(noteID: realmNote.noteID, condition: textView.text!)
+            }
+        case .purpose:
+            if textView.text! != realmNote.purpose {
+                realmManager.updateNotePurpose(noteID: realmNote.noteID, purpose: textView.text!)
+            }
+        case .detail:
+            if textView.text! != realmNote.detail {
+                realmManager.updateNoteDetail(noteID: realmNote.noteID, detail: textView.text!)
+            }
+        case .reflection:
+            if textView.text! != realmNote.reflection {
+                realmManager.updateNoteReflection(noteID: realmNote.noteID, reflection: textView.text!)
+            }
+        }
     }
     
 }

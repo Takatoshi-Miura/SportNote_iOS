@@ -94,11 +94,8 @@ class TaskDetailViewController: UIViewController {
         causeLabel.text = TITLE_CAUSE
         measuresLabel.text = TITLE_MEASURES
         titleTextField.text = task.title
+        initTextView(textView: causeTextView)
         causeTextView.text = task.cause
-        causeTextView.layer.borderColor = UIColor.systemGray6.cgColor
-        causeTextView.layer.borderWidth = 1.0
-        causeTextView.layer.cornerRadius = 5.0
-        causeTextView.layer.masksToBounds = true
     }
     
     // MARK: - Action

@@ -64,7 +64,7 @@
 		8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D3124A17CD400441B32 /* LaunchScreen.storyboard */; };
 		8D665D3B24A17D9A00441B32 /* LoginViewController_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D3A24A17D9A00441B32 /* LoginViewController_old.swift */; };
 		8D69FC9824B7085900DFECB3 /* TaskCellForAddNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D69FC9624B7085900DFECB3 /* TaskCellForAddNote.swift */; };
-		8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */; };
+		8D69FC9924B7085900DFECB3 /* TaskCellForAddNote.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D69FC9724B7085900DFECB3 /* TaskCellForAddNote.xib */; };
 		8D7853FE24A6FE0000CCA440 /* TaskDetailViewController_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7853FD24A6FE0000CCA440 /* TaskDetailViewController_old.swift */; };
 		8D7BAB4F24A5B18800BE196B /* AddTaskViewController_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7BAB4E24A5B18800BE196B /* AddTaskViewController_old.swift */; };
 		8D7C676024DD03F6005599AD /* PageViewController_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7C675F24DD03F6005599AD /* PageViewController_old.swift */; };
@@ -191,7 +191,7 @@
 		8D665D3424A17CD400441B32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D665D3A24A17D9A00441B32 /* LoginViewController_old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController_old.swift; sourceTree = "<group>"; };
 		8D69FC9624B7085900DFECB3 /* TaskCellForAddNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCellForAddNote.swift; sourceTree = "<group>"; };
-		8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskMeasuresTableViewCell.xib; sourceTree = "<group>"; };
+		8D69FC9724B7085900DFECB3 /* TaskCellForAddNote.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskCellForAddNote.xib; sourceTree = "<group>"; };
 		8D7853FD24A6FE0000CCA440 /* TaskDetailViewController_old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController_old.swift; sourceTree = "<group>"; };
 		8D7BAB4E24A5B18800BE196B /* AddTaskViewController_old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController_old.swift; sourceTree = "<group>"; };
 		8D7C675F24DD03F6005599AD /* PageViewController_old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController_old.swift; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 				8D91CE8E28138239000D3B1F /* FreeNoteViewController.xib */,
 				8D91CE94281896E6000D3B1F /* AddPracticeNoteViewController.xib */,
 				8D91CE88280CC80C000D3B1F /* AddTournamentNoteViewController.xib */,
-				8D69FC9724B7085900DFECB3 /* TaskMeasuresTableViewCell.xib */,
+				8D69FC9724B7085900DFECB3 /* TaskCellForAddNote.xib */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -774,7 +774,7 @@
 				8D91CE8A280CC80C000D3B1F /* AddTournamentNoteViewController.xib in Resources */,
 				8D5CFBFE27FBA36A008DF02E /* AddGroupViewController.xib in Resources */,
 				8D665D2E24A17CD300441B32 /* Main.storyboard in Resources */,
-				8D69FC9924B7085900DFECB3 /* TaskMeasuresTableViewCell.xib in Resources */,
+				8D69FC9924B7085900DFECB3 /* TaskCellForAddNote.xib in Resources */,
 				8D91CE96281896E6000D3B1F /* AddPracticeNoteViewController.xib in Resources */,
 				8DBE0260285938D90047C751 /* NoteFilterViewController.xib in Resources */,
 				8D2BE0CE2852A09C009AC672 /* TutorialViewController.xib in Resources */,

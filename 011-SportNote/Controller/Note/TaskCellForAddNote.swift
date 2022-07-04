@@ -10,8 +10,7 @@ import UIKit
 
 class TaskCellForAddNote: UITableViewCell {
 
-    // MARK: - UI
-    
+    // MARK: - UI,Variable
     @IBOutlet weak var taskTitleLabel: UILabel!
     @IBOutlet weak var taskMeasuresTitleLabel: UILabel!
     @IBOutlet weak var effectivenessTextView: UITextView!
@@ -20,7 +19,6 @@ class TaskCellForAddNote: UITableViewCell {
     var memo = Memo()
 
     // MARK: - LifeCycle
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         effectivenessTextView.layer.borderColor = UIColor.systemGray.cgColor
@@ -63,10 +61,16 @@ class TaskCellForAddNote: UITableViewCell {
     
     /// 課題データを表示
     func printInfo(task: TaskForAddNote) {
-        self.task = task
         let realmManager = RealmManager()
+        self.task = task
+        self.measures = realmManager.getPriorityMeasuresInTask(taskID: task.taskID)
         taskTitleLabel.text = task.title
         taskMeasuresTitleLabel.text = realmManager.getMeasuresTitleInTask(taskID: task.taskID)
+    }
+    
+    /// メモを入力
+    func printMemo(memo: Memo) {
+        effectivenessTextView.text = memo.detail
     }
     
 }

@@ -7,6 +7,7 @@
 //
 
 import RealmSwift
+import Foundation
 
 class RealmManager {
     
@@ -224,6 +225,43 @@ extension RealmManager {
             .filter("(isDeleted == false)")
             .first
         return result ?? Task()
+    }
+    
+    /// Realmの課題を取得
+    /// - Parameters:
+    ///   - noteID: ノートID
+    /// - Returns: 課題データ
+    func getTask(noteID: String) -> [Task] {
+        var taskArray = [Task]()
+        
+        let memoArray = getMemo(noteID: noteID)
+        var measuresArray = [Measures]()
+        for memo in memoArray {
+            let measures = getMeasures(measuresID: memo.measuresID)
+            measuresArray.append(measures)
+        }
+        for measures in measuresArray {
+            let task = getTask(taskID: measures.taskID)
+            taskArray.append(task)
+        }
+        
+        return taskArray
+    }
+    
+    /// Realmの課題を取得(ノートViewer用)
+    /// - Parameters:
+    ///   - noteID: ノートID
+    /// - Returns: 課題データ
+    func getTaskArrayForAddNoteView(noteID: String) -> [TaskForAddNote] {
+        var taskForAddNoteArray = [TaskForAddNote]()
+        
+        let taskArray = getTask(noteID: noteID)
+        for task in taskArray {
+            let taskForAddNote = TaskForAddNote(task: task)
+            taskForAddNoteArray.append(taskForAddNote)
+        }
+        
+        return taskForAddNoteArray
     }
     
     /// TaskViewController用task配列を返却
@@ -485,6 +523,26 @@ extension RealmManager {
         return measuresArray.first?.title ?? ""
     }
     
+    /// 課題に含まれる最優先の対策を取得
+    /// - Parameters:
+    ///   - taskID: 課題ID
+    /// - Returns: 対策
+    func getPriorityMeasuresInTask(taskID: String) -> Measures {
+        var measuresArray: [Measures] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "order", ascending: true),
+        ]
+        let results = realm.objects(Measures.self)
+                            .filter("taskID == '\(taskID)'")
+                            .filter("(isDeleted == false)")
+                            .sorted(by: sortProperties)
+        for measures in results {
+            measuresArray.append(measures)
+        }
+        return measuresArray.first!
+    }
+    
     /// 課題に含まれる対策を取得
     /// - Parameters:
     ///   - taskID: 課題ID
@@ -620,6 +678,22 @@ extension RealmManager {
         let results = realm.objects(Memo.self)
                             .filter("(measuresID == '\(measuresID)') && (isDeleted == false)")
                             .sorted(by: sortProperties)
+        for memo in results {
+            memoArray.append(memo)
+        }
+        return memoArray
+    }
+    
+    /// ノートに含まれるメモを取得
+    /// - Parameters:
+    ///   - noteID: ノートID
+    /// - Returns: ノートに含まれるメモ
+    func getMemo(noteID: String) -> [Memo] {
+        var memoArray: [Memo] = []
+        let realm = try! Realm()
+        let results = realm.objects(Memo.self)
+                            .filter("(noteID == '\(noteID)')")
+                            .filter("(isDeleted == false)")
         for memo in results {
             memoArray.append(memo)
         }
@@ -950,6 +1024,132 @@ extension RealmManager {
                            .filter("noteID == '\(noteID)'").first
         try! realm.write {
             result?.detail = detail
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの日付を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - date: 日付
+    func updateNoteDate(noteID: String, date: Date) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.date = date
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの天気を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - weather: 天気
+    func updateNoteWeather(noteID: String, weather: Int) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.weather = weather
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの気温を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - temperature: 気温
+    func updateNoteTemperature(noteID: String, temperature: Int) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.temperature = temperature
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの体調を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - condition: 体調
+    func updateNoteCondition(noteID: String, condition: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.condition = condition
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの練習目的を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - purpose: 練習目的
+    func updateNotePurpose(noteID: String, purpose: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.purpose = purpose
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの目標を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - target: 目標
+    func updateNoteTarget(noteID: String, target: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.target = target
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの意識することを更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - consciousness: 意識すること
+    func updateNoteConsciousness(noteID: String, consciousness: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.consciousness = consciousness
+            result?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの結果を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - result: 結果
+    func updateNoteResult(noteID: String, result: String) {
+        let realm = try! Realm()
+        let result1 = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result1?.result = result
+            result1?.updated_at = Date()
+        }
+    }
+    
+    /// ノートの反省を更新
+    /// - Parameters:
+    ///   - noteID: 更新したいノートのID
+    ///   - purpose: 反省
+    func updateNoteReflection(noteID: String, reflection: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                           .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.reflection = reflection
             result?.updated_at = Date()
         }
     }
