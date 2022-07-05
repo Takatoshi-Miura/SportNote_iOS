@@ -966,13 +966,19 @@ extension RealmManager {
     ///    - date: 取得したいノートの日付
     /// - Returns: ノートデータ
     func getNote(date: Date) -> [Note] {
-        var noteArray: [Note] = []
-        let realm = try! Realm()
-        let result = realm.objects(Note.self)
-                          .filter("date == %@", date)
-        for note in result {
-            noteArray.append(note)
+        var noteArray = [Note]()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        let da = formatter.string(from: date)
+        
+        let notes = getPracticeTournamentNote()
+        for note in notes {
+            if da == formatDate(date: note.date) {
+                noteArray.append(note)
+            }
         }
+        
         return noteArray
     }
     
