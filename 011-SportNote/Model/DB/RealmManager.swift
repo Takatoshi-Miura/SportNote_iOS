@@ -914,6 +914,7 @@ extension RealmManager {
         ]
         let result = realm.objects(Note.self)
             .filter("(noteType == \(NoteType.practice.rawValue)) || (noteType == \(NoteType.tournament.rawValue))")
+            .filter("(isDeleted == false)")
             .sorted(by: sortProperties)
         for note in result {
             noteArray.append(note)
@@ -1170,6 +1171,19 @@ extension RealmManager {
             try! realm.write {
                 note.userID = userID
             }
+        }
+    }
+    
+    /// ノートを削除
+    /// - Parameters:
+    ///    - noteID: ノートID
+    func updateNoteIsDeleted(noteID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+                          .filter("noteID == '\(noteID)'").first
+        try! realm.write {
+            result?.isDeleted = true
+            result?.updated_at = Date()
         }
     }
     

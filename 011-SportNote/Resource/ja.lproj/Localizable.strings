@@ -124,6 +124,9 @@
 "TaskExistError" = "既に表示されています。";
 "TaskEmptyError" = "未解決の課題がありません。";
 "DetailLabel" = "詳細";
+"NoteDetail" = "ノートの詳細";
+"DeleteNoteTitle" = "ノートの削除";
+"DeleteNoteMessage" = "ノートを削除しますか？\n削除すると復元できません。";
 
 // MARK: - Target
 "AddTarget" = "目標の追加";

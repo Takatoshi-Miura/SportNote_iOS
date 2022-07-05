@@ -123,6 +123,9 @@
 "TaskExistError" = "It is already displayed.";
 "TaskEmptyError" = "There are no unresolved tasks.";
 "DetailLabel" = "Detail";
+"NoteDetail" = "Note Detail";
+"DeleteNoteTitle" = "Delete note";
+"DeleteNoteMessage" = "Do you want to delete the note?\nIf you delete an note, you cannot restore it.";
 
 // MARK: - Target
 "AddTarget" = "Add target";

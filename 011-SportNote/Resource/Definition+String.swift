@@ -125,6 +125,9 @@ let MESSAGE_EMPTY_NOTE = NSLocalizedString("EmptyNote", comment: "")
 let TASK_EXIST_ERROR = NSLocalizedString("TaskExistError", comment: "")
 let TASK_EMPTY_ERROR = NSLocalizedString("TaskEmptyError", comment: "")
 let TITLE_DETAIL_LABEL = NSLocalizedString("DetailLabel", comment: "")
+let TITLE_NOTE_DETAIL = NSLocalizedString("NoteDetail", comment: "")
+let TITLE_DELETE_NOTE = NSLocalizedString("DeleteNoteTitle", comment: "")
+let MESSAGE_DELETE_NOTE = NSLocalizedString("DeleteNoteMessage", comment: "")
 
 // MARK: - Target
 let TITLE_ADD_TARGET = NSLocalizedString("AddTarget", comment: "")
