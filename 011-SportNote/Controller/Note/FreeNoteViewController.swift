@@ -36,15 +36,11 @@ class FreeNoteViewController: UIViewController {
     /// 画面初期化
     private func initView() {
         titleLabel.text = TITLE_TITLE
-        detailLabel.text = "詳細"
+        detailLabel.text = TITLE_DETAIL_LABEL
         titleTextField.text = freeNote.title
+        titleTextField.inputAccessoryView = createToolBar(#selector(hideKeyboad(_:)))
+        initTextView(textView: detailTextView)
         detailTextView.text = freeNote.detail
-        detailTextView.layer.borderColor = UIColor.systemGray5.cgColor
-        detailTextView.layer.borderWidth = 1.0
-        detailTextView.layer.cornerRadius = 5.0
-        detailTextView.layer.masksToBounds = true
-        detailTextView.inputAccessoryView = createToolBar(#selector(hideKeyboad(_:)), #selector(hideKeyboad(_:)))
-        titleTextField.inputAccessoryView = createToolBar(#selector(hideKeyboad(_:)), #selector(hideKeyboad(_:)))
     }
     
     /// キーボードを隠す

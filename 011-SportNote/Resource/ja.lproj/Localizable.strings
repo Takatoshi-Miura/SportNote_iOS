@@ -100,6 +100,7 @@
 "AddNoteTitle" = "ノートの追加";
 "AddMessage" = "何を追加しますか？";
 "FreeNote" = "フリーノート";
+"FreeNoteDefaultDetail" = "常に最上位に表示されるノートです。";
 "SearchNoteTitle" = "ノートを検索";
 
 // MARK: - NoteFilterViewController
@@ -122,6 +123,7 @@
 "EmptyNote" = "ノートがありません。";
 "TaskExistError" = "既に表示されています。";
 "TaskEmptyError" = "未解決の課題がありません。";
+"DetailLabel" = "詳細";
 
 // MARK: - Target
 "AddTarget" = "目標の追加";

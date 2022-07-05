@@ -126,7 +126,13 @@ class DataConverter {
     private func convertOldFreeNote(completion: @escaping () -> ()) {
         firebaseManager.getOldFreeNote({
             let oldFreeNote = self.firebaseManager.oldFreeNote
-            if oldFreeNote.getUserID() != "FreeNoteIsEmpty" {
+            if oldFreeNote.getUserID() == "FreeNoteIsEmpty" {
+                // 新規ユーザの場合、フリーノートを自動作成
+                let freeNote = Note()
+                freeNote.title = TITLE_FREE_NOTE
+                freeNote.detail = MESSAGE_FREE_NOTE
+                self.noteArray.append(freeNote)
+            } else {
                 self.noteArray.append(self.convertToFreeNote(oldFreeNote: oldFreeNote))
                 self.firebaseManager.deleteOldFreeNote(oldFreeNote: oldFreeNote, completion: {})
             }

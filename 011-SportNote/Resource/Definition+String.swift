@@ -101,6 +101,7 @@ let TITLE_ORDER = NSLocalizedString("GroupOrder", comment: "")
 let TITLE_ADD_NOTE = NSLocalizedString("AddNoteTitle", comment: "")
 let MESSAGE_ADD_NOTE = NSLocalizedString("AddMessage", comment: "")
 let TITLE_FREE_NOTE = NSLocalizedString("FreeNote", comment: "")
+let MESSAGE_FREE_NOTE = NSLocalizedString("FreeNoteDefaultDetail", comment: "")
 let TITLE_SEARCH_NOTE = NSLocalizedString("SearchNoteTitle", comment: "")
 
 // MARK: - NoteFilterViewController
@@ -123,6 +124,7 @@ let TITLE_REFLECTION = NSLocalizedString("Reflection", comment: "")
 let MESSAGE_EMPTY_NOTE = NSLocalizedString("EmptyNote", comment: "")
 let TASK_EXIST_ERROR = NSLocalizedString("TaskExistError", comment: "")
 let TASK_EMPTY_ERROR = NSLocalizedString("TaskEmptyError", comment: "")
+let TITLE_DETAIL_LABEL = NSLocalizedString("DetailLabel", comment: "")
 
 // MARK: - Target
 let TITLE_ADD_TARGET = NSLocalizedString("AddTarget", comment: "")

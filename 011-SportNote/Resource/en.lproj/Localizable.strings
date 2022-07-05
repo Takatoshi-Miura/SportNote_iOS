@@ -99,6 +99,7 @@
 "AddNoteTitle" = "Add note";
 "AddMessage" = "What do you want to add?";
 "FreeNote" = "FreeNote";
+"FreeNoteDefaultDetail" = "The note that is always displayed at the top.";
 "SearchNoteTitle" = "Search note";
 
 // MARK: - NoteFilterViewController
@@ -121,6 +122,7 @@
 "EmptyNote" = "There are no notes.";
 "TaskExistError" = "It is already displayed.";
 "TaskEmptyError" = "There are no unresolved tasks.";
+"DetailLabel" = "Detail";
 
 // MARK: - Target
 "AddTarget" = "Add target";
