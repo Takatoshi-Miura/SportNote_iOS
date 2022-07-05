@@ -102,6 +102,7 @@ class CalendarViewController: UIViewController {
     private func refreshData() {
         let realmManager = RealmManager()
         noteArray = realmManager.getPracticeTournamentNote()
+        calendar.reloadData()
         tableView.reloadData()
     }
     
