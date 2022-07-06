@@ -24,6 +24,7 @@ class AddTournamentNoteCoordinator: Coordinator {
         // Viewer
         self.navigationController = navigationController
         addTournamentNoteViewController = AddTournamentNoteViewController()
+        addTournamentNoteViewController.delegate = self
         addTournamentNoteViewController.realmNote = note
         addTournamentNoteViewController.isViewer = true
         navigationController.pushViewController(addTournamentNoteViewController, animated: true)
@@ -47,6 +48,11 @@ extension AddTournamentNoteCoordinator: AddTournamentNoteViewControllerDelegate 
     // NoteVC ← AddTournamentNoteVC
     func addTournamentNoteVCDismiss(_ viewController: UIViewController) {
         viewController.dismiss(animated: true, completion: nil)
+    }
+    
+    // NoteVC ← AddTournamentNoteVC
+    func addTournamentNoteVCDeleteNote() {
+        navigationController?.popViewController(animated: true)
     }
     
 }

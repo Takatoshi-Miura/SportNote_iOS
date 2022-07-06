@@ -11,6 +11,8 @@ import UIKit
 protocol AddTournamentNoteViewControllerDelegate: AnyObject {
     // モーダルを閉じる時の処理
     func addTournamentNoteVCDismiss(_ viewController: UIViewController)
+    // ノート削除時の処理
+    func addTournamentNoteVCDeleteNote()
 }
 
 class AddTournamentNoteViewController: UIViewController {
@@ -57,6 +59,7 @@ class AddTournamentNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        initNavigation()
         initTableView()
         initDatePicker()
         initWeatherPicker()
@@ -120,6 +123,17 @@ class AddTournamentNoteViewController: UIViewController {
         }
     }
     
+    private func initNavigation() {
+        if !isViewer {
+            return
+        }
+        self.title = TITLE_NOTE_DETAIL
+        var navigationItems: [UIBarButtonItem] = []
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteNote))
+        navigationItems.append(deleteButton)
+        navigationItem.rightBarButtonItems = navigationItems
+    }
+    
     private func initTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         if #available(iOS 15.0, *) {
@@ -129,6 +143,15 @@ class AddTournamentNoteViewController: UIViewController {
     
     
     // MARK: - Action
+    
+    /// ノートを削除
+    @objc func deleteNote() {
+        showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
+            let realmManager = RealmManager()
+            realmManager.updateNoteIsDeleted(noteID: self.realmNote.noteID)
+            self.delegate?.addTournamentNoteVCDeleteNote()
+        })
+    }
     
     /// 保存ボタンタップ時の処理
     @IBAction func tapSaveButton(_ sender: Any) {
