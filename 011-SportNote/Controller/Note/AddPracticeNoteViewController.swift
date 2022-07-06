@@ -199,7 +199,7 @@ class AddPracticeNoteViewController: UIViewController {
         showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
             let realmManager = RealmManager()
             realmManager.updateNoteIsDeleted(noteID: self.realmNote.noteID)
-            // TODO: ノートに含まれるメモを削除
+            realmManager.updateMemoIsDeleted(noteID: self.realmNote.noteID)
             self.delegate?.addPracticeNoteVCDeleteNote()
         })
     }

@@ -740,6 +740,16 @@ extension RealmManager {
         }
     }
     
+    /// メモの削除フラグを更新
+    /// - Parameters:
+    ///   - noteID: メモ
+    func updateMemoIsDeleted(noteID: String) {
+        let memoArray = getMemo(noteID: noteID)
+        for memo in memoArray {
+            updateMemoIsDeleted(memoID: memo.memoID)
+        }
+    }
+    
     /// ユーザーIDを更新
     /// - Parameters:
     ///    - userID: ユーザーID
