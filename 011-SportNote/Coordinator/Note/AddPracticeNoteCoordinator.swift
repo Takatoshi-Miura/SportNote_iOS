@@ -24,6 +24,7 @@ class AddPracticeNoteCoordinator: Coordinator {
         // Viewer
         self.navigationController = navigationController
         addPracticeNoteViewController = AddPracticeNoteViewController()
+        addPracticeNoteViewController.delegate = self
         addPracticeNoteViewController.realmNote = note
         addPracticeNoteViewController.isViewer = true
         navigationController.pushViewController(addPracticeNoteViewController, animated: true)
@@ -46,6 +47,11 @@ extension AddPracticeNoteCoordinator: AddPracticeNoteViewControllerDelegate {
     // NoteVC ← AddPracticeNoteVC
     func addPracticeNoteVCDismiss(_ viewController: UIViewController) {
         viewController.dismiss(animated: true, completion: nil)
+    }
+    
+    // NoteVC ← AddPracticeNoteVC
+    func addPracticeNoteVCDeleteNote() {
+        navigationController?.popViewController(animated: true)
     }
     
 }

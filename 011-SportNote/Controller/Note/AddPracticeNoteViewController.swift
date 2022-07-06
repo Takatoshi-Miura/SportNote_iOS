@@ -11,6 +11,8 @@ import UIKit
 protocol AddPracticeNoteViewControllerDelegate: AnyObject {
     // モーダルを閉じる時の処理
     func addPracticeNoteVCDismiss(_ viewController: UIViewController)
+    // ノート削除時の処理
+    func addPracticeNoteVCDeleteNote()
 }
 
 class AddPracticeNoteViewController: UIViewController {
@@ -198,7 +200,7 @@ class AddPracticeNoteViewController: UIViewController {
             let realmManager = RealmManager()
             realmManager.updateNoteIsDeleted(noteID: self.realmNote.noteID)
             // TODO: ノートに含まれるメモを削除
-            self.delegate?.addPracticeNoteVCDismiss(self)
+            self.delegate?.addPracticeNoteVCDeleteNote()
         })
     }
     
