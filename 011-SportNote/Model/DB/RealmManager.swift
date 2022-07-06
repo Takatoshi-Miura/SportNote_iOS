@@ -886,7 +886,7 @@ extension RealmManager {
     
     /// Realmのノートを取得
     /// - Returns: ノートデータ
-    private func getNote(ID: String) -> Note {
+    func getNote(ID: String) -> Note {
         let realm = try! Realm()
         let result = realm.objects(Note.self)
             .filter("noteID == '\(ID)'")

@@ -12,7 +12,6 @@ class MeasuresCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var measuresViewController = MeasuresViewController()
-//    let memoDetailCoordinator = MemoDetailCoordinator()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -40,9 +39,12 @@ extension MeasuresCoordinator: MeasuresViewControllerDelegate {
         navigationController?.popViewController(animated: true)
     }
     
-    // MeasuresVC → MemoDetailVC
+    // MeasuresVC → PracticeNoteVC
     func measuresVCMemoDidTap(memo: Memo) {
-//        memoDetailCoordinator.startFlow(in: navigationController!, withMemo: memo)
+        let realmManager = RealmManager()
+        let practiceNote = realmManager.getNote(ID: memo.noteID)
+        let addPracticeNoteCoordinator = AddPracticeNoteCoordinator()
+        addPracticeNoteCoordinator.startFrow(in: navigationController!, withNote: practiceNote)
     }
     
 }
