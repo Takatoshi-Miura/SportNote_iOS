@@ -135,6 +135,7 @@ class AddTournamentNoteViewController: UIViewController {
         // 大会ノートデータを作成＆保存
         let realmManager = RealmManager()
         let tournamentNote = Note()
+        tournamentNote.noteType = NoteType.tournament.rawValue
         tournamentNote.date = selectedDate
         tournamentNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
         tournamentNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
