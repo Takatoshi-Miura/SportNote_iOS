@@ -320,18 +320,19 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
             destinationIndex.row = count == 0 ? 0 : count - 1
         }
         
-        // 並び順を保存
+        // 並び替え
         let task = taskArray[sourceIndexPath.section][sourceIndexPath.row]
         taskArray[sourceIndexPath.section].remove(at: sourceIndexPath.row)
         taskArray[destinationIndex.section].insert(task, at: destinationIndex.row)
-        // TODO: 並び替え保存
-        //updateTaskOrderRealm(taskArray: taskArray)
         
-        // グループが変わる場合はグループも更新
-//        if sourceIndexPath.section != destinationIndex.section {
-//            let groupId = groupArray[destinationIndex.section].getGroupID()
-//            updateTaskGroupIdRealm(task: task, ID: groupId)
-//        }
+        // 並び順を保存
+        let realmManager = RealmManager()
+        realmManager.updateTaskOrder(taskArray: taskArray)
+        if sourceIndexPath.section != destinationIndex.section {
+            // グループが変わる場合はグループも更新
+            let groupId = groupArray[destinationIndex.section].groupID
+            realmManager.updateTaskGroupId(task: task, groupID: groupId)
+        }
         tableView.reloadData()
     }
     

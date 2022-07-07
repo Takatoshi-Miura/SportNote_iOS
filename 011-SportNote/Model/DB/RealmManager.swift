@@ -427,6 +427,44 @@ extension RealmManager {
         }
     }
     
+    /// 課題の並び順を更新
+    /// - Parameters:
+    ///   - taskArray: 課題配列
+    func updateTaskOrder(taskArray: [[Task]]) {
+        let realm = try! Realm()
+        
+        var index = 0
+        for tasks in taskArray {
+            for task in tasks {
+                let result = realm.objects(Task.self)
+                                    .filter("taskID == '\(task.taskID)'").first
+                try! realm.write {
+                    result?.order = index
+                    result?.updated_at = Date()
+                }
+                index += 1
+                if index > tasks.count - 1 {
+                    index = 0
+                    continue
+                }
+            }
+        }
+    }
+    
+    /// 課題の属するグループを更新
+    /// - Parameters:
+    ///    - task: 課題
+    ///    - groupId: 更新後のgroupId
+    func updateTaskGroupId(task: Task, groupID: String) {
+        let realm = try! Realm()
+        let result = realm.objects(Task.self)
+                            .filter("taskID == '\(task.taskID)'").first
+        try! realm.write {
+            result?.groupID = groupID
+            result?.updated_at = Date()
+        }
+    }
+    
     /// 課題の完了フラグを更新
     /// - Parameters:
     ///   - task: 課題
