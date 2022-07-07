@@ -98,13 +98,14 @@ class AddGroupViewController: UIViewController {
         group.color = pickerIndex
         
         let realmManager = RealmManager()
+        group.order = realmManager.getNumberOfGroups()
         if !realmManager.createRealm(object: group) {
             showErrorAlert(message: ERROR_MESSAGE_GROUP_CREATE_FAILED)
             return
         }
         
-        let firebaseManager = FirebaseManager()
         if Network.isOnline() {
+            let firebaseManager = FirebaseManager()
             firebaseManager.saveGroup(group: group, completion: {
                 self.dismissWithReload(group: group)
             })

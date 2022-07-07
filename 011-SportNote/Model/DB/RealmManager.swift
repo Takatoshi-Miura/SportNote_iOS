@@ -100,6 +100,13 @@ extension RealmManager {
         return groupArray
     }
     
+    /// TaskViewControllerに表示するGroupの個数を取得
+    /// - Returns: Group数
+    func getNumberOfGroups() -> Int {
+        let groupArray = getGroupArrayForTaskView()
+        return groupArray.count
+    }
+    
     /// Realmのグループを更新
     /// - Parameters:
     ///    - group: Realmオブジェクト
