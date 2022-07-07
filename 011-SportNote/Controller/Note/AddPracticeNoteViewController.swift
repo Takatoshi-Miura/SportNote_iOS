@@ -11,6 +11,8 @@ import UIKit
 protocol AddPracticeNoteViewControllerDelegate: AnyObject {
     // モーダルを閉じる時の処理
     func addPracticeNoteVCDismiss(_ viewController: UIViewController)
+    // ノート追加時の処理
+    func addPracticeNoteVCAddNote(_ viewController: UIViewController)
     // ノート削除時の処理
     func addPracticeNoteVCDeleteNote()
 }
@@ -283,8 +285,7 @@ class AddPracticeNoteViewController: UIViewController {
             }
         }
         
-        // TODO: NoteVCにアニメーション付きで追加
-        self.delegate?.addPracticeNoteVCDismiss(self)
+        self.delegate?.addPracticeNoteVCAddNote(self)
     }
     
 }

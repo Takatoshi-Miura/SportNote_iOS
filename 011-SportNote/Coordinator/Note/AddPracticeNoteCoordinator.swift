@@ -50,6 +50,12 @@ extension AddPracticeNoteCoordinator: AddPracticeNoteViewControllerDelegate {
     }
     
     // NoteVC ← AddPracticeNoteVC
+    func addPracticeNoteVCAddNote(_ viewController: UIViewController) {
+        (previousViewController as! NoteViewController).refreshData()
+        viewController.dismiss(animated: true, completion: nil)
+    }
+    
+    // NoteVC ← AddPracticeNoteVC
     func addPracticeNoteVCDeleteNote() {
         navigationController?.popViewController(animated: true)
     }

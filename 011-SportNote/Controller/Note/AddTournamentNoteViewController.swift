@@ -11,6 +11,8 @@ import UIKit
 protocol AddTournamentNoteViewControllerDelegate: AnyObject {
     // モーダルを閉じる時の処理
     func addTournamentNoteVCDismiss(_ viewController: UIViewController)
+    // ノート追加時の処理
+    func addTournamentNoteVCAddNote(_ viewController: UIViewController)
     // ノート削除時の処理
     func addTournamentNoteVCDeleteNote()
 }
@@ -179,8 +181,7 @@ class AddTournamentNoteViewController: UIViewController {
             firebaseManager.saveNote(note: tournamentNote, completion: {})
         }
         
-        // TODO: NoteVCにアニメーション付きで追加
-        self.delegate?.addTournamentNoteVCDismiss(self)
+        self.delegate?.addTournamentNoteVCAddNote(self)
     }
     
     /// キャンセルボタンタップ時の処理

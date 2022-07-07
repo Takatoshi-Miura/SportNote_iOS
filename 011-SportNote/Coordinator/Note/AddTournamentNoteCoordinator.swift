@@ -51,6 +51,12 @@ extension AddTournamentNoteCoordinator: AddTournamentNoteViewControllerDelegate 
     }
     
     // NoteVC ← AddTournamentNoteVC
+    func addTournamentNoteVCAddNote(_ viewController: UIViewController) {
+        (previousViewController as! NoteViewController).refreshData()
+        viewController.dismiss(animated: true, completion: nil)
+    }
+    
+    // NoteVC ← AddTournamentNoteVC
     func addTournamentNoteVCDeleteNote() {
         navigationController?.popViewController(animated: true)
     }

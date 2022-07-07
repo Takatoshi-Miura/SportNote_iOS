@@ -113,7 +113,7 @@ class NoteViewController: UIViewController {
     }
     
     /// データを取得
-    private func refreshData() {
+    func refreshData() {
         let realmManager = RealmManager()
         noteArray = realmManager.getPracticeTournamentNote()
         noteArray.insert(realmManager.getFreeNote(), at: 0)
