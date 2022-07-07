@@ -56,11 +56,7 @@ class AddTaskViewController: UIViewController {
         colorLabel.text = TITLE_GROUP
         titleTextField.text = ""
         titleTextField.placeholder = MASSAGE_TASK_EXAMPLE
-        causeTextView.text = ""
-        causeTextView.layer.borderColor = UIColor.systemGray6.cgColor
-        causeTextView.layer.borderWidth = 1.0
-        causeTextView.layer.cornerRadius = 5.0
-        causeTextView.layer.masksToBounds = true
+        initTextView(textView: causeTextView)
         measuresTextField.text = ""
         measuresTextField.placeholder = MASSAGE_MEASURES_EXAMPLE
         colorButton.backgroundColor = Color.allCases[realmGroupArray.first!.color].color
