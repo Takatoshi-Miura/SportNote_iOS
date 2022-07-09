@@ -63,7 +63,9 @@ class CalendarViewController: UIViewController {
     /// 画面初期化
     private func initView() {
         self.title = TITLE_TARGET
+        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(tapRefreshButton(_:)))
         let todayButton = UIBarButtonItem(title: TITLE_TODAY, style: .plain, target: self, action: #selector(tapTodayButton(_:)))
+        navigationItem.leftBarButtonItems = [refreshButton]
         navigationItem.rightBarButtonItems = [todayButton]
         printTarget()
     }
@@ -111,6 +113,11 @@ class CalendarViewController: UIViewController {
     /// 追加ボタンの処理
     @IBAction func tapAddButton(_ sender: Any) {
         self.delegate?.calendarVCAddTargetDidTap(self)
+    }
+    
+    /// 更新ボタンの処理
+    @objc func tapRefreshButton(_ sender: UIBarButtonItem) {
+        syncData()
     }
     
     /// 「今日」ボタンの処理
