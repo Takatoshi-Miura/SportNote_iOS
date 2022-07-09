@@ -200,6 +200,9 @@ class AddPracticeNoteViewController: UIViewController {
             // ノートと連動している課題を取得
             displayTaskArray = realmManager.getTaskArrayForAddNoteView(noteID: realmNote.noteID)
             realmMemoArray = realmManager.getMemo(noteID: realmNote.noteID)
+            if displayTaskArray.isEmpty {
+                taskTableView.separatorStyle = .none
+            }
         } else {
             // 未解決の課題を取得
             displayTaskArray = realmManager.getTaskArrayForAddNoteView()
