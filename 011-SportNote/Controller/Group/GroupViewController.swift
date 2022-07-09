@@ -22,11 +22,11 @@ class GroupViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
-    var group = Group()
     private var groupArray: [Group] = []
     private var pickerView = UIView()
     private let colorPicker = UIPickerView()
     private var pickerIndex: Int = 0
+    var group = Group()
     var delegate: GroupViewControllerDelegate?
     
     // MARK: - LifeCycle

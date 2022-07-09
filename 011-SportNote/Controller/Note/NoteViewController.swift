@@ -75,12 +75,12 @@ class NoteViewController: UIViewController {
     
     private func initNavigationController() {
         self.title = TITLE_NOTE
-        let iconImage = isFiltered ? UIImage(named: "icon_filter_fill")! : UIImage(named: "icon_filter_empty")!
-        let filterButton = UIBarButtonItem(image: iconImage,
-                                           style: .done,
-                                           target: self,
-                                           action: #selector(moveNoteFilterVC))
-        navigationItem.rightBarButtonItems = [filterButton]
+//        let iconImage = isFiltered ? UIImage(named: "icon_filter_fill")! : UIImage(named: "icon_filter_empty")!
+//        let filterButton = UIBarButtonItem(image: iconImage,
+//                                           style: .done,
+//                                           target: self,
+//                                           action: #selector(moveNoteFilterVC))
+//        navigationItem.rightBarButtonItems = [filterButton]
     }
     
     private func initSearchBar() {
@@ -221,6 +221,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
         switch NoteType.allCases[noteArray[indexPath.row].noteType] {
         case .free:
             cell.textLabel?.text = noteArray[indexPath.row].title
+            cell.imageView?.image = UIImage(systemName: "pin")!
             break
         case .practice:
             cell.textLabel?.text = noteArray[indexPath.row].detail
