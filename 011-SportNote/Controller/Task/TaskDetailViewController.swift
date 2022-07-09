@@ -94,8 +94,7 @@ class TaskDetailViewController: UIViewController {
         causeLabel.text = TITLE_CAUSE
         measuresLabel.text = TITLE_MEASURES
         titleTextField.text = task.title
-        initTextView(textView: causeTextView)
-        causeTextView.text = task.cause
+        initTextView(textView: causeTextView, text: task.cause)
     }
     
     // MARK: - Action

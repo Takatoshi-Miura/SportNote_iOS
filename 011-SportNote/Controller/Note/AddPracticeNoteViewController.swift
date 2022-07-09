@@ -135,10 +135,10 @@ class AddPracticeNoteViewController: UIViewController {
         reflectionLabel.text = TITLE_REFLECTION
         addButton.setTitle(TITLE_ADD, for: .normal)
         
-        initTextView(textView: conditionTextView)
-        initTextView(textView: purposeTextView)
-        initTextView(textView: detailTextView)
-        initTextView(textView: reflectionTextView)
+        initTextView(textView: conditionTextView, doneAction: #selector(tapOkButton(_:)))
+        initTextView(textView: purposeTextView, doneAction: #selector(tapOkButton(_:)))
+        initTextView(textView: detailTextView, doneAction: #selector(tapOkButton(_:)))
+        initTextView(textView: reflectionTextView, doneAction: #selector(tapOkButton(_:)))
         conditionTextView.tag = TextViewType.condition.rawValue
         purposeTextView.tag = TextViewType.purpose.rawValue
         detailTextView.tag = TextViewType.detail.rawValue
@@ -153,6 +153,15 @@ class AddPracticeNoteViewController: UIViewController {
             purposeTextView.text = realmNote.purpose
             detailTextView.text = realmNote.detail
             reflectionTextView.text = realmNote.reflection
+        }
+    }
+    
+    /// キーボード、Pickerを隠す
+    @objc func tapOkButton(_ sender: UIButton){
+        self.view.endEditing(true)
+        closePicker(pickerView)
+        if let index = dateTableView.indexPathForSelectedRow {
+            dateTableView.deselectRow(at: index, animated: true)
         }
     }
     

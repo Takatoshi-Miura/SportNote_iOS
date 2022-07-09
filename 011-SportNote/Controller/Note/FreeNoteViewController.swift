@@ -39,8 +39,7 @@ class FreeNoteViewController: UIViewController {
         detailLabel.text = TITLE_DETAIL_LABEL
         titleTextField.text = freeNote.title
         titleTextField.inputAccessoryView = createToolBar(#selector(hideKeyboad(_:)))
-        initTextView(textView: detailTextView)
-        detailTextView.text = freeNote.detail
+        initTextView(textView: detailTextView, text: freeNote.detail)
     }
     
     /// キーボードを隠す
