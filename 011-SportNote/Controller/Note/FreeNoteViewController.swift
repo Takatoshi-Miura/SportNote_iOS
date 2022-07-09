@@ -37,14 +37,8 @@ class FreeNoteViewController: UIViewController {
     private func initView() {
         titleLabel.text = TITLE_TITLE
         detailLabel.text = TITLE_DETAIL_LABEL
-        titleTextField.text = freeNote.title
-        titleTextField.inputAccessoryView = createToolBar(#selector(hideKeyboad(_:)))
+        initTextField(textField: titleTextField, placeholder: "", text: freeNote.title)
         initTextView(textView: detailTextView, text: freeNote.detail)
-    }
-    
-    /// キーボードを隠す
-    @objc func hideKeyboad(_ sender: UIButton){
-        self.view.endEditing(true)
     }
     
 }

@@ -54,15 +54,14 @@ class GroupViewController: UIViewController {
     }
     
     /// 画面初期化
-    func initView() {
+    private func initView() {
         self.title = TITLE_GROUP_DETAIL
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteGroup))
         navigationItem.rightBarButtonItems = [deleteButton]
         titleLabel.text = TITLE_TITLE
         colorLabel.text = TITLE_COLOR
         orderLabel.text = TITLE_ORDER
-        titleTextField.text = group.title
-        titleTextField.placeholder = MESSAGE_GROUP_EXAMPLE
+        initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE, text: group.title)
         colorButton.backgroundColor = Color.allCases[group.color].color
         colorButton.setTitle(Color.allCases[group.color].title, for: .normal)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -73,7 +72,7 @@ class GroupViewController: UIViewController {
     }
     
     /// Picker初期化
-    func initColorPicker() {
+    private func initColorPicker() {
         colorPicker.delegate = self
         colorPicker.dataSource = self
         colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)

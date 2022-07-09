@@ -54,11 +54,9 @@ class AddTaskViewController: UIViewController {
         causeLabel.text = TITLE_CAUSE
         measuresLabel.text = TITLE_MEASURES
         colorLabel.text = TITLE_GROUP
-        titleTextField.text = ""
-        titleTextField.placeholder = MASSAGE_TASK_EXAMPLE
         initTextView(textView: causeTextView)
-        measuresTextField.text = ""
-        measuresTextField.placeholder = MASSAGE_MEASURES_EXAMPLE
+        initTextField(textField: titleTextField, placeholder: MASSAGE_TASK_EXAMPLE)
+        initTextField(textField: measuresTextField, placeholder: MASSAGE_MEASURES_EXAMPLE)
         colorButton.backgroundColor = Color.allCases[realmGroupArray.first!.color].color
         colorButton.setTitle(realmGroupArray.first!.title, for: .normal)
     }

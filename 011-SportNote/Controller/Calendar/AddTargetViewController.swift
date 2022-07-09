@@ -39,8 +39,8 @@ class AddTargetViewController: UIViewController {
     private func initView() {
         naviItem.title = TITLE_ADD_TARGET
         titleLabel.text = TITLE_TITLE
-        titleTextField.placeholder = MESSAGE_TARGET_EXAMPLE
         targetLabel.text = TITLE_YEARLY_TARGET
+        initTextField(textField: titleTextField, placeholder: MESSAGE_TARGET_EXAMPLE)
         pickerView.backgroundColor = UIColor.systemGray6
         pickerView.selectRow(72, inComponent: 0, animated: false)
     }

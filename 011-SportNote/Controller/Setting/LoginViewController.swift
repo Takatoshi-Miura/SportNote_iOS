@@ -43,9 +43,9 @@ class LoginViewController: UIViewController {
     }
     
     ///画面初期化
-    func initView() {
-        loginTextField.placeholder = TITLE_MAIL_ADDRESS
-        passwordTextField.placeholder = TITLE_PASSWORD
+    private func initView() {
+        initTextField(textField: loginTextField, placeholder: TITLE_MAIL_ADDRESS)
+        initTextField(textField: passwordTextField, placeholder: TITLE_PASSWORD)
         if isLogin {
             label.text = TITLE_ALREADY_LOGIN
             loginButton.backgroundColor = UIColor.systemRed

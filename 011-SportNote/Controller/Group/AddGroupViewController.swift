@@ -41,18 +41,17 @@ class AddGroupViewController: UIViewController {
     }
     
     /// 画面表示の初期化
-    func initView() {
+    private func initView() {
         naviItem.title = TITLE_ADD_GROUP
         titleLabel.text = TITLE_TITLE
         colorLabel.text = TITLE_COLOR
-        titleTextField.text = ""
-        titleTextField.placeholder = MESSAGE_GROUP_EXAMPLE
+        initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE)
         colorButton.backgroundColor = Color.allCases[pickerIndex].color
         colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
     }
     
     /// Picker初期化
-    func initColorPicker() {
+    private func initColorPicker() {
         colorPicker.delegate = self
         colorPicker.dataSource = self
         colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)

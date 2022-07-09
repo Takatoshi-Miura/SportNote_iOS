@@ -15,7 +15,7 @@
 		8D2BE0CA284EB7CB009AC672 /* PageViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C9284EB7CB009AC672 /* PageViewCoordinator.swift */; };
 		8D2BE0CD2852A09C009AC672 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0CB2852A09C009AC672 /* TutorialViewController.swift */; };
 		8D2BE0CE2852A09C009AC672 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2BE0CC2852A09C009AC672 /* TutorialViewController.xib */; };
-		8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */; };
+		8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextField.swift */; };
 		8D3FFE5627F664940021C9FC /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE5527F664940021C9FC /* Coordinator.swift */; };
 		8D3FFE5827F665170021C9FC /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE5727F665170021C9FC /* AppCoordinator.swift */; };
 		8D3FFE5A27F665650021C9FC /* TabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FFE5927F665650021C9FC /* TabCoordinator.swift */; };
@@ -106,7 +106,7 @@
 		8D2BE0C9284EB7CB009AC672 /* PageViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewCoordinator.swift; sourceTree = "<group>"; };
 		8D2BE0CB2852A09C009AC672 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		8D2BE0CC2852A09C009AC672 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
-		8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+TextFIeld.swift"; sourceTree = "<group>"; };
+		8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+TextField.swift"; sourceTree = "<group>"; };
 		8D3FFE5527F664940021C9FC /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		8D3FFE5727F665170021C9FC /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		8D3FFE5927F665650021C9FC /* TabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCoordinator.swift; sourceTree = "<group>"; };
@@ -299,7 +299,7 @@
 				8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */,
 				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,
 				8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */,
-				8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift */,
+				8D3A4DBA25FC3D0B000D42C5 /* UIViewController+TextField.swift */,
 				8D91CE992819EB25000D3B1F /* UIViewController+TextView.swift */,
 			);
 			path = Utils;
@@ -702,7 +702,7 @@
 				8D3FFE5827F665170021C9FC /* AppCoordinator.swift in Sources */,
 				8D481D6427F865D70082D956 /* Measures.swift in Sources */,
 				8D2BE0CA284EB7CB009AC672 /* PageViewCoordinator.swift in Sources */,
-				8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextFIeld.swift in Sources */,
+				8D3A4DBB25FC3D0B000D42C5 /* UIViewController+TextField.swift in Sources */,
 				8D3FFE6227F66B400021C9FC /* TaskViewController.swift in Sources */,
 				8DCF350724F6554900055093 /* Note_old.swift in Sources */,
 				8D2BE0C7284EB238009AC672 /* PageViewController.swift in Sources */,

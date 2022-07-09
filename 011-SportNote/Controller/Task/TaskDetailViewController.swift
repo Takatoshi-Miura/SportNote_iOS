@@ -68,7 +68,7 @@ class TaskDetailViewController: UIViewController {
         }
     }
     
-    func initNavigationBar() {
+    private func initNavigationBar() {
         self.title = TITLE_TASK_DETAIL
         var navigationItems: [UIBarButtonItem] = []
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteTask))
@@ -79,7 +79,7 @@ class TaskDetailViewController: UIViewController {
         navigationItem.rightBarButtonItems = navigationItems
     }
     
-    func initTableView() {
+    private func initTableView() {
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
@@ -89,11 +89,11 @@ class TaskDetailViewController: UIViewController {
         }
     }
     
-    func initView() {
+    private func initView() {
         titleLabel.text = TITLE_TITLE
         causeLabel.text = TITLE_CAUSE
         measuresLabel.text = TITLE_MEASURES
-        titleTextField.text = task.title
+        initTextField(textField: titleTextField, placeholder: MASSAGE_TASK_EXAMPLE, text: task.title)
         initTextView(textView: causeTextView, text: task.cause)
     }
     

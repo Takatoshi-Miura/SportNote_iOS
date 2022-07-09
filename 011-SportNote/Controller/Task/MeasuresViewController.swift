@@ -75,7 +75,7 @@ class MeasuresViewController: UIViewController {
     private func initView() {
         titleLabel.text = TITLE_TITLE
         memoLabel.text = TITLE_NOTE
-        titleTextField.text = measures.title
+        initTextField(textField: titleTextField, placeholder: MASSAGE_MEASURES_EXAMPLE, text: measures.title)
     }
     
     /// 対策とそれに含まれるメモを削除
