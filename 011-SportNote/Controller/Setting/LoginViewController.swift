@@ -129,6 +129,10 @@ class LoginViewController: UIViewController {
                 UserDefaultsKey.address.set(value: address)
                 UserDefaultsKey.password.set(value: pass)
                 
+                // Realmデータを全削除
+                let realmManager = RealmManager()
+                realmManager.deleteAllRealmData()
+                
                 // メッセージが隠れてしまうため、遅延処理を行ってから画面遷移
                 HUD.show(.labeledSuccess(title: "", subtitle: MESSAGE_LOGIN_SUCCESSFUL))
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {

@@ -988,6 +988,22 @@ extension RealmManager {
     
     /// Realmのノートを取得
     /// - Parameters:
+    ///    - noteType: メモ配列
+    /// - Returns: ノートデータ
+    func getNote(noteType: Int) -> [Note] {
+        var noteArray = [Note]()
+        let realm = try! Realm()
+        let result = realm.objects(Note.self)
+            .filter("noteType == \(noteType)")
+            .filter("(isDeleted == false)")
+        for note in result {
+            noteArray.append(note)
+        }
+        return noteArray
+    }
+    
+    /// Realmのノートを取得
+    /// - Parameters:
     ///    - memoArray: メモ配列
     /// - Returns: メモが含まれるノート
     func getNote(memoArray: [Memo]) -> [Note] {

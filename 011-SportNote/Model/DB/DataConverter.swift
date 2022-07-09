@@ -35,6 +35,13 @@ class DataConverter {
                     task.groupID = group.groupID
                 }
             }
+            if self.realmManager.getNote(noteType: NoteType.free.rawValue).count == 0 {
+                // 新規ユーザの場合、フリーノートを自動作成
+                let freeNote = Note()
+                freeNote.title = TITLE_FREE_NOTE
+                freeNote.detail = MESSAGE_FREE_NOTE
+                self.noteArray.append(freeNote)
+            }
             self.createRealmWithUpdate()
             completion()
         })
@@ -126,13 +133,7 @@ class DataConverter {
     private func convertOldFreeNote(completion: @escaping () -> ()) {
         firebaseManager.getOldFreeNote({
             let oldFreeNote = self.firebaseManager.oldFreeNote
-            if oldFreeNote.getUserID() == "FreeNoteIsEmpty" {
-                // 新規ユーザの場合、フリーノートを自動作成
-                let freeNote = Note()
-                freeNote.title = TITLE_FREE_NOTE
-                freeNote.detail = MESSAGE_FREE_NOTE
-                self.noteArray.append(freeNote)
-            } else {
+            if oldFreeNote.getUserID() != "FreeNoteIsEmpty" {
                 self.noteArray.append(self.convertToFreeNote(oldFreeNote: oldFreeNote))
                 self.firebaseManager.deleteOldFreeNote(oldFreeNote: oldFreeNote, completion: {})
             }
