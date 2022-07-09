@@ -745,6 +745,26 @@ extension RealmManager {
         return memoArray
     }
     
+    /// 対策に含まれるメモを取得
+    /// - Parameters:
+    ///   - measuresID: 対策ID
+    /// - Returns: 対策に含まれるメモ
+    func getMemo(searchWord: String) -> [Memo] {
+        var memoArray: [Memo] = []
+        let realm = try! Realm()
+        let sortProperties = [
+            SortDescriptor(keyPath: "created_at", ascending: false),
+        ]
+        let results = realm.objects(Memo.self)
+                            .filter("(detail CONTAINS %@)", searchWord)
+                            .filter("(isDeleted == false)")
+                            .sorted(by: sortProperties)
+        for memo in results {
+            memoArray.append(memo)
+        }
+        return memoArray
+    }
+    
     /// ノートに含まれるメモを取得
     /// - Parameters:
     ///   - noteID: ノートID
@@ -966,6 +986,18 @@ extension RealmManager {
         return result ?? Note()
     }
     
+    /// Realmのノートを取得
+    /// - Parameters:
+    ///    - memoArray: メモ配列
+    /// - Returns: メモが含まれるノート
+    func getNote(memoArray: [Memo]) -> [Note] {
+        var noteArray = [Note]()
+        for memo in memoArray {
+            noteArray.append(getNote(ID: memo.noteID))
+        }
+        return noteArray
+    }
+    
     /// Realmのフリーノートを取得
     /// - Returns: フリーノートデータ
     func getFreeNote() -> Note {
@@ -991,6 +1023,38 @@ extension RealmManager {
             noteArray.append(note)
         }
         return noteArray
+    }
+    
+    /// Realmのノート(練習、大会)を取得
+    /// - Parameters:
+    ///    - searchWord: 検索ワード
+    /// - Returns: ノートデータ
+    func getPracticeTournamentNote(searchWord: String) -> [Note] {
+        // メモ以外を検索
+        let realm = try! Realm()
+        var noteArray: [Note] = []
+        let sortProperties = [
+            SortDescriptor(keyPath: "date", ascending: false),
+        ]
+        let result = realm.objects(Note.self)
+            .filter("(noteType == \(NoteType.practice.rawValue)) || (noteType == \(NoteType.tournament.rawValue))")
+            .filter("(condition CONTAINS %@) || (reflection CONTAINS %@) || (purpose CONTAINS %@) || (detail CONTAINS %@) || (target CONTAINS %@) || (consciousness CONTAINS %@) || (result CONTAINS %@)", searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord)
+            .filter("(isDeleted == false)")
+            .sorted(by: sortProperties)
+        for note in result {
+            noteArray.append(note)
+        }
+        
+        // メモを検索
+        let memoArray = getMemo(searchWord: searchWord)
+        let memoNoteArray = getNote(memoArray: memoArray)
+        noteArray.append(contentsOf: memoNoteArray)
+        
+        // 重複を削除&新しい順にソート
+        var resultArray = Array(Set(noteArray))
+        resultArray.sort(by: {$0.date > $1.date})
+        
+        return resultArray
     }
     
     /// Realmのノート(練習、大会)を取得

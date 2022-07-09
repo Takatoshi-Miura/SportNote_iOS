@@ -119,6 +119,7 @@ class NoteViewController: UIViewController {
         noteArray.insert(realmManager.getFreeNote(), at: 0)
         tableView.refreshControl?.endRefreshing()
         tableView.reloadData()
+        searchBar.searchTextField.text = ""
     }
     
     /// バナー広告を表示
@@ -188,10 +189,14 @@ extension NoteViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // 未入力の場合は全検索
         if searchBar.text == "" {
-            
+            refreshData()
+            return
         }
-        // TODO: 検索機能の実装
-        
+        // 文字列検索
+        let realmManager = RealmManager()
+        noteArray = realmManager.getPracticeTournamentNote(searchWord: searchText)
+        noteArray.insert(realmManager.getFreeNote(), at: 0)
+        tableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
