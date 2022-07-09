@@ -128,6 +128,7 @@ let TITLE_DETAIL_LABEL = NSLocalizedString("DetailLabel", comment: "")
 let TITLE_NOTE_DETAIL = NSLocalizedString("NoteDetail", comment: "")
 let TITLE_DELETE_NOTE = NSLocalizedString("DeleteNoteTitle", comment: "")
 let MESSAGE_DELETE_NOTE = NSLocalizedString("DeleteNoteMessage", comment: "")
+let MESSAGE_DONE_TASK_EMPTY = NSLocalizedString("DoneTaskEmpty", comment: "")
 
 // MARK: - Target
 let TITLE_ADD_TARGET = NSLocalizedString("AddTarget", comment: "")

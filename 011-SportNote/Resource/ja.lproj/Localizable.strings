@@ -127,6 +127,7 @@
 "NoteDetail" = "ノートの詳細";
 "DeleteNoteTitle" = "ノートの削除";
 "DeleteNoteMessage" = "ノートを削除しますか？\n削除すると復元できません。";
+"DoneTaskEmpty" = "取り組んだ課題はありません。";
 
 // MARK: - Target
 "AddTarget" = "目標の追加";

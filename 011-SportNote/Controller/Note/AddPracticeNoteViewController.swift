@@ -183,6 +183,7 @@ class AddPracticeNoteViewController: UIViewController {
         dateTableView.tag = TableViewType.date.rawValue
         taskTableView.tag = TableViewType.task.rawValue
         dateTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        taskTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         taskTableView.register(UINib(nibName: "TaskCellForAddNote", bundle: nil), forCellReuseIdentifier: "TaskCellForAddNote")
         if #available(iOS 15.0, *) {
             dateTableView.sectionHeaderTopPadding = 0
@@ -207,8 +208,14 @@ class AddPracticeNoteViewController: UIViewController {
     
     /// スクロール領域を調整
     private func resizeScrollView() {
-        taskTableViewHeight.constant = CGFloat(displayTaskArray.count * 200)
-        scrollViewHeight.constant = CGFloat(1000 + displayTaskArray.count * 200)
+        var tableHeight = CGFloat(0)
+        if isViewer && displayTaskArray.isEmpty {
+            tableHeight = CGFloat(44)
+        } else {
+            tableHeight = CGFloat(displayTaskArray.count * 200)
+        }
+        taskTableViewHeight.constant = tableHeight
+        scrollViewHeight.constant = CGFloat(1000 + tableHeight)
     }
     
     
@@ -315,7 +322,11 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
         case .date:
             return 2
         case .task:
-            return displayTaskArray.count
+            if isViewer && displayTaskArray.isEmpty {
+                return 1
+            } else {
+                return displayTaskArray.count
+            }
         }
     }
     
@@ -324,7 +335,11 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
         case .date:
             return 44
         case .task:
-            return 200
+            if isViewer && displayTaskArray.isEmpty {
+                return 44
+            } else {
+                return 200
+            }
         }
     }
     
@@ -345,12 +360,18 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
             }
             return cell
         case .task:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForAddNote", for: indexPath) as! TaskCellForAddNote
-            cell.printInfo(task: displayTaskArray[indexPath.row])
-            if isViewer {
-                cell.printMemo(memo: realmMemoArray[indexPath.row])
+            if isViewer && displayTaskArray.isEmpty {
+                let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+                cell.textLabel?.text = MESSAGE_DONE_TASK_EMPTY
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForAddNote", for: indexPath) as! TaskCellForAddNote
+                cell.printInfo(task: displayTaskArray[indexPath.row])
+                if isViewer {
+                    cell.printMemo(memo: realmMemoArray[indexPath.row])
+                }
+                return cell
             }
-            return cell
         }
     }
     
