@@ -61,7 +61,7 @@
                     </connections>
                 </textField>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="90" translatesAutoresizingMaskIntoConstraints="NO" id="PM1-wo-dE9">
-                    <rect key="frame" x="16" y="138" width="288" height="31"/>
+                    <rect key="frame" x="16" y="123" width="288" height="31"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bu0-6b-C8o">
                             <rect key="frame" x="0.0" y="0.0" width="149" height="31"/>
@@ -81,7 +81,7 @@
                     </subviews>
                 </stackView>
                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4r-Bq-9uv">
-                    <rect key="frame" x="0.0" y="176" width="320" height="216"/>
+                    <rect key="frame" x="0.0" y="161" width="320" height="216"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="3I6-4q-fLI"/>
                         <outlet property="delegate" destination="-1" id="2d8-aF-YgS"/>
@@ -96,7 +96,7 @@
                 <constraint firstItem="FNZ-7N-C3e" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="4nv-PX-UQc"/>
                 <constraint firstItem="1oH-SI-Kya" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="6f5-Un-Hko"/>
                 <constraint firstItem="AHZ-UJ-n9N" firstAttribute="top" secondItem="1oH-SI-Kya" secondAttribute="bottom" id="8OT-dJ-QLn"/>
-                <constraint firstItem="PM1-wo-dE9" firstAttribute="top" secondItem="AHZ-UJ-n9N" secondAttribute="bottom" constant="30" id="9y7-Cl-GLT"/>
+                <constraint firstItem="PM1-wo-dE9" firstAttribute="top" secondItem="AHZ-UJ-n9N" secondAttribute="bottom" constant="15" id="9y7-Cl-GLT"/>
                 <constraint firstItem="v4r-Bq-9uv" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="F5K-tb-Spn"/>
                 <constraint firstItem="PM1-wo-dE9" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="Gtk-0R-PIY"/>
                 <constraint firstItem="1oH-SI-Kya" firstAttribute="top" secondItem="FNZ-7N-C3e" secondAttribute="bottom" id="J2k-Q3-56R"/>
