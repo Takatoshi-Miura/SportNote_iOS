@@ -56,6 +56,7 @@ class TaskViewController: UIViewController {
         } else {
             self.syncData()
         }
+        displayAgreement()
     }
     
     override func viewDidLayoutSubviews() {
@@ -92,7 +93,7 @@ class TaskViewController: UIViewController {
     }
     
     /// 画面初期化
-    func initView() {
+    private func initView() {
         if isCompleted {
             self.title = TITLE_COMPLETED_TASK
             addButton.isHidden = true
@@ -106,7 +107,7 @@ class TaskViewController: UIViewController {
         }
     }
     
-    func initTableView() {
+    private func initTableView() {
         tableView.tableFooterView = UIView()
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(syncData), for: .valueChanged)
@@ -145,7 +146,7 @@ class TaskViewController: UIViewController {
     }
     
     /// データを再取得
-    func refreshData() {
+    private func refreshData() {
         let realmManager = RealmManager()
         if isCompleted {
             completedTaskArray = realmManager.getTasksInGroup(ID: groupID, isCompleted: isCompleted)
@@ -157,13 +158,8 @@ class TaskViewController: UIViewController {
         tableView.reloadData()
     }
     
-    /// 設定タップ時の処理
-    @objc func openSettingView(_ sender: UIBarButtonItem) {
-        delegate?.taskVCSettingDidTap(self)
-    }
-    
     /// バナー広告を表示
-    func showAdMob() {
+    private func showAdMob() {
         if let adMobView = adMobView {
             adMobView.frame.size = CGSize(width: self.view.frame.width, height: adMobView.frame.height)
             return
@@ -177,6 +173,29 @@ class TaskViewController: UIViewController {
         adMobView!.frame.size = CGSize(width: self.view.frame.width, height: adMobView!.frame.height)
         self.adView.addSubview(adMobView!)
     }
+    
+    /// 利用規約同意画面を表示
+    private func displayAgreement() {
+        // 初回起動判定
+        if UserDefaultsKey.firstLaunch.bool() {
+            // 2回目以降の起動では「firstLaunch」のkeyをfalseに
+            UserDefaultsKey.firstLaunch.set(value: false)
+            
+            // 利用規約を表示
+            displayAgreement({
+                UserDefaultsKey.agree.set(value: true)
+            })
+        }
+        
+        // 同意していないなら利用規約を表示
+        if !UserDefaultsKey.agree.bool() {
+            displayAgreement({
+                UserDefaultsKey.agree.set(value: true)
+            })
+        }
+    }
+    
+    // MARK: - Action
     
     /// 追加ボタンの処理
     @IBAction func tapAddButton(_ sender: Any) {
@@ -194,6 +213,11 @@ class TaskViewController: UIViewController {
                         message: MESSAGE_ADD_GROUP_TASK,
                         actions: alertActions,
                         frame: addButton.frame)
+    }
+    
+    /// 設定タップ時の処理
+    @objc func openSettingView(_ sender: UIBarButtonItem) {
+        delegate?.taskVCSettingDidTap(self)
     }
     
     /// グループを挿入
