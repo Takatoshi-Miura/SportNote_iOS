@@ -315,7 +315,7 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
         case .date:
             return 44
         case .task:
-            return 220
+            return 200
         }
     }
     

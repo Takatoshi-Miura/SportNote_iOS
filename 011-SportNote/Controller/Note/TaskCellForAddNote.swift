@@ -11,6 +11,7 @@ import UIKit
 class TaskCellForAddNote: UITableViewCell {
 
     // MARK: - UI,Variable
+    @IBOutlet weak var colorImageView: UIImageView!
     @IBOutlet weak var taskTitleLabel: UILabel!
     @IBOutlet weak var taskMeasuresTitleLabel: UILabel!
     @IBOutlet weak var effectivenessTextView: UITextView!
@@ -24,23 +25,25 @@ class TaskCellForAddNote: UITableViewCell {
         effectivenessTextView.layer.borderColor = UIColor.systemGray.cgColor
         effectivenessTextView.layer.borderWidth = 1.0
         effectivenessTextView.layer.cornerRadius = 5.0
+        effectivenessTextView.layer.masksToBounds = true
         effectivenessTextView.text = ""
-        createToolBar()
+        if !isiPad() {
+            createToolBar()
+        }
     }
     
     /// ツールバーを作成
     private func createToolBar() {
-        let toolBar = UIToolbar()
+        let toolbar = UIToolbar()
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(hideKeyboard(_:)))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let okButton: UIBarButtonItem = UIBarButtonItem(title: "完了", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapOkButton(_:)))
-        toolBar.setItems([flexibleItem, okButton], animated: true)
-        toolBar.sizeToFit()
-        effectivenessTextView.inputAccessoryView = toolBar
+        toolbar.setItems([flexibleItem, doneItem], animated: true)
+        toolbar.sizeToFit()
+        effectivenessTextView.inputAccessoryView = toolbar
     }
     
-    // OKボタンの処理
-    @objc func tapOkButton(_ sender: UIButton){
-        // キーボードを閉じる
+    /// キーボードを閉じる
+    @objc func hideKeyboard(_ sender: UIButton){
         self.endEditing(true)
     }
     
@@ -48,24 +51,31 @@ class TaskCellForAddNote: UITableViewCell {
     func printInfo(memo: Memo) {
         // データ取得
         let realmManager = RealmManager()
-        self.memo = memo
-        measures = realmManager.getMeasures(measuresID: memo.measuresID)
         let task = realmManager.getTask(taskID: measures.taskID)
+        let group = realmManager.getGroup(groupID: task.groupID)
+        
+        self.memo = memo
+        self.measures = realmManager.getMeasures(measuresID: memo.measuresID)
         self.task = TaskForAddNote(task: task)
         
         // データ表示
         taskTitleLabel.text = task.title
         taskMeasuresTitleLabel.text = "\(TITLE_MEASURES):\(measures.title)"
         effectivenessTextView.text  = memo.detail
+        colorImageView.backgroundColor = Color.allCases[group.color].color
     }
     
     /// 課題データを表示
     func printInfo(task: TaskForAddNote) {
         let realmManager = RealmManager()
+        let group = realmManager.getGroup(groupID: task.groupID)
+        
         self.task = task
         self.measures = realmManager.getPriorityMeasuresInTask(taskID: task.taskID)
+        
         taskTitleLabel.text = task.title
-        taskMeasuresTitleLabel.text = realmManager.getMeasuresTitleInTask(taskID: task.taskID)
+        taskMeasuresTitleLabel.text = "\(TITLE_MEASURES):\(measures.title)"
+        colorImageView.backgroundColor = Color.allCases[group.color].color
     }
     
     /// メモを入力

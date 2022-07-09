@@ -456,6 +456,7 @@
 			children = (
 				8D5CFBFB27FBA36A008DF02E /* AddGroupViewController.swift */,
 				8D5CFC0A2802D925008DF02E /* GroupViewController.swift */,
+				8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";
@@ -466,7 +467,6 @@
 				8D5CFBFC27FBA36A008DF02E /* AddGroupViewController.xib */,
 				8D5CFC0B2802D925008DF02E /* GroupViewController.xib */,
 				8D5CFC0828024CA4008DF02E /* GroupHeaderView.xib */,
-				8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";

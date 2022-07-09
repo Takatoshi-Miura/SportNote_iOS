@@ -83,6 +83,19 @@ extension RealmManager {
         return groupArray
     }
     
+    /// Realmのグループを取得
+    /// - Parameters:
+    ///   - groupID: 課題ID
+    /// - Returns: グループデータ
+    func getGroup(groupID: String) -> Group {
+        let realm = try! Realm()
+        let result = realm.objects(Group.self)
+            .filter("groupID == '\(groupID)'")
+            .filter("(isDeleted == false)")
+            .first
+        return result ?? Group()
+    }
+    
     /// TaskViewController用Group配列を取得
     /// - Returns: Group配列
     func getGroupArrayForTaskView() -> [Group] {
