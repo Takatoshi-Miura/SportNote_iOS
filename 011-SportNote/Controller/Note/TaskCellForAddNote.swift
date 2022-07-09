@@ -71,7 +71,9 @@ class TaskCellForAddNote: UITableViewCell {
         let group = realmManager.getGroup(groupID: task.groupID)
         
         self.task = task
-        self.measures = realmManager.getPriorityMeasuresInTask(taskID: task.taskID)
+        if let measures = realmManager.getPriorityMeasuresInTask(taskID: task.taskID) {
+            self.measures = measures
+        }
         
         taskTitleLabel.text = task.title
         taskMeasuresTitleLabel.text = "\(TITLE_MEASURES):\(measures.title)"

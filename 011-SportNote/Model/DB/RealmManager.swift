@@ -305,7 +305,10 @@ extension RealmManager {
             let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
             for task in tasks {
                 let taskForAddNote = TaskForAddNote(task: task)
-                taskArray.append(taskForAddNote)
+                // 対策未設定の課題は表示しない
+                if getPriorityMeasuresInTask(taskID: task.taskID) != nil {
+                    taskArray.append(taskForAddNote)
+                }
             }
         }
         return taskArray
@@ -585,7 +588,7 @@ extension RealmManager {
     /// - Parameters:
     ///   - taskID: 課題ID
     /// - Returns: 対策
-    func getPriorityMeasuresInTask(taskID: String) -> Measures {
+    func getPriorityMeasuresInTask(taskID: String) -> Measures? {
         var measuresArray: [Measures] = []
         let realm = try! Realm()
         let sortProperties = [
@@ -598,7 +601,7 @@ extension RealmManager {
         for measures in results {
             measuresArray.append(measures)
         }
-        return measuresArray.first!
+        return measuresArray.first
     }
     
     /// 課題に含まれる対策を取得
