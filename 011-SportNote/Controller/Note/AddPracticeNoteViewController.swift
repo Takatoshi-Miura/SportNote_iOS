@@ -20,7 +20,6 @@ protocol AddPracticeNoteViewControllerDelegate: AnyObject {
 class AddPracticeNoteViewController: UIViewController {
     
     // MARK: - UI,Variable
-    
     @IBOutlet weak var naviItem: UINavigationItem!
     @IBOutlet weak var naviBar: UINavigationBar!
     @IBOutlet weak var conditionLabel: UILabel!
@@ -35,13 +34,16 @@ class AddPracticeNoteViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dateTableView: UITableView!
     @IBOutlet weak var taskTableView: UITableView!
+    @IBOutlet weak var scrollViewTop: NSLayoutConstraint!
+    @IBOutlet weak var taskTableViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var scrollViewHeight: NSLayoutConstraint!
     
     private var taskArray = [TaskForAddNote]()
     private var displayTaskArray = [TaskForAddNote]()
+    private var realmMemoArray = [Memo]()
     var delegate: AddPracticeNoteViewControllerDelegate?
     var isViewer = false
     var realmNote = Note()
-    private var realmMemoArray = [Memo]()
     
     private var pickerView = UIView()
     private var datePicker = UIDatePicker()
@@ -85,6 +87,7 @@ class AddPracticeNoteViewController: UIViewController {
         initWeatherPicker()
         initTaskPicker()
         initTaskData()
+        resizeScrollView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -147,7 +150,7 @@ class AddPracticeNoteViewController: UIViewController {
         if isViewer {
             naviBar.isHidden = true
             addButton.isHidden = true
-            // TODO: レイアウト要修正
+            scrollViewTop.constant = -44
             // ノート内容を反映
             conditionTextView.text = realmNote.condition
             purposeTextView.text = realmNote.purpose
@@ -200,6 +203,12 @@ class AddPracticeNoteViewController: UIViewController {
             // 未解決の課題を取得
             displayTaskArray = realmManager.getTaskArrayForAddNoteView()
         }
+    }
+    
+    /// スクロール領域を調整
+    private func resizeScrollView() {
+        taskTableViewHeight.constant = CGFloat(displayTaskArray.count * 200)
+        scrollViewHeight.constant = CGFloat(1000 + displayTaskArray.count * 200)
     }
     
     
@@ -370,6 +379,7 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
                 taskArray[index!].isDisplay = false
                 displayTaskArray.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+                resizeScrollView()
             }
         }
     }
@@ -543,6 +553,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
             taskArray[index].isDisplay = true
             displayTaskArray.append(taskArray[index])
             taskTableView.insertRows(at: [IndexPath(row: displayTaskArray.count - 1, section: 0)], with: .right)
+            resizeScrollView()
         }
         closePicker(pickerView)
     }

@@ -33,6 +33,7 @@ class AddTournamentNoteViewController: UIViewController {
     @IBOutlet weak var consciousnessTextView: UITextView!
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var reflectionTextView: UITextView!
+    @IBOutlet weak var scrollViewTop: NSLayoutConstraint!
     var delegate: AddTournamentNoteViewControllerDelegate?
     var isViewer = false
     var realmNote = Note()
@@ -107,7 +108,8 @@ class AddTournamentNoteViewController: UIViewController {
         
         if isViewer {
             naviBar.isHidden = true
-            // TODO: レイアウト要修正
+            scrollViewTop.constant = -44
+            // ノート内容を反映
             conditionTextView.text = realmNote.condition
             targetTextView.text = realmNote.target
             consciousnessTextView.text = realmNote.consciousness

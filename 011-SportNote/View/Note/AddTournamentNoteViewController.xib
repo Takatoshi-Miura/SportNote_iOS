@@ -21,6 +21,7 @@
                 <outlet property="reflectionTextView" destination="lms-kj-In8" id="H56-fs-Pta"/>
                 <outlet property="resultLabel" destination="gJy-cm-R0M" id="ZtN-6C-02q"/>
                 <outlet property="resultTextView" destination="JrD-jq-ej4" id="nGH-MM-c6K"/>
+                <outlet property="scrollViewTop" destination="6Fq-P7-63m" id="ISd-k8-7y1"/>
                 <outlet property="tableView" destination="ApC-bI-MpS" id="bmm-bl-YJH"/>
                 <outlet property="targetLabel" destination="vIH-iN-Wxc" id="yZi-1Y-5k9"/>
                 <outlet property="targetTextView" destination="EoV-X0-uF8" id="Oji-p4-DiT"/>

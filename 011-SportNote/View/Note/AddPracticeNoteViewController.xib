@@ -23,8 +23,11 @@
                 <outlet property="purposeTextView" destination="m3s-x7-xh5" id="Rxv-7I-sEz"/>
                 <outlet property="reflectionLabel" destination="KJx-sX-bAK" id="lJ6-TZ-o2O"/>
                 <outlet property="reflectionTextView" destination="GoB-uC-TIp" id="S4D-J3-fT4"/>
+                <outlet property="scrollViewHeight" destination="H7w-mp-IEl" id="Bct-IN-Byh"/>
+                <outlet property="scrollViewTop" destination="J62-XO-Qgb" id="7LP-zh-Uoh"/>
                 <outlet property="taskLabel" destination="imM-jU-vkH" id="B7l-pj-rtN"/>
                 <outlet property="taskTableView" destination="lXN-uR-sOr" id="L04-af-xBd"/>
+                <outlet property="taskTableViewHeight" destination="HbG-gk-YX4" id="vJK-n4-g4Y"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
