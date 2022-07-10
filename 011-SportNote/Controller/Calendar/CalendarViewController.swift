@@ -39,6 +39,7 @@ class CalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        initTableView()
         syncData()
     }
     
@@ -68,6 +69,15 @@ class CalendarViewController: UIViewController {
         navigationItem.leftBarButtonItems = [refreshButton]
         navigationItem.rightBarButtonItems = [todayButton]
         printTarget()
+    }
+    
+    private func initTableView() {
+        tableView.tableFooterView = UIView()
+        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: "NoteCell")
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
     }
     
     /// バナー広告を表示
@@ -257,24 +267,24 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if selectedNoteArray.isEmpty {
+            return 44
+        } else {
+            return 50
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if selectedNoteArray.isEmpty {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
             cell.textLabel?.text = MESSAGE_EMPTY_NOTE
             return cell
         } else {
-            let note = selectedNoteArray[indexPath.row]
-            if note.noteType == NoteType.practice.rawValue {
-                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-                cell.textLabel?.text = note.detail
-                cell.accessoryType = .disclosureIndicator
-                return cell
-            } else {
-                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-                cell.textLabel?.text = note.target
-                cell.accessoryType = .disclosureIndicator
-                return cell
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath) as! NoteCell
+            cell.printInfo(note: selectedNoteArray[indexPath.row])
+            cell.accessoryType = .disclosureIndicator
+            return cell
         }
     }
     

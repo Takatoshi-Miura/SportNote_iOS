@@ -113,6 +113,19 @@ extension RealmManager {
         return groupArray
     }
     
+    /// Noteに含まれるGroupカラーを取得
+    /// - Returns: Groupカラー
+    func getGroupColor(noteID: String) -> UIColor {
+        let taskArray = getTask(noteID: noteID)
+        if !taskArray.isEmpty {
+            let task = taskArray.first!
+            let group = getGroup(groupID: task.groupID)
+            return Color.allCases[group.color].color
+        } else {
+            return UIColor.white
+        }
+    }
+    
     /// TaskViewControllerに表示するGroupの個数を取得
     /// - Returns: Group数
     func getNumberOfGroups() -> Int {

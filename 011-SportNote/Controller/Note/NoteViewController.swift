@@ -91,7 +91,7 @@ class NoteViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(syncData), for: .valueChanged)
-//        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: "NoteCell")
+        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: "NoteCell")
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
@@ -215,30 +215,14 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
         return noteArray.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath) as! NoteCell
+        cell.printInfo(note: noteArray[indexPath.row])
         cell.accessoryType = .disclosureIndicator
-        
-        if noteArray.isEmpty {
-            return cell
-        }
-        
-        switch NoteType.allCases[noteArray[indexPath.row].noteType] {
-        case .free:
-            cell.textLabel?.text = noteArray[indexPath.row].title
-            cell.imageView?.image = UIImage(systemName: "pin")!
-            break
-        case .practice:
-            cell.textLabel?.text = noteArray[indexPath.row].detail
-            cell.detailTextLabel?.text = formatDate(date: noteArray[indexPath.row].date)
-            cell.detailTextLabel?.textColor = UIColor.systemGray
-            break
-        case .tournament:
-            cell.textLabel?.text = noteArray[indexPath.row].target
-            cell.detailTextLabel?.text = formatDate(date: noteArray[indexPath.row].date)
-            cell.detailTextLabel?.textColor = UIColor.systemGray
-            break
-        }
         return cell
     }
     
