@@ -79,6 +79,7 @@ let MESSAGE_INCOMPLETE_TASK = NSLocalizedString("InCompleteTaskMessage", comment
 let TITLE_ADD_MEASURES = NSLocalizedString("AddMeasuresTitle", comment: "")
 let MESSAGE_ADD_MEASURES = NSLocalizedString("AddMeasuresMessage", comment: "")
 let TITLE_ADD = NSLocalizedString("Add", comment: "")
+let TITLE_MEASURES_PRIORITY = NSLocalizedString("MeasuresPriority", comment: "")
 
 // MARK: - MeasuresViewController
 let TITLE_MEASURES_DETAIL = NSLocalizedString("MeasuresTitle", comment: "")

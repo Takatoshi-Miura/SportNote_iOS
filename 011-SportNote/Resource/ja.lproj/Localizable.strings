@@ -77,6 +77,7 @@
 "AddMeasuresTitle" = "対策の追加";
 "AddMeasuresMessage" = "対策を入力して下さい。";
 "Add" = "追加";
+"MeasuresPriority" = "対策(優先度が高い順)";
 
 // MARK: - MeasuresViewController
 "MeasuresTitle" = "対策の詳細";

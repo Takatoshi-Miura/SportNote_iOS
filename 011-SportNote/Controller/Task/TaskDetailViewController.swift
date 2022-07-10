@@ -92,7 +92,7 @@ class TaskDetailViewController: UIViewController {
     private func initView() {
         titleLabel.text = TITLE_TITLE
         causeLabel.text = TITLE_CAUSE
-        measuresLabel.text = TITLE_MEASURES
+        measuresLabel.text = TITLE_MEASURES_PRIORITY
         initTextField(textField: titleTextField, placeholder: MASSAGE_TASK_EXAMPLE, text: task.title)
         initTextView(textView: causeTextView, text: task.cause)
     }
