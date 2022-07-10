@@ -744,18 +744,26 @@ extension RealmManager {
     ///   - measuresID: 対策ID
     /// - Returns: 対策に含まれるメモ
     func getMemo(measuresID: String) -> [Memo] {
+        // 対策に含まれるメモを取得
         var memoArray: [Memo] = []
         let realm = try! Realm()
-        let sortProperties = [
-            SortDescriptor(keyPath: "created_at", ascending: false),
-        ]
         let results = realm.objects(Memo.self)
                             .filter("(measuresID == '\(measuresID)') && (isDeleted == false)")
-                            .sorted(by: sortProperties)
         for memo in results {
             memoArray.append(memo)
         }
-        return memoArray
+        
+        // ノートの日付順に並び替える
+        var noteArray = getNote(memoArray: memoArray)
+        noteArray.sort(by: {$0.date > $1.date})
+        var resultArray = [Memo]()
+        for note in noteArray {
+            if let memo = getMemo(noteID: note.noteID, measuresID: measuresID) {
+                resultArray.append(memo)
+            }
+        }
+        
+        return resultArray
     }
     
     /// 対策に含まれるメモを取得
@@ -792,6 +800,21 @@ extension RealmManager {
             memoArray.append(memo)
         }
         return memoArray
+    }
+    
+    /// ノートに含まれるメモを取得
+    /// - Parameters:
+    ///   - noteID: ノートID
+    ///   - measuresID: 対策ID
+    /// - Returns: ノートに含まれるメモ
+    func getMemo(noteID: String, measuresID: String) -> Memo? {
+        let realm = try! Realm()
+        let result = realm.objects(Memo.self)
+            .filter("(noteID == '\(noteID)')")
+            .filter("(measuresID == '\(measuresID)')")
+            .filter("(isDeleted == false)")
+            .first
+        return result
     }
     
     /// Realmのメモを更新
