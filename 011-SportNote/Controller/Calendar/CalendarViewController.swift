@@ -212,6 +212,12 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
             }
         }
         
+        // 今日（白色）
+        let now = Date()
+        if da == formatter.string(from: now) {
+            return UIColor.white
+        }
+        
         // 祝日判定（祝日は赤色）
         if self.judgeHoliday(date){
             return UIColor.red
