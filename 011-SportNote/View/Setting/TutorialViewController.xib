@@ -32,16 +32,16 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題解決に特化したノートアプリです。課題の原因と対策を考え、あああああああああああああああああああああああああああ" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V16-e3-CGp">
-                    <rect key="frame" x="40" y="101" width="240" height="50"/>
+                    <rect key="frame" x="16" y="101" width="288" height="60"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="rO1-Tk-RFx"/>
+                        <constraint firstAttribute="height" constant="60" id="rO1-Tk-RFx"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2wy-LZ-TDD">
-                    <rect key="frame" x="16" y="171" width="288" height="347"/>
+                    <rect key="frame" x="16" y="181" width="288" height="337"/>
                 </imageView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Cdt-iW-dvc"/>
@@ -54,8 +54,8 @@
                 <constraint firstItem="CN9-0x-9Tb" firstAttribute="leading" secondItem="Cdt-iW-dvc" secondAttribute="leading" id="fHS-KY-9Xa"/>
                 <constraint firstItem="CN9-0x-9Tb" firstAttribute="top" secondItem="Cdt-iW-dvc" secondAttribute="top" constant="60" id="fVM-my-MUn"/>
                 <constraint firstItem="Cdt-iW-dvc" firstAttribute="trailing" secondItem="2wy-LZ-TDD" secondAttribute="trailing" constant="16" id="gGb-3T-UBx"/>
-                <constraint firstItem="V16-e3-CGp" firstAttribute="leading" secondItem="Cdt-iW-dvc" secondAttribute="leading" constant="40" id="jQr-If-dRI"/>
-                <constraint firstItem="Cdt-iW-dvc" firstAttribute="trailing" secondItem="V16-e3-CGp" secondAttribute="trailing" constant="40" id="seD-FJ-W4A"/>
+                <constraint firstItem="V16-e3-CGp" firstAttribute="leading" secondItem="Cdt-iW-dvc" secondAttribute="leading" constant="16" id="jQr-If-dRI"/>
+                <constraint firstItem="Cdt-iW-dvc" firstAttribute="trailing" secondItem="V16-e3-CGp" secondAttribute="trailing" constant="16" id="seD-FJ-W4A"/>
                 <constraint firstItem="2wy-LZ-TDD" firstAttribute="top" secondItem="V16-e3-CGp" secondAttribute="bottom" constant="20" id="sfT-bP-19K"/>
             </constraints>
             <point key="canvasLocation" x="138.75" y="152.11267605633802"/>

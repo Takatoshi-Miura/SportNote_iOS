@@ -16,7 +16,7 @@ class TutorialViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     var titleText: String  = ""
     var detailText: String = ""
-    var image:UIImage = UIImage(named: "①概要")!
+    var image:UIImage = UIImage(named: "①SportsNoteとは")!
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
