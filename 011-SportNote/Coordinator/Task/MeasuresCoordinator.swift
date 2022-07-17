@@ -11,7 +11,6 @@ import UIKit
 class MeasuresCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
-    var measuresViewController = MeasuresViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -21,7 +20,7 @@ class MeasuresCoordinator: Coordinator {
     
     func startFrow(in navigationController: UINavigationController, withMeasures measures: Measures) {
         self.navigationController = navigationController
-        measuresViewController = MeasuresViewController()
+        let measuresViewController = MeasuresViewController()
         measuresViewController.delegate = self
         measuresViewController.measures = measures
         navigationController.pushViewController(measuresViewController, animated: true)

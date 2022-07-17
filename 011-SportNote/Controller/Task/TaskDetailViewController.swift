@@ -34,11 +34,9 @@ class TaskDetailViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        initData()
         initNavigationBar()
         initTableView()
-        addButton.isHidden = task.isComplete ? true : false
-        let realmManager = RealmManager()
-        measuresArray = realmManager.getMeasuresInTask(ID: task.taskID)
         initView()
     }
     
@@ -68,6 +66,13 @@ class TaskDetailViewController: UIViewController {
         }
     }
     
+    /// データ初期化
+    private func initData() {
+        let realmManager = RealmManager()
+        measuresArray = realmManager.getMeasuresInTask(ID: task.taskID)
+    }
+    
+    /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_TASK_DETAIL
         var navigationItems: [UIBarButtonItem] = []
@@ -79,6 +84,7 @@ class TaskDetailViewController: UIViewController {
         navigationItem.rightBarButtonItems = navigationItems
     }
     
+    /// TableView初期化
     private func initTableView() {
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
@@ -89,12 +95,14 @@ class TaskDetailViewController: UIViewController {
         }
     }
     
+    /// 画面表示の初期化
     private func initView() {
         titleLabel.text = TITLE_TITLE
         causeLabel.text = TITLE_CAUSE
         measuresLabel.text = TITLE_MEASURES_PRIORITY
         initTextField(textField: titleTextField, placeholder: MASSAGE_TASK_EXAMPLE, text: task.title)
         initTextView(textView: causeTextView, text: task.cause)
+        addButton.isHidden = task.isComplete ? true : false
     }
     
     // MARK: - Action
@@ -143,19 +151,22 @@ class TaskDetailViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    func addMeasures(title: String) {
-        // 対策データを作成＆保存
+    /// 対策追加
+    /// - Parameters:
+    ///    - title: タイトル
+    private func addMeasures(title: String) {
+        // 対策データ作成
         let realmManager = RealmManager()
         let measures = Measures()
         measures.taskID = task.taskID
         measures.title = title
         measures.order = realmManager.getMeasuresInTask(ID: task.taskID).count
-        
         if !realmManager.createRealm(object: measures) {
             showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
             return
         }
         
+        // Firebaseに送信
         if Network.isOnline() {
             let firebaseManager = FirebaseManager()
             firebaseManager.saveMeasures(measures: measures, completion: {})

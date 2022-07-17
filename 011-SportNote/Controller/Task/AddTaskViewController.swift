@@ -11,6 +11,8 @@ import UIKit
 protocol AddTaskViewControllerDelegate: AnyObject {
     // モーダルを閉じる時の処理
     func addTaskVCDismiss(_ viewController: UIViewController)
+    // 課題追加時の処理
+    func addTaskVCAddTask(_ viewController: UIViewController, task: Task)
 }
 
 class AddTaskViewController: UIViewController {
@@ -34,8 +36,7 @@ class AddTaskViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let realmManager = RealmManager()
-        realmGroupArray = realmManager.getGroupArrayForTaskView()
+        initData()
         initView()
         initColorPicker()
         titleTextField.becomeFirstResponder()
@@ -45,6 +46,12 @@ class AddTaskViewController: UIViewController {
         super.viewDidLayoutSubviews()
         // マルチタスクビュー対策
         colorPicker.frame.size.width = self.view.bounds.size.width
+    }
+    
+    /// データ初期化
+    private func initData() {
+        let realmManager = RealmManager()
+        realmGroupArray = realmManager.getGroupArrayForTaskView()
     }
     
     /// 画面の初期化
@@ -60,6 +67,16 @@ class AddTaskViewController: UIViewController {
         colorButton.backgroundColor = Color.allCases[realmGroupArray.first!.color].color
         colorButton.setTitle(realmGroupArray.first!.title, for: .normal)
     }
+    
+    /// Picker初期化
+    private func initColorPicker() {
+        colorPicker.delegate = self
+        colorPicker.dataSource = self
+        colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)
+        colorPicker.backgroundColor = UIColor.systemGray5
+    }
+    
+    // MARK: - Action
     
     /// カラーボタンの処理
     @IBAction func tapAddColorButton(_ sender: Any) {
@@ -79,7 +96,7 @@ class AddTaskViewController: UIViewController {
             return
         }
         
-        // 課題データを作成＆保存
+        // 課題データを作成
         let realmManager = RealmManager()
         let task = Task()
         task.groupID = realmGroupArray[pickerIndex].groupID
@@ -91,7 +108,7 @@ class AddTaskViewController: UIViewController {
             return
         }
         
-        // 対策データを作成＆保存
+        // 対策データを作成
         let measures = Measures()
         if !measuresTextField.text!.isEmpty {
             measures.taskID = task.taskID
@@ -110,25 +127,11 @@ class AddTaskViewController: UIViewController {
                 firebaseManager.saveMeasures(measures: measures, completion: {})
             }
         }
-        self.dismissWithInsertTask(task: task)
-    }
-    
-    /// 課題画面に課題を追加してモーダルを閉じる
-    private func dismissWithInsertTask(task: Task) {
-        let tabBar = self.presentingViewController as! UITabBarController
-        let navigation = tabBar.selectedViewController as! UINavigationController
-        let taskView = navigation.viewControllers.first as! TaskViewController
-        taskView.insertTask(task: task)
-        self.delegate?.addTaskVCDismiss(self)
+        delegate?.addTaskVCAddTask(self, task: task)
     }
     
     /// キャンセルボタンの処理
     @IBAction func tapCancelButton(_ sender: Any) {
-        dismissWithInputCheck()
-    }
-    
-    /// 入力済みの場合、確認アラートを表示
-    private func dismissWithInputCheck() {
         if !titleTextField.text!.isEmpty ||
            !causeTextView.text.isEmpty ||
            !measuresTextField.text!.isEmpty
@@ -155,14 +158,6 @@ extension AddTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return realmGroupArray[row].title   // グループ名
-    }
-    
-    /// Picker初期化
-    private func initColorPicker() {
-        colorPicker.delegate = self
-        colorPicker.dataSource = self
-        colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)
-        colorPicker.backgroundColor = UIColor.systemGray5
     }
     
     @objc func doneAction() {

@@ -49,15 +49,7 @@ class TaskViewController: UIViewController {
         initTableView()
         initNotification()
         // 初回のみ旧データ変換後に同期処理
-        if !isCompleted && Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            let dataConverter = DataConverter()
-            dataConverter.convertOldToRealm(completion: {
-                self.syncData()
-            })
-        } else {
-            self.syncData()
-        }
+        syncDataWithConvert()
         displayAgreement()
     }
     
@@ -109,6 +101,7 @@ class TaskViewController: UIViewController {
         }
     }
     
+    /// TableView初期化
     private func initTableView() {
         tableView.tableFooterView = UIView()
         tableView.refreshControl = UIRefreshControl()
@@ -126,12 +119,12 @@ class TaskViewController: UIViewController {
     
     /// 通知設定
     private func initNotification() {
-        // ログイン、ログアウト時のリロード用
+        // ログイン時のリロード用
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.syncData),
                                                name: NSNotification.Name(rawValue: "afterLogin"),
                                                object: nil)
-        
+        // ログアウト時のリロード用
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.syncDataWithConvert),
                                                name: NSNotification.Name(rawValue: "afterLogout"),
@@ -290,7 +283,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: GroupHeaderView.self))
         if let headerView = view as? GroupHeaderView {
             headerView.delegate = self
-            headerView.setProperty(group: groupArray[section])
+            headerView.printInfo(group: groupArray[section])
             return headerView
         }
         return nil

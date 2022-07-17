@@ -29,8 +29,7 @@ class MeasuresViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let realmManager = RealmManager()
-        memoArray = realmManager.getMemo(measuresID: measures.measuresID)
+        initData()
         initNavigationBar()
         initTableView()
         initView()
@@ -59,12 +58,20 @@ class MeasuresViewController: UIViewController {
         }
     }
     
+    /// データ初期化
+    private func initData() {
+        let realmManager = RealmManager()
+        memoArray = realmManager.getMemo(measuresID: measures.measuresID)
+    }
+    
+    /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_MEASURES_DETAIL
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteMeasures))
         navigationItem.rightBarButtonItems = [deleteButton]
     }
     
+    /// TableView初期化
     private func initTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         if #available(iOS 15.0, *) {
@@ -72,11 +79,14 @@ class MeasuresViewController: UIViewController {
         }
     }
     
+    /// 画面表示の初期化
     private func initView() {
         titleLabel.text = TITLE_TITLE
         memoLabel.text = TITLE_NOTE
         initTextField(textField: titleTextField, placeholder: MASSAGE_MEASURES_EXAMPLE, text: measures.title)
     }
+    
+    // MARK: - Action
     
     /// 対策とそれに含まれるメモを削除
     @objc func deleteMeasures() {

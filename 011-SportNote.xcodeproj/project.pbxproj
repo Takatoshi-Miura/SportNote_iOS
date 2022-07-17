@@ -368,10 +368,10 @@
 		8D3FFE5B27F665F90021C9FC /* Task */ = {
 			isa = PBXGroup;
 			children = (
-				8D91CE792808D9CC000D3B1F /* AddTaskCoordinator.swift */,
 				8D3FFE5E27F666A20021C9FC /* TaskCoordinator.swift */,
 				8D91CE73280777E8000D3B1F /* TaskDetailCoordinator.swift */,
 				8D91CE7F280B07EE000D3B1F /* MeasuresCoordinator.swift */,
+				8D91CE792808D9CC000D3B1F /* AddTaskCoordinator.swift */,
 			);
 			path = Task;
 			sourceTree = "<group>";
@@ -459,9 +459,9 @@
 		8D5CFBF727FBA2FC008DF02E /* Group */ = {
 			isa = PBXGroup;
 			children = (
-				8D5CFBFB27FBA36A008DF02E /* AddGroupViewController.swift */,
 				8D5CFC0A2802D925008DF02E /* GroupViewController.swift */,
 				8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */,
+				8D5CFBFB27FBA36A008DF02E /* AddGroupViewController.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";
@@ -479,8 +479,8 @@
 		8D5CFBFF27FBACF2008DF02E /* Group */ = {
 			isa = PBXGroup;
 			children = (
-				8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */,
 				8D5CFC0E28038D43008DF02E /* GroupCoordinator.swift */,
+				8D5CFC0027FBAD1B008DF02E /* AddGroupCoordinator.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";

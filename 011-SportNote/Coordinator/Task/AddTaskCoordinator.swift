@@ -12,7 +12,6 @@ class AddTaskCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var previousViewController: UIViewController?
-    var addTaskViewController = AddTaskViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -22,7 +21,7 @@ class AddTaskCoordinator: Coordinator {
     
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
-        addTaskViewController = AddTaskViewController()
+        let addTaskViewController = AddTaskViewController()
         addTaskViewController.delegate = self
         if #available(iOS 13.0, *) {
             addTaskViewController.isModalInPresentation = true
@@ -37,6 +36,12 @@ extension AddTaskCoordinator: AddTaskViewControllerDelegate {
     // TaskVC ← AddTaskVC
     func addTaskVCDismiss(_ viewController: UIViewController) {
         viewController.dismiss(animated: true, completion: nil)
+    }
+    
+    // TaskVC ← AddTaskVC
+    func addTaskVCAddTask(_ viewController: UIViewController, task: Task) {
+        viewController.dismiss(animated: true, completion: nil)
+        (previousViewController! as! TaskViewController).insertTask(task: task)
     }
     
 }
