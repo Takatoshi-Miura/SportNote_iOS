@@ -11,14 +11,13 @@ import UIKit
 class CalendarCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
-    var calendarViewController = CalendarViewController()
     
     func startFlow(in window: UIWindow?) {
     }
     
     func startFlow(in navigationController: UINavigationController) {
         self.navigationController = navigationController
-        calendarViewController = CalendarViewController()
+        let calendarViewController = CalendarViewController()
         calendarViewController.delegate = self
         navigationController.pushViewController(calendarViewController, animated: true)
     }

@@ -12,7 +12,6 @@ class PageViewCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var previousViewController: UIViewController?
-    var pageViewController = PageViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -22,7 +21,7 @@ class PageViewCoordinator: Coordinator {
     
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
-        pageViewController = PageViewController()
+        let pageViewController = PageViewController()
         pageViewController.pageVCDelegate = self
         if #available(iOS 13.0, *) {
             pageViewController.isModalInPresentation = true

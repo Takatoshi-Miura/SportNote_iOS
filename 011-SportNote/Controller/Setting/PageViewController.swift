@@ -73,6 +73,8 @@ class PageViewController: UIPageViewController {
         self.view.addSubview(button)
     }
     
+    // MARK: - Action
+    
     /// キャンセルボタンの処理
     @objc func tapCloseButton(_ sender: UIButton) {
         pageVCDelegate?.pageVCCancelDidTap(self)

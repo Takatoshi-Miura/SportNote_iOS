@@ -12,7 +12,6 @@ class LoginCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var previousViewController: UIViewController?
-    var loginViewController = LoginViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -22,7 +21,7 @@ class LoginCoordinator: Coordinator {
     
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
-        loginViewController = LoginViewController()
+        let loginViewController = LoginViewController()
         loginViewController.delegate = self
         if #available(iOS 13.0, *) {
             loginViewController.isModalInPresentation = true

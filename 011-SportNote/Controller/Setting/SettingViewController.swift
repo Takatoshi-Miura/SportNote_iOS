@@ -70,6 +70,7 @@ class SettingViewController: UIViewController {
         naviItem.title = TITLE_SETTING
     }
     
+    /// TableView初期化
     private func initTableView() {
         tableView.tableFooterView = UIView()
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)

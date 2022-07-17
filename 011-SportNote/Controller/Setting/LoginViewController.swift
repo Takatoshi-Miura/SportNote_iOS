@@ -70,6 +70,7 @@ class LoginViewController: UIViewController {
     
     // MARK: - Action
     
+    /// ログインボタンの処理
     @IBAction func tapLoginButton(_ sender: Any) {
         if isLogin {
             logout()
@@ -78,6 +79,7 @@ class LoginViewController: UIViewController {
         }
     }
     
+    /// パスワード変更ボタンの処理
     @IBAction func tapPasswordChangeButton(_ sender: Any) {
         if loginTextField.text == "" {
             showErrorAlert(message: MESSAGE_EMPTY_TEXT_ERROR_PASSWORD_RESET)
@@ -88,6 +90,7 @@ class LoginViewController: UIViewController {
         })
     }
     
+    /// アカウント作成ボタンの処理
     @IBAction func tapCreateAccountButton(_ sender: Any) {
         if loginTextField.text == "" || passwordTextField.text == "" {
             showErrorAlert(message: MESSAGE_EMPTY_TEXT_ERROR)
@@ -98,6 +101,7 @@ class LoginViewController: UIViewController {
         })
     }
     
+    /// キャンセルボタンの処理
     @IBAction func tapCancelButton(_ sender: Any) {
         delegate?.loginVCCancelDidTap(self)
     }

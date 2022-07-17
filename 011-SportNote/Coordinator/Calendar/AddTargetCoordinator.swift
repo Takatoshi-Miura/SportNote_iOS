@@ -12,7 +12,6 @@ class AddTargetCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var previousViewController: UIViewController?
-    var addTargetViewController = AddTargetViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -22,7 +21,7 @@ class AddTargetCoordinator: Coordinator {
     
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
-        addTargetViewController = AddTargetViewController()
+        let addTargetViewController = AddTargetViewController()
         addTargetViewController.delegate = self
         if #available(iOS 13.0, *) {
             addTargetViewController.isModalInPresentation = true

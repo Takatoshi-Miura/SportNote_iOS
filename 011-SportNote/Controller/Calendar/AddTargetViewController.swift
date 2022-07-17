@@ -104,8 +104,8 @@ class AddTargetViewController: UIViewController {
             return
         }
         
-        let firebaseManager = FirebaseManager()
         if Network.isOnline() {
+            let firebaseManager = FirebaseManager()
             firebaseManager.saveTarget(target: target, completion: {
                 self.delegate?.addTargetVCDismissWithReload(self)
             })

@@ -72,6 +72,7 @@ class CalendarViewController: UIViewController {
         printTarget()
     }
     
+    /// TableView初期化
     private func initTableView() {
         tableView.tableFooterView = UIView()
         tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: "NoteCell")
