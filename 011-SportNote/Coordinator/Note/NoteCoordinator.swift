@@ -11,14 +11,13 @@ import UIKit
 class NoteCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
-    var noteViewController = NoteViewController()
     
     func startFlow(in window: UIWindow?) {
     }
     
     func startFlow(in navigationController: UINavigationController) {
         self.navigationController = navigationController
-        noteViewController = NoteViewController()
+        let noteViewController = NoteViewController()
         noteViewController.delegate = self
         navigationController.pushViewController(noteViewController, animated: true)
     }

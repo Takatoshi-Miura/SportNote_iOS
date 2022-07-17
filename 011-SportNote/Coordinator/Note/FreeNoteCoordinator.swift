@@ -11,7 +11,6 @@ import UIKit
 class FreeNoteCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
-    var freeNoteViewController = FreeNoteViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -21,7 +20,7 @@ class FreeNoteCoordinator: Coordinator {
     
     func startFrow(in navigationController: UINavigationController, withFreeNote freeNote: Note) {
         self.navigationController = navigationController
-        freeNoteViewController = FreeNoteViewController()
+        let freeNoteViewController = FreeNoteViewController()
         freeNoteViewController.freeNote = freeNote
         navigationController.pushViewController(freeNoteViewController, animated: true)
     }

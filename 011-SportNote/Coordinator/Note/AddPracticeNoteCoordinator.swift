@@ -12,7 +12,6 @@ class AddPracticeNoteCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var previousViewController: UIViewController?
-    var addPracticeNoteViewController = AddPracticeNoteViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -23,16 +22,16 @@ class AddPracticeNoteCoordinator: Coordinator {
     func startFrow(in navigationController: UINavigationController, withNote note: Note) {
         // Viewer
         self.navigationController = navigationController
-        addPracticeNoteViewController = AddPracticeNoteViewController()
+        let addPracticeNoteViewController = AddPracticeNoteViewController()
         addPracticeNoteViewController.delegate = self
-        addPracticeNoteViewController.realmNote = note
+        addPracticeNoteViewController.note = note
         addPracticeNoteViewController.isViewer = true
         navigationController.pushViewController(addPracticeNoteViewController, animated: true)
     }
     
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
-        addPracticeNoteViewController = AddPracticeNoteViewController()
+        let addPracticeNoteViewController = AddPracticeNoteViewController()
         addPracticeNoteViewController.delegate = self
         if #available(iOS 13.0, *) {
             addPracticeNoteViewController.isModalInPresentation = true

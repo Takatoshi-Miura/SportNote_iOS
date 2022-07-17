@@ -40,19 +40,11 @@ class NoteViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        initNavigationController()
+        initNavigationBar()
         initSearchBar()
         initTableView()
         // 初回のみ旧データ変換後に同期処理
-        if Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            let dataConverter = DataConverter()
-            dataConverter.convertOldToRealm(completion: {
-                self.syncData()
-            })
-        } else {
-            self.syncData()
-        }
+        syncDataWithConvert()
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,7 +66,8 @@ class NoteViewController: UIViewController {
         }
     }
     
-    private func initNavigationController() {
+    /// NavigationBar初期化
+    private func initNavigationBar() {
         self.title = TITLE_NOTE
 //        let iconImage = isFiltered ? UIImage(named: "icon_filter_fill")! : UIImage(named: "icon_filter_empty")!
 //        let filterButton = UIBarButtonItem(image: iconImage,
@@ -84,10 +77,12 @@ class NoteViewController: UIViewController {
 //        navigationItem.rightBarButtonItems = [filterButton]
     }
     
+    /// SearchBar初期化
     private func initSearchBar() {
         searchBar.searchTextField.placeholder = TITLE_SEARCH_NOTE
     }
     
+    /// TableView初期化
     private func initTableView() {
         tableView.tableFooterView = UIView()
         tableView.refreshControl = UIRefreshControl()
@@ -96,6 +91,19 @@ class NoteViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 旧データ変換後に同期処理
+    private func syncDataWithConvert() {
+        if Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let dataConverter = DataConverter()
+            dataConverter.convertOldToRealm(completion: {
+                self.syncData()
+            })
+        } else {
+            self.syncData()
         }
     }
     
@@ -152,7 +160,7 @@ class NoteViewController: UIViewController {
         // フィルタ状態取得
         if let filterTaskIDArray = UserDefaults.standard.array(forKey: UserDefaultsKey.filterTaskID.rawValue) as? [String] {
             isFiltered = true
-            initNavigationController()
+            initNavigationBar()
             let realmManager = RealmManager()
             noteArray = realmManager.getPracticeTournamentNote(taskIDs: filterTaskIDArray)
             noteArray.insert(realmManager.getFreeNote(), at: 0)
@@ -161,7 +169,7 @@ class NoteViewController: UIViewController {
         }
         // フィルタなしの場合は全検索
         isFiltered = false
-        initNavigationController()
+        initNavigationBar()
         refreshData()
     }
     

@@ -12,7 +12,6 @@ class AddTournamentNoteCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var previousViewController: UIViewController?
-    var addTournamentNoteViewController = AddTournamentNoteViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -23,7 +22,7 @@ class AddTournamentNoteCoordinator: Coordinator {
     func startFrow(in navigationController: UINavigationController, withNote note: Note) {
         // Viewer
         self.navigationController = navigationController
-        addTournamentNoteViewController = AddTournamentNoteViewController()
+        let addTournamentNoteViewController = AddTournamentNoteViewController()
         addTournamentNoteViewController.delegate = self
         addTournamentNoteViewController.realmNote = note
         addTournamentNoteViewController.isViewer = true
@@ -33,7 +32,7 @@ class AddTournamentNoteCoordinator: Coordinator {
     func startFlow(in viewController: UIViewController) {
         // 新規作成
         previousViewController = viewController
-        addTournamentNoteViewController = AddTournamentNoteViewController()
+        let addTournamentNoteViewController = AddTournamentNoteViewController()
         addTournamentNoteViewController.delegate = self
         if #available(iOS 13.0, *) {
             addTournamentNoteViewController.isModalInPresentation = true

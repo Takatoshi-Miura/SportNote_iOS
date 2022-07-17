@@ -62,7 +62,7 @@ class AddTournamentNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-        initNavigation()
+        initNavigationBar()
         initTableView()
         initDatePicker()
         initWeatherPicker()
@@ -127,7 +127,8 @@ class AddTournamentNoteViewController: UIViewController {
         }
     }
     
-    private func initNavigation() {
+    /// NavigationBar初期化
+    private func initNavigationBar() {
         if !isViewer {
             return
         }
@@ -138,6 +139,7 @@ class AddTournamentNoteViewController: UIViewController {
         navigationItem.rightBarButtonItems = navigationItems
     }
     
+    /// TableView初期化
     private func initTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         if #available(iOS 15.0, *) {
