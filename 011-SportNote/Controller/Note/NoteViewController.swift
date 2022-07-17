@@ -68,6 +68,7 @@ class NoteViewController: UIViewController {
             if note.isDeleted {
                 noteArray.remove(at: selectedIndex.row)
                 tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                return
             }
             tableView.reloadRows(at: [selectedIndex], with: .none)
         }

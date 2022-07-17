@@ -52,10 +52,11 @@ class CalendarViewController: UIViewController {
         super.viewDidAppear(animated)
         if let selectedIndex = tableView.indexPathForSelectedRow {
             // ノートが削除されていれば取り除く
-            let note = noteArray[selectedIndex.row]
+            let note = selectedNoteArray[selectedIndex.row]
             if note.isDeleted {
-                noteArray.remove(at: selectedIndex.row)
-                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                selectedNoteArray.remove(at: selectedIndex.row)
+                tableView.reloadData()
+                return
             }
             tableView.reloadRows(at: [selectedIndex], with: .none)
         }
