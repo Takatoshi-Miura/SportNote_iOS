@@ -70,4 +70,10 @@ extension TaskCoordinator: TaskViewControllerDelegate {
         settingCoordinator.startFlow(in: viewController)
     }
     
+    // TaskVC → TutorialVC
+    func taskVCShowTutorial(_ viewController: UIViewController) {
+        let pageViewCoordinator = PageViewCoordinator()
+        pageViewCoordinator.startFlow(in: viewController)
+    }
+    
 }

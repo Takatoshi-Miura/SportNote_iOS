@@ -23,6 +23,8 @@ protocol TaskViewControllerDelegate: AnyObject {
     func taskVCCompletedTaskCellDidTap(groupID: String)
     // 設定ボタンタップ時の処理
     func taskVCSettingDidTap(_ viewController: UIViewController)
+    // チュートリアル表示
+    func taskVCShowTutorial(_ viewController: UIViewController)
 }
 
 class TaskViewController: UIViewController {
@@ -184,6 +186,7 @@ class TaskViewController: UIViewController {
             // 利用規約を表示
             displayAgreement({
                 UserDefaultsKey.agree.set(value: true)
+                self.delegate?.taskVCShowTutorial(self)
             })
         }
         

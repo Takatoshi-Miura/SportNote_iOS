@@ -24,9 +24,6 @@ class SettingCoordinator: Coordinator {
         previousViewController = viewController
         settingViewController = SettingViewController()
         settingViewController.delegate = self
-        if #available(iOS 13.0, *) {
-            settingViewController.isModalInPresentation = true
-        }
         previousViewController!.present(settingViewController, animated: true)
     }
     
