@@ -184,11 +184,11 @@ class DataConverter {
     /// - Returns: Weather型の天気
     private func convertToWeather(weather: String) -> Int {
         switch weather {
-        case WeatherString.sunny.rawValue:
+        case OldWeather.sunny.rawValue:
             return Weather.sunny.rawValue
-        case WeatherString.cloudy.rawValue:
+        case OldWeather.cloudy.rawValue:
             return Weather.cloudy.rawValue
-        case WeatherString.rainy.rawValue:
+        case OldWeather.rainy.rawValue:
             return Weather.rainy.rawValue
         default:
             return Weather.sunny.rawValue

@@ -53,6 +53,9 @@
 		8D665D3324A17CD400441B32 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D3124A17CD400441B32 /* LaunchScreen.storyboard */; };
 		8D69FC9824B7085900DFECB3 /* TaskCellForAddNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D69FC9624B7085900DFECB3 /* TaskCellForAddNote.swift */; };
 		8D69FC9924B7085900DFECB3 /* TaskCellForAddNote.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D69FC9724B7085900DFECB3 /* TaskCellForAddNote.xib */; };
+		8D790DB42883CD620062838C /* Definition+Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D790DB32883CD610062838C /* Definition+Note.swift */; };
+		8D790DB62883CF1D0062838C /* Definition+Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D790DB52883CF1D0062838C /* Definition+Group.swift */; };
+		8D790DB82883CF8E0062838C /* Definition+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D790DB72883CF8E0062838C /* Definition+Date.swift */; };
 		8D91CE712806295C000D3B1F /* TaskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91CE6F2806295C000D3B1F /* TaskDetailViewController.swift */; };
 		8D91CE722806295C000D3B1F /* TaskDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D91CE702806295C000D3B1F /* TaskDetailViewController.xib */; };
 		8D91CE74280777E8000D3B1F /* TaskDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91CE73280777E8000D3B1F /* TaskDetailCoordinator.swift */; };
@@ -150,6 +153,9 @@
 		8D665D3424A17CD400441B32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D69FC9624B7085900DFECB3 /* TaskCellForAddNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCellForAddNote.swift; sourceTree = "<group>"; };
 		8D69FC9724B7085900DFECB3 /* TaskCellForAddNote.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskCellForAddNote.xib; sourceTree = "<group>"; };
+		8D790DB32883CD610062838C /* Definition+Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+Note.swift"; sourceTree = "<group>"; };
+		8D790DB52883CF1D0062838C /* Definition+Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+Group.swift"; sourceTree = "<group>"; };
+		8D790DB72883CF8E0062838C /* Definition+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+Date.swift"; sourceTree = "<group>"; };
 		8D91CE6F2806295C000D3B1F /* TaskDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
 		8D91CE702806295C000D3B1F /* TaskDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDetailViewController.xib; sourceTree = "<group>"; };
 		8D91CE73280777E8000D3B1F /* TaskDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailCoordinator.swift; sourceTree = "<group>"; };
@@ -298,8 +304,11 @@
 		8D18E81A27F65B3B00035E99 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				8D481D4C27F7D9030082D956 /* Definition.swift */,
 				8D481D6A27F98BF60082D956 /* Network.swift */,
+				8D481D4C27F7D9030082D956 /* Definition.swift */,
+				8D790DB52883CF1D0062838C /* Definition+Group.swift */,
+				8D790DB32883CD610062838C /* Definition+Note.swift */,
+				8D790DB72883CF8E0062838C /* Definition+Date.swift */,
 				8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */,
 				8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */,
 				8D5A478F25EB1D6E009FB63B /* UIViewController+PickerView.swift */,
@@ -734,6 +743,7 @@
 				8D481D5727F80EB50082D956 /* DataConverter.swift in Sources */,
 				8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */,
 				8D91CE86280BBBA9000D3B1F /* AddTargetCoordinator.swift in Sources */,
+				8D790DB42883CD620062838C /* Definition+Note.swift in Sources */,
 				8D481D6627F8678E0082D956 /* Memo.swift in Sources */,
 				8D5CFC0728024C94008DF02E /* GroupHeaderView.swift in Sources */,
 				8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */,
@@ -750,9 +760,11 @@
 				8D91CE7A2808D9CC000D3B1F /* AddTaskCoordinator.swift in Sources */,
 				8D91CE74280777E8000D3B1F /* TaskDetailCoordinator.swift in Sources */,
 				8DB579D6284428F400245025 /* LoginCoordinator.swift in Sources */,
+				8D790DB62883CF1D0062838C /* Definition+Group.swift in Sources */,
 				8D481D6927F875780082D956 /* Target.swift in Sources */,
 				8DBE025F285938D90047C751 /* NoteFilterViewController.swift in Sources */,
 				8DC8DEA42839A36400BD7F70 /* SettingCoordinator.swift in Sources */,
+				8D790DB82883CF8E0062838C /* Definition+Date.swift in Sources */,
 				8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */,
 				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,
 				8D91CE712806295C000D3B1F /* TaskDetailViewController.swift in Sources */,
