@@ -11,7 +11,6 @@ import UIKit
 class GroupCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
-    var groupViewController = GroupViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -21,7 +20,7 @@ class GroupCoordinator: Coordinator {
     
     func startFrow(in navigationController: UINavigationController, withGroup group: Group) {
         self.navigationController = navigationController
-        groupViewController = GroupViewController()
+        let groupViewController = GroupViewController()
         groupViewController.delegate = self
         groupViewController.group = group
         navigationController.pushViewController(groupViewController, animated: true)
@@ -31,7 +30,6 @@ class GroupCoordinator: Coordinator {
     }
     
 }
-
 
 extension GroupCoordinator: GroupViewControllerDelegate {
     

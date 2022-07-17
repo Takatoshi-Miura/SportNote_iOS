@@ -32,10 +32,11 @@ class GroupViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        initNavigationBar()
+        initTableView()
         initView()
         initColorPicker()
-        let realmManager = RealmManager()
-        groupArray = realmManager.getGroupArrayForTaskView()
+        initData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -53,22 +54,30 @@ class GroupViewController: UIViewController {
         }
     }
     
-    /// 画面初期化
-    private func initView() {
+    /// NavigationBar初期化
+    private func initNavigationBar() {
         self.title = TITLE_GROUP_DETAIL
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteGroup))
         navigationItem.rightBarButtonItems = [deleteButton]
+    }
+    
+    /// TableView初期化
+    private func initTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.isEditing = true
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 画面表示の初期化
+    private func initView() {
         titleLabel.text = TITLE_TITLE
         colorLabel.text = TITLE_COLOR
         orderLabel.text = TITLE_ORDER
         initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE, text: group.title)
         colorButton.backgroundColor = Color.allCases[group.color].color
         colorButton.setTitle(Color.allCases[group.color].title, for: .normal)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.isEditing = true
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
     }
     
     /// Picker初期化
@@ -77,6 +86,13 @@ class GroupViewController: UIViewController {
         colorPicker.dataSource = self
         colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)
         colorPicker.backgroundColor = UIColor.systemGray5
+    }
+    
+    /// データ初期化
+    private func initData() {
+        let realmManager = RealmManager()
+        groupArray = realmManager.getGroupArrayForTaskView()
+        tableView.reloadData()
     }
     
     // MARK: - Action
@@ -93,7 +109,7 @@ class GroupViewController: UIViewController {
     
     /// グループを削除
     @objc func deleteGroup() {
-        /// グループ数チェック
+        // グループ数がゼロになる場合は削除できない
         let realmManager = RealmManager()
         if realmManager.getGroupArrayForTaskView().count == 1 {
             showErrorAlert(message: MESSAGE_EMPTY_GROUP)
@@ -134,8 +150,8 @@ extension GroupViewController: UITextFieldDelegate {
         // グループを更新
         let realmManager = RealmManager()
         realmManager.updateGroupTitle(groupID: group.groupID, title: textField.text!)
-        groupArray = realmManager.getGroupArrayForTaskView()
-        tableView.reloadData()
+        
+        initData()
         return true
     }
     
@@ -164,8 +180,7 @@ extension GroupViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         let realmManager = RealmManager()
         realmManager.updateGroupColor(groupID: group.groupID, color: pickerIndex)
-        groupArray = realmManager.getGroupArrayForTaskView()
-        tableView.reloadData()
+        initData()
     }
     
     @objc func cancelAction() {

@@ -28,23 +28,29 @@ class GroupHeaderView: UITableViewHeaderFooterView {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.tintColor = .systemGray6
-        // タップジェスチャーを追加
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(headerViewDidTap(sender:))))
     }
     
-    func setProperty(group: Group) {
-        self.group = group
-        imageView.backgroundColor = Color.allCases[group.color].color
-        titleLabel.text = group.title
-        infoButton.tintColor = .systemBlue
-    }
+    // MARK: - Action
     
+    /// infoボタンの処理
     @IBAction func tapInfoButton(_ sender: Any) {
         self.delegate?.infoButtonDidTap(view: self)
     }
     
+    /// headerViewタップ時の処理
     @objc func headerViewDidTap(sender: UITapGestureRecognizer) {
         self.delegate?.headerDidTap(view: self)
+    }
+    
+    /// 情報表示
+    /// - Parameters:
+    ///    - group: グループ
+    func printInfo(group: Group) {
+        self.group = group
+        imageView.backgroundColor = Color.allCases[group.color].color
+        titleLabel.text = group.title
+        infoButton.tintColor = .systemBlue
     }
 
 }

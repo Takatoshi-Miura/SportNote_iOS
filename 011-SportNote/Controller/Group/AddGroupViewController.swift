@@ -9,8 +9,10 @@
 import UIKit
 
 protocol AddGroupViewControllerDelegate: AnyObject {
-    // モーダルを閉じる時の処理
-    func addGroupVCDismiss(_ viewController: UIViewController)
+    // キャンセル時の処理
+    func addGroupVCCancel(_ viewController: UIViewController)
+    // グループ追加時の処理
+    func addGroupVCAddGroup(_ viewController: UIViewController, group: Group)
 }
 
 class AddGroupViewController: UIViewController {
@@ -73,10 +75,10 @@ class AddGroupViewController: UIViewController {
     /// キャンセルボタンの処理
     @IBAction func tapCancelButton(_ sender: Any) {
         if titleTextField.text!.isEmpty {
-            self.delegate?.addGroupVCDismiss(self)
+            self.delegate?.addGroupVCCancel(self)
         } else {
             showOKCancelAlert(title: "", message: MESSAGE_DELETE_INPUT, OKAction: {
-                self.delegate?.addGroupVCDismiss(self)
+                self.delegate?.addGroupVCCancel(self)
             })
         }
     }
@@ -92,34 +94,25 @@ class AddGroupViewController: UIViewController {
         }
         
         // グループ作成
+        let realmManager = RealmManager()
         let group = Group()
         group.title = titleTextField.text!
         group.color = pickerIndex
-        
-        let realmManager = RealmManager()
         group.order = realmManager.getNumberOfGroups()
         if !realmManager.createRealm(object: group) {
             showErrorAlert(message: ERROR_MESSAGE_GROUP_CREATE_FAILED)
             return
         }
         
+        // Firebaseに送信
         if Network.isOnline() {
             let firebaseManager = FirebaseManager()
             firebaseManager.saveGroup(group: group, completion: {
-                self.dismissWithReload(group: group)
+                self.delegate?.addGroupVCAddGroup(self, group: group)
             })
         } else {
-            self.dismissWithReload(group: group)
+            self.delegate?.addGroupVCAddGroup(self, group: group)
         }
-    }
-    
-    /// TaskVCにグループを追加して閉じる
-    func dismissWithReload(group: Group) {
-        let tabBar = self.presentingViewController as! UITabBarController
-        let navigation = tabBar.selectedViewController as! UINavigationController
-        let taskView = navigation.viewControllers.first as! TaskViewController
-        taskView.insertGroup(group: group)
-        self.delegate?.addGroupVCDismiss(self)
     }
 
 }

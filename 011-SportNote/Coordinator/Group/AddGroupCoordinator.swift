@@ -12,7 +12,6 @@ class AddGroupCoordinator: Coordinator {
     
     var navigationController: UINavigationController?
     var previousViewController: UIViewController?
-    var addGroupViewController = AddGroupViewController()
     
     func startFlow(in window: UIWindow?) {
     }
@@ -22,7 +21,7 @@ class AddGroupCoordinator: Coordinator {
     
     func startFlow(in viewController: UIViewController) {
         previousViewController = viewController
-        addGroupViewController = AddGroupViewController()
+        let addGroupViewController = AddGroupViewController()
         addGroupViewController.delegate = self
         if #available(iOS 13.0, *) {
             addGroupViewController.isModalInPresentation = true
@@ -35,8 +34,14 @@ class AddGroupCoordinator: Coordinator {
 extension AddGroupCoordinator: AddGroupViewControllerDelegate {
     
     // TaskVC ← AddGroupVC
-    func addGroupVCDismiss(_ viewController: UIViewController) {
+    func addGroupVCCancel(_ viewController: UIViewController) {
         viewController.dismiss(animated: true, completion: nil)
+    }
+    
+    // TaskVC ← AddGroupVC
+    func addGroupVCAddGroup(_ viewController: UIViewController, group: Group) {
+        viewController.dismiss(animated: true, completion: nil)
+        (previousViewController! as! TaskViewController).insertGroup(group: group)
     }
     
 }
