@@ -50,7 +50,7 @@ class NoteCell: UITableViewCell {
                 colorImageView.layer.borderColor = UIColor.systemGray.cgColor
                 colorImageView.layer.borderWidth = 0.5
             }
-            titleLabel.text = note.target
+            titleLabel.text = note.result
             dateLabel.text = formatDate(date: note.date)
             titleLabelTop.constant = CGFloat(8)
         }

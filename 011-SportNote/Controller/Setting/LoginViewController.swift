@@ -13,6 +13,8 @@ import Firebase
 protocol LoginViewControllerDelegate: AnyObject {
     // ログイン時の処理
     func loginVCUserDidLogin(_ viewController: UIViewController)
+    // ログイン時の処理
+    func loginVCUserDidLogout(_ viewController: UIViewController)
     // キャンセルタップ時の処理
     func loginVCCancelDidTap(_ viewController: UIViewController)
 }
@@ -164,7 +166,7 @@ class LoginViewController: UIViewController {
             // メッセージが隠れてしまうため、遅延処理を行う
             HUD.show(.labeledSuccess(title: "", subtitle: MESSAGE_LOGOUT_SUCCESSFUL))
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
-                self.delegate?.loginVCUserDidLogin(self)
+                self.delegate?.loginVCUserDidLogout(self)
             }
         } catch _ as NSError {
             HUD.hide()

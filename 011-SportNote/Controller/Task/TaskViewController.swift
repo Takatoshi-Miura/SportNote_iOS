@@ -129,7 +129,12 @@ class TaskViewController: UIViewController {
         // ログイン、ログアウト時のリロード用
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.syncData),
-                                               name: NSNotification.Name(rawValue: "dataUpdated"),
+                                               name: NSNotification.Name(rawValue: "afterLogin"),
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.syncDataWithConvert),
+                                               name: NSNotification.Name(rawValue: "afterLogout"),
                                                object: nil)
     }
     
@@ -144,6 +149,20 @@ class TaskViewController: UIViewController {
             })
         } else {
             self.refreshData()
+        }
+    }
+    
+    /// データ変換＆同期処理
+    /// ログアウト後は未分類グループなどを自動生成する必要がある
+    @objc func syncDataWithConvert() {
+        if !isCompleted && Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let dataConverter = DataConverter()
+            dataConverter.convertOldToRealm(completion: {
+                self.syncData()
+            })
+        } else {
+            self.syncData()
         }
     }
     
