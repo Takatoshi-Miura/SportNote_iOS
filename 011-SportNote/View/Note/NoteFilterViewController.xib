@@ -27,12 +27,12 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <items>
                         <navigationItem title="Title" id="1uj-qF-lyy">
-                            <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="9hG-85-qXx">
+                            <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="9hG-85-qXx">
                                 <connections>
                                     <action selector="tapCancelButton:" destination="-1" id="wTR-Ej-hlA"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="MMJ-tx-SKQ">
+                            <barButtonItem key="rightBarButtonItem" title="Item" id="MMJ-tx-SKQ">
                                 <connections>
                                     <action selector="tapClearButton:" destination="-1" id="ESS-Gd-jHd"/>
                                 </connections>

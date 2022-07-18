@@ -66,12 +66,12 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <items>
                         <navigationItem title="Title" id="Ias-Hi-RPc">
-                            <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="kRS-Cm-eK7">
+                            <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="kRS-Cm-eK7">
                                 <connections>
                                     <action selector="tapCancelButton:" destination="-1" id="8fs-s6-VO5"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="t9w-ri-FpH">
+                            <barButtonItem key="rightBarButtonItem" systemItem="save" id="t9w-ri-FpH">
                                 <connections>
                                     <action selector="tapSaveButton:" destination="-1" id="PAj-W0-7U1"/>
                                 </connections>
