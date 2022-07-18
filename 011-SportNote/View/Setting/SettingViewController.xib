@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingViewController" customModule="_11_SportNote" customModuleProvider="target">
+            <connections>
+                <outlet property="cancel" destination="0k6-17-4nL" id="erB-PR-EqV"/>
+                <outlet property="naviItem" destination="2fs-wx-ixq" id="yNO-7l-8UW"/>
+                <outlet property="tableView" destination="Pbd-Da-9YT" id="6nk-to-e0Z"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dcf-ek-ZGZ">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <items>
+                        <navigationItem title="Title" id="2fs-wx-ixq">
+                            <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="0k6-17-4nL">
+                                <connections>
+                                    <action selector="tapCancelButton:" destination="-1" id="kSE-aI-TMX"/>
+                                </connections>
+                            </barButtonItem>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Pbd-Da-9YT">
+                    <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Ubj-9C-zhv"/>
+                        <outlet property="delegate" destination="-1" id="6KV-0f-cD4"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Pbd-Da-9YT" firstAttribute="top" secondItem="dcf-ek-ZGZ" secondAttribute="bottom" id="NnA-NQ-8wh"/>
+                <constraint firstItem="Pbd-Da-9YT" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="QcE-wv-8cZ"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Pbd-Da-9YT" secondAttribute="trailing" id="bsp-7j-G4W"/>
+                <constraint firstItem="dcf-ek-ZGZ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="eNf-9a-Jyc"/>
+                <constraint firstItem="dcf-ek-ZGZ" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="rFL-Hz-8ID"/>
+                <constraint firstItem="dcf-ek-ZGZ" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="rhg-vD-D01"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Pbd-Da-9YT" secondAttribute="bottom" id="xll-91-pHF"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="149"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

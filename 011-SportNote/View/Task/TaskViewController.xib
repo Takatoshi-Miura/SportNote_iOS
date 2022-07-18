@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TaskViewController" customModule="_11_SportNote" customModuleProvider="target">
+            <connections>
+                <outlet property="adView" destination="iVB-EU-kdZ" id="1j5-I4-kxc"/>
+                <outlet property="addButton" destination="5ry-Pu-9ZG" id="htt-xe-bkR"/>
+                <outlet property="tableView" destination="D44-AA-53B" id="smW-Rc-ayD"/>
+                <outlet property="view" destination="iN0-l3-epB" id="19v-0Q-FFG"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="D44-AA-53B">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="518"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="iBM-Jm-U03"/>
+                        <outlet property="delegate" destination="-1" id="XCj-bZ-Tow"/>
+                    </connections>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iVB-EU-kdZ">
+                    <rect key="frame" x="0.0" y="518" width="320" height="50"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="mWR-qr-JCx"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ry-Pu-9ZG">
+                    <rect key="frame" x="244.5" y="442.5" width="55.5" height="55.5"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="Plus_Button"/>
+                    <connections>
+                        <action selector="tapAddButton:" destination="-1" eventType="touchUpInside" id="ci9-SX-dgc"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="D44-AA-53B" secondAttribute="trailing" id="2cj-3l-Ged"/>
+                <constraint firstItem="iVB-EU-kdZ" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="86p-ye-FMS"/>
+                <constraint firstItem="iVB-EU-kdZ" firstAttribute="top" secondItem="5ry-Pu-9ZG" secondAttribute="bottom" constant="20" id="Af8-ib-ZzW"/>
+                <constraint firstItem="D44-AA-53B" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="DAj-1Z-4yM"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="5ry-Pu-9ZG" secondAttribute="trailing" constant="20" id="XDJ-TW-4LP"/>
+                <constraint firstItem="D44-AA-53B" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b1M-Vf-ufM"/>
+                <constraint firstItem="iVB-EU-kdZ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="hGQ-ZZ-BfV"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="D44-AA-53B" secondAttribute="bottom" constant="50" id="lze-Vx-b3R"/>
+                <constraint firstItem="iVB-EU-kdZ" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="qQ0-VE-dYt"/>
+            </constraints>
+            <point key="canvasLocation" x="138.75" y="134.1549295774648"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Plus_Button" width="55.5" height="55.5"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

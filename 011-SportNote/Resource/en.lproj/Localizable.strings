@@ -1,0 +1,196 @@
+/* 
+  Localizable.strings
+  011-SportNote
+
+  Created by Takatoshi Miura on 2022/04/02.
+  Copyright © 2022 Takatoshi Miura. All rights reserved.
+*/
+
+// MARK: - Common
+"Cancel" = "Cancel";
+"Save" = "Save";
+"Error" = "Error";
+"Delete" = "Delete";
+"DeleteInput" = "The entered content will be deleted.\nAre you sure?";
+"ServerCommunicationMessage" = "During server communication...";
+
+// MARK: - Color
+"Red" = "Red";
+"Pink" = "Pink";
+"Orange" = "Orange";
+"Yellow" = "Yellow";
+"Green" = "Green";
+"Blue" = "Blue";
+"Purple" = "Purple";
+"Gray" = "Gray";
+"White" = "White";
+"Black" = "Black";
+
+// MARK: - Weather
+"Weather" = "Weather";
+"Temperature" = "Temperature";
+"Sunny" = "Sunny";
+"Cloudy" = "Cloudy";
+"Rainy" = "Rainy";
+
+// MARK: - Month
+"Date" = "Date";
+"January" = "January";
+"February" = "February";
+"March" = "March";
+"April" = "April";
+"May" = "May";
+"June" = "June";
+"July" = "July";
+"August" = "August";
+"September" = "September";
+"October" = "October";
+"November" = "November";
+"December" = "December";
+
+// MARK: - TabBarController
+"Task" = "Task";
+"Note" = "Note";
+"Calendar" = "Calendar";
+"Group" = "Group";
+"Target" = "Target";
+"PracticeNote" = "PracticeNote";
+"TournamentNote" = "TournamentNote";
+
+// MARK: - TaskViewController
+"AddGroupTaskTitle" = "Add group and task";
+"AddGroupTaskMessage" = "What do you want to add?";
+"CompletedTask" = "CompletedTask";
+"Measures" = "Measures";
+"Cause" = "Cause";
+"AddTaskTitle" = "Add task";
+"TaskExample" = "Ex: I'm not motivated to practice";
+"MeasuresExample" = "Ex: Reaffirm your goals";
+
+// MARK: - TaskDetailViewController
+"TaskDetailTitle" = "Task details";
+"DeleteTaskTitle" = "Delete task";
+"DeleteTaskMessage" = "Do you want to delete the task?\nIf you delete an task, you cannot restore it.";
+"CompleteTaskTitle" = "Progress of the task";
+"CompleteTaskMessage" = "Do you want to complete the task?";
+"InCompleteTaskMessage" = "Do you want to keep the task in progress?";
+"AddMeasuresTitle" = "Add Measures";
+"AddMeasuresMessage" = "Please enter the measures.";
+"Add" = "Add";
+"MeasuresPriority" = "Measures(in descending order of priority)";
+
+// MARK: - MeasuresViewController
+"MeasuresTitle" = "Measures details";
+"DeleteMeasuresTitle" = "Delete measures";
+"DeleteMeasuresMessage" = "Do you want to delete the measure?\nIf you delete the measure, all the related information will be deleted from the note. Once deleted, the measure cannot be restored.";
+
+// MARK: - Group
+"AddGroupTitle" = "Add group";
+"Title" = "Title (Required)";
+"Color" = "Color";
+"GroupExample" = "Ex: Physical, Mental, Uncategorized";
+"Uncategorized" = "Uncategorized";
+"GroupTitle" = "Group details";
+"GroupOrder" = "Display order";
+"DeleteGroupMessage" = "Do you want to delete the group?\nDeleting a group also deletes all tasks contained in the group. Once deleted, groups and tasks cannot be restored.";
+"EmptyGroupMessage" = "You need at least one group.";
+"Delete" = "Delete";
+
+// MARK: - NoteViewController
+"AddNoteTitle" = "Add note";
+"AddMessage" = "What do you want to add?";
+"FreeNote" = "FreeNote";
+"FreeNoteDefaultDetail" = "The note that is always displayed at the top.";
+"SearchNoteTitle" = "Search note";
+
+// MARK: - NoteFilterViewController
+"FilterNote" = "Search filter";
+"Period" = "Period";
+"ShowAll" = "Show all";
+"Clear" = "Clear";
+"Apply" = "Apply";
+
+// MARK: - Note
+"AddPracticeNoteTitle" = "Add Practice Note";
+"PracticePurpose" = "Purpose";
+"Detail" = "Detail";
+"TackledTask" = "TackledTask";
+"AddTournamentNoteTitle" = "Add Tournament Note";
+"Condition" = "Condition";
+"Consciousness" = "Consciousness";
+"Result" = "Result";
+"Reflection" = "Reflection";
+"EmptyNote" = "There are no notes.";
+"TaskExistError" = "It is already displayed.";
+"TaskEmptyError" = "There are no unresolved tasks.";
+"DetailLabel" = "Detail";
+"NoteDetail" = "Note Detail";
+"DeleteNoteTitle" = "Delete note";
+"DeleteNoteMessage" = "Do you want to delete the note?\nIf you delete an note, you cannot restore it.";
+"DoneTaskEmpty" = "There are no worked on tasks.";
+
+// MARK: - Target
+"AddTarget" = "Add target";
+"YearlyTarget" = "Yearly target";
+"TargetExample" = "Ex: Complete a full marathon";
+"Yearly" = "Yearly: ";
+"Monthly" = "Monthly: ";
+"TargetEmpty" = "No target has been set.";
+"Today" = "Today";
+
+// MARK: - Setting
+"Setting" = "Setting";
+"Basic configuration" = "Basic Configuration";
+"Data" = "Data";
+"Help" = "Help";
+"Theme" = "Theme";
+"Notification" = "Notification";
+"Data transfer" = "Data transfer";
+"How to use this App?" = "How to use this App?";
+"Inquiry" = "Inquiry";
+"Error" = "Error";
+"Success" = "Success";
+"Internet Error" = "Internet connection is offline.";
+"Mailer Error" = "The email account has not been set.Set up an account with Apple's mail app.";
+"Mail Subject" = "Example: Bug report";
+"Mail Message" = "Please fill in the content of your inquiry.";
+"Mail Send Success" = "The email was sent successfully. Please wait for the reply from the developer.";
+"Mail Send Failed" = "The email could not be sent.";
+
+// MARK: - LoginViewController
+"LoginHelp" = "You can take over the data by creating an account and logging in from another device.";
+"AlreadyLogin" = "Logged in with the following account";
+"MailAddress" = "Mail";
+"Password" = "Password(6 characters or more)";
+"Login" = "Login";
+"Logout" = "Logout";
+"Forgot password" = "Forgot password";
+"Create account" = "Create account";
+"EmptyTextError" = "You have not entered your email address or password.";
+"EmptyTextErrorPasswordReset" = "Enter the email address to which you want to send the password reset email.";
+"DuringLoginProcess" = "During login process...";
+"LoginSuccessful" = "Login successful";
+"InvalidEmail" = "The email address is incorrect.";
+"WrongPassword" = "The password is incorrect.";
+"LoginError" = "Login failed. Please check the input contents.";
+"LogoutSuccessful" = "Logout successful";
+"LogoutError" = "Logout failed.";
+"PasswordResetTitle" = "Password Reset";
+"PasswordResetMessage" = "A password reset email will be sent to the email address you entered. Is it OK?";
+"MailSendError" = "Failed to send the email. Please check the input contents.";
+"MailSendSuccessful" = "The email was sent successfully.";
+"CreateAccountTitle" = "Create an account";
+"CreateAccountMessage" = "Create an account with the entered information. Is it OK?";
+"DuringCreateAccountProcess" = "Account creation is in progres...";
+"EmailAlreadyInUse" = "This email address is already in use.";
+"WeakPassword" = "Please enter the password with at least 6 characters.";
+"CreateAccountError" = "Failed to create an account. Please try again later.";
+"DataTransferSuccessful" = "Data transfer is complete.";
+
+// MARK: - ErrorMessage
+"EmptyTitle" = "Please input a title.";
+"GroupCreateFailed" = "Failed to create a group.";
+"TaskCreateError" = "Failed to create a task.";
+"TargetCreateError" = "Failed to create a target.";
+"TargetExistError" = "The target already exists. Are you sure you want to overwrite it?";
+"NoteCreateError" = "Failed to create a note.";

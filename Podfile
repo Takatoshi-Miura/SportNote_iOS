@@ -7,12 +7,15 @@ target '011-SportNote' do
 
   # Pods for 011-SportNote
 
-pod 'FirebaseAnalytics'
-pod 'Firebase/Auth'
-pod 'Firebase/Firestore'
-pod 'SVProgressHUD'
-pod 'FSCalendar'
-pod 'CalculateCalendarLogic' 
-pod 'Firebase/AdMob'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Firestore'
+  pod 'Google-Mobile-Ads-SDK'
+  pod 'PKHUD'
+  pod 'FSCalendar'
+  pod 'CalculateCalendarLogic'
+  pod 'RealmSwift'
+  pod 'ReachabilitySwift'
 
 end

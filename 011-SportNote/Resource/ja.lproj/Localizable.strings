@@ -1,0 +1,197 @@
+/* 
+  Localizable.strings
+  011-SportNote
+
+  Created by Takatoshi Miura on 2022/04/02.
+  Copyright © 2022 Takatoshi Miura. All rights reserved.
+*/
+
+// MARK: - Common
+"Cancel" = "キャンセル";
+"Save" = "保存";
+"Error" = "エラー";
+"Delete" = "削除";
+"DeleteInput" = "入力した内容が削除されます。\nよろしいですか？";
+"ServerCommunicationMessage" = "通信中";
+
+// MARK: - Color
+"Red" = "レッド";
+"Pink" = "ピンク";
+"Orange" = "オレンジ";
+"Yellow" = "イエロー";
+"Green" = "グリーン";
+"Blue" = "ブルー";
+"Purple" = "パープル";
+"Gray" = "グレー";
+"White" = "白";
+"Black" = "黒";
+
+// MARK: - Weather
+"Weather" = "天気";
+"Temperature" = "気温";
+"Sunny" = "晴れ";
+"Cloudy" = "くもり";
+"Rainy" = "雨";
+
+// MARK: - Month
+"Date" = "日付";
+"January" = "1月";
+"February" = "2月";
+"March" = "3月";
+"April" = "4月";
+"May" = "5月";
+"June" = "6月";
+"July" = "7月";
+"August" = "8月";
+"September" = "9月";
+"October" = "10月";
+"November" = "11月";
+"December" = "12月";
+
+// MARK: - TabBarController
+"Task" = "課題";
+"Note" = "ノート";
+"Calendar" = "カレンダー";
+"Group" = "グループ";
+"Target" = "目標";
+"PracticeNote" = "練習ノート";
+"TournamentNote" = "大会ノート";
+
+// MARK: - TaskViewController
+"AddGroupTaskTitle" = "グループ・課題の追加";
+"AddGroupTaskMessage" = "何を追加しますか？";
+"CompletedTask" = "完了した課題";
+"Measures" = "対策";
+"Cause" = "原因";
+"AddTaskTitle" = "課題の追加";
+"TaskExample" = "例：練習のやる気が出ない";
+"MeasuresExample" = "例：目標を再確認する";
+
+// MARK: - TaskDetailViewController
+"TaskDetailTitle" = "課題の詳細";
+"DeleteTaskTitle" = "課題の削除";
+"DeleteTaskMessage" = "課題を削除しますか？\n課題を削除すると復元できません。";
+"CompleteTaskTitle" = "課題の進捗";
+"CompleteTaskMessage" = "課題を完了にしますか？";
+"InCompleteTaskMessage" = "課題を未完了にしますか？";
+"AddMeasuresTitle" = "対策の追加";
+"AddMeasuresMessage" = "対策を入力して下さい。";
+"Add" = "追加";
+"MeasuresPriority" = "対策(優先度が高い順)";
+
+// MARK: - MeasuresViewController
+"MeasuresTitle" = "対策の詳細";
+"DeleteMeasuresTitle" = "対策の削除";
+"DeleteMeasuresMessage" = "対策を削除しますか？\n対策を削除するとノートからも関連する情報が全て削除されます。一度削除した対策は復元できません。";
+
+
+// MARK: - Group
+"AddGroupTitle" = "グループの追加";
+"Title" = "タイトル(必須)";
+"Color" = "カラー";
+"GroupExample" = "例：フィジカル、メンタル、未分類";
+"Uncategorized" = "未分類";
+"GroupTitle" = "グループの詳細";
+"GroupOrder" = "表示順";
+"DeleteGroupTitle" = "グループの削除";
+"DeleteGroupMessage" = "グループを削除しますか？\nグループを削除するとグループに含まれる課題も全て削除されます。一度削除したグループと課題は復元できません。";
+"EmptyGroupMessage" = "グループは1つ以上必要です。";
+
+// MARK: - NoteViewController
+"AddNoteTitle" = "ノートの追加";
+"AddMessage" = "何を追加しますか？";
+"FreeNote" = "フリーノート";
+"FreeNoteDefaultDetail" = "常に最上位に表示されるノートです。";
+"SearchNoteTitle" = "ノートを検索";
+
+// MARK: - NoteFilterViewController
+"FilterNote" = "検索フィルタ";
+"Period" = "期間";
+"ShowAll" = "すべて表示";
+"Clear" = "クリア";
+"Apply" = "適用";
+
+// MARK: - Note
+"AddPracticeNoteTitle" = "練習ノートの追加";
+"PracticePurpose" = "練習の目的";
+"Detail" = "練習内容";
+"TackledTask" = "取り組んだ課題";
+"AddTournamentNoteTitle" = "大会ノートの追加";
+"Condition" = "体調";
+"Consciousness" = "意識すること";
+"Result" = "結果";
+"Reflection" = "反省";
+"EmptyNote" = "ノートがありません。";
+"TaskExistError" = "既に表示されています。";
+"TaskEmptyError" = "未解決の課題がありません。";
+"DetailLabel" = "詳細";
+"NoteDetail" = "ノートの詳細";
+"DeleteNoteTitle" = "ノートの削除";
+"DeleteNoteMessage" = "ノートを削除しますか？\n削除すると復元できません。";
+"DoneTaskEmpty" = "取り組んだ課題はありません。";
+
+// MARK: - Target
+"AddTarget" = "目標の追加";
+"YearlyTarget" = "年間目標";
+"TargetExample" = "例：フルマラソンを完走する";
+"Yearly" = "年: ";
+"Monthly" = "月: ";
+"TargetEmpty" = "目標が未設定です";
+"Today" = "今日";
+
+// MARK: - Setting
+"Setting" = "設定";
+"Basic configuration" = "基本設定";
+"Data" = "データ";
+"Help" = "ヘルプ";
+"Theme" = "テーマ";
+"Notification" = "通知";
+"Data transfer" = "データの引継ぎ";
+"How to use this App?" = "アプリの使い方";
+"Inquiry" = "お問い合わせ";
+"Error" = "エラー";
+"Success" = "成功";
+"Internet Error" = "インターネット接続がオフラインです。";
+"Mailer Error" = "メールアカウントが未設定です。\nApple社の「メール」アプリでアカウントを設定して下さい。";
+"Mail Subject" = "例：バグの報告";
+"Mail Message" = "お問い合わせ内容をご記入下さい\n\n■ご利用端末(例:iPhone13):　\n■システムバージョン(例:iOS15.4):　";
+"Mail Send Success" = "メールを送信しました。\n開発者からの返信をお待ち下さい。";
+"Mail Send Failed" = "メールを送信できませんでした。";
+
+// MARK: - LoginViewController
+"LoginHelp" = "アカウントを作成し、別の端末からログインするとデータを引継ぐことができます。";
+"AlreadyLogin" = "下記アカウントでログイン済み";
+"MailAddress" = "メールアドレス";
+"Password" = "パスワード(6文字以上)";
+"Login" = "ログイン";
+"Logout" = "ログアウト";
+"Forgot password" = "パスワードを忘れた場合";
+"Create account" = "アカウント作成";
+"EmptyTextError" = "メールアドレスまたはパスワードが未入力です。";
+"EmptyTextErrorPasswordReset" = "パスワードリセットメール送信先のメールアドレスを入力してください。";
+"DuringLoginProcess" = "ログインしています";
+"LoginSuccessful" = "ログインしました";
+"InvalidEmail" = "メールアドレスが間違っています。";
+"WrongPassword" = "パスワードが間違っています。";
+"LoginError" = "ログインに失敗しました。入力内容を確認して下さい。";
+"LogoutSuccessful" = "ログアウトしました";
+"LogoutError" = "ログアウトに失敗しました。";
+"PasswordResetTitle" = "パスワードリセット";
+"PasswordResetMessage" = "入力したメールアドレス宛にパスワードリセットメールを送信します。よろしいですか？";
+"MailSendError" = "メールの送信に失敗しました。入力内容を確認して下さい。";
+"MailSendSuccessful" = "メールを送信しました。";
+"CreateAccountTitle" = "アカウント作成";
+"CreateAccountMessage" = "入力した内容でアカウントを作成します。よろしいですか？";
+"DuringCreateAccountProcess" = "アカウントを作成しています";
+"EmailAlreadyInUse" = "既にこのメールアドレスは使われています。";
+"WeakPassword" = "パスワードは6文字以上で入力してください。";
+"CreateAccountError" = "アカウントの作成に失敗しました。時間をおいて再度お試し下さい。";
+"DataTransferSuccessful" = "データの引継ぎが完了しました。";
+
+// MARK: - ErrorMessage
+"EmptyTitle" = "タイトルを入力して下さい。";
+"GroupCreateFailed" = "グループの作成に失敗しました。";
+"TaskCreateError" = "課題の作成に失敗しました。";
+"TargetCreateError" = "目標の作成に失敗しました。";
+"TargetExistError" = "目標が既に存在します。上書きしてもよろしいですか？";
+"NoteCreateError" = "ノートの作成に失敗しました。";
