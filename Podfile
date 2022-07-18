@@ -13,7 +13,6 @@ target '011-SportNote' do
   pod 'Firebase/Firestore'
   pod 'Google-Mobile-Ads-SDK'
   pod 'PKHUD'
-  pod 'SVProgressHUD'
   pod 'FSCalendar'
   pod 'CalculateCalendarLogic'
   pod 'RealmSwift'

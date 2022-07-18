@@ -495,7 +495,6 @@ PODS:
   - Realm/Headers (10.25.0)
   - RealmSwift (10.25.0):
     - Realm (= 10.25.0)
-  - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
   - CalculateCalendarLogic
@@ -508,7 +507,6 @@ DEPENDENCIES:
   - PKHUD
   - ReachabilitySwift
   - RealmSwift
-  - SVProgressHUD
 
 SPEC REPOS:
   trunk:
@@ -538,7 +536,6 @@ SPEC REPOS:
     - ReachabilitySwift
     - Realm
     - RealmSwift
-    - SVProgressHUD
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -567,8 +564,7 @@ SPEC CHECKSUMS:
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   Realm: 22a82aaa0e73f3483e3a6df32549c4c5cd34aa63
   RealmSwift: c2a635212400923edd3f828b8a37d55d3eb31863
-  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: ef27bde143d4ec968ee69a6a03622babfe3b46f9
+PODFILE CHECKSUM: 156848858611a2af1b575a29aa62b29ba939ca5c
 
 COCOAPODS: 1.10.2
