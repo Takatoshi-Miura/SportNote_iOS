@@ -46,6 +46,7 @@ class CalendarViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         showAdMob()
+        calendar.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {

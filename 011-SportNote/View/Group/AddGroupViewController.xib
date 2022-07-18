@@ -26,9 +26,6 @@
             <subviews>
                 <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bie-lC-srU">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="JOk-H5-rSd"/>
-                    </constraints>
                     <items>
                         <navigationItem title="Title" id="MPn-U4-ds5">
                             <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ZPI-UM-VDE">
