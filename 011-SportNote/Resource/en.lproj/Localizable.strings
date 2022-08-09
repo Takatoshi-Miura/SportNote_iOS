@@ -166,6 +166,7 @@
 "Logout" = "Logout";
 "Forgot password" = "Forgot password";
 "Create account" = "Create account";
+"Delete account" = "Delete account";
 "EmptyTextError" = "You have not entered your email address or password.";
 "EmptyTextErrorPasswordReset" = "Enter the email address to which you want to send the password reset email.";
 "DuringLoginProcess" = "During login process...";
@@ -186,6 +187,11 @@
 "WeakPassword" = "Please enter the password with at least 6 characters.";
 "CreateAccountError" = "Failed to create an account. Please try again later.";
 "DataTransferSuccessful" = "Data transfer is complete.";
+"DeleteAccountMessage" = "Delete your current account. All data will be deleted and cannot be recovered. Is it OK?";
+"PleaseLogin" = "Please login.";
+"DuringDeleteAccount" = "Deleting account.";
+"DeleteAccountSuccessful" = "You have successfully deleted your account.";
+"DeleteAccountError" = "Failed to delete account. Please try again later.";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "Please input a title.";

@@ -28,6 +28,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var passwordChangeButton: UIButton!
     @IBOutlet weak var createAccountButton: UIButton!
+    @IBOutlet weak var deleteAccountButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     private var isLogin: Bool = false
     var delegate: LoginViewControllerDelegate?
@@ -65,6 +66,7 @@ class LoginViewController: UIViewController {
         }
         passwordChangeButton.setTitle(TITLE_PASSWORD_RESET, for: .normal)
         createAccountButton.setTitle(TITLE_CREATE_ACCOUNT, for: .normal)
+        deleteAccountButton.setTitle(TITLE_DELETE_ACCOUNT, for: .normal)
         cancelButton.setTitle(TITLE_CANCEL, for: .normal)
     }
     
@@ -98,6 +100,17 @@ class LoginViewController: UIViewController {
         }
         showOKCancelAlert(title: TITLE_CREATE_ACCOUNT, message: MESSAGE_CREATE_ACCOUNT, OKAction: {
             self.createAccount(mail: self.loginTextField.text!, password: self.passwordTextField.text!)
+        })
+    }
+    
+    /// アカウント削除ボタンの処理
+    @IBAction func tapDeleteAccountButton(_ sender: Any) {
+        if !isLogin {
+            showErrorAlert(message: MESSAGE_PLEASE_LOGIN)
+            return
+        }
+        showOKCancelAlert(title: TITLE_DELETE_ACCOUNT, message: MESSAGE_DELETE_ACCOUNT, OKAction: {
+            self.deleteAccount()
         })
     }
     
@@ -153,19 +166,7 @@ class LoginViewController: UIViewController {
         do {
             try Auth.auth().signOut()
             
-            // Realmデータを全削除
-            let realmManager = RealmManager()
-            realmManager.deleteAllRealmData()
-            
-            // テキストフィールドをクリア
-            loginTextField.text = ""
-            passwordTextField.text = ""
-            
-            // UserDefaultsのユーザー情報を削除&新規作成
-            UserDefaultsKey.userID.remove()
-            UserDefaultsKey.address.remove()
-            UserDefaultsKey.password.remove()
-            UserDefaultsKey.userID.set(value: NSUUID().uuidString)
+            self.actionAfterLogout()
             
             // メッセージが隠れてしまうため、遅延処理を行う
             HUD.show(.labeledSuccess(title: "", subtitle: MESSAGE_LOGOUT_SUCCESSFUL))
@@ -239,6 +240,42 @@ class LoginViewController: UIViewController {
                 })
             }
         }
+    }
+    
+    /// アカウント削除処理
+    private func deleteAccount() {
+        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_DURING_DELETE_ACCOUNT))
+        Auth.auth().currentUser?.delete { (error) in
+            if error == nil {
+                self.actionAfterLogout()
+                
+                // メッセージが隠れてしまうため、遅延処理を行う
+                HUD.show(.labeledSuccess(title: "", subtitle: MESSAGE_DELETE_ACCOUNT_SUCCESSFUL))
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                    self.delegate?.loginVCUserDidLogout(self)
+                }
+            } else {
+                HUD.hide()
+                self.showErrorAlert(message: MESSAGE_DELETE_ACCOUNT_ERROR)
+            }
+        }
+    }
+    
+    /// ログアウト時の共通処理
+    private func actionAfterLogout() {
+        // テキストフィールドをクリア
+        self.loginTextField.text = ""
+        self.passwordTextField.text = ""
+        
+        // Realmデータを全削除
+        let realmManager = RealmManager()
+        realmManager.deleteAllRealmData()
+        
+        // UserDefaultsのユーザー情報を削除&新規作成
+        UserDefaultsKey.userID.remove()
+        UserDefaultsKey.address.remove()
+        UserDefaultsKey.password.remove()
+        UserDefaultsKey.userID.set(value: NSUUID().uuidString)
     }
     
 }
