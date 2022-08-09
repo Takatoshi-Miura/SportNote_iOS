@@ -167,6 +167,7 @@
 "Logout" = "ログアウト";
 "Forgot password" = "パスワードを忘れた場合";
 "Create account" = "アカウント作成";
+"Delete account" = "アカウント削除";
 "EmptyTextError" = "メールアドレスまたはパスワードが未入力です。";
 "EmptyTextErrorPasswordReset" = "パスワードリセットメール送信先のメールアドレスを入力してください。";
 "DuringLoginProcess" = "ログインしています";
@@ -187,6 +188,11 @@
 "WeakPassword" = "パスワードは6文字以上で入力してください。";
 "CreateAccountError" = "アカウントの作成に失敗しました。時間をおいて再度お試し下さい。";
 "DataTransferSuccessful" = "データの引継ぎが完了しました。";
+"DeleteAccountMessage" = "現在のアカウントを削除します。データが全て削除され、復元することができなくなります。よろしいですか？";
+"PleaseLogin" = "ログインしてください。";
+"DuringDeleteAccount" = "アカウントを削除しています";
+"DeleteAccountSuccessful" = "アカウントを削除しました。";
+"DeleteAccountError" = "アカウントの削除に失敗しました。時間をおいて再度お試し下さい。";
 
 // MARK: - ErrorMessage
 "EmptyTitle" = "タイトルを入力して下さい。";
