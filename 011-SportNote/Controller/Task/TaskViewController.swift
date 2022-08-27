@@ -21,6 +21,8 @@ protocol TaskViewControllerDelegate: AnyObject {
     func taskVCTaskCellDidTap(task: Task)
     // 完了した課題セルタップ時の処理
     func taskVCCompletedTaskCellDidTap(groupID: String)
+    // 課題を未完了にした時の処理
+    func taskVCInCompletedTask(task: Task)
     // 設定ボタンタップ時の処理
     func taskVCSettingDidTap(_ viewController: UIViewController)
     // チュートリアル表示
@@ -376,21 +378,8 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if isCompleted {
-            // 課題セル
-            let task = completedTaskArray[indexPath.row]
-            delegate?.taskVCTaskCellDidTap(task: task)
-        } else {
-            // 完了済み課題セル
-            if indexPath.row >= taskArray[indexPath.section].count {
-                let groupID = groupArray[indexPath.section].groupID
-                delegate?.taskVCCompletedTaskCellDidTap(groupID: groupID)
-                return
-            }
-            // 課題セル
-            let task = taskArray[indexPath.section][indexPath.row]
-            delegate?.taskVCTaskCellDidTap(task: task)
-        }
+        // 課題詳細,完了済み課題一覧へ遷移
+        self.transitionTaskDetail(indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -399,6 +388,90 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false    // 削除アイコンのスペースを詰める
+    }
+    
+    /// セル長押し時にメニュー表示
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        // 「完了した課題」セルはメニュー非表示
+        if !isCompleted && (indexPath.row >= taskArray[indexPath.section].count) {
+            return nil
+        }
+        
+        // 課題閲覧
+        let editAction = UIAction(title: TITLE_EDIT, image: UIImage(systemName: "square.and.pencil")!, identifier: nil, discoverabilityTitle: nil) { _ in
+            self.transitionTaskDetail(indexPath: indexPath)
+        }
+        
+        // 課題完了,未完了
+        let image = isCompleted ? UIImage(systemName: "exclamationmark.circle")! : UIImage(systemName: "checkmark.circle")!
+        let title = isCompleted ? TITLE_INCOMPLETE : TITLE_COMPLETE
+        let completeAction = UIAction(title: title, image: image, identifier: nil, discoverabilityTitle: nil) { _ in
+            self.changeTaskStatus(indexPath: indexPath)
+        }
+        
+        // 課題削除
+        let deleteAction = UIAction(title: TITLE_DELETE, image: UIImage(systemName: "trash")!, identifier: nil, discoverabilityTitle: nil) { _ in
+            self.deleteTask(indexPath: indexPath)
+        }
+        
+        let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            UIMenu(title: TITLE_MENU, image: nil, identifier: nil, options: [], children: [editAction, completeAction, deleteAction])
+        }
+        return contextMenuConfiguration
+    }
+    
+    /// 課題詳細画面、完了済み課題一覧へ遷移
+    /// - Parameters :
+    ///   - indexPath: 課題のIndexPath
+    private func transitionTaskDetail(indexPath: IndexPath) {
+        if !isCompleted && (indexPath.row >= taskArray[indexPath.section].count) {
+            // 完了済み課題一覧へ遷移
+            let groupID = groupArray[indexPath.section].groupID
+            delegate?.taskVCCompletedTaskCellDidTap(groupID: groupID)
+        } else {
+            // 課題詳細画面へ遷移
+            let task = isCompleted ? completedTaskArray[indexPath.row] : taskArray[indexPath.section][indexPath.row]
+            delegate?.taskVCTaskCellDidTap(task: task)
+        }
+    }
+    
+    /// 課題の完了,未完了を変更
+    /// - Parameters :
+    ///   - indexPath: 課題のIndexPath
+    private func changeTaskStatus(indexPath: IndexPath) {
+        let task = isCompleted ? completedTaskArray[indexPath.row] : taskArray[indexPath.section][indexPath.row]
+        let message = isCompleted ? MESSAGE_INCOMPLETE_TASK : MESSAGE_COMPLETE_TASK
+        
+        self.showOKCancelAlert(title: TITLE_COMPLETE_TASK, message: message, OKAction: {
+            let realmManager = RealmManager()
+            realmManager.updateTaskIsCompleted(task: task, isCompleted: !self.isCompleted)
+            if self.isCompleted {
+                self.completedTaskArray.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+                self.delegate?.taskVCInCompletedTask(task: task)
+            } else {
+                self.taskArray[indexPath.section].remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+            }
+        })
+    }
+    
+    /// 課題を削除
+    /// - Parameters :
+    ///   - indexPath: 課題のIndexPath
+    private func deleteTask(indexPath: IndexPath) {
+        let task = isCompleted ? completedTaskArray[indexPath.row] : taskArray[indexPath.section][indexPath.row]
+        
+        self.showDeleteAlert(title: TITLE_DELETE_TASK, message: MESSAGE_DELETE_TASK, OKAction: {
+            let realmManager = RealmManager()
+            realmManager.updateTaskIsDeleted(task: task)
+            if self.isCompleted {
+                self.completedTaskArray.remove(at: indexPath.row)
+            } else {
+                self.taskArray[indexPath.section].remove(at: indexPath.row)
+            }
+            self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+        })
     }
     
 }

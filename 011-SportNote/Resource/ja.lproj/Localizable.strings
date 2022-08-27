@@ -68,6 +68,8 @@
 "AddTaskTitle" = "課題の追加";
 "TaskExample" = "例：練習のやる気が出ない";
 "MeasuresExample" = "例：目標を再確認する";
+"Complete" = "完了にする";
+"InComplete" = "未完了にする";
 
 // MARK: - TaskDetailViewController
 "TaskDetailTitle" = "課題の詳細";

@@ -68,6 +68,8 @@
 "AddTaskTitle" = "Add task";
 "TaskExample" = "Ex: I'm not motivated to practice";
 "MeasuresExample" = "Ex: Reaffirm your goals";
+"Complete" = "Change to complete";
+"InComplete" = "Change to incomplete";
 
 // MARK: - TaskDetailViewController
 "TaskDetailTitle" = "Task details";

@@ -64,6 +64,15 @@ extension TaskCoordinator: TaskViewControllerDelegate {
         taskCoordinator.startFlow(in: navigationController!, isCompleted: true, groupID: groupID)
     }
     
+    // TaskVC ← CompletedTaskVC
+    func taskVCInCompletedTask(task: Task) {
+        navigationController?.popToRootViewController(animated: true)
+        let taskVC = navigationController?.topViewController as! TaskViewController
+        if !task.isComplete {
+            taskVC.insertTask(task: task)
+        }
+    }
+    
     // TaskVC → SettingVC
     func taskVCSettingDidTap(_ viewController: UIViewController) {
         let settingCoordinator = SettingCoordinator()

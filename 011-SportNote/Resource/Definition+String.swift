@@ -70,6 +70,8 @@ let TITLE_CAUSE = NSLocalizedString("Cause", comment: "")
 let TITLE_ADD_TASK = NSLocalizedString("AddTaskTitle", comment: "")
 let MASSAGE_TASK_EXAMPLE = NSLocalizedString("TaskExample", comment: "")
 let MASSAGE_MEASURES_EXAMPLE = NSLocalizedString("MeasuresExample", comment: "")
+let TITLE_COMPLETE = NSLocalizedString("Complete", comment: "")
+let TITLE_INCOMPLETE = NSLocalizedString("InComplete", comment: "")
 
 // MARK: - TaskDetailViewController
 let TITLE_TASK_DETAIL = NSLocalizedString("TaskDetailTitle", comment: "")
