@@ -11,6 +11,8 @@
 "Save" = "Save";
 "Error" = "Error";
 "Delete" = "Delete";
+"Edit" = "Edit";
+"Menu" = "Menu";
 "DeleteInput" = "The entered content will be deleted.\nAre you sure?";
 "ServerCommunicationMessage" = "During server communication...";
 

@@ -236,19 +236,55 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing {
-        } else {
-            switch NoteType.allCases[noteArray[indexPath.row].noteType] {
-            case .free:
-                self.delegate?.noteVCFreeNoteDidTap(freeNote: noteArray[indexPath.row])
-                break
-            case .practice:
-                self.delegate?.noteVCPracticeNoteDidTap(practiceNote: noteArray[indexPath.row])
-                break
-            case .tournament:
-                self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: noteArray[indexPath.row])
-                break
-            }
+        if !tableView.isEditing {
+            // ノート閲覧画面へ遷移
+            self.transitionNoteDetail(indexPath: indexPath)
+        }
+    }
+    
+    /// セル長押し時にメニュー表示
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let note = self.noteArray[indexPath.row]
+        
+        // ノート閲覧
+        let editAction = UIAction(title: TITLE_EDIT, image: UIImage(systemName: "square.and.pencil")!, identifier: nil, discoverabilityTitle: nil) { _ in
+            self.transitionNoteDetail(indexPath: indexPath)
+        }
+        
+        // ノート削除
+        let deleteAction = UIAction(title: TITLE_DELETE, image: UIImage(systemName: "trash")!, identifier: nil, discoverabilityTitle: nil) { _ in
+            self.showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
+                let realmManager = RealmManager()
+                realmManager.updateNoteIsDeleted(noteID: note.noteID)
+                realmManager.updateMemoIsDeleted(noteID: note.noteID)
+                self.noteArray.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.left)
+            })
+        }
+        
+        // フリーノートは削除不可
+        let actionArray = note.noteType == NoteType.free.rawValue ? [editAction] : [editAction, deleteAction]
+        let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            UIMenu(title: TITLE_MENU, image: nil, identifier: nil, options: [], children: actionArray)
+        }
+        return contextMenuConfiguration
+    }
+    
+    /// ノート閲覧画面に遷移
+    /// - Parameters:
+    ///    - indexPath セルのindexPath
+    private func transitionNoteDetail(indexPath: IndexPath) {
+        let note = self.noteArray[indexPath.row]
+        switch NoteType.allCases[note.noteType] {
+        case .free:
+            self.delegate?.noteVCFreeNoteDidTap(freeNote: note)
+            break
+        case .practice:
+            self.delegate?.noteVCPracticeNoteDidTap(practiceNote: note)
+            break
+        case .tournament:
+            self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: note)
+            break
         }
     }
     

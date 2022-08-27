@@ -13,6 +13,8 @@ let TITLE_CANCEL = NSLocalizedString("Cancel", comment: "")
 let TITLE_SAVE = NSLocalizedString("Save", comment: "")
 let TITLE_ERROR = NSLocalizedString("Error", comment: "")
 let TITLE_DELETE = NSLocalizedString("Delete", comment: "")
+let TITLE_EDIT = NSLocalizedString("Edit", comment: "")
+let TITLE_MENU = NSLocalizedString("Menu", comment: "")
 let MESSAGE_DELETE_INPUT = NSLocalizedString("DeleteInput", comment: "")
 let MESSAGE_SERVER_COMMUNICATION = NSLocalizedString("ServerCommunicationMessage", comment: "")
 
