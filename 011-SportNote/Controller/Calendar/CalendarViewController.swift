@@ -277,11 +277,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if selectedNoteArray.isEmpty {
-            return 44
-        } else {
-            return 50
-        }
+        return 50
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -301,12 +297,54 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         if selectedNoteArray.isEmpty {
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         } else {
-            let note = selectedNoteArray[indexPath.row]
-            if note.noteType == NoteType.practice.rawValue {
-                delegate?.calendarVCPracticeNoteDidTap(practiceNote: note)
-            } else {
-                delegate?.calendarVCTournamentNoteDidTap(tournamentNote: note)
-            }
+            self.transitionNoteDetail(indexPath: indexPath)
+        }
+    }
+    
+    /// セル長押し時にメニュー表示
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        // ノートがない場合は非表示
+        if selectedNoteArray.isEmpty {
+            return nil
+        }
+        
+        // ノート閲覧
+        let editAction = UIAction(title: TITLE_EDIT, image: UIImage(systemName: "square.and.pencil")!, identifier: nil, discoverabilityTitle: nil) { _ in
+            self.transitionNoteDetail(indexPath: indexPath)
+        }
+        
+        // ノート削除
+        let deleteAction = UIAction(title: TITLE_DELETE, image: UIImage(systemName: "trash")!, identifier: nil, discoverabilityTitle: nil) { _ in
+            self.showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
+                let note = self.selectedNoteArray[indexPath.row]
+                let realmManager = RealmManager()
+                realmManager.updateNoteIsDeleted(noteID: note.noteID)
+                realmManager.updateMemoIsDeleted(noteID: note.noteID)
+                self.selectedNoteArray.remove(at: indexPath.row)
+                self.tableView.reloadData()
+            })
+        }
+        
+        let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            UIMenu(title: TITLE_MENU, image: nil, identifier: nil, options: [], children: [editAction, deleteAction])
+        }
+        return contextMenuConfiguration
+    }
+    
+    /// ノート閲覧画面に遷移
+    /// - Parameters:
+    ///    - indexPath セルのindexPath
+    private func transitionNoteDetail(indexPath: IndexPath) {
+        let note = selectedNoteArray[indexPath.row]
+        switch NoteType.allCases[note.noteType] {
+        case .free:
+            break
+        case .practice:
+            self.delegate?.calendarVCPracticeNoteDidTap(practiceNote: note)
+            break
+        case .tournament:
+            self.delegate?.calendarVCTournamentNoteDidTap(tournamentNote: note)
+            break
         }
     }
     
