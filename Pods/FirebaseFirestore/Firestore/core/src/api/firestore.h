@@ -46,6 +46,10 @@ struct Empty;
 
 namespace api {
 
+class PersistentCacheIndexManager;
+
+extern const int kDefaultTransactionMaxAttempts;
+
 class Firestore : public std::enable_shared_from_this<Firestore> {
  public:
   Firestore() = default;
@@ -86,13 +90,18 @@ class Firestore : public std::enable_shared_from_this<Firestore> {
 
   void set_user_executor(std::unique_ptr<util::Executor> user_executor);
 
+  std::shared_ptr<const PersistentCacheIndexManager>
+  persistent_cache_index_manager();
+
   CollectionReference GetCollection(const std::string& collection_path);
   DocumentReference GetDocument(const std::string& document_path);
   WriteBatch GetBatch();
   core::Query GetCollectionGroup(std::string collection_id);
 
+  // The default value for `max_attempts` is `kDefaultTransactionMaxAttempts`.
   void RunTransaction(core::TransactionUpdateCallback update_callback,
-                      core::TransactionResultCallback result_callback);
+                      core::TransactionResultCallback result_callback,
+                      int max_attempts);
 
   void Terminate(util::StatusCallback callback);
   void ClearPersistence(util::StatusCallback callback);
@@ -102,6 +111,9 @@ class Firestore : public std::enable_shared_from_this<Firestore> {
 
   void EnableNetwork(util::StatusCallback callback);
   void DisableNetwork(util::StatusCallback callback);
+
+  void SetIndexConfiguration(const std::string& config,
+                             const util::StatusCallback& callback);
 
   std::shared_ptr<api::LoadBundleTask> LoadBundle(
       std::unique_ptr<util::ByteStream> bundle_data);
@@ -123,6 +135,9 @@ class Firestore : public std::enable_shared_from_this<Firestore> {
   std::shared_ptr<credentials::AuthCredentialsProvider>
       auth_credentials_provider_;
   std::string persistence_key_;
+
+  std::shared_ptr<const PersistentCacheIndexManager>
+      persistent_cache_index_manager_;
 
   std::shared_ptr<util::Executor> user_executor_;
   std::shared_ptr<util::AsyncQueue> worker_queue_;

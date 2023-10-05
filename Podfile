@@ -17,5 +17,7 @@ target '011-SportNote' do
   pod 'CalculateCalendarLogic'
   pod 'RealmSwift'
   pod 'ReachabilitySwift'
+  pod 'RxSwift'
+  pod 'RxCocoa'
 
 end
