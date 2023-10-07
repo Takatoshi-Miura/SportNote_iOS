@@ -127,20 +127,18 @@ class LoginViewController: UIViewController {
         HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_DURING_LOGIN_PROCESS))
         
         Auth.auth().signIn(withEmail: address, password: pass) { authResult, error in
-            if error != nil {
-                if let errorCode = AuthErrorCode(rawValue: error!._code) {
-                    switch errorCode {
-                    case .invalidEmail:
-                        HUD.show(.labeledError(title: "", subtitle: MESSAGE_INVALID_EMAIL))
-                    case .wrongPassword:
-                        HUD.show(.labeledError(title: "", subtitle: MESSAGE_WRONG_PASSWORD))
-                    default:
-                        HUD.show(.labeledError(title: "", subtitle: MESSAGE_LOGIN_ERROR))
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) {
-                        HUD.hide()
-                        return
-                    }
+            if let error = error as? AuthErrorCode {
+                switch error.code {
+                case .invalidEmail:
+                    HUD.show(.labeledError(title: "", subtitle: MESSAGE_INVALID_EMAIL))
+                case .wrongPassword:
+                    HUD.show(.labeledError(title: "", subtitle: MESSAGE_WRONG_PASSWORD))
+                default:
+                    HUD.show(.labeledError(title: "", subtitle: MESSAGE_LOGIN_ERROR))
+                }
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) {
+                    HUD.hide()
+                    return
                 }
             } else {
                 // UserDefaultsにユーザー情報を保存
@@ -203,23 +201,21 @@ class LoginViewController: UIViewController {
         HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_DURING_CREATE_ACCOUNT_PROCESS))
         
         Auth.auth().createUser(withEmail: address, password: pass) { authResult, error in
-            if error != nil {
+            if let error = error as? AuthErrorCode {
                 HUD.hide()
-                if let errorCode = AuthErrorCode(rawValue: error!._code) {
-                    switch errorCode {
-                        case .invalidEmail:
-                            HUD.show(.labeledError(title: "", subtitle: MESSAGE_INVALID_EMAIL))
-                        case .emailAlreadyInUse:
-                            HUD.show(.labeledError(title: "", subtitle: MESSAGE_EMAIL_ALREADY_INUSE))
-                        case .weakPassword:
-                            HUD.show(.labeledError(title: "", subtitle: MESSAGE_WEAK_PASSWORD))
-                        default:
-                            HUD.show(.labeledError(title: "", subtitle: MESSAGE_CREATE_ACCOUNT_ERROR))
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) {
-                        HUD.hide()
-                        return
-                    }
+                switch error.code {
+                    case .invalidEmail:
+                        HUD.show(.labeledError(title: "", subtitle: MESSAGE_INVALID_EMAIL))
+                    case .emailAlreadyInUse:
+                        HUD.show(.labeledError(title: "", subtitle: MESSAGE_EMAIL_ALREADY_INUSE))
+                    case .weakPassword:
+                        HUD.show(.labeledError(title: "", subtitle: MESSAGE_WEAK_PASSWORD))
+                    default:
+                        HUD.show(.labeledError(title: "", subtitle: MESSAGE_CREATE_ACCOUNT_ERROR))
+                }
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) {
+                    HUD.hide()
+                    return
                 }
             } else {
                 // FirebaseのユーザーIDとログイン情報を保存

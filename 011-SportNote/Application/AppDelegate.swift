@@ -44,9 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     // エラーなし
                 } else {
                     // エラーのハンドリング
-                    if AuthErrorCode(rawValue: error!._code) != nil {
-                        return
-                    }
                 }
                 // ログイン成功時の処理
                 // FirebaseのユーザーIDを使用
