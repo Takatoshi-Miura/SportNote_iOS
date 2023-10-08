@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol GroupViewControllerDelegate: AnyObject {
     // グループ削除時の処理
@@ -26,6 +28,7 @@ class GroupViewController: UIViewController {
     private var pickerView = UIView()
     private let colorPicker = UIPickerView()
     private var pickerIndex: Int = 0
+    private let disposeBag = DisposeBag()
     var group = Group()
     var delegate: GroupViewControllerDelegate?
     
@@ -37,6 +40,7 @@ class GroupViewController: UIViewController {
         initView()
         initColorPicker()
         initData()
+        initBind()
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,16 +99,68 @@ class GroupViewController: UIViewController {
         tableView.reloadData()
     }
     
+    // MARK: - Bind
+    
+    /// バインドの設定
+    private func initBind() {
+        bindTitleTextField()
+        bindColorButton()
+    }
+    
+    /// タイトル入力欄のバインド
+    private func bindTitleTextField() {
+        // 入力終了
+        titleTextField.rx.controlEvent(.editingDidEnd).asDriver()
+            .drive(onNext: { [unowned self] _ in
+                titleTextField.resignFirstResponder()
+                finishInputTitleTextField(text: titleTextField.text!)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// カラーボタンのバインド
+    private func bindColorButton() {
+        // タップ
+        colorButton.rx.tap
+            .subscribe(onNext: {[unowned self] _ in
+                tapColorButton()
+            })
+            .disposed(by: disposeBag)
+    }
+    
     // MARK: - Action
     
     /// カラーボタンの処理
-    @IBAction func tapColorButton(_ sender: Any) {
+    private func tapColorButton() {
         titleTextField.resignFirstResponder()
         closePicker(pickerView)
         pickerView = UIView(frame: colorPicker.bounds)
         pickerView.addSubview(colorPicker)
         pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
         openPicker(pickerView)
+    }
+    
+    /// タイトル入力欄の処理
+    /// - Parameter text: 入力されたテキスト
+    private func finishInputTitleTextField(text: String) {
+        // 差分がなければ何もしない
+        if text == group.title {
+            return
+        }
+        
+        // 入力チェック
+        if text.isEmpty {
+            showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                self.titleTextField.text = self.group.title
+                self.titleTextField.becomeFirstResponder()
+            })
+            return
+        }
+        
+        // グループを更新
+        let realmManager = RealmManager()
+        realmManager.updateGroupTitle(groupID: group.groupID, title: text)
+        initData()
     }
     
     /// グループを削除
@@ -120,39 +176,6 @@ class GroupViewController: UIViewController {
             realmManager.updateGroupIsDeleted(group: self.group)
             self.delegate?.groupVCDeleteGroup()
         })
-    }
-    
-}
-
-extension GroupViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        // 差分がなければ何もしない
-        if textField.text! == group.title {
-            return true
-        }
-        
-        // 入力チェック
-        if textField.text!.isEmpty {
-            showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
-                self.titleTextField.text = self.group.title
-                self.titleTextField.becomeFirstResponder()
-            })
-            return false
-        }
-        
-        // グループを更新
-        let realmManager = RealmManager()
-        realmManager.updateGroupTitle(groupID: group.groupID, title: textField.text!)
-        
-        initData()
-        return true
     }
     
 }

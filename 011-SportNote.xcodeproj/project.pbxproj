@@ -515,6 +515,7 @@
 				8D18E81427F65AA400035E99 /* Application */,
 				8D18E81527F65ACC00035E99 /* Model */,
 				8D18E81627F65AF400035E99 /* View */,
+				8DC294822AD24905009B8AF2 /* ViewModel */,
 				8D18E81727F65B0000035E99 /* Controller */,
 				8D18E81827F65B0F00035E99 /* Coordinator */,
 				8D18E81A27F65B3B00035E99 /* Utils */,
@@ -535,6 +536,21 @@
 				8DB8B04328797F1800DF88FD /* NoteCell.swift */,
 			);
 			path = Note;
+			sourceTree = "<group>";
+		};
+		8DC294822AD24905009B8AF2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8DC294832AD24914009B8AF2 /* Group */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8DC294832AD24914009B8AF2 /* Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Group;
 			sourceTree = "<group>";
 		};
 		8DC8DEA128399E9C00BD7F70 /* Setting */ = {
