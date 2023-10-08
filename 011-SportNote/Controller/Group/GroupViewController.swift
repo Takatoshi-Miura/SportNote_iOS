@@ -61,7 +61,8 @@ class GroupViewController: UIViewController {
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_GROUP_DETAIL
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteGroup))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        bindDeleteButton(deleteButton: deleteButton)
         navigationItem.rightBarButtonItems = [deleteButton]
     }
     
@@ -107,75 +108,64 @@ class GroupViewController: UIViewController {
         bindColorButton()
     }
     
+    /// 削除ボタンのバインド
+    /// - Parameter deleteButton: 削除ボタン
+    private func bindDeleteButton(deleteButton: UIBarButtonItem) {
+        deleteButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                // グループ数がゼロになる場合は削除できない
+                let realmManager = RealmManager()
+                if realmManager.getGroupArrayForTaskView().count == 1 {
+                    showErrorAlert(message: MESSAGE_EMPTY_GROUP)
+                    return
+                }
+                // グループ削除
+                showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
+                    realmManager.updateGroupIsDeleted(group: self.group)
+                    self.delegate?.groupVCDeleteGroup()
+                })
+            })
+            .disposed(by: disposeBag)
+    }
+    
     /// タイトル入力欄のバインド
     private func bindTitleTextField() {
-        // 入力終了
         titleTextField.rx.controlEvent(.editingDidEnd).asDriver()
-            .drive(onNext: { [unowned self] _ in
+            .drive(onNext: {[unowned self] _ in
                 titleTextField.resignFirstResponder()
-                finishInputTitleTextField(text: titleTextField.text!)
+                // 差分がなければ何もしない
+                if titleTextField.text! == group.title {
+                    return
+                }
+                // 入力チェック
+                if titleTextField.text!.isEmpty {
+                    showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                        self.titleTextField.text = self.group.title
+                        self.titleTextField.becomeFirstResponder()
+                    })
+                    return
+                }
+                // グループを更新
+                let realmManager = RealmManager()
+                realmManager.updateGroupTitle(groupID: group.groupID, title: titleTextField.text!)
+                initData()
             })
             .disposed(by: disposeBag)
     }
     
     /// カラーボタンのバインド
     private func bindColorButton() {
-        // タップ
         colorButton.rx.tap
             .subscribe(onNext: {[unowned self] _ in
-                tapColorButton()
+                // colorPickerを開く
+                titleTextField.resignFirstResponder()
+                closePicker(pickerView)
+                pickerView = UIView(frame: colorPicker.bounds)
+                pickerView.addSubview(colorPicker)
+                pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
+                openPicker(pickerView)
             })
             .disposed(by: disposeBag)
-    }
-    
-    // MARK: - Action
-    
-    /// カラーボタンの処理
-    private func tapColorButton() {
-        titleTextField.resignFirstResponder()
-        closePicker(pickerView)
-        pickerView = UIView(frame: colorPicker.bounds)
-        pickerView.addSubview(colorPicker)
-        pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
-        openPicker(pickerView)
-    }
-    
-    /// タイトル入力欄の処理
-    /// - Parameter text: 入力されたテキスト
-    private func finishInputTitleTextField(text: String) {
-        // 差分がなければ何もしない
-        if text == group.title {
-            return
-        }
-        
-        // 入力チェック
-        if text.isEmpty {
-            showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
-                self.titleTextField.text = self.group.title
-                self.titleTextField.becomeFirstResponder()
-            })
-            return
-        }
-        
-        // グループを更新
-        let realmManager = RealmManager()
-        realmManager.updateGroupTitle(groupID: group.groupID, title: text)
-        initData()
-    }
-    
-    /// グループを削除
-    @objc func deleteGroup() {
-        // グループ数がゼロになる場合は削除できない
-        let realmManager = RealmManager()
-        if realmManager.getGroupArrayForTaskView().count == 1 {
-            showErrorAlert(message: MESSAGE_EMPTY_GROUP)
-            return
-        }
-        
-        showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
-            realmManager.updateGroupIsDeleted(group: self.group)
-            self.delegate?.groupVCDeleteGroup()
-        })
     }
     
 }
