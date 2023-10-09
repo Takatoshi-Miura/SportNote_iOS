@@ -47,10 +47,9 @@ class GroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationBar()
-        initTableView()
-        initView()
+        initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE, text: viewModel.group.value.title)
         initColorPicker()
-        initPickerView()
+        initTableView()
         initBind()
     }
     
@@ -68,26 +67,14 @@ class GroupViewController: UIViewController {
         }
     }
     
+    // MARK: - Other Methods
+    
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_GROUP_DETAIL
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
         bindDeleteButton(deleteButton: deleteButton)
         navigationItem.rightBarButtonItems = [deleteButton]
-    }
-    
-    /// TableView初期化
-    private func initTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.isEditing = true
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
-    }
-    
-    /// 画面表示の初期化
-    private func initView() {
-        initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE, text: viewModel.group.value.title)
     }
     
     /// ColorPicker初期化
@@ -101,8 +88,11 @@ class GroupViewController: UIViewController {
         pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + 88 + view.safeAreaInsets.bottom))
         pickerView.backgroundColor = UIColor.systemGray5
         pickerView.addSubview(colorPicker)
-        
-        // ツールバーを作成
+        pickerView.addSubview(createPickerToolBar())
+    }
+    
+    /// Picker用ツールバーを作成
+    private func createPickerToolBar() -> UIToolbar {
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
@@ -110,7 +100,7 @@ class GroupViewController: UIViewController {
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         bindPickerToolBar(doneItem: doneItem, cancelItem: cancelItem)
         toolbar.setItems([cancelItem, flexibleItem, doneItem], animated: true)
-        pickerView.addSubview(toolbar)
+        return toolbar
     }
     
     // MARK: - Bind
@@ -122,32 +112,11 @@ class GroupViewController: UIViewController {
         bindPicker()
     }
     
-    /// 削除ボタンのバインド
-    /// - Parameter deleteButton: 削除ボタン
-    private func bindDeleteButton(deleteButton: UIBarButtonItem) {
-        deleteButton.rx.tap
-            .subscribe(onNext: { [unowned self] in
-                // グループ数がゼロになる場合は削除できない
-                let realmManager = RealmManager()
-                if realmManager.getGroupArrayForTaskView().count == 1 {
-                    showErrorAlert(message: MESSAGE_EMPTY_GROUP)
-                    return
-                }
-                // グループ削除
-                showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
-                    self.viewModel.deleteGroup()
-                    self.delegate?.groupVCDeleteGroup()
-                })
-            })
-            .disposed(by: disposeBag)
-    }
-    
     /// タイトル入力欄のバインド
     private func bindTitleTextField() {
         titleTextField.rx.controlEvent(.editingDidEnd).asDriver()
             .drive(onNext: {[unowned self] _ in
                 titleTextField.resignFirstResponder()
-                // 入力チェック
                 if titleTextField.text!.isEmpty {
                     showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
                         self.titleTextField.text = self.viewModel.title.value
@@ -155,7 +124,6 @@ class GroupViewController: UIViewController {
                     })
                     return
                 }
-                // 更新
                 viewModel.title.accept(titleTextField.text!)
             })
             .disposed(by: disposeBag)
@@ -165,7 +133,6 @@ class GroupViewController: UIViewController {
     private func bindColorButton() {
         colorButton.rx.tap
             .subscribe(onNext: {[unowned self] _ in
-                // colorPickerを開く
                 titleTextField.resignFirstResponder()
                 closePicker(pickerView)
                 initPickerView()
@@ -182,7 +149,7 @@ class GroupViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    /// Pickerのバインド
+    /// Picker項目のバインド
     private func bindPicker() {
         Observable.just(Color.allCases)
             .bind(to: colorPicker.rx.itemTitles) { _, color in
@@ -215,9 +182,38 @@ class GroupViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
+    /// 削除ボタンのバインド
+    /// - Parameter deleteButton: 削除ボタン
+    private func bindDeleteButton(deleteButton: UIBarButtonItem) {
+        deleteButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                // グループ数がゼロになる場合は削除不可
+                let realmManager = RealmManager()
+                if realmManager.getGroupArrayForTaskView().count == 1 {
+                    showErrorAlert(message: MESSAGE_EMPTY_GROUP)
+                    return
+                }
+                // グループ削除
+                showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
+                    self.viewModel.deleteGroup()
+                    self.delegate?.groupVCDeleteGroup()
+                })
+            })
+            .disposed(by: disposeBag)
+    }
+    
 }
 
 extension GroupViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    /// TableView初期化
+    private func initTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.isEditing = true
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
