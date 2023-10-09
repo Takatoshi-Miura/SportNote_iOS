@@ -31,7 +31,7 @@ class GroupViewModel {
         self.buttonTitle = BehaviorRelay(value: Color.allCases[group.color].title)
         self.buttonBackgroundColor = BehaviorRelay(value: Color.allCases[group.color].color)
         self.groupArray = BehaviorRelay(value: [])
-        selectGroupArray()
+        groupArray.accept(selectGroupArray())
         initBind()
     }
     
@@ -79,12 +79,33 @@ class GroupViewModel {
     private func bindGroupArray() {
         groupArray
             .subscribe(onNext: { [weak self] newArray in
-                guard let self = self else { return }
+                guard self != nil else { return }
                 // Realm更新
                 let realmManager = RealmManager()
                 realmManager.updateGroupOrder(groupArray: newArray)
             })
             .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
+    
+    /// グループ取得
+    /// - Returns: グループ配列
+    private func selectGroupArray() -> [Group] {
+        let realmManager = RealmManager()
+        return realmManager.getGroupArrayForTaskView()
+    }
+    
+    /// グループ更新
+    func updateFirebaseGroup() {
+        let firebaseManager = FirebaseManager()
+        firebaseManager.updateGroup(group: group.value)
+    }
+    
+    /// グループ削除
+    func deleteGroup() {
+        let realmManager = RealmManager()
+        realmManager.updateGroupIsDeleted(group: group.value)
     }
     
     // MARK: - TableView
@@ -101,24 +122,6 @@ class GroupViewModel {
         let groupToMove = newGroupArray.remove(at: sourceIndex)
         newGroupArray.insert(groupToMove, at: destinationIndex)
         groupArray.accept(newGroupArray)
-    }
-    
-    /// グループ取得
-    func selectGroupArray() {
-        let realmManager = RealmManager()
-        groupArray.accept(realmManager.getGroupArrayForTaskView())
-    }
-    
-    /// グループ更新
-    func updateFirebaseGroup() {
-        let firebaseManager = FirebaseManager()
-        firebaseManager.updateGroup(group: group.value)
-    }
-    
-    /// グループ削除
-    func deleteGroup() {
-        let realmManager = RealmManager()
-        realmManager.updateGroupIsDeleted(group: group.value)
     }
     
 }

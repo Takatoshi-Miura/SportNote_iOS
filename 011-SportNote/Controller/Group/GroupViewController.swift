@@ -67,42 +67,6 @@ class GroupViewController: UIViewController {
         }
     }
     
-    // MARK: - Other Methods
-    
-    /// NavigationBar初期化
-    private func initNavigationBar() {
-        self.title = TITLE_GROUP_DETAIL
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
-        bindDeleteButton(deleteButton: deleteButton)
-        navigationItem.rightBarButtonItems = [deleteButton]
-    }
-    
-    /// ColorPicker初期化
-    private func initColorPicker() {
-        colorPicker.frame = CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height)
-        colorPicker.backgroundColor = UIColor.systemGray5
-    }
-    
-    /// PickerVIewの初期化
-    private func initPickerView() {
-        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + 88 + view.safeAreaInsets.bottom))
-        pickerView.backgroundColor = UIColor.systemGray5
-        pickerView.addSubview(colorPicker)
-        pickerView.addSubview(createPickerToolBar())
-    }
-    
-    /// Picker用ツールバーを作成
-    private func createPickerToolBar() -> UIToolbar {
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        bindPickerToolBar(doneItem: doneItem, cancelItem: cancelItem)
-        toolbar.setItems([cancelItem, flexibleItem, doneItem], animated: true)
-        return toolbar
-    }
-    
     // MARK: - Bind
     
     /// バインド設定
@@ -200,6 +164,42 @@ class GroupViewController: UIViewController {
                 })
             })
             .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
+    
+    /// NavigationBar初期化
+    private func initNavigationBar() {
+        self.title = TITLE_GROUP_DETAIL
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        bindDeleteButton(deleteButton: deleteButton)
+        navigationItem.rightBarButtonItems = [deleteButton]
+    }
+    
+    /// ColorPicker初期化
+    private func initColorPicker() {
+        colorPicker.frame = CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height)
+        colorPicker.backgroundColor = UIColor.systemGray5
+    }
+    
+    /// PickerVIewの初期化
+    private func initPickerView() {
+        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + 88 + view.safeAreaInsets.bottom))
+        pickerView.backgroundColor = UIColor.systemGray5
+        pickerView.addSubview(colorPicker)
+        pickerView.addSubview(createPickerToolBar())
+    }
+    
+    /// Picker用ツールバーを作成
+    private func createPickerToolBar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        bindPickerToolBar(doneItem: doneItem, cancelItem: cancelItem)
+        toolbar.setItems([cancelItem, flexibleItem, doneItem], animated: true)
+        return toolbar
     }
     
 }
