@@ -16,30 +16,41 @@ protocol GroupViewControllerDelegate: AnyObject {
 }
 
 class GroupViewController: UIViewController {
-
+    
     // MARK: - UI,Variable
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var colorLabel: UILabel!
     @IBOutlet weak var orderLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
-    private var groupArray: [Group] = []
     private var pickerView = UIView()
     private let colorPicker = UIPickerView()
-    private var pickerIndex: Int = 0
+    private let viewModel: GroupViewModel
     private let disposeBag = DisposeBag()
-    var group = Group()
     var delegate: GroupViewControllerDelegate?
     
+    // MARK: - Initializer
+    
+    init(group: Group) {
+        self.viewModel = GroupViewModel(group: group)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationBar()
         initTableView()
         initView()
         initColorPicker()
-        initData()
+        initPickerView()
         initBind()
     }
     
@@ -53,8 +64,7 @@ class GroupViewController: UIViewController {
         super.viewDidDisappear(animated)
         // Firebaseに送信
         if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.updateGroup(group: group)
+            viewModel.updateFirebaseGroup()
         }
     }
     
@@ -80,32 +90,39 @@ class GroupViewController: UIViewController {
         titleLabel.text = TITLE_TITLE
         colorLabel.text = TITLE_COLOR
         orderLabel.text = TITLE_ORDER
-        initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE, text: group.title)
-        colorButton.backgroundColor = Color.allCases[group.color].color
-        colorButton.setTitle(Color.allCases[group.color].title, for: .normal)
+        initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE, text: viewModel.group.value.title)
     }
     
-    /// Picker初期化
+    /// ColorPicker初期化
     private func initColorPicker() {
-        colorPicker.delegate = self
-        colorPicker.dataSource = self
-        colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)
+        colorPicker.frame = CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height)
         colorPicker.backgroundColor = UIColor.systemGray5
     }
     
-    /// データ初期化
-    private func initData() {
-        let realmManager = RealmManager()
-        groupArray = realmManager.getGroupArrayForTaskView()
-        tableView.reloadData()
+    /// PickerVIewの初期化
+    private func initPickerView() {
+        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + 88 + view.safeAreaInsets.bottom))
+        pickerView.backgroundColor = UIColor.systemGray5
+        pickerView.addSubview(colorPicker)
+        
+        // ツールバーを作成
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        bindPickerToolBar(doneItem: doneItem, cancelItem: cancelItem)
+        toolbar.setItems([cancelItem, flexibleItem, doneItem], animated: true)
+        pickerView.addSubview(toolbar)
     }
     
     // MARK: - Bind
     
-    /// バインドの設定
+    /// バインド設定
     private func initBind() {
         bindTitleTextField()
         bindColorButton()
+        bindPicker()
     }
     
     /// 削除ボタンのバインド
@@ -121,7 +138,7 @@ class GroupViewController: UIViewController {
                 }
                 // グループ削除
                 showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
-                    realmManager.updateGroupIsDeleted(group: self.group)
+                    self.viewModel.deleteGroup()
                     self.delegate?.groupVCDeleteGroup()
                 })
             })
@@ -133,22 +150,16 @@ class GroupViewController: UIViewController {
         titleTextField.rx.controlEvent(.editingDidEnd).asDriver()
             .drive(onNext: {[unowned self] _ in
                 titleTextField.resignFirstResponder()
-                // 差分がなければ何もしない
-                if titleTextField.text! == group.title {
-                    return
-                }
                 // 入力チェック
                 if titleTextField.text!.isEmpty {
                     showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
-                        self.titleTextField.text = self.group.title
+                        self.titleTextField.text = self.viewModel.title.value
                         self.titleTextField.becomeFirstResponder()
                     })
                     return
                 }
-                // グループを更新
-                let realmManager = RealmManager()
-                realmManager.updateGroupTitle(groupID: group.groupID, title: titleTextField.text!)
-                initData()
+                // 更新
+                viewModel.title.accept(titleTextField.text!)
             })
             .disposed(by: disposeBag)
     }
@@ -160,61 +171,66 @@ class GroupViewController: UIViewController {
                 // colorPickerを開く
                 titleTextField.resignFirstResponder()
                 closePicker(pickerView)
-                pickerView = UIView(frame: colorPicker.bounds)
-                pickerView.addSubview(colorPicker)
-                pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
+                initPickerView()
                 openPicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.buttonTitle
+            .bind(to: colorButton.rx.title(for: .normal))
+            .disposed(by: disposeBag)
+        
+        viewModel.buttonBackgroundColor
+            .bind(to: colorButton.rx.backgroundColor)
+            .disposed(by: disposeBag)
+    }
+    
+    /// Pickerのバインド
+    private func bindPicker() {
+        Observable.just(Color.allCases)
+            .bind(to: colorPicker.rx.itemTitles) { _, color in
+                return color.title
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    /// Pickerツールバーのバインド
+    /// - Parameters:
+    ///   - doneItem: 完了ボタン
+    ///   - cancelItem: キャンセルボタン
+    private func bindPickerToolBar(doneItem: UIBarButtonItem, cancelItem: UIBarButtonItem) {
+        doneItem.rx.tap.asDriver()
+            .drive(onNext: { [weak self] (_) in
+                guard let self = self else { return }
+                // 選択したIndexを反映
+                viewModel.colorIndex.accept(colorPicker.selectedRow(inComponent: 0))
+                closePicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+        
+        cancelItem.rx.tap.asDriver()
+            .drive(onNext: { [weak self] (_) in
+                guard let self = self else { return }
+                // Indexを元に戻して閉じる
+                colorPicker.selectRow(viewModel.colorIndex.value, inComponent: 0, animated: false)
+                closePicker(pickerView)
             })
             .disposed(by: disposeBag)
     }
     
 }
 
-extension GroupViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1    // 列数
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return Color.allCases.count  // カラーの項目数
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return Color.allCases[row].title   // 文字列
-    }
-    
-    @objc func doneAction() {
-        // 選択したIndexを取得して閉じる
-        pickerIndex = colorPicker.selectedRow(inComponent: 0)
-        closePicker(pickerView)
-        colorButton.backgroundColor = Color.allCases[pickerIndex].color
-        colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
-        
-        let realmManager = RealmManager()
-        realmManager.updateGroupColor(groupID: group.groupID, color: pickerIndex)
-        initData()
-    }
-    
-    @objc func cancelAction() {
-        // Indexを元に戻して閉じる
-        colorPicker.selectRow(pickerIndex, inComponent: 0, animated: false)
-        closePicker(pickerView)
-    }
-    
-}
-
-extension GroupViewController: UITableViewDelegate, UITableViewDataSource {
+extension GroupViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if groupArray.isEmpty {
+        if viewModel.groupArray.value.isEmpty {
             return 0
         } else {
-            return groupArray.count
+            return viewModel.groupArray.value.count
         }
     }
     
@@ -231,17 +247,12 @@ extension GroupViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let group = groupArray[sourceIndexPath.row]
-        groupArray.remove(at: sourceIndexPath.row)
-        groupArray.insert(group, at: destinationIndexPath.row)
-        
-        let realmManager = RealmManager()
-        realmManager.updateGroupOrder(groupArray: groupArray)
+        viewModel.moveGroup(from: sourceIndexPath.row, to: destinationIndexPath.row)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = groupArray[indexPath.row].title
+        cell.textLabel?.text = viewModel.groupArray.value[indexPath.row].title
         cell.backgroundColor = UIColor.systemGray6
         return cell
     }

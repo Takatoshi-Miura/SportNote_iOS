@@ -16,6 +16,7 @@ public extension UIViewController {
         - pickerView: PickerVIewを載せたUIView
      */
     func openPicker(_ pickerView:UIView) {
+        tabBarController?.tabBar.isHidden = true
         view.addSubview(pickerView)
         pickerView.frame.origin.y = UIScreen.main.bounds.size.height
         UIView.animate(withDuration: 0.3) {
@@ -29,6 +30,7 @@ public extension UIViewController {
         - pickerView: PickerVIewを載せたUIView
      */
     func closePicker(_ pickerView:UIView) {
+        tabBarController?.tabBar.isHidden = false
         UIView.animate(withDuration: 0.3) {
             pickerView.frame.origin.y += pickerView.bounds.size.height
         }

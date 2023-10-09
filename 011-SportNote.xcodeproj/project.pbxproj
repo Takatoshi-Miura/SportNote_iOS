@@ -90,6 +90,7 @@
 		8DC1931427F7BE320097BF07 /* NoteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC1931327F7BE320097BF07 /* NoteCoordinator.swift */; };
 		8DC1931627F7CB5B0097BF07 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */; };
 		8DC1931827F7CB9B0097BF07 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DC1931727F7CB9B0097BF07 /* NoteViewController.xib */; };
+		8DC294852AD35F6B009B8AF2 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC294842AD35F6B009B8AF2 /* GroupViewModel.swift */; };
 		8DC8DE9F28399E8F00BD7F70 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8DE9D28399E8F00BD7F70 /* SettingViewController.swift */; };
 		8DC8DEA028399E8F00BD7F70 /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DC8DE9E28399E8F00BD7F70 /* SettingViewController.xib */; };
 		8DC8DEA42839A36400BD7F70 /* SettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8DEA32839A36400BD7F70 /* SettingCoordinator.swift */; };
@@ -190,6 +191,7 @@
 		8DC1931327F7BE320097BF07 /* NoteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCoordinator.swift; sourceTree = "<group>"; };
 		8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		8DC1931727F7CB9B0097BF07 /* NoteViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
+		8DC294842AD35F6B009B8AF2 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		8DC8DE9D28399E8F00BD7F70 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		8DC8DE9E28399E8F00BD7F70 /* SettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingViewController.xib; sourceTree = "<group>"; };
 		8DC8DEA32839A36400BD7F70 /* SettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCoordinator.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 		8DC294832AD24914009B8AF2 /* Group */ = {
 			isa = PBXGroup;
 			children = (
+				8DC294842AD35F6B009B8AF2 /* GroupViewModel.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";
@@ -778,6 +781,7 @@
 				8DC8DEA42839A36400BD7F70 /* SettingCoordinator.swift in Sources */,
 				8D790DB82883CF8E0062838C /* Definition+Date.swift in Sources */,
 				8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */,
+				8DC294852AD35F6B009B8AF2 /* GroupViewModel.swift in Sources */,
 				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,
 				8D91CE712806295C000D3B1F /* TaskDetailViewController.swift in Sources */,
 				8D481D7627F9C52A0082D956 /* RealmManager.swift in Sources */,
