@@ -87,9 +87,6 @@ class GroupViewController: UIViewController {
     
     /// 画面表示の初期化
     private func initView() {
-        titleLabel.text = TITLE_TITLE
-        colorLabel.text = TITLE_COLOR
-        orderLabel.text = TITLE_ORDER
         initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE, text: viewModel.group.value.title)
     }
     

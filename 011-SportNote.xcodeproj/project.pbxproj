@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -45,7 +45,6 @@
 		8D5CFC0728024C94008DF02E /* GroupHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */; };
 		8D5CFC0928024CA4008DF02E /* GroupHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0828024CA4008DF02E /* GroupHeaderView.xib */; };
 		8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0A2802D925008DF02E /* GroupViewController.swift */; };
-		8D5CFC0D2802D925008DF02E /* GroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0B2802D925008DF02E /* GroupViewController.xib */; };
 		8D5CFC0F28038D43008DF02E /* GroupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CFC0E28038D43008DF02E /* GroupCoordinator.swift */; };
 		8D665D2724A17CD300441B32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D665D2624A17CD300441B32 /* AppDelegate.swift */; };
 		8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D665D2F24A17CD400441B32 /* Assets.xcassets */; };
@@ -91,6 +90,8 @@
 		8DC1931627F7CB5B0097BF07 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */; };
 		8DC1931827F7CB9B0097BF07 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DC1931727F7CB9B0097BF07 /* NoteViewController.xib */; };
 		8DC294852AD35F6B009B8AF2 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC294842AD35F6B009B8AF2 /* GroupViewModel.swift */; };
+		8DC294862AD3B017009B8AF2 /* GroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DC294882AD3B017009B8AF2 /* GroupViewController.xib */; };
+		8DC2948B2AD3B120009B8AF2 /* LocalizedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC2948A2AD3B120009B8AF2 /* LocalizedLabel.swift */; };
 		8DC8DE9F28399E8F00BD7F70 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8DE9D28399E8F00BD7F70 /* SettingViewController.swift */; };
 		8DC8DEA028399E8F00BD7F70 /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DC8DE9E28399E8F00BD7F70 /* SettingViewController.xib */; };
 		8DC8DEA42839A36400BD7F70 /* SettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8DEA32839A36400BD7F70 /* SettingCoordinator.swift */; };
@@ -143,7 +144,6 @@
 		8D5CFC0628024C94008DF02E /* GroupHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHeaderView.swift; sourceTree = "<group>"; };
 		8D5CFC0828024CA4008DF02E /* GroupHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupHeaderView.xib; sourceTree = "<group>"; };
 		8D5CFC0A2802D925008DF02E /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
-		8D5CFC0B2802D925008DF02E /* GroupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupViewController.xib; sourceTree = "<group>"; };
 		8D5CFC0E28038D43008DF02E /* GroupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCoordinator.swift; sourceTree = "<group>"; };
 		8D665D2324A17CD300441B32 /* 011-SportNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "011-SportNote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D665D2624A17CD300441B32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -192,6 +192,9 @@
 		8DC1931527F7CB5B0097BF07 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		8DC1931727F7CB9B0097BF07 /* NoteViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		8DC294842AD35F6B009B8AF2 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
+		8DC294872AD3B017009B8AF2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GroupViewController.xib; sourceTree = "<group>"; };
+		8DC294892AD3B017009B8AF2 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/GroupViewController.xcstrings; sourceTree = "<group>"; };
+		8DC2948A2AD3B120009B8AF2 /* LocalizedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedLabel.swift; sourceTree = "<group>"; };
 		8DC8DE9D28399E8F00BD7F70 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		8DC8DE9E28399E8F00BD7F70 /* SettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingViewController.xib; sourceTree = "<group>"; };
 		8DC8DEA32839A36400BD7F70 /* SettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCoordinator.swift; sourceTree = "<group>"; };
@@ -257,6 +260,7 @@
 				8D18E81C27F65CAA00035E99 /* Note */,
 				8D481D6F27F98FE30082D956 /* Calendar */,
 				8D18E81D27F65CBF00035E99 /* Setting */,
+				8DC2948A2AD3B120009B8AF2 /* LocalizedLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -477,7 +481,7 @@
 		8D5CFBF827FBA30B008DF02E /* Group */ = {
 			isa = PBXGroup;
 			children = (
-				8D5CFC0B2802D925008DF02E /* GroupViewController.xib */,
+				8DC294882AD3B017009B8AF2 /* GroupViewController.xib */,
 				8D5CFC0828024CA4008DF02E /* GroupHeaderView.xib */,
 				8D5CFBFC27FBA36A008DF02E /* AddGroupViewController.xib */,
 			);
@@ -665,7 +669,7 @@
 				8D665D3024A17CD400441B32 /* Assets.xcassets in Resources */,
 				8DB579D42844207E00245025 /* LoginViewController.xib in Resources */,
 				8DB8B04628797F1800DF88FD /* NoteCell.xib in Resources */,
-				8D5CFC0D2802D925008DF02E /* GroupViewController.xib in Resources */,
+				8DC294862AD3B017009B8AF2 /* GroupViewController.xib in Resources */,
 				8D5CFC0928024CA4008DF02E /* GroupHeaderView.xib in Resources */,
 				8D91CE8A280CC80C000D3B1F /* AddTournamentNoteViewController.xib in Resources */,
 				8D5CFBFE27FBA36A008DF02E /* AddGroupViewController.xib in Resources */,
@@ -785,6 +789,7 @@
 				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,
 				8D91CE712806295C000D3B1F /* TaskDetailViewController.swift in Sources */,
 				8D481D7627F9C52A0082D956 /* RealmManager.swift in Sources */,
+				8DC2948B2AD3B120009B8AF2 /* LocalizedLabel.swift in Sources */,
 				8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */,
 				8D5CFC0F28038D43008DF02E /* GroupCoordinator.swift in Sources */,
 				8DCF350824F6554900055093 /* Target_old.swift in Sources */,
@@ -813,6 +818,15 @@
 				8D481D4527F7D1550082D956 /* ja */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8DC294882AD3B017009B8AF2 /* GroupViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DC294872AD3B017009B8AF2 /* Base */,
+				8DC294892AD3B017009B8AF2 /* mul */,
+			);
+			name = GroupViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

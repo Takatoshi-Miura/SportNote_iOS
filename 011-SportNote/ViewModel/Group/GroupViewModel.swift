@@ -19,7 +19,6 @@ class GroupViewModel {
     let colorIndex: BehaviorRelay<Int>
     let buttonTitle: BehaviorRelay<String>
     let buttonBackgroundColor: BehaviorRelay<UIColor>
-    let canMoveRowAt = BehaviorRelay<Bool>(value: true)
     let groupArray: BehaviorRelay<[Group]>
     private let disposeBag = DisposeBag()
     
@@ -42,6 +41,7 @@ class GroupViewModel {
     private func initBind() {
         bindTitle()
         bindColor()
+        bindGroupArray()
     }
     
     /// タイトルの変更をバインド
@@ -75,28 +75,32 @@ class GroupViewModel {
             .disposed(by: disposeBag)
     }
     
+    /// グループ配列のバインド
+    private func bindGroupArray() {
+        groupArray
+            .subscribe(onNext: { [weak self] newArray in
+                guard let self = self else { return }
+                // Realm更新
+                let realmManager = RealmManager()
+                realmManager.updateGroupOrder(groupArray: newArray)
+            })
+            .disposed(by: disposeBag)
+    }
     
     // MARK: - TableView
     
-    /// セルの移動
+    /// セルの移動（グループの並び替え）
     /// - Parameters:
     ///   - sourceIndex: 元のindex
     ///   - destinationIndex: 移動先のindex
     func moveGroup(from sourceIndex: Int, to destinationIndex: Int) {
-        // 同じ位置への移動は処理しない
         guard sourceIndex != destinationIndex else {
             return
         }
-        
-        // グループの移動
         var newGroupArray = groupArray.value
         let groupToMove = newGroupArray.remove(at: sourceIndex)
         newGroupArray.insert(groupToMove, at: destinationIndex)
         groupArray.accept(newGroupArray)
-        
-        // Realm更新
-        let realmManager = RealmManager()
-        realmManager.updateGroupOrder(groupArray: newGroupArray)
     }
     
     /// グループ取得
