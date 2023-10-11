@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol AddGroupViewControllerDelegate: AnyObject {
     // キャンセル時の処理
@@ -18,21 +20,39 @@ protocol AddGroupViewControllerDelegate: AnyObject {
 class AddGroupViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var naviItem: UINavigationItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var colorLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
     private var pickerView = UIView()
     private let colorPicker = UIPickerView()
+    private let viewModel: AddGroupViewModel
+    private let disposeBag = DisposeBag()
     private var pickerIndex: Int = 0
     var delegate: AddGroupViewControllerDelegate?
     
+    // MARK: - Initializer
+    
+    init () {
+        self.viewModel = AddGroupViewModel()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
         initColorPicker()
+        initBind()
         titleTextField.becomeFirstResponder()
     }
     
@@ -42,107 +62,152 @@ class AddGroupViewController: UIViewController {
         colorPicker.frame.size.width = self.view.bounds.size.width
     }
     
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindCancelButton()
+        bindSaveButton()
+        bindColorButton()
+        bindPicker()
+    }
+    
+    /// キャンセルボタンのバインド
+    private func bindCancelButton() {
+        cancelButton.rx.tap
+            .subscribe(onNext: {[unowned self] _ in
+                if titleTextField.text!.isEmpty {
+                    self.delegate?.addGroupVCCancel(self)
+                } else {
+                    showOKCancelAlert(title: "", message: MESSAGE_DELETE_INPUT, OKAction: {
+                        self.delegate?.addGroupVCCancel(self)
+                    })
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 保存ボタンのバインド
+    private func bindSaveButton() {
+        saveButton.rx.tap
+            .subscribe(onNext: {[unowned self] _ in
+                // 入力チェック
+                if titleTextField.text!.isEmpty {
+                    showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                        self.titleTextField.becomeFirstResponder()
+                    })
+                    return
+                }
+                
+                // グループ作成
+                let group = viewModel.insertGroup(title: titleTextField.text!)
+                guard let group else {
+                    showErrorAlert(message: ERROR_MESSAGE_GROUP_CREATE_FAILED)
+                    return
+                }
+                
+                // Firebaseに送信
+                if Network.isOnline() {
+                    let firebaseManager = FirebaseManager()
+                    firebaseManager.saveGroup(group: group, completion: {
+                        self.delegate?.addGroupVCAddGroup(self, group: group)
+                    })
+                } else {
+                    self.delegate?.addGroupVCAddGroup(self, group: group)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// カラーボタンのバインド
+    private func bindColorButton() {
+        colorButton.rx.tap
+            .subscribe(onNext: {[unowned self] _ in
+                titleTextField.resignFirstResponder()
+                closePicker(pickerView)
+                initPickerView()
+                openPicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.buttonTitle
+            .bind(to: colorButton.rx.title(for: .normal))
+            .disposed(by: disposeBag)
+        
+        viewModel.buttonBackgroundColor
+            .bind(to: colorButton.rx.backgroundColor)
+            .disposed(by: disposeBag)
+    }
+    
+    /// Picker項目のバインド
+    private func bindPicker() {
+        Observable.just(Color.allCases)
+            .bind(to: colorPicker.rx.itemTitles) { _, color in
+                return color.title
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    /// Pickerツールバーのバインド
+    /// - Parameters:
+    ///   - doneItem: 完了ボタン
+    ///   - cancelItem: キャンセルボタン
+    private func bindPickerToolBar(doneItem: UIBarButtonItem, cancelItem: UIBarButtonItem) {
+        doneItem.rx.tap.asDriver()
+            .drive(onNext: { [weak self] (_) in
+                guard let self = self else { return }
+                // 選択したIndexを反映
+                viewModel.colorIndex.accept(colorPicker.selectedRow(inComponent: 0))
+                closePicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+        
+        cancelItem.rx.tap.asDriver()
+            .drive(onNext: { [weak self] (_) in
+                guard let self = self else { return }
+                // Indexを元に戻して閉じる
+                colorPicker.selectRow(viewModel.colorIndex.value, inComponent: 0, animated: false)
+                closePicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
+    
     /// 画面表示の初期化
     private func initView() {
         naviItem.title = TITLE_ADD_GROUP
         titleLabel.text = TITLE_TITLE
         colorLabel.text = TITLE_COLOR
         initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE)
-        colorButton.backgroundColor = Color.allCases[pickerIndex].color
-        colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
+//        colorButton.backgroundColor = Color.allCases[pickerIndex].color
+//        colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
     }
     
-    /// Picker初期化
+    /// ColorPicker初期化
     private func initColorPicker() {
-        colorPicker.delegate = self
-        colorPicker.dataSource = self
-        colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)
+        colorPicker.frame = CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height)
         colorPicker.backgroundColor = UIColor.systemGray5
     }
     
-    // MARK: - Action
-    
-    /// カラーボタンの処理
-    @IBAction func tapColorButton(_ sender: Any) {
-        titleTextField.resignFirstResponder()
-        closePicker(pickerView)
-        pickerView = UIView(frame: colorPicker.bounds)
+    /// PickerVIewの初期化
+    private func initPickerView() {
+        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + 88 + view.safeAreaInsets.bottom))
+        pickerView.backgroundColor = UIColor.systemGray5
         pickerView.addSubview(colorPicker)
-        pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
-        openPicker(pickerView)
+        pickerView.addSubview(createPickerToolBar())
     }
     
-    /// キャンセルボタンの処理
-    @IBAction func tapCancelButton(_ sender: Any) {
-        if titleTextField.text!.isEmpty {
-            self.delegate?.addGroupVCCancel(self)
-        } else {
-            showOKCancelAlert(title: "", message: MESSAGE_DELETE_INPUT, OKAction: {
-                self.delegate?.addGroupVCCancel(self)
-            })
-        }
-    }
-    
-    /// 保存ボタンの処理
-    @IBAction func tapSaveButton(_ sender: Any) {
-        // 入力チェック
-        if titleTextField.text!.isEmpty {
-            showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
-                self.titleTextField.becomeFirstResponder()
-            })
-            return
-        }
-        
-        // グループ作成
-        let realmManager = RealmManager()
-        let group = Group()
-        group.title = titleTextField.text!
-        group.color = pickerIndex
-        group.order = realmManager.getNumberOfGroups()
-        if !realmManager.createRealm(object: group) {
-            showErrorAlert(message: ERROR_MESSAGE_GROUP_CREATE_FAILED)
-            return
-        }
-        
-        // Firebaseに送信
-        if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.saveGroup(group: group, completion: {
-                self.delegate?.addGroupVCAddGroup(self, group: group)
-            })
-        } else {
-            self.delegate?.addGroupVCAddGroup(self, group: group)
-        }
+    /// Picker用ツールバーを作成
+    private func createPickerToolBar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        bindPickerToolBar(doneItem: doneItem, cancelItem: cancelItem)
+        toolbar.setItems([cancelItem, flexibleItem, doneItem], animated: true)
+        return toolbar
     }
 
-}
-
-extension AddGroupViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1    // 列数
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return Color.allCases.count  // カラーの項目数
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return Color.allCases[row].title   // 文字列
-    }
-    
-    @objc func doneAction() {
-        // 選択したIndexを取得して閉じる
-        pickerIndex = colorPicker.selectedRow(inComponent: 0)
-        closePicker(pickerView)
-        colorButton.backgroundColor = Color.allCases[pickerIndex].color
-        colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
-    }
-    
-    @objc func cancelAction() {
-        // Indexを元に戻して閉じる
-        colorPicker.selectRow(pickerIndex, inComponent: 0, animated: false)
-        closePicker(pickerView)
-    }
-    
 }

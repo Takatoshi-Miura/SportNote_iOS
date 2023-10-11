@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3DEAE45CE9BB67CBC455FA77 /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */; };
 		8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12B0C727F7D01E0040AF3D /* Definition+String.swift */; };
+		8D1522C02AD758B0002D1018 /* AddGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */; };
 		8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */; };
 		8D2BE0C7284EB238009AC672 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C5284EB238009AC672 /* PageViewController.swift */; };
 		8D2BE0C8284EB238009AC672 /* PageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C6284EB238009AC672 /* PageViewController.xib */; };
@@ -106,6 +107,7 @@
 /* Begin PBXFileReference section */
 		54F93BC31ED4497F68396349 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
 		8D12B0C727F7D01E0040AF3D /* Definition+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+String.swift"; sourceTree = "<group>"; };
+		8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewModel.swift; sourceTree = "<group>"; };
 		8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8D2BE0C5284EB238009AC672 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		8D2BE0C6284EB238009AC672 /* PageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageViewController.xib; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC294842AD35F6B009B8AF2 /* GroupViewModel.swift */,
+				8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";
@@ -741,6 +744,7 @@
 				8D3FFE6227F66B400021C9FC /* TaskViewController.swift in Sources */,
 				8DCF350724F6554900055093 /* Note_old.swift in Sources */,
 				8D2BE0C7284EB238009AC672 /* PageViewController.swift in Sources */,
+				8D1522C02AD758B0002D1018 /* AddGroupViewModel.swift in Sources */,
 				8D5CFBFD27FBA36A008DF02E /* AddGroupViewController.swift in Sources */,
 				8D91CE80280B07EE000D3B1F /* MeasuresCoordinator.swift in Sources */,
 				8DC1931627F7CB5B0097BF07 /* NoteViewController.swift in Sources */,
