@@ -180,8 +180,6 @@ class AddGroupViewController: UIViewController {
         titleLabel.text = TITLE_TITLE
         colorLabel.text = TITLE_COLOR
         initTextField(textField: titleTextField, placeholder: MESSAGE_GROUP_EXAMPLE)
-//        colorButton.backgroundColor = Color.allCases[pickerIndex].color
-//        colorButton.setTitle(Color.allCases[pickerIndex].title, for: .normal)
     }
     
     /// ColorPicker初期化
