@@ -20,9 +20,8 @@ class MeasuresCoordinator: Coordinator {
     
     func startFrow(in navigationController: UINavigationController, withMeasures measures: Measures) {
         self.navigationController = navigationController
-        let measuresViewController = MeasuresViewController()
+        let measuresViewController = MeasuresViewController(measures: measures)
         measuresViewController.delegate = self
-        measuresViewController.measures = measures
         navigationController.pushViewController(measuresViewController, animated: true)
     }
     

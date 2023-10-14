@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol MeasuresViewControllerDelegate: AnyObject {
     // 対策削除時の処理
@@ -22,27 +24,36 @@ class MeasuresViewController: UIViewController {
     @IBOutlet weak var memoLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var tableView: UITableView!
-    private var memoArray = [Memo]()
-    var measures = Measures()
+    private var viewModel: MeasuresViewModel
+    private let disposeBag = DisposeBag()
     var delegate: MeasuresViewControllerDelegate?
     
+    // MARK: - Initializer
+    
+    init(measures: Measures) {
+        self.viewModel = MeasuresViewModel(measures: measures)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        initData()
         initNavigationBar()
         initTableView()
         initView()
+        initBind()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let selectedIndex = tableView.indexPathForSelectedRow {
             // メモが削除されていれば取り除く
-            let memo = memoArray[selectedIndex.row]
-            if memo.isDeleted {
-                memoArray.remove(at: selectedIndex.row)
-                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+            if (viewModel.removeMemo(index: selectedIndex.row)) {
                 return
             }
             tableView.reloadRows(at: [selectedIndex], with: .none)
@@ -53,21 +64,79 @@ class MeasuresViewController: UIViewController {
         super.viewDidDisappear(animated)
         // Firebaseに送信
         if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.updateMeasures(measures: measures)
+            viewModel.updateFirebaseMeasures()
         }
     }
     
-    /// データ初期化
-    private func initData() {
-        let realmManager = RealmManager()
-        memoArray = realmManager.getMemo(measuresID: measures.measuresID)
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindTitleTextField()
+        bindTableView()
     }
+    
+    /// タイトル入力欄のバインド
+    private func bindTitleTextField() {
+        titleTextField.rx.controlEvent(.editingDidEnd).asDriver()
+            .drive(onNext: {[unowned self] _ in
+                titleTextField.resignFirstResponder()
+                if titleTextField.text!.isEmpty {
+                    showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                        self.titleTextField.text = self.viewModel.title.value
+                        self.titleTextField.becomeFirstResponder()
+                    })
+                    return
+                }
+                viewModel.title.accept(titleTextField.text!)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// TableViewのバインド
+    private func bindTableView() {
+        viewModel.memoArray.asDriver()
+            .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { _, memo, cell in
+                cell.textLabel?.text = memo.detail
+                cell.backgroundColor = UIColor.systemGray6
+                cell.textLabel?.numberOfLines = 0
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
+                if let memo = self.viewModel.getMemo(index: indexPath.row) {
+                    self.delegate?.measuresVCMemoDidTap(memo: memo)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 削除ボタンのバインド
+    /// - Parameter deleteButton: 削除ボタン
+    private func bindDeleteButton(deleteButton: UIBarButtonItem) {
+        deleteButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                // 対策とそれに含まれるメモを削除
+                showDeleteAlert(title: TITLE_DELETE_MEASURES, message: MESSAGE_DELETE_MEASURES, OKAction: {
+                    self.viewModel.deleteMeasures()
+                    if Network.isOnline() {
+                        self.viewModel.updateFirebaseMeasures()
+                    }
+                    self.delegate?.measuresVCDeleteMeasures()
+                })
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
     
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_MEASURES_DETAIL
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteMeasures))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        bindDeleteButton(deleteButton: deleteButton)
         navigationItem.rightBarButtonItems = [deleteButton]
     }
     
@@ -83,82 +152,7 @@ class MeasuresViewController: UIViewController {
     private func initView() {
         titleLabel.text = TITLE_TITLE
         memoLabel.text = TITLE_NOTE
-        initTextField(textField: titleTextField, placeholder: MASSAGE_MEASURES_EXAMPLE, text: measures.title)
+        initTextField(textField: titleTextField, placeholder: MASSAGE_MEASURES_EXAMPLE, text: viewModel.title.value)
     }
     
-    // MARK: - Action
-    
-    /// 対策とそれに含まれるメモを削除
-    @objc func deleteMeasures() {
-        showDeleteAlert(title: TITLE_DELETE_MEASURES, message: MESSAGE_DELETE_MEASURES, OKAction: {
-            let realmManager = RealmManager()
-            realmManager.updateMeasuresIsDeleted(measures: self.measures)
-            for memo in self.memoArray {
-                realmManager.updateMemoIsDeleted(memoID: memo.memoID)
-            }
-            if Network.isOnline() {
-                let firebaseManager = FirebaseManager()
-                firebaseManager.updateMeasures(measures: self.measures)
-                for memo in self.memoArray {
-                    firebaseManager.updateMemo(memo: memo)
-                }
-            }
-            self.delegate?.measuresVCDeleteMeasures()
-        })
-    }
-    
-}
-
-extension MeasuresViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if memoArray.isEmpty {
-            return 0
-        }
-        return memoArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let memo = memoArray[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = memo.detail
-        cell.backgroundColor = UIColor.systemGray6
-        cell.textLabel?.numberOfLines = 0 // 全文表示
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !memoArray.isEmpty {
-            delegate?.measuresVCMemoDidTap(memo: memoArray[indexPath.row])
-        }
-    }
-    
-}
-
-extension MeasuresViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        // 差分がなければ何もしない
-        if textField.text! == measures.title {
-            return true
-        }
-        
-        // 入力チェック
-        if textField.text!.isEmpty {
-            showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
-            textField.text = measures.title
-            return false
-        }
-        
-        // 対策を更新
-        let realmManager = RealmManager()
-        realmManager.updateMeasuresTitle(measuresID: measures.measuresID, title: textField.text!)
-        return true
-    }
 }

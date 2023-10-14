@@ -10,6 +10,7 @@
 		3DEAE45CE9BB67CBC455FA77 /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */; };
 		8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12B0C727F7D01E0040AF3D /* Definition+String.swift */; };
 		8D1522C02AD758B0002D1018 /* AddGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */; };
+		8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */; };
 		8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */; };
 		8D2BE0C7284EB238009AC672 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C5284EB238009AC672 /* PageViewController.swift */; };
 		8D2BE0C8284EB238009AC672 /* PageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C6284EB238009AC672 /* PageViewController.xib */; };
@@ -108,6 +109,7 @@
 		54F93BC31ED4497F68396349 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
 		8D12B0C727F7D01E0040AF3D /* Definition+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+String.swift"; sourceTree = "<group>"; };
 		8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewModel.swift; sourceTree = "<group>"; };
+		8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresViewModel.swift; sourceTree = "<group>"; };
 		8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8D2BE0C5284EB238009AC672 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		8D2BE0C6284EB238009AC672 /* PageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageViewController.xib; sourceTree = "<group>"; };
@@ -231,6 +233,14 @@
 				54F93BC31ED4497F68396349 /* Pods-011-SportNote.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		8D1522C12ADA1CEC002D1018 /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */,
+			);
+			path = Task;
 			sourceTree = "<group>";
 		};
 		8D18E81427F65AA400035E99 /* Application */ = {
@@ -550,6 +560,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC294832AD24914009B8AF2 /* Group */,
+				8D1522C12ADA1CEC002D1018 /* Task */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -754,6 +765,7 @@
 				8D3FFE5F27F666A20021C9FC /* TaskCoordinator.swift in Sources */,
 				8D91CE9C281EC364000D3B1F /* Note.swift in Sources */,
 				8D3FFE5A27F665650021C9FC /* TabCoordinator.swift in Sources */,
+				8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */,
 				8D2BE0CD2852A09C009AC672 /* TutorialViewController.swift in Sources */,
 				8D69FC9824B7085900DFECB3 /* TaskCellForAddNote.swift in Sources */,
 				8D481D5527F808090082D956 /* FirebaseManager.swift in Sources */,
