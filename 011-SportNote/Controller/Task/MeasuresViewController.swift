@@ -20,6 +20,7 @@ protocol MeasuresViewControllerDelegate: AnyObject {
 class MeasuresViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var memoLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!

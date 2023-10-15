@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol TaskDetailViewControllerDelegate: AnyObject {
     // 課題の完了(未完了)時の処理
@@ -20,6 +22,7 @@ protocol TaskDetailViewControllerDelegate: AnyObject {
 class TaskDetailViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var causeLabel: UILabel!
     @IBOutlet weak var measuresLabel: UILabel!
@@ -27,26 +30,36 @@ class TaskDetailViewController: UIViewController {
     @IBOutlet weak var causeTextView: UITextView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
-    private var measuresArray: [Measures] = []
-    var task = Task()
+    private let viewModel: TaskDetailViewModel
+    private let disposeBag = DisposeBag()
     var delegate: TaskDetailViewControllerDelegate?
     
+    // MARK: - Initializer
+    
+    init(task: Task) {
+        self.viewModel = TaskDetailViewModel(task: task)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        initData()
         initNavigationBar()
         initTableView()
         initView()
+        initBind()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let selectedIndex = tableView.indexPathForSelectedRow {
             // 対策が削除されていれば取り除く
-            let measures = measuresArray[selectedIndex.row]
-            if measures.isDeleted {
-                measuresArray.remove(at: selectedIndex.row)
+            if (viewModel.removeMeasures(index: selectedIndex.row)) {
                 tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
                 return
             }
@@ -58,27 +71,122 @@ class TaskDetailViewController: UIViewController {
         super.viewDidDisappear(animated)
         // Firebaseに送信
         if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.updateTask(task: task)
-            for measures in measuresArray {
-                firebaseManager.updateMeasures(measures: measures)
-            }
+            viewModel.updateFirebaseMeasures()
         }
     }
     
-    /// データ初期化
-    private func initData() {
-        let realmManager = RealmManager()
-        measuresArray = realmManager.getMeasuresInTask(ID: task.taskID)
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindTitleTextField()
+        bindCauseTextView()
+        bindAddButton()
     }
+    
+    /// タイトル入力欄のバインド
+    private func bindTitleTextField() {
+        titleTextField.rx.controlEvent(.editingDidEnd).asDriver()
+            .drive(onNext: { [unowned self] _ in
+                titleTextField.resignFirstResponder()
+                if titleTextField.text!.isEmpty {
+                    showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                        self.titleTextField.text = self.viewModel.title.value
+                        self.titleTextField.becomeFirstResponder()
+                    })
+                    return
+                }
+                viewModel.title.accept(titleTextField.text!)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 原因入力欄のバインド
+    private func bindCauseTextView() {
+        causeTextView.rx.didEndEditing.asDriver()
+            .drive(onNext: { [unowned self] _ in
+                causeTextView.resignFirstResponder()
+                viewModel.cause.accept(causeTextView.text)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 削除ボタンのバインド
+    /// - Parameter deleteButton: 削除ボタン
+    private func bindDeleteButton(deleteButton: UIBarButtonItem) {
+        deleteButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                showDeleteAlert(title: TITLE_DELETE_TASK, message: MESSAGE_DELETE_TASK, OKAction: {
+                    self.viewModel.deleteTask()
+                    self.delegate?.taskDetailVCDeleteTask(task: self.viewModel.task)
+                })
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 課題完了ボタンのバインド
+    /// - Parameter completeButton: 完了ボタン
+    private func bindCompleteButton(completeButton: UIBarButtonItem) {
+        completeButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                let isCompleted = viewModel.task.isComplete
+                let message = isCompleted ? MESSAGE_INCOMPLETE_TASK : MESSAGE_COMPLETE_TASK
+                showOKCancelAlert(title: TITLE_COMPLETE_TASK, message: message, OKAction: {
+                    self.viewModel.completeTask(isCompleted: !isCompleted)
+                    self.delegate?.taskDetailVCCompleteTask(task: self.viewModel.task)
+                })
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 対策追加ボタンのバインド
+    private func bindAddButton() {
+        addButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                let alert = UIAlertController(title: TITLE_ADD_MEASURES, message: MESSAGE_ADD_MEASURES, preferredStyle: .alert)
+                
+                var alertTextField: UITextField?
+                alert.addTextField(configurationHandler: {(textField) -> Void in
+                    alertTextField = textField
+                })
+                
+                let OKAction = UIAlertAction(title: TITLE_ADD, style: UIAlertAction.Style.default, handler: {(action: UIAlertAction) in
+                    if (alertTextField?.text == nil || alertTextField?.text == "") {
+                        self.showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
+                    } else {
+                        // 対策データ作成
+                        let result = self.viewModel.insertMeasures(title: alertTextField!.text!)
+                        if (!result) {
+                            self.showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
+                            return
+                        }
+                        // tableView更新
+                        let index: IndexPath = [0, self.viewModel.measuresArray.value.count - 1]
+                        self.tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
+                    }
+                })
+                
+                let cancelAction = UIAlertAction(title: TITLE_CANCEL, style: UIAlertAction.Style.cancel, handler: nil)
+                
+                let actions = [OKAction, cancelAction]
+                actions.forEach { alert.addAction($0) }
+                present(alert, animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    
+    // MARK: - Other Methods
     
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_TASK_DETAIL
         var navigationItems: [UIBarButtonItem] = []
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteTask))
-        let image = task.isComplete ? UIImage(systemName: "exclamationmark.circle") : UIImage(systemName: "checkmark.circle")
-        let completeButton = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(completeTask))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        bindDeleteButton(deleteButton: deleteButton)
+        let image = viewModel.task.isComplete ? UIImage(systemName: "exclamationmark.circle") : UIImage(systemName: "checkmark.circle")
+        let completeButton = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+        bindCompleteButton(completeButton: completeButton)
         navigationItems.append(deleteButton)
         navigationItems.append(completeButton)
         navigationItem.rightBarButtonItems = navigationItems
@@ -100,82 +208,9 @@ class TaskDetailViewController: UIViewController {
         titleLabel.text = TITLE_TITLE
         causeLabel.text = TITLE_CAUSE
         measuresLabel.text = TITLE_MEASURES_PRIORITY
-        initTextField(textField: titleTextField, placeholder: MASSAGE_TASK_EXAMPLE, text: task.title)
-        initTextView(textView: causeTextView, text: task.cause)
-        addButton.isHidden = task.isComplete ? true : false
-    }
-    
-    // MARK: - Action
-    
-    /// 課題を削除
-    @objc func deleteTask() {
-        showDeleteAlert(title: TITLE_DELETE_TASK, message: MESSAGE_DELETE_TASK, OKAction: {
-            let realmManager = RealmManager()
-            realmManager.updateTaskIsDeleted(task: self.task)
-            self.delegate?.taskDetailVCDeleteTask(task: self.task)
-        })
-    }
-    
-    /// 課題を完了(未完了)にする
-    @objc func completeTask() {
-        let isCompleted = task.isComplete
-        let message = isCompleted ? MESSAGE_INCOMPLETE_TASK : MESSAGE_COMPLETE_TASK
-        showOKCancelAlert(title: TITLE_COMPLETE_TASK, message: message, OKAction: {
-            let realmManager = RealmManager()
-            realmManager.updateTaskIsCompleted(task: self.task, isCompleted: !isCompleted)
-            self.delegate?.taskDetailVCCompleteTask(task: self.task)
-        })
-    }
-    
-    /// 対策を追加
-    @IBAction func tapAddButton(_ sender: Any) {
-        let alert = UIAlertController(title: TITLE_ADD_MEASURES, message: MESSAGE_ADD_MEASURES, preferredStyle: .alert)
-        
-        var alertTextField: UITextField?
-        alert.addTextField(configurationHandler: {(textField) -> Void in
-            alertTextField = textField
-        })
-        
-        let OKAction = UIAlertAction(title: TITLE_ADD, style: UIAlertAction.Style.default, handler: {(action: UIAlertAction) in
-            if (alertTextField?.text == nil || alertTextField?.text == "") {
-                self.showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
-            } else {
-                self.addMeasures(title: alertTextField!.text!)
-            }
-        })
-        
-        let cancelAction = UIAlertAction(title: TITLE_CANCEL, style: UIAlertAction.Style.cancel, handler: nil)
-        
-        let actions = [OKAction, cancelAction]
-        actions.forEach { alert.addAction($0) }
-        present(alert, animated: true)
-    }
-    
-    /// 対策追加
-    /// - Parameters:
-    ///    - title: タイトル
-    private func addMeasures(title: String) {
-        // 対策データ作成
-        let realmManager = RealmManager()
-        let measures = Measures()
-        measures.taskID = task.taskID
-        measures.title = title
-        measures.order = realmManager.getMeasuresInTask(ID: task.taskID).count
-        if !realmManager.createRealm(object: measures) {
-            showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
-            return
-        }
-        
-        // Firebaseに送信
-        if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.saveMeasures(measures: measures, completion: {})
-        }
-        
-        // tableView更新
-        let index: IndexPath = [0, measures.order]
-        measuresArray.append(measures)
-        tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
+        initTextField(textField: titleTextField, placeholder: MASSAGE_TASK_EXAMPLE, text: viewModel.task.title)
+        initTextView(textView: causeTextView, text: viewModel.task.cause)
+        addButton.isHidden = viewModel.task.isComplete ? true : false
     }
     
 }
@@ -203,75 +238,28 @@ extension TaskDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // 対策の並び順を保存
-        let measures = measuresArray[sourceIndexPath.row]
-        measuresArray.remove(at: sourceIndexPath.row)
-        measuresArray.insert(measures, at: destinationIndexPath.row)
-        let realmManager = RealmManager()
-        realmManager.updateMeasuresOrder(measuresArray: measuresArray)
+        viewModel.moveMeasures(from: sourceIndexPath.row, to: destinationIndexPath.row)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if measuresArray.isEmpty {
+        if viewModel.measuresArray.value.isEmpty {
             return 0
         } else {
-            return measuresArray.count
+            return viewModel.measuresArray.value.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = measuresArray[indexPath.row].title
+        cell.textLabel?.text = viewModel.measuresArray.value[indexPath.row].title
         cell.backgroundColor = UIColor.systemGray6
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 対策画面へ遷移
-        let measures = measuresArray[indexPath.row]
+        let measures = viewModel.measuresArray.value[indexPath.row]
         delegate?.taskDetailVCMeasuresCellDidTap(measures: measures)
-    }
-    
-}
-
-extension TaskDetailViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        // 差分がなければ何もしない
-        if textField.text! == task.title {
-            return true
-        }
-        
-        // 入力チェック
-        if textField.text!.isEmpty {
-            showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
-            textField.text = task.title
-            return false
-        }
-        
-        let realmManager = RealmManager()
-        realmManager.updateTaskTitle(taskID: task.taskID, title: textField.text!)
-        return true
-    }
-    
-}
-
-extension TaskDetailViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-        // 差分がなければ何もしない
-        if textView.text! == task.cause {
-            return
-        }
-        
-        let realmManager = RealmManager()
-        realmManager.updateTaskCause(taskID: task.taskID, cause: textView.text!)
     }
     
 }

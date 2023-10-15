@@ -20,9 +20,8 @@ class TaskDetailCoordinator: Coordinator {
     
     func startFrow(in navigationController: UINavigationController, withTask task: Task) {
         self.navigationController = navigationController
-        let taskDetailViewController = TaskDetailViewController()
+        let taskDetailViewController = TaskDetailViewController(task: task)
         taskDetailViewController.delegate = self
-        taskDetailViewController.task = task
         navigationController.pushViewController(taskDetailViewController, animated: true)
     }
     
