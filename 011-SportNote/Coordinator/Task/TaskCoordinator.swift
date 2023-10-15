@@ -20,10 +20,8 @@ class TaskCoordinator: Coordinator {
     
     func startFlow(in navigationController: UINavigationController, isCompleted: Bool, groupID: String) {
         self.navigationController = navigationController
-        let taskViewController = TaskViewController()
+        let taskViewController = TaskViewController(isComplete: isCompleted, groupID: groupID)
         taskViewController.delegate = self
-        taskViewController.isCompleted = isCompleted
-        taskViewController.groupID = groupID
         navigationController.pushViewController(taskViewController, animated: true)
     }
     

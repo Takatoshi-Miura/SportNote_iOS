@@ -9,6 +9,8 @@
 import UIKit
 import GoogleMobileAds
 import PKHUD
+import RxSwift
+import RxCocoa
 
 protocol TaskViewControllerDelegate: AnyObject {
     // グループ追加タップ時の処理
@@ -30,17 +32,24 @@ protocol TaskViewControllerDelegate: AnyObject {
 class TaskViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
-    private var groupArray: [Group] = []
-    private var taskArray: [[Task]] = []
     private var adMobView: GADBannerView?
+    private var viewModel: TaskViewModel
+    private let disposeBag = DisposeBag()
     var delegate: TaskViewControllerDelegate?
     
-    var isCompleted = false
-    var groupID = ""
-    private var completedTaskArray: [Task] = []
+    // MARK: - Initializer
+    
+    init(isComplete: Bool, groupID: String) {
+        self.viewModel = TaskViewModel(isComplete: isComplete, groupID: groupID)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - LifeCycle
     override func viewDidLoad() {

@@ -12,6 +12,7 @@
 		8D1522C02AD758B0002D1018 /* AddGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */; };
 		8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */; };
 		8D1522C52ADB6E5F002D1018 /* TaskDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */; };
+		8D1522C72ADC9E23002D1018 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */; };
 		8D2A345925DBC8CC00ADE6C6 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */; };
 		8D2BE0C7284EB238009AC672 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C5284EB238009AC672 /* PageViewController.swift */; };
 		8D2BE0C8284EB238009AC672 /* PageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2BE0C6284EB238009AC672 /* PageViewController.xib */; };
@@ -112,6 +113,7 @@
 		8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewModel.swift; sourceTree = "<group>"; };
 		8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresViewModel.swift; sourceTree = "<group>"; };
 		8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewModel.swift; sourceTree = "<group>"; };
+		8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		8D2A345825DBC8CC00ADE6C6 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8D2BE0C5284EB238009AC672 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		8D2BE0C6284EB238009AC672 /* PageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageViewController.xib; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 		8D1522C12ADA1CEC002D1018 /* Task */ = {
 			isa = PBXGroup;
 			children = (
+				8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */,
 				8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */,
 				8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */,
 			);
@@ -776,6 +779,7 @@
 				8DCF350A24F6554900055093 /* Task_old.swift in Sources */,
 				8D91CE89280CC80C000D3B1F /* AddTournamentNoteViewController.swift in Sources */,
 				8DC1931427F7BE320097BF07 /* NoteCoordinator.swift in Sources */,
+				8D1522C72ADC9E23002D1018 /* TaskViewModel.swift in Sources */,
 				8D91CE95281896E6000D3B1F /* AddPracticeNoteViewController.swift in Sources */,
 				8D91CE9228138668000D3B1F /* FreeNoteCoordinator.swift in Sources */,
 				8DC8DE9F28399E8F00BD7F70 /* SettingViewController.swift in Sources */,
