@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PKHUD
 import RxSwift
 import RxCocoa
 
@@ -27,8 +28,7 @@ class TaskViewModel {
     init(isComplete: Bool, groupID: String) {
         self.isComplete = isComplete
         self.groupID = groupID
-        
-        self.groupArray = BehaviorRelay(value: realmManager.getMeasuresInTask(ID: task.taskID))
+        syncDataWithConvert()
         initBind()
     }
     
@@ -36,31 +36,7 @@ class TaskViewModel {
     
     /// バインド設定
     private func initBind() {
-        bindTitle()
-        bindCause()
         bindMeasuresArray()
-    }
-    
-    /// タイトルの変更をバインド
-    private func bindTitle() {
-        title
-            .subscribe(onNext: { [weak self] newTitle in
-                guard let self = self else { return }
-                // Realm更新
-                realmManager.updateTaskTitle(taskID: task.taskID, title: newTitle)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    /// 原因の変更をバインド
-    private func bindCause() {
-        cause
-            .subscribe(onNext: { [weak self] newText in
-                guard let self = self else { return }
-                // Realm更新
-                realmManager.updateTaskCause(taskID: task.taskID, cause: newText)
-            })
-            .disposed(by: disposeBag)
     }
     
     /// 対策配列のバインド
@@ -84,88 +60,98 @@ class TaskViewModel {
         guard sourceIndex != destinationIndex else {
             return
         }
-        var newMeasuresArray = groupArray.value
-        let measuresToMove = newMeasuresArray.remove(at: sourceIndex)
-        newMeasuresArray.insert(measuresToMove, at: destinationIndex)
-        groupArray.accept(newMeasuresArray)
+        var newGroupArray = groupArray.value
+        let measuresToMove = newGroupArray.remove(at: sourceIndex)
+        newGroupArray.insert(measuresToMove, at: destinationIndex)
+        groupArray.accept(newGroupArray)
     }
     
     // MARK: - Other Methods
     
-    /// 対策を新規作成
-    /// - Parameter title: タイトル
-    /// - Returns: 処理結果
-    func insertMeasures(title: String) -> Bool {
-        let measures = createMeasures(title: title)
-        if !realmManager.createRealm(object: measures) {
-            return false
-        }
-        
-        // Firebaseに送信
-        if Network.isOnline() {
-            insertFirebaseMeasures(measures: measures)
-        }
-        
-        var currentMeasures = groupArray.value
-        currentMeasures.insert(measures, at: measures.order)
-        groupArray.accept(currentMeasures)
-        return true
-    }
-    
-    /// 対策を作成
-    /// - Parameter title: タイトル
-    /// - Returns: Measures
-    private func createMeasures(title: String) -> Measures {
-        let measures = Measures()
-        measures.taskID = task.taskID
-        measures.title = title
-        measures.order = realmManager.getMeasuresInTask(ID: task.taskID).count
-        return measures
-    }
-    
-    /// Firebaseに対策を新規作成
-    /// - Parameter measures: 対策
-    private func insertFirebaseMeasures(measures: Measures) {
-        let firebaseManager = FirebaseManager()
-        firebaseManager.saveMeasures(measures: measures, completion: {})
-    }
-    
-    /// Firebaseに課題と対策を更新
-    func updateFirebaseMeasures() {
-        let firebaseManager = FirebaseManager()
-        firebaseManager.updateTask(task: task)
-        for measures in groupArray.value {
-            firebaseManager.updateMeasures(measures: measures)
-        }
-    }
-    
-    /// 課題の完了状態を更新
-    /// - Parameter isCompleted: 完了状態
-    func completeTask(isCompleted: Bool) {
-        realmManager.updateTaskIsCompleted(task: task, isCompleted: isCompleted)
-    }
-    
-    /// 課題とそれに含まれる対策を削除
-    func deleteTask() {
-        realmManager.updateTaskIsDeleted(task: task)
-        for measures in groupArray.value {
-            realmManager.updateMeasuresIsDeleted(measures: measures)
-        }
-    }
-    
-    /// measuresArrayから指定した対策を削除
-    /// - Parameter index: インデックス
-    /// - Returns: 削除有無
-    func removeMeasures(index: Int) -> Bool {
-        var currentMeasures = groupArray.value
-        let measures = currentMeasures[index]
-        if measures.isDeleted {
-            currentMeasures.remove(at: index)
-            groupArray.accept(currentMeasures)
-            return true
+    /// データ変換＆同期処理
+    /// ログアウト後は未分類グループなどを自動生成する必要がある
+    func syncDataWithConvert() {
+        if !isComplete && Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let dataConverter = DataConverter()
+            dataConverter.convertOldToRealm(completion: {
+                self.syncData()
+            })
         } else {
-            return false
+            self.syncData()
         }
     }
+    
+    /// 同期処理
+    func syncData() {
+        if !isComplete && Network.isOnline() {
+            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+            let syncManager = SyncManager()
+            syncManager.syncDatabase(completion: {
+                self.refreshData()
+                HUD.hide()
+            })
+        } else {
+            self.refreshData()
+        }
+    }
+    
+    /// データ再取得
+    func refreshData() {
+        if isComplete {
+            completedTaskArray.accept(realmManager.getTasksInGroup(ID: groupID, isCompleted: isComplete))
+        } else {
+            groupArray.accept(realmManager.getGroupArrayForTaskView())
+            taskArray.accept(realmManager.getTaskArrayForTaskView())
+        }
+    }
+    
+    /// グループを挿入
+    /// - Parameter group: グループ
+    func insertGroup(group: Group) {
+        var newGroupArray = groupArray.value
+        newGroupArray.append(group)
+        groupArray.accept(newGroupArray)
+        
+        var newTaskArray = taskArray.value
+        newTaskArray.append([])
+        taskArray.accept(newTaskArray)
+    }
+    
+    
+    /// taskArrayから指定Taskを削除
+    /// - Parameter indexPath: IndexPath
+    /// - Returns: 削除有無
+    func deleteTaskFromArray(indexPath: IndexPath) -> Bool {
+        if isComplete {
+            var taskArray = completedTaskArray.value
+            let task = taskArray[indexPath.row]
+            if !task.isComplete || task.isDeleted {
+                taskArray.remove(at: indexPath.row)
+                completedTaskArray.accept(taskArray)
+                return true
+            }
+        } else {
+            if indexPath.row < taskArray.value[indexPath.section].count {
+                var taskArray = taskArray.value
+                let task = taskArray[indexPath.section][indexPath.row]
+                if task.isComplete || task.isDeleted {
+                    taskArray[indexPath.section].remove(at: indexPath.row)
+                    self.taskArray.accept(taskArray)
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }

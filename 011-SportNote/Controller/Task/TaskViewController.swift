@@ -57,9 +57,10 @@ class TaskViewController: UIViewController {
         initView()
         initTableView()
         initNotification()
-        // 初回のみ旧データ変換後に同期処理
-        syncDataWithConvert()
         displayAgreement()
+        initBind()
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -71,41 +72,69 @@ class TaskViewController: UIViewController {
         super.viewDidAppear(animated)
         if let selectedIndex = tableView.indexPathForSelectedRow {
             // 課題が完了状態が更新or削除されていれば取り除く
-            if isCompleted {
-                let task = completedTaskArray[selectedIndex.row]
-                if !task.isComplete || task.isDeleted {
-                    completedTaskArray.remove(at: selectedIndex.row)
-                    tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
-                    return
-                }
-            } else {
-                if selectedIndex.row < taskArray[selectedIndex.section].count {
-                    let task = taskArray[selectedIndex.section][selectedIndex.row]
-                    if task.isComplete || task.isDeleted {
-                        taskArray[selectedIndex.section].remove(at: selectedIndex.row)
-                        tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
-                        return
-                    }
-                }
+            if (viewModel.deleteTaskFromArray(indexPath: selectedIndex)) {
+                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                return
             }
             tableView.reloadRows(at: [selectedIndex], with: .none)
         } else {
             // グループから戻る場合はリロード
-            refreshData()
+            viewModel.refreshData()
+            tableView.refreshControl?.endRefreshing()
+            tableView.reloadData()
         }
     }
     
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindAddButton()
+    }
+    
+    /// 課題,グループ追加ボタンのバインド
+    private func bindAddButton() {
+        addButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                var alertActions: [UIAlertAction] = []
+                let addGroupAction = UIAlertAction(title: TITLE_GROUP, style: .default) { _ in
+                    self.delegate?.taskVCAddGroupDidTap(self)
+                }
+                let addTaskAction = UIAlertAction(title: TITLE_TASK, style: .default) { _ in
+                    self.delegate?.taskVCAddTaskDidTap(self)
+                }
+                alertActions.append(addGroupAction)
+                alertActions.append(addTaskAction)
+                
+                showActionSheet(title: TITLE_ADD_GROUP_TASK,
+                                message: MESSAGE_ADD_GROUP_TASK,
+                                actions: alertActions,
+                                frame: addButton.frame)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 設定ボタンのバインド
+    /// - Parameter button: 設定ボタン
+    private func bindSettingButton(button: UIBarButtonItem) {
+        button.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                self.delegate?.taskVCSettingDidTap(self)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
+    
     /// 画面初期化
     private func initView() {
-        if isCompleted {
+        if viewModel.isComplete {
             self.title = TITLE_COMPLETED_TASK
             addButton.isHidden = true
         } else {
             self.title = TITLE_TASK
-            let settingButton = UIBarButtonItem(image: UIImage(systemName: "gear"),
-                                                style: .plain,
-                                                target: self,
-                                                action: #selector(openSettingView(_:)))
+            let settingButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: nil)
+            bindSettingButton(button: settingButton)
             navigationItem.leftBarButtonItems = [settingButton]
         }
     }
@@ -142,41 +171,15 @@ class TaskViewController: UIViewController {
     
     /// データの同期処理
     @objc func syncData() {
-        if !isCompleted && Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            let syncManager = SyncManager()
-            syncManager.syncDatabase(completion: {
-                self.refreshData()
-                HUD.hide()
-            })
-        } else {
-            self.refreshData()
-        }
+        viewModel.syncData()
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
     
     /// データ変換＆同期処理
     /// ログアウト後は未分類グループなどを自動生成する必要がある
     @objc func syncDataWithConvert() {
-        if !isCompleted && Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            let dataConverter = DataConverter()
-            dataConverter.convertOldToRealm(completion: {
-                self.syncData()
-            })
-        } else {
-            self.syncData()
-        }
-    }
-    
-    /// データを再取得
-    private func refreshData() {
-        let realmManager = RealmManager()
-        if isCompleted {
-            completedTaskArray = realmManager.getTasksInGroup(ID: groupID, isCompleted: isCompleted)
-        } else {
-            groupArray = realmManager.getGroupArrayForTaskView()
-            taskArray = realmManager.getTaskArrayForTaskView()
-        }
+        viewModel.syncDataWithConvert()
         tableView.refreshControl?.endRefreshing()
         tableView.reloadData()
     }
@@ -199,12 +202,9 @@ class TaskViewController: UIViewController {
     
     /// 利用規約同意画面を表示
     private func displayAgreement() {
-        // 初回起動判定
+        // 初回起動時に利用規約を表示
         if UserDefaultsKey.firstLaunch.bool() {
-            // 2回目以降の起動では「firstLaunch」のkeyをfalseに
             UserDefaultsKey.firstLaunch.set(value: false)
-            
-            // 利用規約を表示
             displayAgreement({
                 UserDefaultsKey.agree.set(value: true)
                 self.delegate?.taskVCShowTutorial(self)
@@ -221,36 +221,11 @@ class TaskViewController: UIViewController {
     
     // MARK: - Action
     
-    /// 追加ボタンの処理
-    @IBAction func tapAddButton(_ sender: Any) {
-        var alertActions: [UIAlertAction] = []
-        let addGroupAction = UIAlertAction(title: TITLE_GROUP, style: .default) { _ in
-            self.delegate?.taskVCAddGroupDidTap(self)
-        }
-        let addTaskAction = UIAlertAction(title: TITLE_TASK, style: .default) { _ in
-            self.delegate?.taskVCAddTaskDidTap(self)
-        }
-        alertActions.append(addGroupAction)
-        alertActions.append(addTaskAction)
-        
-        showActionSheet(title: TITLE_ADD_GROUP_TASK,
-                        message: MESSAGE_ADD_GROUP_TASK,
-                        actions: alertActions,
-                        frame: addButton.frame)
-    }
-    
-    /// 設定タップ時の処理
-    @objc func openSettingView(_ sender: UIBarButtonItem) {
-        delegate?.taskVCSettingDidTap(self)
-    }
-    
     /// グループを挿入
-    /// - Parameters:
-    ///    - group: 挿入するグループ
+    /// - Parameter group: グループ
     func insertGroup(group: Group) {
+        viewModel.insertGroup(group: group)
         let index: IndexPath = [group.order, 0]
-        groupArray.append(group)
-        taskArray.append([])
         tableView.insertSections(IndexSet(integer: index.section), with: UITableView.RowAnimation.right)
     }
     
@@ -259,7 +234,7 @@ class TaskViewController: UIViewController {
     ///   - task: 挿入する課題
     func insertTask(task: Task) {
         var index: IndexPath = [0, 0]
-        for group in groupArray {
+        for group in viewModel.groupArray.value {
             if task.groupID == group.groupID {
                 // グループに含まれる課題数を並び順にセットする
                 let realmManager = RealmManager()
@@ -279,27 +254,26 @@ class TaskViewController: UIViewController {
 extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if isCompleted {
+        if viewModel.isComplete {
             return 1
         } else {
-            return groupArray.count
+            return viewModel.groupArray.value.count
         }
-        
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if isCompleted { return nil }
+        if viewModel.isComplete { return nil }
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: GroupHeaderView.self))
         if let headerView = view as? GroupHeaderView {
             headerView.delegate = self
-            headerView.printInfo(group: groupArray[section])
+            headerView.printInfo(group: viewModel.groupArray.value[section])
             return headerView
         }
         return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if isCompleted { return 0.1 }
+        if viewModel.isComplete { return 0.1 }
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: String(describing: GroupHeaderView.self))
         if let headerView = view as? GroupHeaderView {
             return headerView.bounds.height
@@ -308,16 +282,16 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isCompleted {
-            return completedTaskArray.count
+        if viewModel.isComplete {
+            return viewModel.completedTaskArray.value.count
         } else {
-            return taskArray[section].count + 1
+            return viewModel.taskArray.value[section].count + 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        if isCompleted {
+        if viewModel.isComplete {
             // 課題セル
             let task = completedTaskArray[indexPath.row]
             let realmManager = RealmManager()
@@ -343,8 +317,8 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if isCompleted { return false }
-        if indexPath.row >= taskArray[indexPath.section].count {
+        if viewModel.isComplete { return false }
+        if indexPath.row >= viewModel.taskArray.value[indexPath.section].count {
             return false    // 解決済みの課題セルは編集不可
         } else {
             return true
@@ -352,8 +326,8 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if isCompleted { return false }
-        if indexPath.row >= taskArray[indexPath.section].count {
+        if viewModel.isComplete { return false }
+        if indexPath.row >= viewModel.taskArray.value[indexPath.section].count {
             return false    // 完了課題セルは並び替え不可
         } else {
             return true
@@ -363,7 +337,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         // 完了課題セルの下に入れようとした場合は課題の最下端に並び替え
         var destinationIndex = destinationIndexPath
-        let count = taskArray[destinationIndex.section].count
+        let count = viewModel.taskArray.value[destinationIndex.section].count
         if destinationIndex.row >= count {
             destinationIndex.row = count == 0 ? 0 : count - 1
         }
@@ -385,7 +359,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if isCompleted {
+        if viewModel.isComplete {
             // 課題セル
             let task = completedTaskArray[indexPath.row]
             delegate?.taskVCTaskCellDidTap(task: task)
