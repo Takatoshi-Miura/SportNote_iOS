@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PKHUD
 import RxSwift
 import RxCocoa
 
@@ -28,7 +27,10 @@ class TaskViewModel {
     init(isComplete: Bool, groupID: String) {
         self.isComplete = isComplete
         self.groupID = groupID
-        syncDataWithConvert()
+        self.groupArray = BehaviorRelay(value: [])
+        self.taskArray = BehaviorRelay(value: [])
+        self.completedTaskArray = BehaviorRelay(value: [])
+        syncDataWithConvert(completion: {})
         initBind()
     }
     
@@ -36,63 +38,145 @@ class TaskViewModel {
     
     /// バインド設定
     private func initBind() {
-        bindMeasuresArray()
+        bindTaskArray()
+        bindGroupArray()
     }
     
-    /// 対策配列のバインド
-    private func bindMeasuresArray() {
+    /// 課題配列のバインド
+    private func bindTaskArray() {
+        taskArray
+            .subscribe(onNext: { [weak self] newArray in
+                guard let self = self else { return }
+                // Realm更新
+                realmManager.updateTaskOrder(taskArray: newArray)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// グループ配列のバインド
+    private func bindGroupArray() {
         groupArray
             .subscribe(onNext: { [weak self] newArray in
                 guard let self = self else { return }
                 // Realm更新
-                realmManager.updateMeasuresOrder(measuresArray: newArray)
+                realmManager.updateGroupOrder(groupArray: newArray)
             })
             .disposed(by: disposeBag)
     }
     
     // MARK: - TableView
     
-    /// セルの移動（対策の並び替え）
+    /// セクション数を返却
+    /// - Returns: セクション数
+    func getNumberOfSections() -> Int {
+        if isComplete {
+            return 1
+        } else {
+            return groupArray.value.count
+        }
+    }
+    
+    /// セクションに含まれるセル数を返却
+    /// - Parameter section: セクション番号
+    /// - Returns: セル数
+    func getNumberOfRowsInSection(section: Int) -> Int {
+        if isComplete {
+            return completedTaskArray.value.count
+        } else {
+            return taskArray.value[section].count + 1
+        }
+    }
+    
+    /// セルの編集可否を返却
+    /// - Parameter indexPath: IndexPath
+    /// - Returns: 編集可否
+    func getCanEditRowAt(indexPath: IndexPath) -> Bool {
+        if isComplete {
+            return false
+        }
+        if indexPath.row >= taskArray.value[indexPath.section].count {
+            return false // 解決済みの課題セルは編集不可
+        } else {
+            return true
+        }
+    }
+    
+    /// セルの並び替え可否を返却
+    /// - Parameter indexPath: IndexPath
+    /// - Returns: 並び替え可否
+    func getCanMoveRowAt(indexPath: IndexPath) -> Bool {
+        if isComplete {
+            return false
+        }
+        if indexPath.row >= taskArray.value[indexPath.section].count {
+            return false // 解決済みの課題セルは並び替え不可
+        } else {
+            return true
+        }
+    }
+    
+    /// セルの並び替え
     /// - Parameters:
-    ///   - sourceIndex: 元のindex
-    ///   - destinationIndex: 移動先のindex
-    func moveMeasures(from sourceIndex: Int, to destinationIndex: Int) {
-        guard sourceIndex != destinationIndex else {
+    ///   - sourceIndexPath: 元のindex
+    ///   - destinationIndexPath: 移動先のindex
+    func moveTask(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard sourceIndexPath != destinationIndexPath else {
             return
         }
-        var newGroupArray = groupArray.value
-        let measuresToMove = newGroupArray.remove(at: sourceIndex)
-        newGroupArray.insert(measuresToMove, at: destinationIndex)
-        groupArray.accept(newGroupArray)
+        
+        // 完了課題セルの下に入れようとした場合は課題の最下端に並び替え
+        var destinationIndex = destinationIndexPath
+        let count = taskArray.value[destinationIndex.section].count
+        if destinationIndex.row >= count {
+            destinationIndex.row = count == 0 ? 0 : count - 1
+        }
+        
+        // 並び替え
+        var newTaskArray = taskArray.value
+        let task = newTaskArray[sourceIndexPath.section][sourceIndexPath.row]
+        newTaskArray[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+        newTaskArray[destinationIndex.section].insert(task, at: destinationIndex.row)
+        taskArray.accept(newTaskArray)
+        
+        // グループが変わる場合はグループも更新
+        if sourceIndexPath.section != destinationIndex.section {
+            let groupId = groupArray.value[destinationIndex.section].groupID
+            realmManager.updateTaskGroupId(task: task, groupID: groupId)
+        }
     }
     
     // MARK: - Other Methods
     
     /// データ変換＆同期処理
     /// ログアウト後は未分類グループなどを自動生成する必要がある
-    func syncDataWithConvert() {
+    /// - Parameter completion: 完了処理
+    func syncDataWithConvert(completion: @escaping () -> ()) {
         if !isComplete && Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let dataConverter = DataConverter()
             dataConverter.convertOldToRealm(completion: {
-                self.syncData()
+                self.syncData(completion: {
+                    completion()
+                })
             })
         } else {
-            self.syncData()
+            self.syncData(completion: {
+                completion()
+            })
         }
     }
     
     /// 同期処理
-    func syncData() {
+    /// - Parameter completion: 完了処理
+    func syncData(completion: @escaping () -> ()) {
         if !isComplete && Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let syncManager = SyncManager()
             syncManager.syncDatabase(completion: {
                 self.refreshData()
-                HUD.hide()
+                completion()
             })
         } else {
             self.refreshData()
+            completion()
         }
     }
     
@@ -108,7 +192,8 @@ class TaskViewModel {
     
     /// グループを挿入
     /// - Parameter group: グループ
-    func insertGroup(group: Group) {
+    /// - Returns: 挿入するIndexPath
+    func insertGroup(group: Group) -> IndexPath {
         var newGroupArray = groupArray.value
         newGroupArray.append(group)
         groupArray.accept(newGroupArray)
@@ -116,8 +201,31 @@ class TaskViewModel {
         var newTaskArray = taskArray.value
         newTaskArray.append([])
         taskArray.accept(newTaskArray)
+        let index: IndexPath = [group.order, 0]
+        return index
     }
     
+    /// 課題を挿入
+    /// - Parameter task: 課題
+    /// - Returns: 挿入するIndexPath
+    func insertTask(task: Task) -> IndexPath {
+        var index: IndexPath = [0, 0]
+        for group in groupArray.value {
+            if task.groupID == group.groupID {
+                // グループに含まれる課題数を並び順にセットする
+                let tasks = realmManager.getTasksInGroup(ID: group.groupID, isCompleted: false)
+                realmManager.updateTaskOrder(task: task, order: tasks.count - 1)
+                // tableViewに課題を追加
+                index = [index.section, tasks.count - 1]
+                var newTaskArray = taskArray.value
+                newTaskArray[index.section].append(task)
+                taskArray.accept(newTaskArray)
+                return index
+            }
+            index = [index.section + 1, task.order]
+        }
+        return index
+    }
     
     /// taskArrayから指定Taskを削除
     /// - Parameter indexPath: IndexPath
@@ -144,14 +252,5 @@ class TaskViewModel {
         }
         return false
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 }

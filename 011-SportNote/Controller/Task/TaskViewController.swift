@@ -45,6 +45,7 @@ class TaskViewController: UIViewController {
     
     init(isComplete: Bool, groupID: String) {
         self.viewModel = TaskViewModel(isComplete: isComplete, groupID: groupID)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -52,6 +53,7 @@ class TaskViewController: UIViewController {
     }
     
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -171,17 +173,23 @@ class TaskViewController: UIViewController {
     
     /// データの同期処理
     @objc func syncData() {
-        viewModel.syncData()
-        tableView.refreshControl?.endRefreshing()
-        tableView.reloadData()
+        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+        viewModel.syncData(completion: {
+            self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+            HUD.hide()
+        })
     }
     
     /// データ変換＆同期処理
     /// ログアウト後は未分類グループなどを自動生成する必要がある
     @objc func syncDataWithConvert() {
-        viewModel.syncDataWithConvert()
-        tableView.refreshControl?.endRefreshing()
-        tableView.reloadData()
+        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+        viewModel.syncDataWithConvert(completion: {
+            self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+            HUD.hide()
+        })
     }
     
     /// バナー広告を表示
@@ -224,8 +232,7 @@ class TaskViewController: UIViewController {
     /// グループを挿入
     /// - Parameter group: グループ
     func insertGroup(group: Group) {
-        viewModel.insertGroup(group: group)
-        let index: IndexPath = [group.order, 0]
+        let index = viewModel.insertGroup(group: group)
         tableView.insertSections(IndexSet(integer: index.section), with: UITableView.RowAnimation.right)
     }
     
@@ -233,20 +240,8 @@ class TaskViewController: UIViewController {
     /// - Parameters:
     ///   - task: 挿入する課題
     func insertTask(task: Task) {
-        var index: IndexPath = [0, 0]
-        for group in viewModel.groupArray.value {
-            if task.groupID == group.groupID {
-                // グループに含まれる課題数を並び順にセットする
-                let realmManager = RealmManager()
-                let tasks = realmManager.getTasksInGroup(ID: group.groupID, isCompleted: false)
-                realmManager.updateTaskOrder(task: task, order: tasks.count - 1)
-                // tableViewに課題を追加
-                index = [index.section, tasks.count - 1]
-                taskArray[index.section].append(task)
-                tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
-            }
-            index = [index.section + 1, task.order]
-        }
+        let index = viewModel.insertTask(task: task)
+        tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
     }
     
 }
@@ -254,11 +249,7 @@ class TaskViewController: UIViewController {
 extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if viewModel.isComplete {
-            return 1
-        } else {
-            return viewModel.groupArray.value.count
-        }
+        return viewModel.getNumberOfSections()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -282,30 +273,26 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if viewModel.isComplete {
-            return viewModel.completedTaskArray.value.count
-        } else {
-            return viewModel.taskArray.value[section].count + 1
-        }
+        return viewModel.getNumberOfRowsInSection(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         if viewModel.isComplete {
             // 課題セル
-            let task = completedTaskArray[indexPath.row]
+            let task = viewModel.completedTaskArray.value[indexPath.row]
             let realmManager = RealmManager()
             cell.textLabel?.text = task.title
             cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
             cell.detailTextLabel?.textColor = UIColor.lightGray
         } else {
-            if indexPath.row >= taskArray[indexPath.section].count {
+            if indexPath.row >= viewModel.taskArray.value[indexPath.section].count {
                 // 完了済み課題セル
                 cell.textLabel?.text = TITLE_COMPLETED_TASK
                 cell.textLabel?.textColor = UIColor.systemBlue
             } else {
                 // 課題セル
-                let task = taskArray[indexPath.section][indexPath.row]
+                let task = viewModel.taskArray.value[indexPath.section][indexPath.row]
                 let realmManager = RealmManager()
                 cell.textLabel?.text = task.title
                 cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
@@ -317,61 +304,32 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if viewModel.isComplete { return false }
-        if indexPath.row >= viewModel.taskArray.value[indexPath.section].count {
-            return false    // 解決済みの課題セルは編集不可
-        } else {
-            return true
-        }
+        return viewModel.getCanEditRowAt(indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if viewModel.isComplete { return false }
-        if indexPath.row >= viewModel.taskArray.value[indexPath.section].count {
-            return false    // 完了課題セルは並び替え不可
-        } else {
-            return true
-        }
+        return viewModel.getCanMoveRowAt(indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // 完了課題セルの下に入れようとした場合は課題の最下端に並び替え
-        var destinationIndex = destinationIndexPath
-        let count = viewModel.taskArray.value[destinationIndex.section].count
-        if destinationIndex.row >= count {
-            destinationIndex.row = count == 0 ? 0 : count - 1
-        }
-        
-        // 並び替え
-        let task = taskArray[sourceIndexPath.section][sourceIndexPath.row]
-        taskArray[sourceIndexPath.section].remove(at: sourceIndexPath.row)
-        taskArray[destinationIndex.section].insert(task, at: destinationIndex.row)
-        
-        // 並び順を保存
-        let realmManager = RealmManager()
-        realmManager.updateTaskOrder(taskArray: taskArray)
-        if sourceIndexPath.section != destinationIndex.section {
-            // グループが変わる場合はグループも更新
-            let groupId = groupArray[destinationIndex.section].groupID
-            realmManager.updateTaskGroupId(task: task, groupID: groupId)
-        }
+        viewModel.moveTask(from: sourceIndexPath, to: destinationIndexPath)
         tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if viewModel.isComplete {
             // 課題セル
-            let task = completedTaskArray[indexPath.row]
+            let task = viewModel.completedTaskArray.value[indexPath.row]
             delegate?.taskVCTaskCellDidTap(task: task)
         } else {
             // 完了済み課題セル
-            if indexPath.row >= taskArray[indexPath.section].count {
-                let groupID = groupArray[indexPath.section].groupID
+            if indexPath.row >= viewModel.taskArray.value[indexPath.section].count {
+                let groupID = viewModel.groupArray.value[indexPath.section].groupID
                 delegate?.taskVCCompletedTaskCellDidTap(groupID: groupID)
                 return
             }
             // 課題セル
-            let task = taskArray[indexPath.section][indexPath.row]
+            let task = viewModel.taskArray.value[indexPath.section][indexPath.row]
             delegate?.taskVCTaskCellDidTap(task: task)
         }
     }
