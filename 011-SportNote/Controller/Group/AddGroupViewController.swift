@@ -32,7 +32,6 @@ class AddGroupViewController: UIViewController {
     private let colorPicker = UIPickerView()
     private let viewModel: AddGroupViewModel
     private let disposeBag = DisposeBag()
-    private var pickerIndex: Int = 0
     var delegate: AddGroupViewControllerDelegate?
     
     // MARK: - Initializer

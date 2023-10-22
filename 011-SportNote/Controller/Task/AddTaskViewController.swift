@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol AddTaskViewControllerDelegate: AnyObject {
     // モーダルを閉じる時の処理
@@ -18,7 +20,10 @@ protocol AddTaskViewControllerDelegate: AnyObject {
 class AddTaskViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var naviItem: UINavigationItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var causeLabel: UILabel!
     @IBOutlet weak var measuresLabel: UILabel!
@@ -27,18 +32,30 @@ class AddTaskViewController: UIViewController {
     @IBOutlet weak var causeTextView: UITextView!
     @IBOutlet weak var measuresTextField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
-    private var realmGroupArray: [Group] = []
     private var pickerView = UIView()
     private let colorPicker = UIPickerView()
-    private var pickerIndex: Int = 0
+    private let viewModel: AddTaskViewModel
+    private let disposeBag = DisposeBag()
     var delegate: AddTaskViewControllerDelegate?
     
+    // MARK: - Initializer
+    
+    init () {
+        self.viewModel = AddTaskViewModel()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        initData()
         initView()
         initColorPicker()
+        initBind()
         titleTextField.becomeFirstResponder()
     }
     
@@ -48,11 +65,125 @@ class AddTaskViewController: UIViewController {
         colorPicker.frame.size.width = self.view.bounds.size.width
     }
     
-    /// データ初期化
-    private func initData() {
-        let realmManager = RealmManager()
-        realmGroupArray = realmManager.getGroupArrayForTaskView()
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindCancelButton()
+        bindSaveButton()
+        bindColorButton()
+        bindPicker()
     }
+    
+    /// キャンセルボタンのバインド
+    private func bindCancelButton() {
+        cancelButton.rx.tap
+            .subscribe(onNext: {[unowned self] _ in
+                if !titleTextField.text!.isEmpty ||
+                   !causeTextView.text.isEmpty ||
+                   !measuresTextField.text!.isEmpty
+                {
+                    showOKCancelAlert(title: "", message: MESSAGE_DELETE_INPUT, OKAction: {
+                        self.delegate?.addTaskVCDismiss(self)
+                    })
+                    return
+                }
+                self.delegate?.addTaskVCDismiss(self)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 保存ボタンのバインド
+    private func bindSaveButton() {
+        saveButton.rx.tap
+            .subscribe(onNext: {[unowned self] _ in
+                // 入力チェック
+                if titleTextField.text!.isEmpty {
+                    showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                        self.titleTextField.becomeFirstResponder()
+                    })
+                    return
+                }
+                
+                // 課題データを作成
+                guard let task = viewModel.insertTask(title: titleTextField.text!, cause: causeTextView.text!) else {
+                    showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
+                    return
+                }
+                if Network.isOnline() {
+                    viewModel.insertFirebase(task: task)
+                }
+                
+                // 対策データを作成
+                if !measuresTextField.text!.isEmpty {
+                    guard let measures = viewModel.insertMeasures(title: measuresTextField.text!, taskID: task.taskID) else {
+                        showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
+                        return
+                    }
+                    if Network.isOnline() {
+                        viewModel.insertFirebase(measures: measures)
+                    }
+                }
+                
+                delegate?.addTaskVCAddTask(self, task: task)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// カラーボタンのバインド
+    private func bindColorButton() {
+        colorButton.rx.tap
+            .subscribe(onNext: {[unowned self] _ in
+                titleTextField.resignFirstResponder()
+                closePicker(pickerView)
+                initPickerView()
+                openPicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.buttonTitle
+            .bind(to: colorButton.rx.title(for: .normal))
+            .disposed(by: disposeBag)
+        
+        viewModel.buttonBackgroundColor
+            .bind(to: colorButton.rx.backgroundColor)
+            .disposed(by: disposeBag)
+    }
+    
+    /// Picker項目のバインド
+    private func bindPicker() {
+        Observable.just(viewModel.groupArray.value)
+            .bind(to: colorPicker.rx.itemTitles) { _, group in
+                return group.title
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    /// Pickerツールバーのバインド
+    /// - Parameters:
+    ///   - doneItem: 完了ボタン
+    ///   - cancelItem: キャンセルボタン
+    private func bindPickerToolBar(doneItem: UIBarButtonItem, cancelItem: UIBarButtonItem) {
+        doneItem.rx.tap.asDriver()
+            .drive(onNext: { [weak self] (_) in
+                guard let self = self else { return }
+                // 選択したIndexを反映
+                viewModel.colorIndex.accept(colorPicker.selectedRow(inComponent: 0))
+                closePicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+        
+        cancelItem.rx.tap.asDriver()
+            .drive(onNext: { [weak self] (_) in
+                guard let self = self else { return }
+                // Indexを元に戻して閉じる
+                colorPicker.selectRow(viewModel.colorIndex.value, inComponent: 0, animated: false)
+                closePicker(pickerView)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
     
     /// 画面の初期化
     private func initView() {
@@ -64,135 +195,32 @@ class AddTaskViewController: UIViewController {
         initTextView(textView: causeTextView)
         initTextField(textField: titleTextField, placeholder: MASSAGE_TASK_EXAMPLE)
         initTextField(textField: measuresTextField, placeholder: MASSAGE_MEASURES_EXAMPLE)
-        colorButton.backgroundColor = Color.allCases[realmGroupArray.first!.color].color
-        colorButton.setTitle(realmGroupArray.first!.title, for: .normal)
     }
     
-    /// Picker初期化
+    /// ColorPicker初期化
     private func initColorPicker() {
-        colorPicker.delegate = self
-        colorPicker.dataSource = self
-        colorPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height + 44)
+        colorPicker.frame = CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: colorPicker.bounds.size.height)
         colorPicker.backgroundColor = UIColor.systemGray5
     }
     
-    // MARK: - Action
-    
-    /// カラーボタンの処理
-    @IBAction func tapAddColorButton(_ sender: Any) {
-        titleTextField.resignFirstResponder()
-        closePicker(pickerView)
-        pickerView = UIView(frame: colorPicker.bounds)
+    /// PickerVIewの初期化
+    private func initPickerView() {
+        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + 88 + view.safeAreaInsets.bottom))
+        pickerView.backgroundColor = UIColor.systemGray5
         pickerView.addSubview(colorPicker)
-        pickerView.addSubview(createToolBar(#selector(doneAction), #selector(cancelAction)))
-        openPicker(pickerView)
+        pickerView.addSubview(createPickerToolBar())
     }
     
-    /// 保存ボタンの処理
-    @IBAction func tapSaveButton(_ sender: Any) {
-        // 入力チェック
-        if titleTextField.text!.isEmpty {
-            showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
-            return
-        }
-        
-        // 課題データを作成
-        let realmManager = RealmManager()
-        let task = Task()
-        task.groupID = realmGroupArray[pickerIndex].groupID
-        task.title = titleTextField.text!
-        task.cause = causeTextView.text!
-        task.order = realmManager.getTasksInGroup(ID: task.groupID, isCompleted: false).count
-        if !realmManager.createRealm(object: task) {
-            showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
-            return
-        }
-        
-        // 対策データを作成
-        let measures = Measures()
-        if !measuresTextField.text!.isEmpty {
-            measures.taskID = task.taskID
-            measures.title = measuresTextField.text!
-            if !realmManager.createRealm(object: measures) {
-                showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
-                return
-            }
-        }
-        
-        // Firebaseに送信
-        if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.saveTask(task: task, completion: {})
-            if !measuresTextField.text!.isEmpty {
-                firebaseManager.saveMeasures(measures: measures, completion: {})
-            }
-        }
-        delegate?.addTaskVCAddTask(self, task: task)
-    }
-    
-    /// キャンセルボタンの処理
-    @IBAction func tapCancelButton(_ sender: Any) {
-        if !titleTextField.text!.isEmpty ||
-           !causeTextView.text.isEmpty ||
-           !measuresTextField.text!.isEmpty
-        {
-            showOKCancelAlert(title: "", message: MESSAGE_DELETE_INPUT, OKAction: {
-                self.delegate?.addTaskVCDismiss(self)
-            })
-            return
-        }
-        self.delegate?.addTaskVCDismiss(self)
-    }
-    
-}
-
-extension AddTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1    // 列数
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return realmGroupArray.count  // グループ数
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return realmGroupArray[row].title   // グループ名
-    }
-    
-    @objc func doneAction() {
-        // 選択したIndexを取得して閉じる
-        pickerIndex = colorPicker.selectedRow(inComponent: 0)
-        closePicker(pickerView)
-        colorButton.backgroundColor = Color.allCases[realmGroupArray[pickerIndex].color].color
-        colorButton.setTitle(realmGroupArray[pickerIndex].title, for: .normal)
-    }
-    
-    @objc func cancelAction() {
-        // Indexを元に戻して閉じる
-        colorPicker.selectRow(pickerIndex, inComponent: 0, animated: false)
-        closePicker(pickerView)
-    }
-    
-}
-
-extension AddTaskViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-}
-
-extension AddTaskViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
+    /// Picker用ツールバーを作成
+    private func createPickerToolBar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: nil)
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        bindPickerToolBar(doneItem: doneItem, cancelItem: cancelItem)
+        toolbar.setItems([cancelItem, flexibleItem, doneItem], animated: true)
+        return toolbar
     }
     
 }
