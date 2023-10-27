@@ -106,6 +106,7 @@
 		8DCF350A24F6554900055093 /* Task_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350624F6554900055093 /* Task_old.swift */; };
 		8DE6E10825F461DE0012DA54 /* UIViewController+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */; };
 		8DEF8A9E2AE499620018AF57 /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */; };
+		8DEF8AA12AEC70300018AF57 /* FreeNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -214,6 +215,7 @@
 		8DCF350624F6554900055093 /* Task_old.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task_old.swift; sourceTree = "<group>"; };
 		8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+UserDefaults.swift"; sourceTree = "<group>"; };
 		8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
+		8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNoteViewModel.swift; sourceTree = "<group>"; };
 		C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -570,6 +572,7 @@
 			children = (
 				8DC294832AD24914009B8AF2 /* Group */,
 				8D1522C12ADA1CEC002D1018 /* Task */,
+				8DEF8A9F2AEC70110018AF57 /* Note */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -602,6 +605,14 @@
 				8D2BE0C9284EB7CB009AC672 /* PageViewCoordinator.swift */,
 			);
 			path = Setting;
+			sourceTree = "<group>";
+		};
+		8DEF8A9F2AEC70110018AF57 /* Note */ = {
+			isa = PBXGroup;
+			children = (
+				8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */,
+			);
+			path = Note;
 			sourceTree = "<group>";
 		};
 		C286C2B0EED91BEBB760A936 /* Frameworks */ = {
@@ -805,6 +816,7 @@
 				8D481D4D27F7D9040082D956 /* Definition.swift in Sources */,
 				8D5CFC0127FBAD1B008DF02E /* AddGroupCoordinator.swift in Sources */,
 				8D91CE7A2808D9CC000D3B1F /* AddTaskCoordinator.swift in Sources */,
+				8DEF8AA12AEC70300018AF57 /* FreeNoteViewModel.swift in Sources */,
 				8D91CE74280777E8000D3B1F /* TaskDetailCoordinator.swift in Sources */,
 				8DB579D6284428F400245025 /* LoginCoordinator.swift in Sources */,
 				8D790DB62883CF1D0062838C /* Definition+Group.swift in Sources */,

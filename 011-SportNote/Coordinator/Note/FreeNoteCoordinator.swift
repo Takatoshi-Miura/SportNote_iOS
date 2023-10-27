@@ -20,8 +20,7 @@ class FreeNoteCoordinator: Coordinator {
     
     func startFrow(in navigationController: UINavigationController, withFreeNote freeNote: Note) {
         self.navigationController = navigationController
-        let freeNoteViewController = FreeNoteViewController()
-        freeNoteViewController.freeNote = freeNote
+        let freeNoteViewController = FreeNoteViewController(freeNote: freeNote)
         navigationController.pushViewController(freeNoteViewController, animated: true)
     }
     

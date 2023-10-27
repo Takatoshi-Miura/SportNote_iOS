@@ -7,20 +7,37 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class FreeNoteViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var detailTextView: UITextView!
-    var freeNote = Note()
+    private let viewModel: FreeNoteViewModel
+    private let disposeBag = DisposeBag()
+    
+    // MARK: - Initializer
+    
+    init(freeNote: Note) {
+        self.viewModel = FreeNoteViewModel(freeNote: freeNote)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        initBind()
         // TODO: キーボードで入力欄が隠れない設定
     }
     
@@ -28,59 +45,53 @@ class FreeNoteViewController: UIViewController {
         super.viewDidDisappear(animated)
         // Firebaseに送信
         if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.updateNote(note: freeNote)
+            viewModel.updateFirebaseNote()
         }
     }
+    
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindTitleTextField()
+        bindDetailTextView()
+    }
+    
+    /// タイトル入力欄のバインド
+    private func bindTitleTextField() {
+        titleTextField.rx.controlEvent(.editingDidEnd).asDriver()
+            .drive(onNext: {[unowned self] _ in
+                titleTextField.resignFirstResponder()
+                if titleTextField.text!.isEmpty {
+                    showOKAlert(title: TITLE_ERROR, message: ERROR_MESSAGE_EMPTY_TITLE, OKAction: {
+                        self.titleTextField.text = self.viewModel.title.value
+                        self.titleTextField.becomeFirstResponder()
+                    })
+                    return
+                }
+                viewModel.title.accept(titleTextField.text!)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// 詳細入力欄のバインド
+    private func bindDetailTextView() {
+        detailTextView.rx.didEndEditing.asDriver()
+            .drive(onNext: { [unowned self] _ in
+                detailTextView.resignFirstResponder()
+                viewModel.detail.accept(detailTextView.text)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
     
     /// 画面初期化
     private func initView() {
         titleLabel.text = TITLE_TITLE
         detailLabel.text = TITLE_DETAIL_LABEL
-        initTextField(textField: titleTextField, placeholder: "", text: freeNote.title)
-        initTextView(textView: detailTextView, text: freeNote.detail)
-    }
-    
-}
-
-extension FreeNoteViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        // 差分がなければ何もしない
-        if textField.text! == freeNote.title {
-            return true
-        }
-        
-        // 入力チェック
-        if textField.text!.isEmpty {
-            showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
-            textField.text = freeNote.title
-            return false
-        }
-        
-        let realmManager = RealmManager()
-        realmManager.updateNoteTitle(noteID: freeNote.noteID, title: textField.text!)
-        return true
-    }
-    
-}
-
-extension FreeNoteViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-        // 差分がなければ何もしない
-        if textView.text! == freeNote.detail {
-            return
-        }
-        
-        let realmManager = RealmManager()
-        realmManager.updateNoteDetail(noteID: freeNote.noteID, detail: textView.text!)
+        initTextField(textField: titleTextField, placeholder: "", text: viewModel.freeNote.value.title)
+        initTextView(textView: detailTextView, text: viewModel.freeNote.value.detail)
     }
     
 }
