@@ -107,6 +107,7 @@
 		8DE6E10825F461DE0012DA54 /* UIViewController+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */; };
 		8DEF8A9E2AE499620018AF57 /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */; };
 		8DEF8AA12AEC70300018AF57 /* FreeNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */; };
+		8DEF8AA32AED28080018AF57 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -216,6 +217,7 @@
 		8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+UserDefaults.swift"; sourceTree = "<group>"; };
 		8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNoteViewModel.swift; sourceTree = "<group>"; };
+		8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
 		C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -611,6 +613,7 @@
 			isa = PBXGroup;
 			children = (
 				8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */,
+				8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -789,6 +792,7 @@
 				8D3FFE5A27F665650021C9FC /* TabCoordinator.swift in Sources */,
 				8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */,
 				8D2BE0CD2852A09C009AC672 /* TutorialViewController.swift in Sources */,
+				8DEF8AA32AED28080018AF57 /* NoteViewModel.swift in Sources */,
 				8D69FC9824B7085900DFECB3 /* TaskCellForAddNote.swift in Sources */,
 				8D481D5527F808090082D956 /* FirebaseManager.swift in Sources */,
 				8DCF350A24F6554900055093 /* Task_old.swift in Sources */,

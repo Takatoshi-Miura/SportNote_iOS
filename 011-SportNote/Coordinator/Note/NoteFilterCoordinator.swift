@@ -41,7 +41,7 @@ extension NoteFilterCoordinator: NoteFilterViewControllerDelegate {
     // NoteVC ← NoteFilterVC
     func noteFilterVCApplyDidTap(_ viewController: NoteFilterViewController) {
         viewController.dismiss(animated: true, completion: nil)
-        (previousViewController as! NoteViewController).searchNoteWithFilter()
+//        (previousViewController as! NoteViewController).searchNoteWithFilter()
     }
     
 }

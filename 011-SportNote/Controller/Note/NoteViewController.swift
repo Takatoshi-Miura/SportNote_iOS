@@ -9,6 +9,8 @@
 import UIKit
 import GoogleMobileAds
 import PKHUD
+import RxSwift
+import RxCocoa
 
 protocol NoteViewControllerDelegate: AnyObject {
     // 練習ノート追加ボタンタップ時
@@ -28,21 +30,35 @@ protocol NoteViewControllerDelegate: AnyObject {
 class NoteViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var adView: UIView!
     private var adMobView: GADBannerView?
-    private var noteArray: [Note] = []
-    private var isFiltered: Bool = false
+    private var viewModel: NoteViewModel
+    private let disposeBag = DisposeBag()
     var delegate: NoteViewControllerDelegate?
     
+    // MARK: - Initializer
+    
+    init() {
+        self.viewModel = NoteViewModel()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationBar()
         initSearchBar()
         initTableView()
+        initBind()
         // 初回のみ旧データ変換後に同期処理
         syncDataWithConvert()
     }
@@ -56,25 +72,90 @@ class NoteViewController: UIViewController {
         super.viewDidAppear(animated)
         if let selectedIndex = tableView.indexPathForSelectedRow {
             // ノートが削除されていれば取り除く
-            let note = noteArray[selectedIndex.row]
-            if note.isDeleted {
-                noteArray.remove(at: selectedIndex.row)
-                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+            if (viewModel.deleteNoteFromArray(indexPath: selectedIndex)) {
                 return
             }
             tableView.reloadRows(at: [selectedIndex], with: .none)
         }
     }
     
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindSearchBar()
+        bindTableView()
+        bindAddButton()
+    }
+    
+    /// searchBarのバインド
+    private func bindSearchBar() {
+        searchBar
+            .rx.text
+            .orEmpty
+            .debounce(.milliseconds(100), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] searchText in
+                self?.viewModel.selectNote(searchText: searchText)
+            })
+            .disposed(by: disposeBag)
+        
+        searchBar
+            .rx.searchButtonClicked
+            .subscribe(onNext: { [weak self] in
+                self?.searchBar.endEditing(true)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// TableViewのバインド
+    private func bindTableView() {
+        viewModel.noteArray
+            .bind(to: tableView.rx.items(cellIdentifier: "NoteCell", cellType: NoteCell.self)) { (row, note, cell) in
+                cell.printInfo(note: note)
+                cell.accessoryType = .disclosureIndicator
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.modelSelected(Note.self)
+            .subscribe(onNext: { [weak self] selectedNote in
+                guard let self = self else { return }
+                switch NoteType.allCases[selectedNote.noteType] {
+                case .free:
+                    self.delegate?.noteVCFreeNoteDidTap(freeNote: selectedNote)
+                case .practice:
+                    self.delegate?.noteVCPracticeNoteDidTap(practiceNote: selectedNote)
+                case .tournament:
+                    self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: selectedNote)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// ノート追加ボタンのバインド
+    private func bindAddButton() {
+        addButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                var alertActions: [UIAlertAction] = []
+                let addPracticeNoteAction = UIAlertAction(title: TITLE_PRACTICE_NOTE, style: .default) { _ in
+                    self.delegate?.noteVCAddPracticeNoteDidTap(self)
+                }
+                let addTournamentNoteAction = UIAlertAction(title: TITLE_TOURNAMENT_NOTE, style: .default) { _ in
+                    self.delegate?.noteVCAddTournamentNoteDidTap(self)
+                }
+                alertActions.append(addPracticeNoteAction)
+                alertActions.append(addTournamentNoteAction)
+                
+                showActionSheet(title: TITLE_ADD_NOTE, message: MESSAGE_ADD_NOTE, actions: alertActions, frame: addButton.frame)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
+    
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_NOTE
-//        let iconImage = isFiltered ? UIImage(named: "icon_filter_fill")! : UIImage(named: "icon_filter_empty")!
-//        let filterButton = UIBarButtonItem(image: iconImage,
-//                                           style: .done,
-//                                           target: self,
-//                                           action: #selector(moveNoteFilterVC))
-//        navigationItem.rightBarButtonItems = [filterButton]
     }
     
     /// SearchBar初期化
@@ -96,39 +177,27 @@ class NoteViewController: UIViewController {
     
     /// 旧データ変換後に同期処理
     private func syncDataWithConvert() {
-        if Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            let dataConverter = DataConverter()
-            dataConverter.convertOldToRealm(completion: {
-                self.syncData()
-            })
-        } else {
-            self.syncData()
-        }
+        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+        viewModel.syncDataWithConvert(completion: {
+            self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+            HUD.hide()
+        })
     }
     
     /// データの同期処理
     @objc func syncData() {
-        if Network.isOnline() {
-            HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            let syncManager = SyncManager()
-            syncManager.syncDatabase(completion: {
-                self.refreshData()
-                HUD.hide()
-            })
-        } else {
-            refreshData()
-        }
+        HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
+        viewModel.syncData(completion: {
+            self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+            HUD.hide()
+        })
     }
     
-    /// データを取得
-    func refreshData() {
-        let realmManager = RealmManager()
-        noteArray = realmManager.getPracticeTournamentNote()
-        noteArray.insert(realmManager.getFreeNote(), at: 0)
-        tableView.refreshControl?.endRefreshing()
-        tableView.reloadData()
-        searchBar.searchTextField.text = ""
+    /// データの同期処理
+    @objc func refreshData() {
+        viewModel.refreshData()
     }
     
     /// バナー広告を表示
@@ -145,111 +214,6 @@ class NoteViewController: UIViewController {
         adMobView!.frame.origin = CGPoint(x: 0, y: 0)
         adMobView!.frame.size = CGSize(width: self.view.frame.width, height: adMobView!.frame.height)
         adView.addSubview(adMobView!)
-    }
-    
-    // MARK: - Action
-    
-    /// ノートの検索フィルタ画面へ遷移
-    @objc func moveNoteFilterVC() {
-        delegate?.noteVCFilterDidTap(self)
-    }
-    
-    /// 検索フィルタによる検索
-    func searchNoteWithFilter() {
-        // TODO: 空のノートがヒットするから要対策
-        // フィルタ状態取得
-        if let filterTaskIDArray = UserDefaults.standard.array(forKey: UserDefaultsKey.filterTaskID.rawValue) as? [String] {
-            isFiltered = true
-            initNavigationBar()
-            let realmManager = RealmManager()
-            noteArray = realmManager.getPracticeTournamentNote(taskIDs: filterTaskIDArray)
-            noteArray.insert(realmManager.getFreeNote(), at: 0)
-            tableView.reloadData()
-            return
-        }
-        // フィルタなしの場合は全検索
-        isFiltered = false
-        initNavigationBar()
-        refreshData()
-    }
-    
-    /// 追加ボタンの処理
-    @IBAction func tapAddButton(_ sender: Any) {
-        var alertActions: [UIAlertAction] = []
-        let addPracticeNoteAction = UIAlertAction(title: TITLE_PRACTICE_NOTE, style: .default) { _ in
-            self.delegate?.noteVCAddPracticeNoteDidTap(self)
-        }
-        let addTournamentNoteAction = UIAlertAction(title: TITLE_TOURNAMENT_NOTE, style: .default) { _ in
-            self.delegate?.noteVCAddTournamentNoteDidTap(self)
-        }
-        alertActions.append(addPracticeNoteAction)
-        alertActions.append(addTournamentNoteAction)
-        
-        showActionSheet(title: TITLE_ADD_NOTE,
-                        message: MESSAGE_ADD_NOTE,
-                        actions: alertActions,
-                        frame: addButton.frame)
-    }
-    
-}
-
-extension NoteViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // 未入力の場合は全検索
-        if searchBar.text == "" {
-            refreshData()
-            return
-        }
-        // 文字列検索
-        let realmManager = RealmManager()
-        noteArray = realmManager.getPracticeTournamentNote(searchWord: searchText)
-        noteArray.insert(realmManager.getFreeNote(), at: 0)
-        tableView.reloadData()
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-    }
-    
-}
-
-extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1    // セクションの個数
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return noteArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath) as! NoteCell
-        cell.printInfo(note: noteArray[indexPath.row])
-        cell.accessoryType = .disclosureIndicator
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing {
-        } else {
-            switch NoteType.allCases[noteArray[indexPath.row].noteType] {
-            case .free:
-                self.delegate?.noteVCFreeNoteDidTap(freeNote: noteArray[indexPath.row])
-                break
-            case .practice:
-                self.delegate?.noteVCPracticeNoteDidTap(practiceNote: noteArray[indexPath.row])
-                break
-            case .tournament:
-                self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: noteArray[indexPath.row])
-                break
-            }
-        }
     }
     
 }
