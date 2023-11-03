@@ -108,6 +108,7 @@
 		8DEF8A9E2AE499620018AF57 /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */; };
 		8DEF8AA12AEC70300018AF57 /* FreeNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */; };
 		8DEF8AA32AED28080018AF57 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */; };
+		8DEF8AA62AF47DEE0018AF57 /* AddTargetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA52AF47DEE0018AF57 /* AddTargetViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -218,6 +219,7 @@
 		8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNoteViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
+		8DEF8AA52AF47DEE0018AF57 /* AddTargetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTargetViewModel.swift; sourceTree = "<group>"; };
 		C1C0FDE81752318EFC24834D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D814DA5F5740A5262D7A498F /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -575,6 +577,7 @@
 				8DC294832AD24914009B8AF2 /* Group */,
 				8D1522C12ADA1CEC002D1018 /* Task */,
 				8DEF8A9F2AEC70110018AF57 /* Note */,
+				8DEF8AA42AF47DCE0018AF57 /* Calendar */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -616,6 +619,14 @@
 				8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */,
 			);
 			path = Note;
+			sourceTree = "<group>";
+		};
+		8DEF8AA42AF47DCE0018AF57 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				8DEF8AA52AF47DEE0018AF57 /* AddTargetViewModel.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 		C286C2B0EED91BEBB760A936 /* Frameworks */ = {
@@ -827,6 +838,7 @@
 				8D481D6927F875780082D956 /* Target.swift in Sources */,
 				8DBE025F285938D90047C751 /* NoteFilterViewController.swift in Sources */,
 				8DC8DEA42839A36400BD7F70 /* SettingCoordinator.swift in Sources */,
+				8DEF8AA62AF47DEE0018AF57 /* AddTargetViewModel.swift in Sources */,
 				8D790DB82883CF8E0062838C /* Definition+Date.swift in Sources */,
 				8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */,
 				8DC294852AD35F6B009B8AF2 /* GroupViewModel.swift in Sources */,

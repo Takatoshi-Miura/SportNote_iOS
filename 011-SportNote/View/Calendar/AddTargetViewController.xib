@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,8 +11,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddTargetViewController" customModule="_11_SportNote" customModuleProvider="target">
             <connections>
+                <outlet property="cancelButton" destination="Wru-j5-oqB" id="weJ-mF-1Ia"/>
                 <outlet property="naviItem" destination="7p4-Eq-V8p" id="yAV-p4-vnx"/>
                 <outlet property="pickerView" destination="v4r-Bq-9uv" id="lhC-GM-mzD"/>
+                <outlet property="saveButton" destination="mj3-Wm-MeW" id="k1l-da-2hK"/>
                 <outlet property="targetLabel" destination="bu0-6b-C8o" id="I0h-mh-gKM"/>
                 <outlet property="titleLabel" destination="1oH-SI-Kya" id="ydX-j8-GV7"/>
                 <outlet property="titleTextField" destination="AHZ-UJ-n9N" id="SPl-6M-spQ"/>
@@ -26,25 +28,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FNZ-7N-C3e">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                     <items>
                         <navigationItem title="Title" id="7p4-Eq-V8p">
-                            <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Wru-j5-oqB">
-                                <connections>
-                                    <action selector="tapCancelButton:" destination="-1" id="Fbt-2H-6tf"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem key="rightBarButtonItem" systemItem="save" id="mj3-Wm-MeW">
-                                <connections>
-                                    <action selector="tapSaveButton:" destination="-1" id="XZb-UF-cKs"/>
-                                </connections>
-                            </barButtonItem>
+                            <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Wru-j5-oqB"/>
+                            <barButtonItem key="rightBarButtonItem" systemItem="save" id="mj3-Wm-MeW"/>
                         </navigationItem>
                     </items>
                     <navigationBarAppearance key="compactAppearance"/>
                 </navigationBar>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1oH-SI-Kya">
-                    <rect key="frame" x="16" y="44" width="288" height="30"/>
+                    <rect key="frame" x="16" y="64" width="288" height="30"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="jWG-56-V80"/>
                     </constraints>
@@ -53,15 +47,12 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AHZ-UJ-n9N">
-                    <rect key="frame" x="16" y="74" width="288" height="34"/>
+                    <rect key="frame" x="16" y="94" width="288" height="34"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
-                    <connections>
-                        <outlet property="delegate" destination="-1" id="J6Y-ez-b6g"/>
-                    </connections>
                 </textField>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="90" translatesAutoresizingMaskIntoConstraints="NO" id="PM1-wo-dE9">
-                    <rect key="frame" x="16" y="123" width="288" height="31"/>
+                    <rect key="frame" x="16" y="143" width="288" height="31"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bu0-6b-C8o">
                             <rect key="frame" x="0.0" y="0.0" width="149" height="31"/>
@@ -74,14 +65,11 @@
                         </label>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="LWn-Nl-VjB">
                             <rect key="frame" x="239" y="0.0" width="51" height="31"/>
-                            <connections>
-                                <action selector="tapYearlyTargetSwitch:" destination="-1" eventType="valueChanged" id="YOk-w5-2sr"/>
-                            </connections>
                         </switch>
                     </subviews>
                 </stackView>
                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4r-Bq-9uv">
-                    <rect key="frame" x="0.0" y="161" width="320" height="216"/>
+                    <rect key="frame" x="0.0" y="181" width="320" height="216"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="3I6-4q-fLI"/>
                         <outlet property="delegate" destination="-1" id="2d8-aF-YgS"/>
@@ -115,7 +103,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
