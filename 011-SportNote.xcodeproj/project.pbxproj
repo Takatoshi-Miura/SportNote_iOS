@@ -104,6 +104,7 @@
 		8DCF350824F6554900055093 /* Target_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350424F6554900055093 /* Target_old.swift */; };
 		8DCF350924F6554900055093 /* FreeNote_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350524F6554900055093 /* FreeNote_old.swift */; };
 		8DCF350A24F6554900055093 /* Task_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF350624F6554900055093 /* Task_old.swift */; };
+		8DD228082AFAF0CE00C846BA /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD228072AFAF0CE00C846BA /* SettingViewModel.swift */; };
 		8DE6E10825F461DE0012DA54 /* UIViewController+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */; };
 		8DEF8A9E2AE499620018AF57 /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */; };
 		8DEF8AA12AEC70300018AF57 /* FreeNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */; };
@@ -215,6 +216,7 @@
 		8DCF350424F6554900055093 /* Target_old.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Target_old.swift; sourceTree = "<group>"; };
 		8DCF350524F6554900055093 /* FreeNote_old.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeNote_old.swift; sourceTree = "<group>"; };
 		8DCF350624F6554900055093 /* Task_old.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task_old.swift; sourceTree = "<group>"; };
+		8DD228072AFAF0CE00C846BA /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		8DE6E10725F461DE0012DA54 /* UIViewController+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+UserDefaults.swift"; sourceTree = "<group>"; };
 		8DEF8A9D2AE499620018AF57 /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNoteViewModel.swift; sourceTree = "<group>"; };
@@ -578,6 +580,7 @@
 				8D1522C12ADA1CEC002D1018 /* Task */,
 				8DEF8A9F2AEC70110018AF57 /* Note */,
 				8DEF8AA42AF47DCE0018AF57 /* Calendar */,
+				8DD228062AFAF09D00C846BA /* Setting */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -608,6 +611,14 @@
 				8DC8DEA32839A36400BD7F70 /* SettingCoordinator.swift */,
 				8DB579D5284428F400245025 /* LoginCoordinator.swift */,
 				8D2BE0C9284EB7CB009AC672 /* PageViewCoordinator.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		8DD228062AFAF09D00C846BA /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				8DD228072AFAF0CE00C846BA /* SettingViewModel.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -816,6 +827,7 @@
 				8D481D5727F80EB50082D956 /* DataConverter.swift in Sources */,
 				8D5A479025EB1D6E009FB63B /* UIViewController+PickerView.swift in Sources */,
 				8D91CE86280BBBA9000D3B1F /* AddTargetCoordinator.swift in Sources */,
+				8DD228082AFAF0CE00C846BA /* SettingViewModel.swift in Sources */,
 				8D790DB42883CD620062838C /* Definition+Note.swift in Sources */,
 				8D481D6627F8678E0082D956 /* Memo.swift in Sources */,
 				8D5CFC0728024C94008DF02E /* GroupHeaderView.swift in Sources */,

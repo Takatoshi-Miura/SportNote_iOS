@@ -8,6 +8,8 @@
 
 import UIKit
 import MessageUI
+import RxSwift
+import RxCocoa
 
 protocol SettingViewControllerDelegate: AnyObject {
     // キャンセルタップ時の処理
@@ -21,49 +23,78 @@ protocol SettingViewControllerDelegate: AnyObject {
 class SettingViewController: UIViewController {
     
     // MARK: - UI,Variable
+    
     @IBOutlet weak var naviItem: UINavigationItem!
-    @IBOutlet weak var cancel: UIBarButtonItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
-    private var cells: [[Cell]] = [[Cell.dataTransfer], [Cell.help, Cell.inquiry]]
+    private var viewModel: SettingViewModel
+    
+    private let disposeBag = DisposeBag()
     var delegate: SettingViewControllerDelegate?
     
-    private enum Section: Int, CaseIterable {
-        case data
-        case help
-        var title: String {
-            switch self {
-            case .data: return TITLE_DATA
-            case .help: return TITLE_HELP
-            }
-        }
+    // MARK: - Initializer
+    
+    init() {
+        self.viewModel = SettingViewModel()
+        super.init(nibName: nil, bundle: nil)
     }
     
-    private enum Cell: Int, CaseIterable {
-        case dataTransfer
-        case help
-        case inquiry
-        var title: String {
-            switch self {
-            case .dataTransfer: return TITLE_DATA_TRANSFER
-            case .help: return TITLE_HOW_TO_USE_THIS_APP
-            case .inquiry: return TITLE_INQUIRY
-            }
-        }
-        var image: UIImage {
-            switch self {
-            case .dataTransfer: return UIImage(systemName: "icloud.and.arrow.up")!
-            case .help: return UIImage(systemName: "questionmark.circle")!
-            case .inquiry: return UIImage(systemName: "envelope")!
-            }
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
         initTableView()
+        initBind()
     }
+    
+    // MARK: - Bind
+    
+    /// バインド設定
+    private func initBind() {
+        bindCancelButton()
+        bindTableView()
+    }
+    
+    /// キャンセルボタンのバインド
+    private func bindCancelButton() {
+        cancelButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                delegate?.settingVCCancelDidTap(self)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    /// TableViewのバインド
+    private func bindTableView() {
+        viewModel.cells
+            .bind(to: tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { (row, note, cell) in
+                cell.imageView?.image = cells[indexPath.section][indexPath.row].image
+                cell.textLabel?.text = cells[indexPath.section][indexPath.row].title
+                cell.accessoryType = .disclosureIndicator
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.modelSelected(Note.self)
+            .subscribe(onNext: { [weak self] selectedNote in
+                guard let self = self else { return }
+                switch NoteType.allCases[selectedNote.noteType] {
+                case .free:
+                    self.delegate?.noteVCFreeNoteDidTap(freeNote: selectedNote)
+                case .practice:
+                    self.delegate?.noteVCPracticeNoteDidTap(practiceNote: selectedNote)
+                case .tournament:
+                    self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: selectedNote)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Other Methods
     
     /// 画面初期化
     private func initView() {
@@ -78,11 +109,6 @@ class SettingViewController: UIViewController {
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
-    }
-    
-    // MARK: - Action
-    @IBAction func tapCancelButton(_ sender: Any) {
-        delegate?.settingVCCancelDidTap(self)
     }
     
 }
