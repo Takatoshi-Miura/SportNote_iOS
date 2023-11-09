@@ -28,7 +28,6 @@ class SettingViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     private var viewModel: SettingViewModel
-    
     private let disposeBag = DisposeBag()
     var delegate: SettingViewControllerDelegate?
     
@@ -57,7 +56,6 @@ class SettingViewController: UIViewController {
     /// バインド設定
     private func initBind() {
         bindCancelButton()
-        bindTableView()
     }
     
     /// キャンセルボタンのバインド
@@ -65,31 +63,6 @@ class SettingViewController: UIViewController {
         cancelButton.rx.tap
             .subscribe(onNext: { [unowned self] in
                 delegate?.settingVCCancelDidTap(self)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    /// TableViewのバインド
-    private func bindTableView() {
-        viewModel.cells
-            .bind(to: tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { (row, note, cell) in
-                cell.imageView?.image = cells[indexPath.section][indexPath.row].image
-                cell.textLabel?.text = cells[indexPath.section][indexPath.row].title
-                cell.accessoryType = .disclosureIndicator
-            }
-            .disposed(by: disposeBag)
-        
-        tableView.rx.modelSelected(Note.self)
-            .subscribe(onNext: { [weak self] selectedNote in
-                guard let self = self else { return }
-                switch NoteType.allCases[selectedNote.noteType] {
-                case .free:
-                    self.delegate?.noteVCFreeNoteDidTap(freeNote: selectedNote)
-                case .practice:
-                    self.delegate?.noteVCPracticeNoteDidTap(practiceNote: selectedNote)
-                case .tournament:
-                    self.delegate?.noteVCTournamentNoteDidTap(tournamentNote: selectedNote)
-                }
             })
             .disposed(by: disposeBag)
     }
@@ -120,28 +93,28 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.allCases.count
+        return SettingViewModel.Section.allCases.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return Section.allCases[section].title
+        return SettingViewModel.Section.allCases[section].title
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cells[section].count
+        return viewModel.cells[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        cell.imageView?.image = cells[indexPath.section][indexPath.row].image
-        cell.textLabel?.text = cells[indexPath.section][indexPath.row].title
+        cell.imageView?.image = viewModel.cells[indexPath.section][indexPath.row].image
+        cell.textLabel?.text = viewModel.cells[indexPath.section][indexPath.row].title
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        switch cells[indexPath.section][indexPath.row] {
+        switch viewModel.cells[indexPath.section][indexPath.row] {
         case .dataTransfer:
             delegate?.settingVCDataTransferDidTap(self)
             break
