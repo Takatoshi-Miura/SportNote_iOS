@@ -88,6 +88,22 @@ class NoteViewController: UIViewController {
         bindAddButton()
     }
     
+    /// ページビュー切替ボタンのバインド
+    /// - Parameter button: ボタン
+    private func bindPageModeButton(button: UIBarButtonItem) {
+        button.rx.tap
+            .subscribe(onNext: { [unowned self] in
+//                self.delegate?.taskVCSettingDidTap(self)
+            })
+            .disposed(by: disposeBag)
+        
+        // フリーノート以外存在しない場合は非活性
+        viewModel.noteArray
+            .map { $0.count > 1 }
+            .bind(to: button.rx.isEnabled)
+            .disposed(by: disposeBag)
+    }
+    
     /// searchBarのバインド
     private func bindSearchBar() {
         searchBar
@@ -156,6 +172,9 @@ class NoteViewController: UIViewController {
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_NOTE
+        let pageModeButton = UIBarButtonItem(image: UIImage(systemName: "book.pages"), style: .plain, target: self, action: nil)
+        bindPageModeButton(button: pageModeButton)
+        navigationItem.rightBarButtonItems = [pageModeButton]
     }
     
     /// SearchBar初期化
