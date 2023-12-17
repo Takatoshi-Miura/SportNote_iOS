@@ -65,5 +65,11 @@ extension NoteCoordinator: NoteViewControllerDelegate {
         noteFilterCoordinator.startFlow(in: viewController)
     }
     
+    // NoteVC → NotePageVC
+    func noteVCNotePageDidTap(_ viewController: UIViewController) {
+        let notePageCoordinator = NotePageCoordinator()
+        notePageCoordinator.startFlow(in: navigationController!)
+    }
+    
 }
 

@@ -25,6 +25,8 @@ protocol NoteViewControllerDelegate: AnyObject {
     func noteVCTournamentNoteDidTap(tournamentNote: Note)
     // フィルタータップ時
     func noteVCFilterDidTap(_ viewController: UIViewController)
+    // ノートページモードタップ時
+    func noteVCNotePageDidTap(_ viewController: UIViewController)
 }
 
 class NoteViewController: UIViewController {
@@ -93,7 +95,7 @@ class NoteViewController: UIViewController {
     private func bindPageModeButton(button: UIBarButtonItem) {
         button.rx.tap
             .subscribe(onNext: { [unowned self] in
-//                self.delegate?.taskVCSettingDidTap(self)
+                self.delegate?.noteVCNotePageDidTap(self)
             })
             .disposed(by: disposeBag)
         
