@@ -11,7 +11,8 @@ import RxSwift
 import RxCocoa
 
 protocol NotePageViewControllerDelegate: AnyObject {
-    
+    // リスト切替ボタンタップ時
+    func notePageVCListDidTap(_ viewController: UIViewController)
 }
 
 class NotePageViewController: UIViewController {
@@ -26,6 +27,7 @@ class NotePageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationBar()
+        initBind()
     }
     
     // MARK: - Bind
@@ -39,7 +41,7 @@ class NotePageViewController: UIViewController {
     private func bindListModeButton(button: UIBarButtonItem) {
         button.rx.tap
             .subscribe(onNext: { [unowned self] in
-//                self.delegate?.noteVCNotePageDidTap(self)
+                self.delegate?.notePageVCListDidTap(self)
             })
             .disposed(by: disposeBag)
     }
@@ -49,7 +51,8 @@ class NotePageViewController: UIViewController {
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_NOTE
-        let pageModeButton = UIBarButtonItem(image: UIImage(systemName: "book.pages"), style: .plain, target: self, action: nil)
+        self.navigationItem.hidesBackButton = true
+        let pageModeButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: nil)
         bindListModeButton(button: pageModeButton)
         navigationItem.rightBarButtonItems = [pageModeButton]
     }

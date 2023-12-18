@@ -29,4 +29,9 @@ class NotePageCoordinator: Coordinator {
 
 extension NotePageCoordinator: NotePageViewControllerDelegate {
     
+    // NotePageVC → NoteVC
+    func notePageVCListDidTap(_ viewController: UIViewController) {
+        navigationController?.popViewController(animated: false)
+    }
+    
 }
