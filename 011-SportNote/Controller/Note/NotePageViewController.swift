@@ -15,33 +15,33 @@ protocol NotePageViewControllerDelegate: AnyObject {
     func notePageVCListDidTap(_ viewController: UIViewController)
 }
 
-class NotePageViewController: UIViewController {
+class NotePageViewController: UIPageViewController {
     
     // MARK: - UI,Variable
     
+    private var controllers: [UIViewController] = []
+    private var pageControl: UIPageControl!
     private let disposeBag = DisposeBag()
-    var delegate: NotePageViewControllerDelegate?
+    var notePageVCdelegate: NotePageViewControllerDelegate?
     
     // MARK: - LifeCycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavigationBar()
-        initBind()
+        initNoteDetailView()
+        initPageVC()
+        initPageControl()
     }
     
     // MARK: - Bind
-    
-    /// バインド設定
-    private func initBind() {
-    }
     
     /// リストビュー切替ボタンのバインド
     /// - Parameter button: ボタン
     private func bindListModeButton(button: UIBarButtonItem) {
         button.rx.tap
             .subscribe(onNext: { [unowned self] in
-                self.delegate?.notePageVCListDidTap(self)
+                self.notePageVCdelegate?.notePageVCListDidTap(self)
             })
             .disposed(by: disposeBag)
     }
@@ -52,9 +52,79 @@ class NotePageViewController: UIViewController {
     private func initNavigationBar() {
         self.title = TITLE_NOTE
         self.navigationItem.hidesBackButton = true
-        let pageModeButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: nil)
-        bindListModeButton(button: pageModeButton)
-        navigationItem.rightBarButtonItems = [pageModeButton]
+        let listModeButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: nil)
+        bindListModeButton(button: listModeButton)
+        navigationItem.rightBarButtonItems = [listModeButton]
     }
     
+    /// ノート詳細画面作成
+    private func initNoteDetailView() {
+        let imageArray:[UIImage?] = [UIImage(named: "①SportsNoteとは"),
+                                     UIImage(named: "②課題一覧"),
+                                     UIImage(named: "③課題の管理"),
+                                     UIImage(named: "④ノートを作成"),
+                                     UIImage(named: "⑤振り返り"),
+                                     UIImage(named: "⑥課題を完了にする")]
+        
+        for index in 0...5 {
+            let tutorialVC = TutorialViewController()
+            tutorialVC.initView(title: "タイトル", detail: "詳細", image: imageArray[index]!)
+            self.controllers.append(tutorialVC)
+        }
+    }
+    
+    /// PageViewController初期化
+    private func initPageVC() {
+        let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageViewController.setViewControllers([self.controllers[0]], direction: .forward, animated: true, completion: nil)
+        pageViewController.dataSource = self
+        pageViewController.delegate = self
+        self.addChild(pageViewController)
+        self.view.addSubview(pageViewController.view!)
+    }
+    
+    /// pageControl初期化
+    private func initPageControl() {
+        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 60, width: UIScreen.main.bounds.width,height: 60))
+        pageControl.numberOfPages = self.controllers.count
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = .gray
+        pageControl.currentPageIndicatorTintColor = .white
+        pageControl.isUserInteractionEnabled = false
+        self.view.addSubview(self.pageControl)
+    }
+    
+}
+
+extension NotePageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    
+    /// ページ数
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return controllers.count
+    }
+   
+    /// 左にスワイプ（進む）
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        if let index = controllers.firstIndex(of: viewController), index < controllers.count - 1 {
+            return controllers[index + 1]
+        } else {
+            return nil
+        }
+    }
+
+    /// 右にスワイプ （戻る）
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        if let index = controllers.firstIndex(of: viewController), index > 0 {
+            return controllers[index - 1]
+        } else {
+            return nil
+        }
+    }
+    
+    /// アニメーション終了後処理
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        let currentPage = pageViewController.viewControllers![0]
+        pageControl.currentPage = controllers.firstIndex(of: currentPage)!
+    }
+
 }

@@ -18,7 +18,7 @@ class NotePageCoordinator: Coordinator {
     func startFlow(in navigationController: UINavigationController) {
         self.navigationController = navigationController
         let notePageViewController = NotePageViewController()
-        notePageViewController.delegate = self
+        notePageViewController.notePageVCdelegate = self
         navigationController.pushViewController(notePageViewController, animated: false)
     }
     
