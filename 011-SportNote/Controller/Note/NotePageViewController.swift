@@ -21,6 +21,7 @@ class NotePageViewController: UIPageViewController {
     
     private var controllers: [UIViewController] = []
     private var pageControl: UIPageControl!
+    private var viewModel = NotePageViewModel()
     private let disposeBag = DisposeBag()
     var notePageVCdelegate: NotePageViewControllerDelegate?
     

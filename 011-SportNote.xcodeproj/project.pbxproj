@@ -84,6 +84,7 @@
 		8D91CE9828189EF9000D3B1F /* AddPracticeNoteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91CE9728189EF9000D3B1F /* AddPracticeNoteCoordinator.swift */; };
 		8D91CE9A2819EB25000D3B1F /* UIViewController+TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91CE992819EB25000D3B1F /* UIViewController+TextView.swift */; };
 		8D91CE9C281EC364000D3B1F /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91CE9B281EC364000D3B1F /* Note.swift */; };
+		8DA277AC2B387C05001017F3 /* NotePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA277AB2B387C04001017F3 /* NotePageViewModel.swift */; };
 		8DB579D32844207E00245025 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB579D12844207E00245025 /* LoginViewController.swift */; };
 		8DB579D42844207E00245025 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DB579D22844207E00245025 /* LoginViewController.xib */; };
 		8DB579D6284428F400245025 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB579D5284428F400245025 /* LoginCoordinator.swift */; };
@@ -197,6 +198,7 @@
 		8D91CE9728189EF9000D3B1F /* AddPracticeNoteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPracticeNoteCoordinator.swift; sourceTree = "<group>"; };
 		8D91CE992819EB25000D3B1F /* UIViewController+TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+TextView.swift"; sourceTree = "<group>"; };
 		8D91CE9B281EC364000D3B1F /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		8DA277AB2B387C04001017F3 /* NotePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePageViewModel.swift; sourceTree = "<group>"; };
 		8DB579D12844207E00245025 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8DB579D22844207E00245025 /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		8DB579D5284428F400245025 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
@@ -637,6 +639,7 @@
 			children = (
 				8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */,
 				8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */,
+				8DA277AB2B387C04001017F3 /* NotePageViewModel.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -798,6 +801,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DA277AC2B387C05001017F3 /* NotePageViewModel.swift in Sources */,
 				8D481D7427F990410082D956 /* CalendarViewController.swift in Sources */,
 				8DEF8A9E2AE499620018AF57 /* AddTaskViewModel.swift in Sources */,
 				8DB579D32844207E00245025 /* LoginViewController.swift in Sources */,
