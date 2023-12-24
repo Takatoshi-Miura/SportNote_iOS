@@ -80,12 +80,17 @@ class NotePageViewController: UIPageViewController {
         pageViewController.dataSource = self
         pageViewController.delegate = self
         self.addChild(pageViewController)
+        
+        // NavigationBarの下に隠れないようにMarginを確保
+        let topMargin = navigationController?.navigationBar.frame.maxY ?? 0
+        pageViewController.view.frame = CGRect(x: 0, y: topMargin, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - topMargin)
         self.view.addSubview(pageViewController.view!)
     }
     
     /// pageControl初期化
     private func initPageControl() {
-        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 60, width: UIScreen.main.bounds.width,height: 60))
+        let bottomMargin = tabBarController?.tabBar.frame.height ?? 0
+        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - bottomMargin - 30, width: UIScreen.main.bounds.width,height: 30))
         pageControl.numberOfPages = self.controllers.count
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .gray
