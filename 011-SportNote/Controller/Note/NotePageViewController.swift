@@ -60,17 +60,9 @@ class NotePageViewController: UIPageViewController {
     
     /// ノート詳細画面作成
     private func initNoteDetailView() {
-        let imageArray:[UIImage?] = [UIImage(named: "①SportsNoteとは"),
-                                     UIImage(named: "②課題一覧"),
-                                     UIImage(named: "③課題の管理"),
-                                     UIImage(named: "④ノートを作成"),
-                                     UIImage(named: "⑤振り返り"),
-                                     UIImage(named: "⑥課題を完了にする")]
-        
-        for index in 0...5 {
-            let tutorialVC = TutorialViewController()
-            tutorialVC.initView(title: "タイトル", detail: "詳細", image: imageArray[index]!)
-            self.controllers.append(tutorialVC)
+        for note in viewModel.noteArray.value {
+            let noteDetailVC = NoteDetailViewController()
+            self.controllers.append(noteDetailVC)
         }
     }
     
