@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -37,7 +37,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CaE-ln-uxM">
-                    <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PhG-6k-TNq">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="1400"/>
@@ -230,7 +230,7 @@
                     <viewLayoutGuide key="frameLayoutGuide" id="Mfc-Ke-2qp"/>
                 </scrollView>
                 <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4lE-Q2-jcp">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                     <items>
                         <navigationItem title="Title" id="3do-Sr-XeQ">
                             <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="FtV-zA-lw3">
