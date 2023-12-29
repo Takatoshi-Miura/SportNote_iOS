@@ -174,7 +174,7 @@ class NoteViewController: UIViewController {
     /// NavigationBar初期化
     private func initNavigationBar() {
         self.title = TITLE_NOTE
-        let pageModeButton = UIBarButtonItem(image: UIImage(systemName: "book.pages"), style: .plain, target: self, action: nil)
+        let pageModeButton = UIBarButtonItem(image: UIImage(systemName: "doc.plaintext"), style: .plain, target: self, action: nil)
         bindPageModeButton(button: pageModeButton)
         navigationItem.rightBarButtonItems = [pageModeButton]
     }
