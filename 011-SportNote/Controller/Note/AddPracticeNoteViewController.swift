@@ -526,7 +526,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         weatherPicker.tag = PickerType.weather.rawValue
         
         if isViewer {
-            weatherPicker.selectRow(note.weather ,inComponent: 0, animated: true)
+            weatherPicker.selectRow(note.weather , inComponent: 0, animated: true)
             weatherPicker.selectRow(note.temperature + 40, inComponent: 1, animated: true)
         } else {
             weatherPicker.selectRow(60, inComponent: 1, animated: true)

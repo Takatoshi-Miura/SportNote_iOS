@@ -15,7 +15,8 @@ class NoteDetailViewController: UIViewController {
     // MARK: - UI,Variable
     
     @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var weatherLabel: UILabel!
+    @IBOutlet weak var weatherImage: UIImageView!
+    @IBOutlet weak var temperatureLabel: UILabel!
     private var viewModel: NoteDetailViewModel
     private let disposeBag = DisposeBag()
     
@@ -39,8 +40,11 @@ class NoteDetailViewController: UIViewController {
     
     // MARK: - Other Methods
     
+    /// 画面にノート内容をセット
     private func initView() {
         dateLabel.text = formatDate(date: viewModel.note.date, format: "yyyy/M/d (E)")
+        temperatureLabel.text = String(viewModel.note.temperature) + "℃"
+        weatherImage.image = Weather.allCases[viewModel.note.weather].image
     }
 
 }

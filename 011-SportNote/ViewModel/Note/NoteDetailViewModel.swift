@@ -24,4 +24,6 @@ class NoteDetailViewModel {
         self.note = note
     }
     
+    // MARK: - Other Methods
+    
 }

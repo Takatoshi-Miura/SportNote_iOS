@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// ノート種別
 enum NoteType: Int, CaseIterable {
@@ -26,6 +27,14 @@ enum Weather: Int, CaseIterable {
         case .sunny: return TITLE_SUNNY
         case .cloudy: return TITLE_CLOUDY
         case .rainy: return TITLE_RAINY
+        }
+    }
+    
+    var image: UIImage {
+        switch self {
+        case .sunny: return UIImage(named: "sunny")!
+        case .cloudy: return UIImage(named: "cloudy")!
+        case .rainy: return UIImage(named: "rainy")!
         }
     }
 }
