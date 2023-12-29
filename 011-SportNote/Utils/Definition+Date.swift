@@ -89,10 +89,11 @@ func getCurrentTime() -> String {
 /// 時刻を変換
 /// - Parameters:
 ///    - date: 変換したいDate
+///    - format: 変換後の形式
 /// - Returns: 現在時刻（yyyy/MM/dd）
-func formatDate(date: Date) -> String {
+func formatDate(date: Date, format: String) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale(identifier: "ja_JP")
-    dateFormatter.dateFormat = "yyyy/MM/dd"
+    dateFormatter.dateFormat = format
     return dateFormatter.string(from: date)
 }

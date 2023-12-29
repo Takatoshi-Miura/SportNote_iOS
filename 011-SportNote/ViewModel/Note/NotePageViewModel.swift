@@ -29,7 +29,7 @@ class NotePageViewModel {
     
     /// ノート取得
     func refreshData() {
-        var newNoteArray = realmManager.getPracticeTournamentNote()
+        let newNoteArray = realmManager.getPracticeTournamentNote()
         noteArray.accept(newNoteArray)
     }
 }

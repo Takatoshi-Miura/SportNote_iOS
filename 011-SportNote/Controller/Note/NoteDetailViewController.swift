@@ -7,26 +7,40 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class NoteDetailViewController: UIViewController {
 
     // MARK: - UI,Variable
     
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var weatherLabel: UILabel!
+    private var viewModel: NoteDetailViewModel
+    private let disposeBag = DisposeBag()
+    
+    // MARK: - Initializer
+    
+    init(note: Note) {
+        self.viewModel = NoteDetailViewModel(note: note)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        initView()
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    // MARK: - Other Methods
+    
+    private func initView() {
+        dateLabel.text = formatDate(date: viewModel.note.date, format: "yyyy/M/d (E)")
     }
-    */
 
 }

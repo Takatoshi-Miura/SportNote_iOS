@@ -61,7 +61,7 @@ class NotePageViewController: UIPageViewController {
     /// ノート詳細画面作成
     private func initNoteDetailView() {
         for note in viewModel.noteArray.value {
-            let noteDetailVC = NoteDetailViewController()
+            let noteDetailVC = NoteDetailViewController(note: note)
             self.controllers.append(noteDetailVC)
         }
     }

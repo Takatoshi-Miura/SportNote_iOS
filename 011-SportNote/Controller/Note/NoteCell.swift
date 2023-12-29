@@ -40,7 +40,7 @@ class NoteCell: UITableViewCell {
                 colorImageView.layer.borderWidth = 0.5
             }
             titleLabel.text = note.detail
-            dateLabel.text = formatDate(date: note.date)
+            dateLabel.text = formatDate(date: note.date, format: "yyyy/M/d (E)")
             titleLabelTop.constant = CGFloat(8)
         case .tournament:
             let realmManager = RealmManager()
@@ -51,7 +51,7 @@ class NoteCell: UITableViewCell {
                 colorImageView.layer.borderWidth = 0.5
             }
             titleLabel.text = note.result
-            dateLabel.text = formatDate(date: note.date)
+            dateLabel.text = formatDate(date: note.date, format: "yyyy/M/d (E)")
             titleLabelTop.constant = CGFloat(8)
         }
     }

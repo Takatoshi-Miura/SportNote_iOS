@@ -157,12 +157,12 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     /// ノートが存在する日付のセルを色付ける
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
+        formatter.dateFormat = "yyyy/M/d (E)"
         let da = formatter.string(from: date)
         
         // ノートデータがある日付のセルを色付け
         for note in noteArray {
-            if da == formatDate(date: note.date) {
+            if da == formatDate(date: note.date, format: "yyyy/M/d (E)") {
                 if note.noteType == NoteType.practice.rawValue {
                     return UIColor.systemGreen
                 } else {
@@ -207,10 +207,10 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         // ノートがある日付（白色）
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
+        formatter.dateFormat = "yyyy/M/d (E)"
         let da = formatter.string(from: date)
         for note in noteArray {
-            if da == formatDate(date: note.date) {
+            if da == formatDate(date: note.date, format: "yyyy/M/d (E)") {
                 return UIColor.white
             }
         }

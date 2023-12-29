@@ -1157,12 +1157,12 @@ extension RealmManager {
         var noteArray = [Note]()
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
+        formatter.dateFormat = "yyyy/M/d (E)"
         let da = formatter.string(from: date)
         
         let notes = getPracticeTournamentNote()
         for note in notes {
-            if da == formatDate(date: note.date) {
+            if da == formatDate(date: note.date, format: "yyyy/M/d (E)") {
                 noteArray.append(note)
             }
         }
