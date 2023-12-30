@@ -17,6 +17,16 @@ class NoteDetailViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var weatherImage: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var conditionLabel: UILabel!
+    @IBOutlet weak var conditionText: UILabel!
+    @IBOutlet weak var purposeArea: UIStackView!
+    @IBOutlet weak var purposeHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var purposeLabel: UILabel!
+    @IBOutlet weak var purposeText: UILabel!
+    @IBOutlet weak var detailArea: UIStackView!
+    @IBOutlet weak var detailHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var detailLabel: UILabel!
+    @IBOutlet weak var detailText: UILabel!
     private var viewModel: NoteDetailViewModel
     private let disposeBag = DisposeBag()
     
@@ -45,6 +55,23 @@ class NoteDetailViewController: UIViewController {
         dateLabel.text = formatDate(date: viewModel.note.date, format: "yyyy/M/d (E)")
         temperatureLabel.text = String(viewModel.note.temperature) + "℃"
         weatherImage.image = Weather.allCases[viewModel.note.weather].image
+        conditionLabel.text = TITLE_CONDITION
+        conditionText.text = viewModel.note.condition
+        if viewModel.note.noteType == NoteType.practice.rawValue {
+            purposeLabel.text = TITLE_PRACTICE_PURPOSE
+            purposeText.text = viewModel.note.purpose
+            detailLabel.text = TITLE_DETAIL
+            detailText.text = viewModel.note.detail
+        } else {
+            purposeArea.isHidden = true
+            purposeLabel.isHidden = true
+            purposeText.isHidden = true
+            purposeHeightConstraint.constant = 0
+            detailArea.isHidden = true
+            detailLabel.isHidden = true
+            detailText.isHidden = true
+            detailHeightConstraint.constant = 0
+        }
     }
 
 }
