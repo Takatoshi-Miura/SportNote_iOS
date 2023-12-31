@@ -27,6 +27,7 @@ class NoteDetailViewController: UIViewController {
     @IBOutlet weak var detailHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var detailText: UILabel!
+    @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var reflectionLabel: UILabel!
@@ -63,6 +64,7 @@ class NoteDetailViewController: UIViewController {
         weatherImage.image = Weather.allCases[viewModel.note.weather].image
         conditionLabel.text = TITLE_CONDITION
         conditionText.text = viewModel.note.condition
+        taskLabel.text = TITLE_TACKLED_TASK
         reflectionLabel.text = TITLE_REFLECTION
         reflectionText.text = viewModel.note.reflection
         if viewModel.note.noteType == NoteType.practice.rawValue {
@@ -79,6 +81,8 @@ class NoteDetailViewController: UIViewController {
             detailLabel.isHidden = true
             detailText.isHidden = true
             detailHeightConstraint.constant = 0
+            taskLabel.isHidden = true
+            tableView.isHidden = true
         }
     }
     
