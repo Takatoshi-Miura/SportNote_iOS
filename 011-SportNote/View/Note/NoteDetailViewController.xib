@@ -22,6 +22,11 @@
                 <outlet property="purposeHeightConstraint" destination="hEJ-NY-PPm" id="b0i-JC-Vbl"/>
                 <outlet property="purposeLabel" destination="Mhp-37-pxl" id="YlU-TW-7uN"/>
                 <outlet property="purposeText" destination="fo0-gT-OM1" id="8Mm-dT-65P"/>
+                <outlet property="reflectionLabel" destination="cYO-Ls-TMn" id="XGN-3e-kfO"/>
+                <outlet property="reflectionText" destination="KGv-ZB-yMb" id="oBN-th-S2U"/>
+                <outlet property="scrollViewHeightConstraint" destination="MhV-KI-H02" id="Lxc-OU-2Ug"/>
+                <outlet property="tableView" destination="rl1-De-bs9" id="wjV-sL-Xx8"/>
+                <outlet property="tableViewHeightConstraint" destination="hCH-Qh-ZJq" id="CsX-GA-t2w"/>
                 <outlet property="temperatureLabel" destination="beK-sU-liO" id="p0j-jc-E8m"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="weatherImage" destination="wVd-xh-7cX" id="BJ2-22-ttn"/>
@@ -140,8 +145,19 @@
                                         <constraint firstAttribute="height" priority="250" constant="100" id="JtU-zS-Jt7"/>
                                     </constraints>
                                 </stackView>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rl1-De-bs9">
+                                    <rect key="frame" x="0.0" y="241.5" width="375" height="250"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="250" id="hCH-Qh-ZJq"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-1" id="rT0-xZ-wjl"/>
+                                        <outlet property="delegate" destination="-1" id="pv5-iC-2O0"/>
+                                    </connections>
+                                </tableView>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tzE-dO-xvH">
-                                    <rect key="frame" x="16" y="241.5" width="343" height="50.5"/>
+                                    <rect key="frame" x="16" y="501.5" width="343" height="50.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cYO-Ls-TMn">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
@@ -167,15 +183,18 @@
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
+                                <constraint firstAttribute="trailing" secondItem="rl1-De-bs9" secondAttribute="trailing" id="6C8-Av-3hs"/>
                                 <constraint firstAttribute="trailing" secondItem="hLe-W3-Cfe" secondAttribute="trailing" constant="16" id="6qc-UI-Udr"/>
                                 <constraint firstAttribute="trailing" secondItem="zFA-HW-o0V" secondAttribute="trailing" constant="16" id="9lD-PL-bZO"/>
                                 <constraint firstAttribute="trailing" secondItem="tzE-dO-xvH" secondAttribute="trailing" constant="16" id="GR0-wx-ooy"/>
+                                <constraint firstItem="tzE-dO-xvH" firstAttribute="top" secondItem="rl1-De-bs9" secondAttribute="bottom" constant="10" id="I5u-ys-wYV"/>
                                 <constraint firstAttribute="trailing" secondItem="Oea-9X-uKf" secondAttribute="trailing" constant="16" id="JwU-9Q-Jwm"/>
-                                <constraint firstItem="tzE-dO-xvH" firstAttribute="top" secondItem="hLe-W3-Cfe" secondAttribute="bottom" constant="10" id="MFq-so-bQI"/>
                                 <constraint firstAttribute="height" constant="1400" id="MhV-KI-H02"/>
+                                <constraint firstItem="rl1-De-bs9" firstAttribute="top" secondItem="hLe-W3-Cfe" secondAttribute="bottom" constant="10" id="NwH-dZ-8Hq"/>
                                 <constraint firstItem="tzE-dO-xvH" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" constant="16" id="R20-GY-QXs"/>
                                 <constraint firstItem="Oea-9X-uKf" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" constant="16" id="W31-SI-9AQ"/>
                                 <constraint firstItem="hLe-W3-Cfe" firstAttribute="top" secondItem="zFA-HW-o0V" secondAttribute="bottom" constant="10" id="Z7B-nB-lY9"/>
+                                <constraint firstItem="rl1-De-bs9" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" id="ofL-Qf-lQm"/>
                                 <constraint firstItem="zl7-5K-cbH" firstAttribute="top" secondItem="ZtV-cw-LC1" secondAttribute="top" constant="10" id="p1Y-6Y-7x0"/>
                                 <constraint firstItem="Oea-9X-uKf" firstAttribute="top" secondItem="zl7-5K-cbH" secondAttribute="bottom" constant="10" id="rgu-gl-RSf"/>
                                 <constraint firstItem="hLe-W3-Cfe" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" constant="16" id="t4A-RL-L7i"/>

@@ -15,6 +15,8 @@ class NoteDetailViewModel {
     // MARK: - Variable
     
     var note: Note
+    var taskArray = [TaskForAddNote]()
+    var memoArray = [Memo]()
     private let realmManager = RealmManager()
     private let disposeBag = DisposeBag()
     
@@ -22,8 +24,16 @@ class NoteDetailViewModel {
     
     init(note: Note) {
         self.note = note
+        self.getLinkedTask(noteID: note.noteID)
     }
     
     // MARK: - Other Methods
+    
+    /// ノートに紐づく課題・メモデータを取得
+    /// - Parameter noteID: ノートID
+    private func getLinkedTask(noteID: String) {
+        taskArray = realmManager.getTaskArrayForAddNoteView(noteID: noteID)
+        memoArray = realmManager.getMemo(noteID: noteID)
+    }
     
 }

@@ -27,6 +27,11 @@ class NoteDetailViewController: UIViewController {
     @IBOutlet weak var detailHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var detailText: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var reflectionLabel: UILabel!
+    @IBOutlet weak var reflectionText: UILabel!
+    @IBOutlet weak var scrollViewHeightConstraint: NSLayoutConstraint!
     private var viewModel: NoteDetailViewModel
     private let disposeBag = DisposeBag()
     
@@ -46,6 +51,7 @@ class NoteDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        initTableView()
     }
     
     // MARK: - Other Methods
@@ -57,6 +63,8 @@ class NoteDetailViewController: UIViewController {
         weatherImage.image = Weather.allCases[viewModel.note.weather].image
         conditionLabel.text = TITLE_CONDITION
         conditionText.text = viewModel.note.condition
+        reflectionLabel.text = TITLE_REFLECTION
+        reflectionText.text = viewModel.note.reflection
         if viewModel.note.noteType == NoteType.practice.rawValue {
             purposeLabel.text = TITLE_PRACTICE_PURPOSE
             purposeText.text = viewModel.note.purpose
@@ -73,5 +81,62 @@ class NoteDetailViewController: UIViewController {
             detailHeightConstraint.constant = 0
         }
     }
+    
+    /// TableView初期化
+    private func initTableView() {
+        tableView.register(UINib(nibName: "TaskCellForAddNote", bundle: nil), forCellReuseIdentifier: "TaskCellForAddNote")
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+        if viewModel.taskArray.isEmpty {
+            tableView.separatorStyle = .none
+        }
+        resizeScrollView()
+    }
+    
+    /// スクロール領域を調整
+    private func resizeScrollView() {
+        var tableHeight = CGFloat(0)
+        if viewModel.taskArray.isEmpty {
+            tableHeight = CGFloat(44)
+        } else {
+            tableHeight = CGFloat(viewModel.taskArray.count * 200)
+        }
+        tableViewHeightConstraint.constant = tableHeight
+        scrollViewHeightConstraint.constant = CGFloat(1000 + tableHeight)
+    }
 
+}
+
+extension NoteDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.taskArray.isEmpty ? 1 : viewModel.taskArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return viewModel.taskArray.isEmpty ? 44 : 200
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if viewModel.taskArray.isEmpty {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            cell.textLabel?.text = MESSAGE_DONE_TASK_EMPTY
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForAddNote", for: indexPath) as! TaskCellForAddNote
+            cell.printInfo(task: viewModel.taskArray[indexPath.row])
+            cell.printMemo(memo: viewModel.memoArray[indexPath.row])
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
 }
