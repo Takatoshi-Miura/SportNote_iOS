@@ -48,24 +48,6 @@ class TaskCellForAddNote: UITableViewCell {
     }
     
     /// 課題データを表示
-    func printInfo(memo: Memo) {
-        // データ取得
-        let realmManager = RealmManager()
-        let task = realmManager.getTask(taskID: measures.taskID)
-        let group = realmManager.getGroup(groupID: task.groupID)
-        
-        self.memo = memo
-        self.measures = realmManager.getMeasures(measuresID: memo.measuresID)
-        self.task = TaskForAddNote(task: task)
-        
-        // データ表示
-        taskTitleLabel.text = task.title
-        taskMeasuresTitleLabel.text = "\(TITLE_MEASURES):\(measures.title)"
-        effectivenessTextView.text  = memo.detail
-        colorImageView.backgroundColor = Color.allCases[group.color].color
-    }
-    
-    /// 課題データを表示
     func printInfo(task: TaskForAddNote) {
         let realmManager = RealmManager()
         let group = realmManager.getGroup(groupID: task.groupID)

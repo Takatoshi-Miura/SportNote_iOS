@@ -88,6 +88,7 @@ class NotePageViewController: UIPageViewController {
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .gray
         pageControl.currentPageIndicatorTintColor = .white
+        pageControl.backgroundColor = .secondarySystemBackground
         pageControl.isUserInteractionEnabled = false
         self.view.addSubview(self.pageControl)
     }
