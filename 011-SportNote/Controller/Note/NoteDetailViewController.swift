@@ -73,14 +73,10 @@ class NoteDetailViewController: UIViewController {
             detailLabel.text = TITLE_DETAIL
             detailText.text = viewModel.note.detail
         } else {
-            purposeArea.isHidden = true
-            purposeLabel.isHidden = true
-            purposeText.isHidden = true
-            purposeHeightConstraint.constant = 0
-            detailArea.isHidden = true
-            detailLabel.isHidden = true
-            detailText.isHidden = true
-            detailHeightConstraint.constant = 0
+            purposeLabel.text = TITLE_TARGET
+            purposeText.text = viewModel.note.target
+            detailLabel.text = TITLE_CONSCIOUSNESS
+            detailText.text = viewModel.note.consciousness
             taskLabel.isHidden = true
             tableView.isHidden = true
         }
