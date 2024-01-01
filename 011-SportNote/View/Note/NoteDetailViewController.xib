@@ -22,8 +22,10 @@
                 <outlet property="purposeHeightConstraint" destination="hEJ-NY-PPm" id="b0i-JC-Vbl"/>
                 <outlet property="purposeLabel" destination="Mhp-37-pxl" id="YlU-TW-7uN"/>
                 <outlet property="purposeText" destination="fo0-gT-OM1" id="8Mm-dT-65P"/>
-                <outlet property="reflectionLabel" destination="cYO-Ls-TMn" id="XGN-3e-kfO"/>
-                <outlet property="reflectionText" destination="KGv-ZB-yMb" id="oBN-th-S2U"/>
+                <outlet property="reflectionLabel" destination="F4M-Qv-2VS" id="S4t-tw-ZxE"/>
+                <outlet property="reflectionText" destination="abD-mw-iM3" id="PnU-g7-urZ"/>
+                <outlet property="resultLabel" destination="cYO-Ls-TMn" id="vge-8d-Tsk"/>
+                <outlet property="resultText" destination="KGv-ZB-yMb" id="Kly-u3-adq"/>
                 <outlet property="scrollViewHeightConstraint" destination="MhV-KI-H02" id="Lxc-OU-2Ug"/>
                 <outlet property="tableView" destination="rl1-De-bs9" id="wjV-sL-Xx8"/>
                 <outlet property="tableViewHeightConstraint" destination="hCH-Qh-ZJq" id="CsX-GA-t2w"/>
@@ -191,6 +193,30 @@
                                         <constraint firstAttribute="height" priority="250" constant="100" id="o5n-dt-h7W"/>
                                     </constraints>
                                 </stackView>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ktp-fe-iyS">
+                                    <rect key="frame" x="16" y="687" width="343" height="55.5"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F4M-Qv-2VS">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
+                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="WPw-SQ-JyA"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abD-mw-iM3">
+                                            <rect key="frame" x="0.0" y="35" width="343" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" priority="250" constant="100" id="J2i-7A-br3"/>
+                                    </constraints>
+                                </stackView>
                             </subviews>
                             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                             <constraints>
@@ -203,9 +229,12 @@
                                 <constraint firstAttribute="height" constant="1400" id="MhV-KI-H02"/>
                                 <constraint firstItem="rl1-De-bs9" firstAttribute="top" secondItem="xBJ-Vv-jTE" secondAttribute="bottom" id="NwH-dZ-8Hq"/>
                                 <constraint firstItem="tzE-dO-xvH" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" constant="16" id="R20-GY-QXs"/>
+                                <constraint firstAttribute="trailing" secondItem="ktp-fe-iyS" secondAttribute="trailing" constant="16" id="VcQ-6w-NdX"/>
                                 <constraint firstItem="Oea-9X-uKf" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" constant="16" id="W31-SI-9AQ"/>
                                 <constraint firstItem="hLe-W3-Cfe" firstAttribute="top" secondItem="zFA-HW-o0V" secondAttribute="bottom" constant="25" id="Z7B-nB-lY9"/>
+                                <constraint firstItem="ktp-fe-iyS" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" constant="16" id="afU-Q0-Log"/>
                                 <constraint firstAttribute="trailing" secondItem="xBJ-Vv-jTE" secondAttribute="trailing" constant="16" id="b0y-7D-qu7"/>
+                                <constraint firstItem="ktp-fe-iyS" firstAttribute="top" secondItem="tzE-dO-xvH" secondAttribute="bottom" constant="25" id="jSh-92-vt4"/>
                                 <constraint firstItem="rl1-De-bs9" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" id="ofL-Qf-lQm"/>
                                 <constraint firstItem="zl7-5K-cbH" firstAttribute="top" secondItem="ZtV-cw-LC1" secondAttribute="top" constant="10" id="p1Y-6Y-7x0"/>
                                 <constraint firstItem="xBJ-Vv-jTE" firstAttribute="leading" secondItem="ZtV-cw-LC1" secondAttribute="leading" constant="16" id="q7p-v9-Hfg"/>

@@ -30,6 +30,8 @@ class NoteDetailViewController: UIViewController {
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var resultText: UILabel!
     @IBOutlet weak var reflectionLabel: UILabel!
     @IBOutlet weak var reflectionText: UILabel!
     @IBOutlet weak var scrollViewHeightConstraint: NSLayoutConstraint!
@@ -77,6 +79,8 @@ class NoteDetailViewController: UIViewController {
             purposeText.text = viewModel.note.purpose
             detailLabel.text = TITLE_DETAIL
             detailText.text = viewModel.note.detail
+            resultLabel.isHidden = true
+            resultText.isHidden = true
         } else {
             purposeLabel.text = TITLE_TARGET
             purposeText.text = viewModel.note.target
@@ -84,6 +88,8 @@ class NoteDetailViewController: UIViewController {
             detailText.text = viewModel.note.consciousness
             taskLabel.isHidden = true
             tableView.isHidden = true
+            resultLabel.text = TITLE_RESULT
+            resultText.text = viewModel.note.result
         }
     }
     
@@ -109,7 +115,7 @@ class NoteDetailViewController: UIViewController {
             tableHeight = updateTableViewHeight()
         }
         tableViewHeightConstraint.constant = tableHeight
-        scrollViewHeightConstraint.constant = CGFloat(500 + tableHeight)
+        scrollViewHeightConstraint.constant = CGFloat(800 + tableHeight)
     }
     
     /// セルの高さの合計を計算
