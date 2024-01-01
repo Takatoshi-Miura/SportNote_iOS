@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TaskCellForNoteDetailView" rowHeight="118" id="KGk-i7-Jjw" customClass="TaskCellForNoteDetailView" customModule="_11_SportNote" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="432" height="118"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="432" height="118"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="mBf-fL-vvt">
+                        <rect key="frame" x="16" y="16" width="400" height="86"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="9WC-bQ-3dU">
+                                <rect key="frame" x="0.0" y="0.0" width="400" height="50"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="icn-ma-cG4">
+                                        <rect key="frame" x="0.0" y="0.0" width="20" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="VGZ-bS-0p1"/>
+                                            <constraint firstAttribute="height" constant="50" id="qZQ-Hw-DU4"/>
+                                        </constraints>
+                                    </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vN6-48-zdC">
+                                        <rect key="frame" x="25" y="0.0" width="375" height="50"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="課題のタイトル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5q-Bw-KaW">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="VqO-WW-om6"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="対策：最有力の対策のタイトル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6SH-va-q2A">
+                                                <rect key="frame" x="0.0" y="25" width="375" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="EV9-Xs-oY3"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jpu-w7-aRF">
+                                <rect key="frame" x="0.0" y="55" width="400" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" priority="250" constant="30" id="Cq9-HH-WVV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                <constraints>
+                    <constraint firstItem="mBf-fL-vvt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="DjT-fK-A5C"/>
+                    <constraint firstAttribute="bottom" secondItem="mBf-fL-vvt" secondAttribute="bottom" constant="16" id="MNo-XF-qzl"/>
+                    <constraint firstItem="mBf-fL-vvt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="N2f-Vh-XmV"/>
+                    <constraint firstAttribute="trailing" secondItem="mBf-fL-vvt" secondAttribute="trailing" constant="16" id="fWB-ga-4SX"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="colorImageView" destination="icn-ma-cG4" id="83P-p5-3NM"/>
+                <outlet property="memoLabel" destination="jpu-w7-aRF" id="hPy-Ii-7uz"/>
+                <outlet property="taskMeasuresTitleLabel" destination="6SH-va-q2A" id="T8D-is-E6p"/>
+                <outlet property="taskTitleLabel" destination="c5q-Bw-KaW" id="uK2-sn-guQ"/>
+            </connections>
+            <point key="canvasLocation" x="224.42748091603053" y="-19.014084507042256"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

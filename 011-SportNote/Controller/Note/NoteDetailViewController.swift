@@ -55,6 +55,11 @@ class NoteDetailViewController: UIViewController {
         initTableView()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        resizeScrollView()
+    }
+    
     // MARK: - Other Methods
     
     /// 画面にノート内容をセット
@@ -84,14 +89,15 @@ class NoteDetailViewController: UIViewController {
     
     /// TableView初期化
     private func initTableView() {
-        tableView.register(UINib(nibName: "TaskCellForAddNote", bundle: nil), forCellReuseIdentifier: "TaskCellForAddNote")
+        tableView.register(UINib(nibName: "TaskCellForNoteDetailView", bundle: nil), forCellReuseIdentifier: "TaskCellForNoteDetailView")
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 120
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
         if viewModel.taskArray.isEmpty {
             tableView.separatorStyle = .none
         }
-        resizeScrollView()
     }
     
     /// スクロール領域を調整
@@ -100,10 +106,23 @@ class NoteDetailViewController: UIViewController {
         if viewModel.taskArray.isEmpty {
             tableHeight = CGFloat(44)
         } else {
-            tableHeight = CGFloat(viewModel.taskArray.count * 200)
+            tableHeight = updateTableViewHeight()
         }
         tableViewHeightConstraint.constant = tableHeight
-        scrollViewHeightConstraint.constant = CGFloat(1000 + tableHeight)
+        scrollViewHeightConstraint.constant = CGFloat(500 + tableHeight)
+    }
+    
+    /// セルの高さの合計を計算
+    /// - Returns: tableView高さ
+    func updateTableViewHeight() -> CGFloat {
+        var totalCellHeight: CGFloat = 0
+        for section in 0..<tableView.numberOfSections {
+            for row in 0..<tableView.numberOfRows(inSection: section) {
+                let indexPath = IndexPath(row: row, section: section)
+                totalCellHeight += tableView.rectForRow(at: indexPath).height
+            }
+        }
+        return totalCellHeight
     }
 
 }
@@ -115,7 +134,7 @@ extension NoteDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return viewModel.taskArray.isEmpty ? 44 : 200
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -124,7 +143,7 @@ extension NoteDetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.textLabel?.text = MESSAGE_DONE_TASK_EMPTY
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForAddNote", for: indexPath) as! TaskCellForAddNote
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCellForNoteDetailView", for: indexPath) as! TaskCellForNoteDetailView
             cell.printInfo(task: viewModel.taskArray[indexPath.row])
             cell.printMemo(memo: viewModel.memoArray[indexPath.row])
             return cell

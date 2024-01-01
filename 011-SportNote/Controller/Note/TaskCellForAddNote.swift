@@ -11,6 +11,7 @@ import UIKit
 class TaskCellForAddNote: UITableViewCell {
 
     // MARK: - UI,Variable
+    
     @IBOutlet weak var colorImageView: UIImageView!
     @IBOutlet weak var taskTitleLabel: UILabel!
     @IBOutlet weak var taskMeasuresTitleLabel: UILabel!
@@ -20,6 +21,7 @@ class TaskCellForAddNote: UITableViewCell {
     var memo = Memo()
 
     // MARK: - LifeCycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         effectivenessTextView.layer.borderColor = UIColor.systemGray.cgColor
