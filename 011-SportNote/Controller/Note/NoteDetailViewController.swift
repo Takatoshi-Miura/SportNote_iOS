@@ -17,21 +17,25 @@ class NoteDetailViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var weatherImage: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
+    
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var conditionText: UILabel!
-    @IBOutlet weak var purposeArea: UIStackView!
-    @IBOutlet weak var purposeHeightConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var purposeLabel: UILabel!
     @IBOutlet weak var purposeText: UILabel!
-    @IBOutlet weak var detailArea: UIStackView!
-    @IBOutlet weak var detailHeightConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var detailText: UILabel!
+    
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var taskStackView: UIStackView!
+    
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var resultText: UILabel!
+    @IBOutlet weak var resultStackView: UIStackView!
+    
     @IBOutlet weak var reflectionLabel: UILabel!
     @IBOutlet weak var reflectionText: UILabel!
     @IBOutlet weak var scrollViewHeightConstraint: NSLayoutConstraint!
@@ -79,15 +83,13 @@ class NoteDetailViewController: UIViewController {
             purposeText.text = viewModel.note.purpose
             detailLabel.text = TITLE_DETAIL
             detailText.text = viewModel.note.detail
-            resultLabel.isHidden = true
-            resultText.isHidden = true
+            resultStackView.isHidden = true
         } else {
             purposeLabel.text = TITLE_TARGET
             purposeText.text = viewModel.note.target
             detailLabel.text = TITLE_CONSCIOUSNESS
             detailText.text = viewModel.note.consciousness
-            taskLabel.isHidden = true
-            tableView.isHidden = true
+            taskStackView.isHidden = true
             resultLabel.text = TITLE_RESULT
             resultText.text = viewModel.note.result
         }
