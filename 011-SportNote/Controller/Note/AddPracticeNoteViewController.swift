@@ -546,7 +546,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
             // 天気と気温を更新
             let realmManager = RealmManager()
             realmManager.updateNoteWeather(noteID: note.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
-            realmManager.updateNoteWeather(noteID: note.noteID, weather: temperature[selectedWeather[TITLE_TEMPERATURE]!])
+            realmManager.updateNoteTemperature(noteID: note.noteID, temperature:  temperature[selectedWeather[TITLE_TEMPERATURE]!])
         }
     }
     
