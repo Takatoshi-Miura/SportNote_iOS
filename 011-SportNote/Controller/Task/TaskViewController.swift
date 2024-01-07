@@ -72,19 +72,7 @@ class TaskViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let selectedIndex = tableView.indexPathForSelectedRow {
-            // 課題が完了状態が更新or削除されていれば取り除く
-            if (viewModel.deleteTaskFromArray(indexPath: selectedIndex)) {
-                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
-                return
-            }
-            tableView.reloadRows(at: [selectedIndex], with: .none)
-        } else {
-            // グループから戻る場合はリロード
-            viewModel.refreshData()
-            tableView.refreshControl?.endRefreshing()
-            tableView.reloadData()
-        }
+        handleSelectedCell()
     }
     
     // MARK: - Bind
@@ -138,22 +126,6 @@ class TaskViewController: UIViewController {
             let settingButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: nil)
             bindSettingButton(button: settingButton)
             navigationItem.leftBarButtonItems = [settingButton]
-        }
-    }
-    
-    /// TableView初期化
-    private func initTableView() {
-        tableView.tableFooterView = UIView()
-        tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(syncData), for: .valueChanged)
-        tableView.isEditing = true
-        tableView.allowsSelectionDuringEditing = true
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.register(UINib(nibName: String(describing: GroupHeaderView.self), bundle: nil),
-                           forHeaderFooterViewReuseIdentifier: String(describing: GroupHeaderView.self))
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
         }
     }
     
@@ -247,6 +219,39 @@ class TaskViewController: UIViewController {
 }
 
 extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    /// TableView初期化
+    private func initTableView() {
+        tableView.tableFooterView = UIView()
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(syncData), for: .valueChanged)
+        tableView.isEditing = true
+        tableView.allowsSelectionDuringEditing = true
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UINib(nibName: String(describing: GroupHeaderView.self), bundle: nil),
+                           forHeaderFooterViewReuseIdentifier: String(describing: GroupHeaderView.self))
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 選択されたセルを更新
+    private func handleSelectedCell() {
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            // 課題が完了状態が更新or削除されていれば取り除く
+            if (viewModel.deleteTaskFromArray(indexPath: selectedIndex)) {
+                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                return
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
+        } else {
+            // グループから戻る場合はリロード
+            viewModel.refreshData()
+            tableView.refreshControl?.endRefreshing()
+            tableView.reloadData()
+        }
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.getNumberOfSections()

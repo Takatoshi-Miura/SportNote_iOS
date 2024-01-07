@@ -72,13 +72,7 @@ class NoteViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let selectedIndex = tableView.indexPathForSelectedRow {
-            // ノートが削除されていれば取り除く
-            if (viewModel.deleteNoteFromArray(indexPath: selectedIndex)) {
-                return
-            }
-            tableView.reloadRows(at: [selectedIndex], with: .none)
-        }
+        handleSelectedCell()
     }
     
     // MARK: - Bind
@@ -193,6 +187,17 @@ class NoteViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 選択されたセルの更新
+    private func handleSelectedCell() {
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            // ノートが削除されていれば取り除く
+            if (viewModel.deleteNoteFromArray(indexPath: selectedIndex)) {
+                return
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
         }
     }
     

@@ -74,6 +74,10 @@ class SettingViewController: UIViewController {
         naviItem.title = TITLE_SETTING
     }
     
+}
+
+extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
+    
     /// TableView初期化
     private func initTableView() {
         tableView.tableFooterView = UIView()
@@ -83,10 +87,6 @@ class SettingViewController: UIViewController {
             tableView.sectionHeaderTopPadding = 0
         }
     }
-    
-}
-
-extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30

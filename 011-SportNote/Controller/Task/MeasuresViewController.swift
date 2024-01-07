@@ -52,13 +52,7 @@ class MeasuresViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let selectedIndex = tableView.indexPathForSelectedRow {
-            // メモが削除されていれば取り除く
-            if (viewModel.removeMemo(index: selectedIndex.row)) {
-                return
-            }
-            tableView.reloadRows(at: [selectedIndex], with: .none)
-        }
+        handleSelectedCell()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -146,6 +140,17 @@ class MeasuresViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 選択されたセルの更新
+    private func handleSelectedCell() {
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            // メモが削除されていれば取り除く
+            if (viewModel.removeMemo(index: selectedIndex.row)) {
+                return
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
         }
     }
     

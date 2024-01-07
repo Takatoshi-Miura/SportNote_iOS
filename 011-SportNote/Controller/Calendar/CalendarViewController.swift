@@ -36,6 +36,7 @@ class CalendarViewController: UIViewController {
     var delegate: CalendarViewControllerDelegate?
     
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -51,17 +52,10 @@ class CalendarViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let selectedIndex = tableView.indexPathForSelectedRow {
-            // ノートが削除されていれば取り除く
-            let note = selectedNoteArray[selectedIndex.row]
-            if note.isDeleted {
-                selectedNoteArray.remove(at: selectedIndex.row)
-                tableView.reloadData()
-                return
-            }
-            tableView.reloadRows(at: [selectedIndex], with: .none)
-        }
+        handleSelectedCell()
     }
+    
+    // MARK: - Other Methods
     
     /// 画面初期化
     private func initView() {
@@ -71,16 +65,6 @@ class CalendarViewController: UIViewController {
         navigationItem.leftBarButtonItems = [refreshButton]
         navigationItem.rightBarButtonItems = [todayButton]
         printTarget()
-    }
-    
-    /// TableView初期化
-    private func initTableView() {
-        tableView.tableFooterView = UIView()
-        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: "NoteCell")
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
     }
     
     /// バナー広告を表示
@@ -267,6 +251,30 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
 }
 
 extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    /// TableView初期化
+    private func initTableView() {
+        tableView.tableFooterView = UIView()
+        tableView.register(UINib(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: "NoteCell")
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 選択されたセルの更新
+    private func handleSelectedCell() {
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            // ノートが削除されていれば取り除く
+            let note = selectedNoteArray[selectedIndex.row]
+            if note.isDeleted {
+                selectedNoteArray.remove(at: selectedIndex.row)
+                tableView.reloadData()
+                return
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if selectedNoteArray.isEmpty {

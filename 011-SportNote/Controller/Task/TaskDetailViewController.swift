@@ -57,14 +57,7 @@ class TaskDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let selectedIndex = tableView.indexPathForSelectedRow {
-            // 対策が削除されていれば取り除く
-            if (viewModel.removeMeasures(index: selectedIndex.row)) {
-                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
-                return
-            }
-            tableView.reloadRows(at: [selectedIndex], with: .none)
-        }
+        handleSelectedCell()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -192,17 +185,6 @@ class TaskDetailViewController: UIViewController {
         navigationItem.rightBarButtonItems = navigationItems
     }
     
-    /// TableView初期化
-    private func initTableView() {
-        tableView.isEditing = true
-        tableView.allowsSelectionDuringEditing = true
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
-    }
-    
     /// 画面表示の初期化
     private func initView() {
         titleLabel.text = TITLE_TITLE
@@ -216,6 +198,29 @@ class TaskDetailViewController: UIViewController {
 }
 
 extension TaskDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    /// TableView初期化
+    private func initTableView() {
+        tableView.isEditing = true
+        tableView.allowsSelectionDuringEditing = true
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    /// 選択されたセルの更新
+    private func handleSelectedCell() {
+        if let selectedIndex = tableView.indexPathForSelectedRow {
+            // 対策が削除されていれば取り除く
+            if (viewModel.removeMeasures(index: selectedIndex.row)) {
+                tableView.deleteRows(at: [selectedIndex], with: UITableView.RowAnimation.left)
+                return
+            }
+            tableView.reloadRows(at: [selectedIndex], with: .none)
+        }
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
