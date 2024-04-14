@@ -28,6 +28,27 @@ class FirebaseManager {
     
     // MARK: - Create
     
+    /// FirebaseにGroupを保存
+    /// - Parameter group: Group
+    func saveGroup(group: Group) async {
+        let db = Firestore.firestore()
+        
+        do {
+            try await db.collection("Group").document("\(group.userID)_\(group.groupID)").setData([
+                "userID"        : group.userID,
+                "groupID"       : group.groupID,
+                "title"         : group.title,
+                "color"         : group.color,
+                "order"         : group.order,
+                "isDeleted"     : group.isDeleted,
+                "created_at"    : group.created_at,
+                "updated_at"    : group.updated_at
+            ])
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
+
     /// グループデータを保存
     /// - Parameters:
     ///   - group: グループデータ
@@ -186,6 +207,40 @@ class FirebaseManager {
     
     
     // MARK: - Select
+    
+    
+    /// FirebaseからGroupを全取得
+    /// - Returns: [Group]
+    func getAllGroup() async -> [Group] {
+        var groupArray:[Group] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("Group")
+                .whereField("userID", isEqualTo: userID)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let collection = document.data()
+                let group = Group()
+                group.userID = collection["userID"] as! String
+                group.groupID = collection["groupID"] as! String
+                group.title = collection["title"] as! String
+                group.color = collection["color"] as! Int
+                group.order = collection["order"] as! Int
+                group.isDeleted = collection["isDeleted"] as! Bool
+                group.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                group.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
+                groupArray.append(group)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return groupArray
+    }
+
     
     /// グループを全取得
     /// - Parameters:

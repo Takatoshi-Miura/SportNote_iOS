@@ -15,6 +15,14 @@ class SyncManager {
     
     // MARK: - Realm-Firebase同期用
     
+    /// RaalmとFirebaseのデータを同期（Swift Concurrency）
+    /// データの種類ごとに並列に取得し、すべての処理の完了を待つ
+    func syncDatabase() async { // TODO: 可能ならasyncをつけたくない
+        async let group: Void = syncGroup()
+        
+        let _: [Void] = await [group]
+    }
+    
     /**
      RaalmとFirebaseのデータを同期
      - Parameters:
@@ -95,9 +103,61 @@ class SyncManager {
     
     // MARK: - Group同期用
     
-    /// グループを同期
-    /// - Parameters:
-    ///   - completion: 完了処理
+    /// Groupを同期
+    private func syncGroup() async {
+        print("グループ同期開始")
+        
+        // Realmのグループを全取得
+        let realmGroupArray: [Group] = realmManager.getAllGroup()
+        
+        // Firebaseのグループを全取得(取得完了を待つ)
+        let firebaseGroupArray: [Group] = await firebaseManager.getAllGroup()
+        
+        // FirebaseもしくはRealmにしか存在しないデータを抽出
+        let firebaseGroupIDArray = firebaseGroupArray.map { $0.groupID }
+        let realmGroupIDArray = realmGroupArray.map { $0.groupID }
+        let onlyFirebaseID = firebaseGroupIDArray.subtracting(realmGroupIDArray)
+        let onlyRealmID = realmGroupIDArray.subtracting(firebaseGroupIDArray)
+        
+        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
+        await withTaskGroup(of: Void.self) { taskGroup in
+            for groupID in onlyRealmID {
+                taskGroup.addTask {
+                    if let group = realmGroupArray.first(where: { $0.groupID == groupID }) {
+                        await self.firebaseManager.saveGroup(group: group)
+                    }
+                }
+            }
+        }
+        
+        // Firebaseにしか存在しないデータをRealmに保存
+        onlyFirebaseID.forEach { groupID in
+            guard let group = firebaseGroupArray.first(where: { $0.groupID == groupID }) else {
+                return
+            }
+            _ = self.realmManager.createRealm(object: group)
+        }
+        
+        // どちらにも存在するデータの更新日時を比較し新しい方に更新する
+        for groupID in realmGroupIDArray {
+            guard let realmGroup = realmGroupArray.first(where: { $0.groupID == groupID }),
+                  let firebaseGroup = firebaseGroupArray.first(where: { $0.groupID == groupID }) else 
+            {
+                continue
+            }
+            
+            if realmGroup.updated_at > firebaseGroup.updated_at {
+                self.firebaseManager.updateGroup(group: realmGroup)
+            } else if firebaseGroup.updated_at > realmGroup.updated_at {
+                self.realmManager.updateGroup(group: firebaseGroup)
+            }
+        }
+        print("グループ同期終了")
+    }
+    
+    
+    /// Groupを同期
+    /// - Parameter completion: 完了処理
     private func syncGroup(completion: @escaping () -> ()) {
         // Realmのグループを全取得
         let realmGroupArray: [Group] = realmManager.getAllGroup()
@@ -105,8 +165,8 @@ class SyncManager {
         // Firebaseのグループを全取得
         firebaseManager.getAllGroup(completion: {
             // FirebaseもしくはRealmにしか存在しないデータを抽出
-            let firebaseGroupIDArray = self.getGroupIDArray(array: self.firebaseManager.groupArray)
-            let realmGroupIDArray = self.getGroupIDArray(array: realmGroupArray)
+            let firebaseGroupIDArray = self.firebaseManager.groupArray.map { $0.groupID }
+            let realmGroupIDArray = realmGroupArray.map { $0.groupID }
             let onlyRealmID = realmGroupIDArray.subtracting(firebaseGroupIDArray)
             let onlyFirebaseID = firebaseGroupIDArray.subtracting(realmGroupIDArray)
             
@@ -142,19 +202,6 @@ class SyncManager {
         })
     }
 
-    /**
-     Group配列からgroupID配列を作成
-     - Parameters:
-        - array: Group配列
-     - Returns: groupID配列
-     */
-    private func getGroupIDArray(array: [Group]) -> [String] {
-        var groupIDArray: [String] = []
-        for group in array {
-            groupIDArray.append(group.groupID)
-        }
-        return groupIDArray
-    }
 
     /**
      Group配列からGroupを取得(groupID指定)
