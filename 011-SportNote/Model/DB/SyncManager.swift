@@ -19,8 +19,9 @@ class SyncManager {
     /// データの種類ごとに並列に取得し、すべての処理の完了を待つ
     func syncDatabase() async { // TODO: 可能ならasyncをつけたくない
         async let group: Void = syncGroup()
+        async let task: Void = syncTask()
         
-        let _: [Void] = await [group]
+        let _: [Void] = await [group, task]
     }
     
     /**
@@ -101,8 +102,6 @@ class SyncManager {
         }
     }
     
-    // MARK: - Group同期用
-    
     /// Groupを同期
     private func syncGroup() async {
         print("グループ同期開始")
@@ -155,6 +154,59 @@ class SyncManager {
         print("グループ同期終了")
     }
     
+    /// Taskを同期
+    private func syncTask() async {
+        print("Task同期開始")
+        
+        // RealmのTaskを全取得
+        let realmTaskArray: [Task] = realmManager.getAllTask()
+        
+        // FirebaseのTaskを全取得(取得完了を待つ)
+        let firebaseTaskArray: [Task] = await firebaseManager.getAllTask()
+        
+        // FirebaseもしくはRealmにしか存在しないデータを抽出
+        let firebaseTaskIDArray = firebaseTaskArray.map { $0.taskID }
+        let realmTaskIDArray = realmTaskArray.map { $0.taskID }
+        let onlyFirebaseID = firebaseTaskIDArray.subtracting(realmTaskIDArray)
+        let onlyRealmID = realmTaskIDArray.subtracting(firebaseTaskIDArray)
+        
+        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
+        await withTaskGroup(of: Void.self) { taskGroup in
+            for taskID in onlyRealmID {
+                taskGroup.addTask {
+                    if let task = realmTaskArray.first(where: { $0.taskID == taskID }) {
+                        await self.firebaseManager.saveTask(task: task)
+                    }
+                }
+            }
+        }
+        
+        // Firebaseにしか存在しないデータをRealmに保存
+        onlyFirebaseID.forEach { taskID in
+            guard let task = firebaseTaskArray.first(where: { $0.taskID == taskID }) else {
+                return
+            }
+            _ = self.realmManager.createRealm(object: task)
+        }
+        
+        // どちらにも存在するデータの更新日時を比較し新しい方に更新する
+        for taskID in realmTaskIDArray {
+            guard let realmTask = realmTaskArray.first(where: { $0.taskID == taskID }),
+                  let firebaseTask = firebaseTaskArray.first(where: { $0.taskID == taskID }) else
+            {
+                continue
+            }
+            
+            if realmTask.updated_at > firebaseTask.updated_at {
+                self.firebaseManager.updateTask(task: realmTask)
+            } else if firebaseTask.updated_at > realmTask.updated_at {
+                self.realmManager.updateTask(task: firebaseTask)
+            }
+        }
+        print("Task同期終了")
+    }
+    
+    // MARK: - Group同期用
     
     /// Groupを同期
     /// - Parameter completion: 完了処理

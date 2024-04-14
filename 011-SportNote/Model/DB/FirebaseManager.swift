@@ -48,6 +48,29 @@ class FirebaseManager {
             print("Error writing document: \(error)")
         }
     }
+    
+    /// FirebaseにTaskを保存
+    /// - Parameter task: Task
+    func saveTask(task: Task) async {
+        let db = Firestore.firestore()
+        
+        do {
+            try await db.collection("Task").document("\(task.userID)_\(task.taskID)").setData([
+                "userID"        : task.userID,
+                "taskID"        : task.taskID,
+                "groupID"       : task.groupID,
+                "title"         : task.title,
+                "cause"         : task.cause,
+                "order"         : task.order,
+                "isComplete"    : task.isComplete,
+                "isDeleted"     : task.isDeleted,
+                "created_at"    : task.created_at,
+                "updated_at"    : task.updated_at
+            ])
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
 
     /// グループデータを保存
     /// - Parameters:
@@ -208,11 +231,10 @@ class FirebaseManager {
     
     // MARK: - Select
     
-    
     /// FirebaseからGroupを全取得
     /// - Returns: [Group]
     func getAllGroup() async -> [Group] {
-        var groupArray:[Group] = []
+        var groupArray: [Group] = []
         let db = Firestore.firestore()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
@@ -240,7 +262,40 @@ class FirebaseManager {
         
         return groupArray
     }
-
+    
+    /// FirebaseからTaskを全取得
+    /// - Returns: [Task]
+    func getAllTask() async -> [Task] {
+        var taskArray: [Task] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("Task")
+                .whereField("userID", isEqualTo: userID)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let collection = document.data()
+                let task = Task()
+                task.userID = collection["userID"] as! String
+                task.taskID = collection["taskID"] as! String
+                task.groupID = collection["groupID"] as! String
+                task.title = collection["title"] as! String
+                task.cause = collection["cause"] as! String
+                task.order = collection["order"] as! Int
+                task.isComplete = collection["isComplete"] as! Bool
+                task.isDeleted = collection["isDeleted"] as! Bool
+                task.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                task.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
+                taskArray.append(task)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return taskArray
+    }
     
     /// グループを全取得
     /// - Parameters:
