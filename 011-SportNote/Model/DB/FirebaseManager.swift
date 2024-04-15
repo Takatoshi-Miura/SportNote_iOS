@@ -71,6 +71,33 @@ class FirebaseManager {
             print("Error writing document: \(error)")
         }
     }
+    
+    /// FirebaseにMeasuresを保存
+    /// - Parameter measures: Measures
+    func saveMeasures(measures: Measures) async {
+        let db = Firestore.firestore()
+        
+        do {
+            try await db.collection("Measures").document("\(measures.userID)_\(measures.measuresID)").setData([
+                "userID"        : measures.userID,
+                "measuresID"    : measures.measuresID,
+                "taskID"        : measures.taskID,
+                "title"         : measures.title,
+                "order"         : measures.order,
+                "isDeleted"     : measures.isDeleted,
+                "created_at"    : measures.created_at,
+                "updated_at"    : measures.updated_at
+            ])
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
+    
+    
+    
+    
+    
+    
 
     /// グループデータを保存
     /// - Parameters:
@@ -296,6 +323,43 @@ class FirebaseManager {
         
         return taskArray
     }
+    
+    /// FirebaseからMeasuresを全取得
+    /// - Returns: [Measures]
+    func getAllMeasures() async -> [Measures] {
+        var measuresArray: [Measures] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("Measures")
+                .whereField("userID", isEqualTo: userID)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let collection = document.data()
+                let measures = Measures()
+                measures.userID = collection["userID"] as! String
+                measures.measuresID = collection["measuresID"] as! String
+                measures.taskID = collection["taskID"] as! String
+                measures.title = collection["title"] as! String
+                measures.order = collection["order"] as! Int
+                measures.isDeleted = collection["isDeleted"] as! Bool
+                measures.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                measures.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
+                measuresArray.append(measures)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return measuresArray
+    }
+    
+    
+    
+    
+    
     
     /// グループを全取得
     /// - Parameters:

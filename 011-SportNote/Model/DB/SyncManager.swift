@@ -20,8 +20,9 @@ class SyncManager {
     func syncDatabase() async { // TODO: 可能ならasyncをつけたくない
         async let group: Void = syncGroup()
         async let task: Void = syncTask()
+        async let measures: Void = syncMeasures()
         
-        let _: [Void] = await [group, task]
+        let _: [Void] = await [group, task, measures]
     }
     
     /**
@@ -204,6 +205,58 @@ class SyncManager {
             }
         }
         print("Task同期終了")
+    }
+    
+    /// Measuresを同期
+    private func syncMeasures() async {
+        print("Measures同期開始")
+        
+        // RealmのMeasuresを全取得
+        let realmMeasuresArray: [Measures] = realmManager.getAllMeasures()
+        
+        // FirebaseのMeasuresを全取得(取得完了を待つ)
+        let firebaseMeasuresArray: [Measures] = await firebaseManager.getAllMeasures()
+        
+        // FirebaseもしくはRealmにしか存在しないデータを抽出
+        let firebaseMeasuresIDArray = firebaseMeasuresArray.map { $0.measuresID }
+        let realmMeasuresIDArray = realmMeasuresArray.map { $0.measuresID }
+        let onlyFirebaseID = firebaseMeasuresIDArray.subtracting(realmMeasuresIDArray)
+        let onlyRealmID = realmMeasuresIDArray.subtracting(firebaseMeasuresIDArray)
+        
+        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
+        await withTaskGroup(of: Void.self) { taskGroup in
+            for measuresID in onlyRealmID {
+                taskGroup.addTask {
+                    if let measures = realmMeasuresArray.first(where: { $0.measuresID == measuresID }) {
+                        await self.firebaseManager.saveMeasures(measures: measures)
+                    }
+                }
+            }
+        }
+        
+        // Firebaseにしか存在しないデータをRealmに保存
+        onlyFirebaseID.forEach { measuresID in
+            guard let measures = firebaseMeasuresArray.first(where: { $0.measuresID == measuresID }) else {
+                return
+            }
+            _ = self.realmManager.createRealm(object: measures)
+        }
+        
+        // どちらにも存在するデータの更新日時を比較し新しい方に更新する
+        for measuresID in realmMeasuresIDArray {
+            guard let realmMeasures = realmMeasuresArray.first(where: { $0.measuresID == measuresID }),
+                  let firebaseMeasures = firebaseMeasuresArray.first(where: { $0.measuresID == measuresID }) else
+            {
+                continue
+            }
+            
+            if realmMeasures.updated_at > firebaseMeasures.updated_at {
+                self.firebaseManager.updateMeasures(measures: realmMeasures)
+            } else if firebaseMeasures.updated_at > realmMeasures.updated_at {
+                self.realmManager.updateMeasures(measures: firebaseMeasures)
+            }
+        }
+        print("Measures同期終了")
     }
     
     // MARK: - Group同期用
