@@ -21,8 +21,9 @@ class SyncManager {
         async let group: Void = syncGroup()
         async let task: Void = syncTask()
         async let measures: Void = syncMeasures()
+        async let memo: Void = syncMemo()
         
-        let _: [Void] = await [group, task, measures]
+        let _: [Void] = await [group, task, measures, memo]
     }
     
     /**
@@ -257,6 +258,58 @@ class SyncManager {
             }
         }
         print("Measures同期終了")
+    }
+    
+    /// Memoを同期
+    private func syncMemo() async {
+        print("Memo同期開始")
+        
+        // RealmのMemoを全取得
+        let realmMemoArray: [Memo] = realmManager.getAllMemo()
+        
+        // FirebaseのMemoを全取得(取得完了を待つ)
+        let firebaseMemoArray: [Memo] = await firebaseManager.getAllMemo()
+        
+        // FirebaseもしくはRealmにしか存在しないデータを抽出
+        let firebaseMemoIDArray = firebaseMemoArray.map { $0.memoID }
+        let realmMemoIDArray = realmMemoArray.map { $0.memoID }
+        let onlyFirebaseID = firebaseMemoIDArray.subtracting(realmMemoIDArray)
+        let onlyRealmID = realmMemoIDArray.subtracting(firebaseMemoIDArray)
+        
+        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
+        await withTaskGroup(of: Void.self) { taskGroup in
+            for memoID in onlyRealmID {
+                taskGroup.addTask {
+                    if let memo = realmMemoArray.first(where: { $0.memoID == memoID }) {
+                        await self.firebaseManager.saveMemo(memo: memo)
+                    }
+                }
+            }
+        }
+        
+        // Firebaseにしか存在しないデータをRealmに保存
+        onlyFirebaseID.forEach { memoID in
+            guard let memo = firebaseMemoArray.first(where: { $0.memoID == memoID }) else {
+                return
+            }
+            _ = self.realmManager.createRealm(object: memo)
+        }
+        
+        // どちらにも存在するデータの更新日時を比較し新しい方に更新する
+        for memoID in realmMemoIDArray {
+            guard let realmMemo = realmMemoArray.first(where: { $0.memoID == memoID }),
+                  let firebaseMemo = firebaseMemoArray.first(where: { $0.memoID == memoID }) else
+            {
+                continue
+            }
+            
+            if realmMemo.updated_at > firebaseMemo.updated_at {
+                self.firebaseManager.updateMemo(memo: realmMemo)
+            } else if firebaseMemo.updated_at > realmMemo.updated_at {
+                self.realmManager.updateMemo(memo: firebaseMemo)
+            }
+        }
+        print("Memo同期終了")
     }
     
     // MARK: - Group同期用

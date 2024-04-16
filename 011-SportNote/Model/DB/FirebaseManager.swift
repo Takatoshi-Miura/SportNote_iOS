@@ -93,6 +93,27 @@ class FirebaseManager {
         }
     }
     
+    /// FirebaseにMemoを保存
+    /// - Parameter memo: Memo
+    func saveMemo(memo: Memo) async {
+        let db = Firestore.firestore()
+        
+        do {
+            try await db.collection("Memo").document("\(memo.userID)_\(memo.memoID)").setData([
+                "userID"        : memo.userID,
+                "memoID"        : memo.memoID,
+                "noteID"        : memo.noteID,
+                "measuresID"    : memo.measuresID,
+                "detail"        : memo.detail,
+                "isDeleted"     : memo.isDeleted,
+                "created_at"    : memo.created_at,
+                "updated_at"    : memo.updated_at
+            ])
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
+    
     
     
     
@@ -354,6 +375,38 @@ class FirebaseManager {
         }
         
         return measuresArray
+    }
+    
+    /// FirebaseからMemoを全取得
+    /// - Returns: [Memo]
+    func getAllMemo() async -> [Memo] {
+        var memoArray: [Memo] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("Memo")
+                .whereField("userID", isEqualTo: userID)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let collection = document.data()
+                let memo = Memo()
+                memo.userID = collection["userID"] as! String
+                memo.memoID = collection["memoID"] as! String
+                memo.noteID = collection["noteID"] as! String
+                memo.measuresID = collection["measuresID"] as! String
+                memo.detail = collection["detail"] as! String
+                memo.isDeleted = collection["isDeleted"] as! Bool
+                memo.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                memo.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
+                memoArray.append(memo)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return memoArray
     }
     
     
