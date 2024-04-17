@@ -114,6 +114,28 @@ class FirebaseManager {
         }
     }
     
+    /// FirebaseにTargetを保存
+    /// - Parameter target: Target
+    func saveTarget(target: Target) async {
+        let db = Firestore.firestore()
+        
+        do {
+            try await db.collection("Target").document("\(target.userID)_\(target.targetID)").setData([
+                "userID"        : target.userID,
+                "targetID"      : target.targetID,
+                "title"         : target.title,
+                "year"          : target.year,
+                "month"         : target.month,
+                "isYearlyTarget": target.isYearlyTarget,
+                "isDeleted"     : target.isDeleted,
+                "created_at"    : target.created_at,
+                "updated_at"    : target.updated_at
+            ])
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
+    
     
     
     
@@ -407,6 +429,39 @@ class FirebaseManager {
         }
         
         return memoArray
+    }
+    
+    /// FirebaseからTargetを全取得
+    /// - Returns: [Target]
+    func getAllTarget() async -> [Target] {
+        var targetArray: [Target] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("Target")
+                .whereField("userID", isEqualTo: userID)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let collection = document.data()
+                let target = Target()
+                target.userID = collection["userID"] as! String
+                target.targetID = collection["targetID"] as! String
+                target.title = collection["title"] as! String
+                target.year = collection["year"] as! Int
+                target.month = collection["month"] as! Int
+                target.isYearlyTarget = collection["isYearlyTarget"] as! Bool
+                target.isDeleted = collection["isDeleted"] as! Bool
+                target.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                target.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
+                targetArray.append(target)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return targetArray
     }
     
     

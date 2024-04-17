@@ -22,8 +22,9 @@ class SyncManager {
         async let task: Void = syncTask()
         async let measures: Void = syncMeasures()
         async let memo: Void = syncMemo()
+        async let target: Void = syncTarget()
         
-        let _: [Void] = await [group, task, measures, memo]
+        let _: [Void] = await [group, task, measures, memo, target]
     }
     
     /**
@@ -310,6 +311,58 @@ class SyncManager {
             }
         }
         print("Memo同期終了")
+    }
+    
+    /// Targetを同期
+    private func syncTarget() async {
+        print("Target同期開始")
+        
+        // RealmのTargetを全取得
+        let realmTargetArray: [Target] = realmManager.getAllTarget()
+        
+        // FirebaseのTargetを全取得(取得完了を待つ)
+        let firebaseTargetArray: [Target] = await firebaseManager.getAllTarget()
+        
+        // FirebaseもしくはRealmにしか存在しないデータを抽出
+        let firebaseTargetIDArray = firebaseTargetArray.map { $0.targetID }
+        let realmTargetIDArray = realmTargetArray.map { $0.targetID }
+        let onlyFirebaseID = firebaseTargetIDArray.subtracting(realmTargetIDArray)
+        let onlyRealmID = realmTargetIDArray.subtracting(firebaseTargetIDArray)
+        
+        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
+        await withTaskGroup(of: Void.self) { taskGroup in
+            for targetID in onlyRealmID {
+                taskGroup.addTask {
+                    if let target = realmTargetArray.first(where: { $0.targetID == targetID }) {
+                        await self.firebaseManager.saveTarget(target: target)
+                    }
+                }
+            }
+        }
+        
+        // Firebaseにしか存在しないデータをRealmに保存
+        onlyFirebaseID.forEach { targetID in
+            guard let target = firebaseTargetArray.first(where: { $0.targetID == targetID }) else {
+                return
+            }
+            _ = self.realmManager.createRealm(object: target)
+        }
+        
+        // どちらにも存在するデータの更新日時を比較し新しい方に更新する
+        for targetID in realmTargetIDArray {
+            guard let realmTarget = realmTargetArray.first(where: { $0.targetID == targetID }),
+                  let firebaseTarget = firebaseTargetArray.first(where: { $0.targetID == targetID }) else
+            {
+                continue
+            }
+            
+            if realmTarget.updated_at > firebaseTarget.updated_at {
+                self.firebaseManager.updateTarget(target: realmTarget)
+            } else if firebaseTarget.updated_at > realmTarget.updated_at {
+                self.realmManager.updateTarget(target: firebaseTarget)
+            }
+        }
+        print("Target同期終了")
     }
     
     // MARK: - Group同期用
