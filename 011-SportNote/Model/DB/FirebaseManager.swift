@@ -136,6 +136,36 @@ class FirebaseManager {
         }
     }
     
+    /// FirebaseにNoteを保存
+    /// - Parameter target: Note
+    func saveNote(note: Note) async {
+        let db = Firestore.firestore()
+        
+        do {
+            try await db.collection("Note").document("\(note.userID)_\(note.noteID)").setData([
+                "userID"        : note.userID,
+                "noteID"        : note.noteID,
+                "noteType"      : note.noteType,
+                "isDeleted"     : note.isDeleted,
+                "created_at"    : note.created_at,
+                "updated_at"    : note.updated_at,
+                "title"         : note.title,
+                "date"          : note.date,
+                "weather"       : note.weather,
+                "temperature"   : note.temperature,
+                "condition"     : note.condition,
+                "reflection"    : note.reflection,
+                "purpose"       : note.purpose,
+                "detail"        : note.detail,
+                "target"        : note.target,
+                "consciousness" : note.consciousness,
+                "result"        : note.result
+            ])
+        } catch {
+            print("Error writing document: \(error)")
+        }
+    }
+    
     
     
     
@@ -462,6 +492,47 @@ class FirebaseManager {
         }
         
         return targetArray
+    }
+    
+    /// FirebaseからNoteを全取得
+    /// - Returns: [Note]
+    func getAllNote() async -> [Note] {
+        var noteArray: [Note] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("Note")
+                .whereField("userID", isEqualTo: userID)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let collection = document.data()
+                let note = Note()
+                note.userID = collection["userID"] as! String
+                note.noteID = collection["noteID"] as! String
+                note.noteType = collection["noteType"] as! Int
+                note.isDeleted = collection["isDeleted"] as! Bool
+                note.created_at = (collection["created_at"] as! Timestamp).dateValue()
+                note.updated_at = (collection["updated_at"] as! Timestamp).dateValue()
+                note.title = collection["title"] as! String
+                note.date = (collection["date"] as! Timestamp).dateValue()
+                note.weather = collection["weather"] as! Int
+                note.temperature = collection["temperature"] as! Int
+                note.condition = collection["condition"] as! String
+                note.reflection = collection["reflection"] as! String
+                note.purpose = collection["purpose"] as! String
+                note.detail = collection["detail"] as! String
+                note.target = collection["target"] as! String
+                note.consciousness = collection["consciousness"] as! String
+                note.result = collection["result"] as! String
+                noteArray.append(note)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return noteArray
     }
     
     

@@ -23,8 +23,9 @@ class SyncManager {
         async let measures: Void = syncMeasures()
         async let memo: Void = syncMemo()
         async let target: Void = syncTarget()
+        async let note: Void = syncNote()
         
-        let _: [Void] = await [group, task, measures, memo, target]
+        let _: [Void] = await [group, task, measures, memo, target, note]
     }
     
     /**
@@ -363,6 +364,58 @@ class SyncManager {
             }
         }
         print("Target同期終了")
+    }
+    
+    /// Noteを同期
+    private func syncNote() async {
+        print("Note同期開始")
+        
+        // RealmのNoteを全取得
+        let realmNoteArray: [Note] = realmManager.getAllNote()
+        
+        // FirebaseのNoteを全取得(取得完了を待つ)
+        let firebaseNoteArray: [Note] = await firebaseManager.getAllNote()
+        
+        // FirebaseもしくはRealmにしか存在しないデータを抽出
+        let firebaseNoteIDArray = firebaseNoteArray.map { $0.noteID }
+        let realmNoteIDArray = realmNoteArray.map { $0.noteID }
+        let onlyFirebaseID = firebaseNoteIDArray.subtracting(realmNoteIDArray)
+        let onlyRealmID = realmNoteIDArray.subtracting(firebaseNoteIDArray)
+        
+        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
+        await withTaskGroup(of: Void.self) { taskGroup in
+            for noteID in onlyRealmID {
+                taskGroup.addTask {
+                    if let note = realmNoteArray.first(where: { $0.noteID == noteID }) {
+                        await self.firebaseManager.saveNote(note: note)
+                    }
+                }
+            }
+        }
+        
+        // Firebaseにしか存在しないデータをRealmに保存
+        onlyFirebaseID.forEach { noteID in
+            guard let note = firebaseNoteArray.first(where: { $0.noteID == noteID }) else {
+                return
+            }
+            _ = self.realmManager.createRealm(object: note)
+        }
+        
+        // どちらにも存在するデータの更新日時を比較し新しい方に更新する
+        for noteID in realmNoteIDArray {
+            guard let realmNote = realmNoteArray.first(where: { $0.noteID == noteID }),
+                  let firebaseNote = firebaseNoteArray.first(where: { $0.noteID == noteID }) else
+            {
+                continue
+            }
+            
+            if realmNote.updated_at > firebaseNote.updated_at {
+                self.firebaseManager.updateNote(note: realmNote)
+            } else if firebaseNote.updated_at > realmNote.updated_at {
+                self.realmManager.updateNote(note: firebaseNote)
+            }
+        }
+        print("Note同期終了")
     }
     
     // MARK: - Group同期用
