@@ -135,6 +135,7 @@ class AddTournamentNoteViewController: UIViewController {
         self.title = TITLE_NOTE_DETAIL
         var navigationItems: [UIBarButtonItem] = []
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteNote))
+        deleteButton.tintColor = UIColor.red
         navigationItems.append(deleteButton)
         navigationItem.rightBarButtonItems = navigationItems
     }

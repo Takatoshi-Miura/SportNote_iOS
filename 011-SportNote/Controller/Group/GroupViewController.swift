@@ -172,6 +172,7 @@ class GroupViewController: UIViewController {
     private func initNavigationBar() {
         self.title = TITLE_GROUP_DETAIL
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        deleteButton.tintColor = UIColor.red
         bindDeleteButton(deleteButton: deleteButton)
         navigationItem.rightBarButtonItems = [deleteButton]
     }

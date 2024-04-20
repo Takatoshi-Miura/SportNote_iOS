@@ -131,6 +131,7 @@ class MeasuresViewController: UIViewController {
     private func initNavigationBar() {
         self.title = TITLE_MEASURES_DETAIL
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        deleteButton.tintColor = UIColor.red
         bindDeleteButton(deleteButton: deleteButton)
         navigationItem.rightBarButtonItems = [deleteButton]
     }
