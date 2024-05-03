@@ -608,6 +608,89 @@ class FirebaseManager {
         return oldTargetArray
     }
     
+    /// Firebaseから旧FreeNoteを取得
+    /// - Returns: FreeNote_old?
+    func getOldFreeNote() async -> FreeNote_old? {
+        var oldFreeNote = FreeNote_old()
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("FreeNoteData")
+                .whereField("userID", isEqualTo: userID)
+                .getDocuments()
+            
+            // FreeNoteが存在しない場合
+            if querySnapshot.documents.count == 0 {
+                return nil
+            }
+            
+            for document in querySnapshot.documents {
+                let dataCollection = document.data()
+                oldFreeNote.setTitle(dataCollection["title"] as! String)
+                oldFreeNote.setDetail(dataCollection["detail"] as! String)
+                oldFreeNote.setUserID(dataCollection["userID"] as! String)
+                oldFreeNote.setCreated_at(dataCollection["created_at"] as! String)
+                oldFreeNote.setUpdated_at(dataCollection["updated_at"] as! String)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+            return nil
+        }
+        
+        return oldFreeNote
+    }
+    
+    /// Firebaseから旧Noteを取得
+    /// - Returns: [Note_old]
+    func getOldNote() async -> [Note_old] {
+        var oldNoteArray: [Note_old] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("NoteData")
+                .whereField("userID", isEqualTo: userID)
+                .whereField("isDeleted", isEqualTo: false)
+                .order(by: "year", descending: true)
+                .order(by: "month", descending: true)
+                .order(by: "date", descending: true)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let dataCollection = document.data()
+                let note = Note_old()
+                note.setNoteID(dataCollection["noteID"] as! Int)
+                note.setNoteType(dataCollection["noteType"] as! String)
+                note.setYear(dataCollection["year"] as! Int)
+                note.setMonth(dataCollection["month"] as! Int)
+                note.setDate(dataCollection["date"] as! Int)
+                note.setDay(dataCollection["day"] as! String)
+                note.setWeather(dataCollection["weather"] as! String)
+                note.setTemperature(dataCollection["temperature"] as! Int)
+                note.setPhysicalCondition(dataCollection["physicalCondition"] as! String)
+                note.setPurpose(dataCollection["purpose"] as! String)
+                note.setDetail(dataCollection["detail"] as! String)
+                note.setTarget(dataCollection["target"] as! String)
+                note.setConsciousness(dataCollection["consciousness"] as! String)
+                note.setResult(dataCollection["result"] as! String)
+                note.setReflection(dataCollection["reflection"] as! String)
+                note.setTaskTitle(dataCollection["taskTitle"] as! [String])
+                note.setMeasuresTitle(dataCollection["measuresTitle"] as! [String])
+                note.setMeasuresEffectiveness(dataCollection["measuresEffectiveness"] as! [String])
+                note.setIsDeleted(dataCollection["isDeleted"] as! Bool)
+                note.setUserID(dataCollection["userID"] as! String)
+                note.setCreated_at(dataCollection["created_at"] as! String)
+                note.setUpdated_at(dataCollection["updated_at"] as! String)
+                oldNoteArray.append(note)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return oldNoteArray
+    }
+    
     
     
     

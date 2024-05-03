@@ -66,8 +66,10 @@ class DataConverter {
     private func convertOldDataToNewData() async {
         async let oldTask: Void = convertOldTask()
         async let oldTarget: Void = convertOldTarget()
+        async let oldFreeNote: Void = convertOldFreeNote()
+        async let oldNote: Void = convertOldNote()
         
-        let _: [Void] = await [oldTask, oldTarget]
+        let _: [Void] = await [oldTask, oldTarget, oldFreeNote, oldFreeNote]
     }
     
     /// 全ての旧Taskを変換&FIrebaseから削除
@@ -100,6 +102,38 @@ class DataConverter {
         }
         print("OldTarget変換終了")
     }
+    
+    /// 全ての旧FreeNoteを変換&FIrebaseから削除
+    private func convertOldFreeNote() async {
+        print("OldFreeNote変換開始")
+        
+        // Firebaseの旧FreeNoteを取得(取得完了を待つ)
+        if let oldFreeNote = await firebaseManager.getOldFreeNote() {
+            self.noteArray.append(self.convertToFreeNote(oldFreeNote: oldFreeNote))
+            self.firebaseManager.deleteOldFreeNote(oldFreeNote: oldFreeNote, completion: {})
+        }
+        print("OldFreeNote変換終了")
+    }
+    
+    /// 全ての旧ノートデータを変換&旧データをFIrebaseから削除
+    private func convertOldNote() async {
+        print("OldNote変換開始")
+        
+        // Firebaseの旧Noteを全取得(取得完了を待つ)
+        let oldNoteArray: [Note_old] = await firebaseManager.getOldNote()
+        for oldNote in oldNoteArray {
+            let note = self.convertToNote(oldNote: oldNote)
+            self.noteArray.append(note)
+            self.firebaseManager.deleteOldNote(oldNote: oldNote, completion: {})
+        }
+        print("OldNote変換終了")
+    }
+    
+    
+    
+    
+    
+    
     
     /// 全ての旧データを変換
     private func convertOldDataToNewData(completion: @escaping () -> ()) {
