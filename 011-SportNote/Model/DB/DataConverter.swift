@@ -61,6 +61,30 @@ class DataConverter {
         } while resultArray.contains(false) // 成功するまで繰り返す
     }
     
+    /// 旧データを新データに変換（Swift Concurrency）
+    private func convertOldDataToNewData() async {
+        async let oldTask: Void = convertOldTask()
+        
+        let _: [Void] = await [oldTask]
+    }
+    
+    /// 全ての旧Taskを変換&FIrebaseから削除
+    private func convertOldTask() async {
+        print("OldTask変換開始")
+        
+        // Firebaseの旧Taskを全取得(取得完了を待つ)
+        let oldTaskArray: [Task_old] = await firebaseManager.getOldTask()
+        
+        for oldTask in oldTaskArray {
+            let dic = self.convertToTaskMeasuresMemo(oldTask: oldTask)
+            self.taskArray.append(contentsOf: dic["task"]!.first as! [Task])
+            self.measuresArray.append(contentsOf: dic["measures"]!.first as! [Measures])
+            self.memoArray.append(contentsOf: dic["memo"]!.first as! [Memo])
+            self.firebaseManager.deleteOldTask(oldTask: oldTask, completion: {})
+        }
+        print("OldTask変換終了")
+    }
+    
     /// 全ての旧データを変換
     private func convertOldDataToNewData(completion: @escaping () -> ()) {
         var completionNumber = 0

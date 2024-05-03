@@ -17,7 +17,7 @@ class SyncManager {
     
     /// RaalmとFirebaseのデータを同期（Swift Concurrency）
     /// データの種類ごとに並列に取得し、すべての処理の完了を待つ
-    func syncDatabase() async { // TODO: 可能ならasyncをつけたくない
+    func syncDatabase() async {
         async let group: Void = syncGroup()
         async let task: Void = syncTask()
         async let measures: Void = syncMeasures()

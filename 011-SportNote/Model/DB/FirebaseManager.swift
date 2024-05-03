@@ -535,6 +535,44 @@ class FirebaseManager {
         return noteArray
     }
     
+    /// Firebaseから旧Taskを全取得
+    func getOldTask() async -> [Task_old] {
+        var oldTaskArray: [Task_old] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("TaskData")
+                .whereField("userID", isEqualTo: userID)
+                .whereField("isDeleted", isEqualTo: false)
+                .order(by: "taskID", descending: true)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let taskCollection = document.data()
+                let task = Task_old()
+                task.setTaskID(taskCollection["taskID"] as! Int)
+                task.setTitle(taskCollection["taskTitle"] as! String)
+                task.setCause(taskCollection["taskCause"] as! String)
+                task.setAchievement(taskCollection["taskAchievement"] as! Bool)
+                task.setIsDeleted(taskCollection["isDeleted"] as! Bool)
+                task.setUserID(taskCollection["userID"] as! String)
+                task.setCreated_at(taskCollection["created_at"] as! String)
+                task.setUpdated_at(taskCollection["updated_at"] as! String)
+                task.setMeasuresData(taskCollection["measuresData"] as! [String:[[String:Int]]])
+                task.setMeasuresPriority(taskCollection["measuresPriority"] as! String)
+                if let order = taskCollection["order"] as? Int {
+                    task.setOrder(order)
+                }
+                oldTaskArray.append(task)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return oldTaskArray
+    }
+    
     
     
     
