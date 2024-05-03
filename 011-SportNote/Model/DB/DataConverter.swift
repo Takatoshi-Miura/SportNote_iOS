@@ -62,10 +62,12 @@ class DataConverter {
     }
     
     /// 旧データを新データに変換（Swift Concurrency）
+    /// 各々のデータ変換処理が全て終わるのを待つ
     private func convertOldDataToNewData() async {
         async let oldTask: Void = convertOldTask()
+        async let oldTarget: Void = convertOldTarget()
         
-        let _: [Void] = await [oldTask]
+        let _: [Void] = await [oldTask, oldTarget]
     }
     
     /// 全ての旧Taskを変換&FIrebaseから削除
@@ -83,6 +85,20 @@ class DataConverter {
             self.firebaseManager.deleteOldTask(oldTask: oldTask, completion: {})
         }
         print("OldTask変換終了")
+    }
+    
+    /// 全ての旧Targetを変換&FIrebaseから削除
+    private func convertOldTarget() async {
+        print("OldTarget変換開始")
+        
+        // Firebaseの旧Targetを全取得(取得完了を待つ)
+        let oldTargetArray: [Target_old] = await firebaseManager.getOldTarget()
+        
+        for oldTarget in oldTargetArray {
+            self.targetArray.append(self.convertToTarget(oldTarget: oldTarget))
+            self.firebaseManager.deleteOldTarget(oldTarget: oldTarget, completion: {})
+        }
+        print("OldTarget変換終了")
     }
     
     /// 全ての旧データを変換

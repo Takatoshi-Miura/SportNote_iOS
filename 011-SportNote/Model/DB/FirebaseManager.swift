@@ -536,6 +536,7 @@ class FirebaseManager {
     }
     
     /// Firebaseから旧Taskを全取得
+    /// - Returns: [Task_old]
     func getOldTask() async -> [Task_old] {
         var oldTaskArray: [Task_old] = []
         let db = Firestore.firestore()
@@ -572,6 +573,45 @@ class FirebaseManager {
         
         return oldTaskArray
     }
+    
+    /// Firebaseから旧Targetを全取得
+    /// - Returns: [Target_old]
+    func getOldTarget() async -> [Target_old] {
+        var oldTargetArray: [Target_old] = []
+        let db = Firestore.firestore()
+        let userID = UserDefaults.standard.object(forKey: "userID") as! String
+        
+        do {
+            let querySnapshot = try await db.collection("TargetData")
+                .whereField("userID", isEqualTo: userID)
+                .whereField("isDeleted", isEqualTo: false)
+                .order(by: "year", descending: true)
+                .order(by: "month", descending: true)
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let targetDataCollection = document.data()
+                let target = Target_old()
+                target.setYear(targetDataCollection["year"] as! Int)
+                target.setMonth(targetDataCollection["month"] as! Int)
+                target.setDetail(targetDataCollection["detail"] as! String)
+                target.setIsDeleted(targetDataCollection["isDeleted"] as! Bool)
+                target.setUserID(targetDataCollection["userID"] as! String)
+                target.setCreated_at(targetDataCollection["created_at"] as! String)
+                target.setUpdated_at(targetDataCollection["updated_at"] as! String)
+                oldTargetArray.append(target)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
+        
+        return oldTargetArray
+    }
+    
+    
+    
+    
+    
     
     
     
