@@ -24,4 +24,21 @@ class Group: Object {
         return "groupID"
     }
     
+    /// イニシャライザ
+    /// - Parameters:
+    ///   - title: タイトル
+    ///   - color: カラー
+    ///   - order: 並び順
+    convenience init(title: String, color: Color, order: Int) {
+        self.init()
+        self.title = title
+        self.color = color.rawValue
+        self.order = order
+        self.groupID = NSUUID().uuidString
+        self.userID = UserDefaults.standard.object(forKey: "userID") as! String
+        self.isDeleted = false
+        self.created_at = Date()
+        self.updated_at = Date()
+    }
+    
 }

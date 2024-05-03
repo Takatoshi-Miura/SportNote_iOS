@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 class DataConverter {
     
@@ -21,44 +22,37 @@ class DataConverter {
     private var noteArray: [Note] = []
     
     /// 旧データを新データに変換してRealmに保存
-    func convertOldToRealm(completion: @escaping () -> ()) {
-        convertOldDataToNewData(completion: {
-            if self.realmManager.getAllGroup().count == 0 {
-                // 未分類グループを自動生成
-                let group = Group()
-                group.title = TITLE_UNCATEGORIZED
-                group.color = Color.gray.rawValue
-                self.groupArray = []
-                self.groupArray.append(group)
-                // 課題を未分類グループに所属させる
-                for task in self.taskArray {
-                    task.groupID = group.groupID
-                }
+    func convertOldToRealm() async {
+        // 旧データを新データに変換
+        await convertOldDataToNewData()
+        
+        if self.realmManager.getAllGroup().count == 0 {
+            // 未分類グループを自動生成
+            let defaultGroup = Group(title: TITLE_UNCATEGORIZED, color: Color.gray, order: 0)
+            self.groupArray = [defaultGroup]
+            // 課題を未分類グループに所属させる
+            for task in self.taskArray {
+                task.groupID = defaultGroup.groupID
             }
-            if self.realmManager.getNote(noteType: NoteType.free.rawValue).count == 0 {
-                // 新規ユーザの場合、フリーノートを自動作成
-                let freeNote = Note()
-                freeNote.title = TITLE_FREE_NOTE
-                freeNote.detail = MESSAGE_FREE_NOTE
-                self.noteArray.append(freeNote)
-            }
-            self.createRealmWithUpdate()
-            completion()
-        })
+        }
+        if self.realmManager.getNote(noteType: NoteType.free.rawValue).count == 0 {
+            // 新規ユーザの場合、フリーノートを自動作成
+            let freeNote = Note(freeWithTitle: TITLE_FREE_NOTE)
+            freeNote.detail = MESSAGE_FREE_NOTE
+            self.noteArray.append(freeNote)
+        }
+        createAndUpdateRealm()
     }
     
     /// 全ての新データをRealmに保存
-    private func createRealmWithUpdate() {
-        var resultArray: [Bool] = []
-        repeat {
-            resultArray = []
-            resultArray.append(realmManager.createRealmWithUpdate(objects: groupArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: taskArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: measuresArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: memoArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: targetArray))
-            resultArray.append(realmManager.createRealmWithUpdate(objects: noteArray))
-        } while resultArray.contains(false) // 成功するまで繰り返す
+    private func createAndUpdateRealm() {
+        let arrays = [groupArray, taskArray, measuresArray, memoArray, targetArray, noteArray] as [Any]
+        for array in arrays {
+            var success = false
+            repeat {
+                success = realmManager.createRealmWithUpdate(objects: array as! [Object])
+            } while !success // 失敗したらリトライ
+        }
     }
     
     /// 旧データを新データに変換（Swift Concurrency）
@@ -134,6 +128,47 @@ class DataConverter {
     
     
     
+    
+    /// 旧データを新データに変換してRealmに保存
+    func convertOldToRealm(completion: @escaping () -> ()) {
+        convertOldDataToNewData(completion: {
+            if self.realmManager.getAllGroup().count == 0 {
+                // 未分類グループを自動生成
+                let group = Group()
+                group.title = TITLE_UNCATEGORIZED
+                group.color = Color.gray.rawValue
+                self.groupArray = []
+                self.groupArray.append(group)
+                // 課題を未分類グループに所属させる
+                for task in self.taskArray {
+                    task.groupID = group.groupID
+                }
+            }
+            if self.realmManager.getNote(noteType: NoteType.free.rawValue).count == 0 {
+                // 新規ユーザの場合、フリーノートを自動作成
+                let freeNote = Note()
+                freeNote.title = TITLE_FREE_NOTE
+                freeNote.detail = MESSAGE_FREE_NOTE
+                self.noteArray.append(freeNote)
+            }
+            self.createRealmWithUpdate()
+            completion()
+        })
+    }
+    
+    /// 全ての新データをRealmに保存
+    private func createRealmWithUpdate() {
+        var resultArray: [Bool] = []
+        repeat {
+            resultArray = []
+            resultArray.append(realmManager.createRealmWithUpdate(objects: groupArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: taskArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: measuresArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: memoArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: targetArray))
+            resultArray.append(realmManager.createRealmWithUpdate(objects: noteArray))
+        } while resultArray.contains(false) // 成功するまで繰り返す
+    }
     
     /// 全ての旧データを変換
     private func convertOldDataToNewData(completion: @escaping () -> ()) {
@@ -339,9 +374,7 @@ class DataConverter {
     ///   - oldFreeNote: 旧フリーノートデータ
     /// - Returns: 新フリーノートデータ
     private func convertToFreeNote(oldFreeNote: FreeNote_old) -> Note {
-        let note = Note()
-        note.noteType = NoteType.free.rawValue
-        note.title = oldFreeNote.getTitle()
+        let note = Note(freeWithTitle: oldFreeNote.getTitle())
         note.detail = oldFreeNote.getDetail()
         return note
     }

@@ -37,4 +37,36 @@ class Note: Object {
         return "noteID"
     }
     
+    /// フリーノートのイニシャライザ
+    /// - Parameter title: タイトル
+    convenience init(freeWithTitle title: String) {
+        self.init()
+        self.noteType = NoteType.free.rawValue
+        self.title = title
+    }
+    
+    /// 練習ノートのイニシャライザ
+    /// - Parameters:
+    ///   - purpose: 練習の目的
+    ///   - detail: 練習内容
+    convenience init(practiceWithPurpose purpose: String, detail: String) {
+        self.init()
+        self.noteType = NoteType.practice.rawValue
+        self.purpose = purpose
+        self.detail = detail
+    }
+    
+    /// 大会ノートのイニシャライザ
+    /// - Parameters:
+    ///   - target: 目標
+    ///   - consciousness: 意識すること
+    ///   - result: 結果
+    convenience init(tournamentWithTarget target: String, consciousness: String, result: String) {
+        self.init()
+        self.noteType = NoteType.tournament.rawValue
+        self.target = target
+        self.consciousness = consciousness
+        self.result = result
+    }
+    
 }
