@@ -30,7 +30,6 @@ class TaskViewModel {
         self.groupArray = BehaviorRelay(value: [])
         self.taskArray = BehaviorRelay(value: [])
         self.completedTaskArray = BehaviorRelay(value: [])
-        syncDataWithConvert(completion: {})
         initBind()
     }
     
@@ -149,34 +148,28 @@ class TaskViewModel {
     
     /// データ変換＆同期処理
     /// ログアウト後は未分類グループなどを自動生成する必要がある
-    /// - Parameter completion: 完了処理
-    func syncDataWithConvert(completion: @escaping () -> ()) {
+    func syncDataWithConvert() {
         if !isComplete && Network.isOnline() {
-            let dataConverter = DataConverter()
-            dataConverter.convertOldToRealm(completion: {
-                self.syncData(completion: {
-                    completion()
-                })
-            })
+            Task {
+                let dataConverter = DataConverter()
+                await dataConverter.convertOldToRealm()
+                syncData()
+            }
         } else {
-            self.syncData(completion: {
-                completion()
-            })
+            syncData()
         }
     }
     
     /// 同期処理
-    /// - Parameter completion: 完了処理
-    func syncData(completion: @escaping () -> ()) {
+    func syncData() {
         if !isComplete && Network.isOnline() {
-            let syncManager = SyncManager()
-            syncManager.syncDatabase(completion: {
-                self.refreshData()
-                completion()
-            })
+            Task {
+                let syncManager = SyncManager()
+                await syncManager.syncDatabase()
+                refreshData()
+            }
         } else {
-            self.refreshData()
-            completion()
+            refreshData()
         }
     }
     

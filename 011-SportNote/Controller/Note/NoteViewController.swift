@@ -61,8 +61,6 @@ class NoteViewController: UIViewController {
         initSearchBar()
         initTableView()
         initBind()
-        // 初回のみ旧データ変換後に同期処理
-        syncDataWithConvert()
     }
     
     override func viewDidLayoutSubviews() {
@@ -204,21 +202,19 @@ class NoteViewController: UIViewController {
     /// 旧データ変換後に同期処理
     private func syncDataWithConvert() {
         HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-        viewModel.syncDataWithConvert(completion: {
-            self.tableView.refreshControl?.endRefreshing()
-            self.tableView.reloadData()
-            HUD.hide()
-        })
+        viewModel.syncDataWithConvert()
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
+        HUD.hide()
     }
     
     /// データの同期処理
     @objc func syncData() {
         HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-        viewModel.syncData(completion: {
-            self.tableView.refreshControl?.endRefreshing()
-            self.tableView.reloadData()
-            HUD.hide()
-        })
+        viewModel.syncData()
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
+        HUD.hide()
     }
     
     /// データの同期処理

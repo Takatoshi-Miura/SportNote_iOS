@@ -88,10 +88,11 @@ class CalendarViewController: UIViewController {
         if Network.isOnline() {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
             let syncManager = SyncManager()
-            syncManager.syncDatabase(completion: {
+            Task {
+                await syncManager.syncDatabase()
                 self.refreshData()
                 HUD.hide()
-            })
+            }
         } else {
             refreshData()
         }

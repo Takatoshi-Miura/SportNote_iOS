@@ -229,11 +229,12 @@ class LoginViewController: UIViewController {
                 
                 // Firebaseと同期
                 let syncManager = SyncManager()
-                syncManager.syncDatabase(completion: {
+                Task {
+                    await syncManager.syncDatabase()
                     HUD.hide()
                     self.delegate?.loginVCUserDidLogin(self)
                     HUD.show(.labeledSuccess(title: "", subtitle: MESSAGE_DATA_TRANSFER_SUCCESSFUL))
-                })
+                }
             }
         }
     }

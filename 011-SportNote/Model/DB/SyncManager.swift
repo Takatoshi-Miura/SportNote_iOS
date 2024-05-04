@@ -18,6 +18,7 @@ class SyncManager {
     /// RaalmとFirebaseのデータを同期（Swift Concurrency）
     /// データの種類ごとに並列に取得し、すべての処理の完了を待つ
     func syncDatabase() async {
+        print("開始:Realm-Firebase同期----------")
         async let group: Void = syncGroup()
         async let task: Void = syncTask()
         async let measures: Void = syncMeasures()
@@ -26,6 +27,7 @@ class SyncManager {
         async let note: Void = syncNote()
         
         let _: [Void] = await [group, task, measures, memo, target, note]
+        print("終了:Realm-Firebase同期----------")
     }
     
     /**
@@ -108,7 +110,7 @@ class SyncManager {
     
     /// Groupを同期
     private func syncGroup() async {
-        print("グループ同期開始")
+        print("Group同期開始")
         
         // Realmのグループを全取得
         let realmGroupArray: [Group] = realmManager.getAllGroup()
@@ -155,7 +157,7 @@ class SyncManager {
                 self.realmManager.updateGroup(group: firebaseGroup)
             }
         }
-        print("グループ同期終了")
+        print("Group同期終了")
     }
     
     /// Taskを同期

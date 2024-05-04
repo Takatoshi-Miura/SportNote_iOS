@@ -22,41 +22,34 @@ class NoteViewModel {
     
     init() {
         self.noteArray = BehaviorRelay(value: [])
-        syncDataWithConvert(completion: {})
     }
     
     // MARK: - Other Methods
     
     /// データ変換＆同期処理
     /// ログアウト後は未分類グループなどを自動生成する必要がある
-    /// - Parameter completion: 完了処理
-    func syncDataWithConvert(completion: @escaping () -> ()) {
+    func syncDataWithConvert() {
         if Network.isOnline() {
-            let dataConverter = DataConverter()
-            dataConverter.convertOldToRealm(completion: {
-                self.syncData(completion: {
-                    completion()
-                })
-            })
+            Task {
+                let dataConverter = DataConverter()
+                await dataConverter.convertOldToRealm()
+                syncData()
+            }
         } else {
-            self.syncData(completion: {
-                completion()
-            })
+            syncData()
         }
     }
     
     /// 同期処理
-    /// - Parameter completion: 完了処理
-    func syncData(completion: @escaping () -> ()) {
+    func syncData() {
         if Network.isOnline() {
-            let syncManager = SyncManager()
-            syncManager.syncDatabase(completion: {
+            Task {
+                let syncManager = SyncManager()
+                await syncManager.syncDatabase()
                 self.refreshData()
-                completion()
-            })
+            }
         } else {
             self.refreshData()
-            completion()
         }
     }
     

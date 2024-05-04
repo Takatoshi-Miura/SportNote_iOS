@@ -58,12 +58,14 @@ class DataConverter {
     /// 旧データを新データに変換（Swift Concurrency）
     /// 各々のデータ変換処理が全て終わるのを待つ
     private func convertOldDataToNewData() async {
+        print("開始:旧データ変換----------")
         async let oldTask: Void = convertOldTask()
         async let oldTarget: Void = convertOldTarget()
         async let oldFreeNote: Void = convertOldFreeNote()
         async let oldNote: Void = convertOldNote()
         
-        let _: [Void] = await [oldTask, oldTarget, oldFreeNote, oldFreeNote]
+        let _: [Void] = await [oldTask, oldTarget, oldFreeNote, oldNote]
+        print("終了:旧データ変換----------")
     }
     
     /// 全ての旧Taskを変換&FIrebaseから削除
