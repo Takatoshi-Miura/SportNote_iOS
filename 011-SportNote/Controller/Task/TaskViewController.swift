@@ -20,7 +20,7 @@ protocol TaskViewControllerDelegate: AnyObject {
     // セクションヘッダータップ時の処理
     func taskVCHeaderDidTap(group: Group)
     // 課題セルタップ時の処理
-    func taskVCTaskCellDidTap(task: Task)
+    func taskVCTaskCellDidTap(task: TaskData)
     // 完了した課題セルタップ時の処理
     func taskVCCompletedTaskCellDidTap(groupID: String)
     // 設定ボタンタップ時の処理
@@ -211,7 +211,7 @@ class TaskViewController: UIViewController {
     /// 課題を挿入(最後尾に追加)
     /// - Parameters:
     ///   - task: 挿入する課題
-    func insertTask(task: Task) {
+    func insertTask(task: TaskData) {
         let index = viewModel.insertTask(task: task)
         tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
     }

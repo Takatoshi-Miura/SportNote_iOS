@@ -18,7 +18,7 @@ class TaskDetailCoordinator: Coordinator {
     func startFlow(in navigationController: UINavigationController) {
     }
     
-    func startFrow(in navigationController: UINavigationController, withTask task: Task) {
+    func startFrow(in navigationController: UINavigationController, withTask task: TaskData) {
         self.navigationController = navigationController
         let taskDetailViewController = TaskDetailViewController(task: task)
         taskDetailViewController.delegate = self
@@ -34,7 +34,7 @@ class TaskDetailCoordinator: Coordinator {
 extension TaskDetailCoordinator: TaskDetailViewControllerDelegate {
     
     // TaskVC ← TaskDetailVC
-    func taskDetailVCCompleteTask(task: Task) {
+    func taskDetailVCCompleteTask(task: TaskData) {
         navigationController?.popToRootViewController(animated: true)
         let taskVC = navigationController?.topViewController as! TaskViewController
         if !task.isComplete {
@@ -44,7 +44,7 @@ extension TaskDetailCoordinator: TaskDetailViewControllerDelegate {
     
     // TaskVC ← TaskDetailVC
     // CompleteTaskVC ← TaskDetailVC
-    func taskDetailVCDeleteTask(task: Task) {
+    func taskDetailVCDeleteTask(task: TaskData) {
         navigationController?.popViewController(animated: true)
     }
     

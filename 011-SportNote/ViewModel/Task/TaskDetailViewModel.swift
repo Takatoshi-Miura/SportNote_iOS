@@ -17,13 +17,13 @@ class TaskDetailViewModel {
     let title: BehaviorRelay<String>
     let cause: BehaviorRelay<String>
     var measuresArray: BehaviorRelay<[Measures]>
-    var task: Task
+    var task: TaskData
     private let realmManager = RealmManager()
     private let disposeBag = DisposeBag()
     
     // MARK: - Initializer
     
-    init(task: Task) {
+    init(task: TaskData) {
         self.task = task
         self.title = BehaviorRelay(value: task.title)
         self.cause = BehaviorRelay(value: task.cause)

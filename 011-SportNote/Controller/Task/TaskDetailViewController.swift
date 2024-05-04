@@ -12,9 +12,9 @@ import RxCocoa
 
 protocol TaskDetailViewControllerDelegate: AnyObject {
     // 課題の完了(未完了)時の処理
-    func taskDetailVCCompleteTask(task: Task)
+    func taskDetailVCCompleteTask(task: TaskData)
     // 課題削除時の処理
-    func taskDetailVCDeleteTask(task: Task)
+    func taskDetailVCDeleteTask(task: TaskData)
     // 対策セルタップ時の処理
     func taskDetailVCMeasuresCellDidTap(measures: Measures)
 }
@@ -36,7 +36,7 @@ class TaskDetailViewController: UIViewController {
     
     // MARK: - Initializer
     
-    init(task: Task) {
+    init(task: TaskData) {
         self.viewModel = TaskDetailViewModel(task: task)
         super.init(nibName: nil, bundle: nil)
     }

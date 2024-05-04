@@ -60,8 +60,8 @@ class AddTaskViewModel {
     ///   - title: タイトル
     ///   - cause: 原因
     /// - Returns: Task
-    func insertTask(title: String, cause: String) -> Task? {
-        let task = Task()
+    func insertTask(title: String, cause: String) -> TaskData? {
+        let task = TaskData()
         task.groupID = groupArray.value[colorIndex.value].groupID
         task.title = title
         task.cause = cause
@@ -83,7 +83,7 @@ class AddTaskViewModel {
     
     /// 課題をFIrebaseに新規登録
     /// - Parameter task: 課題
-    func insertFirebase(task: Task) {
+    func insertFirebase(task: TaskData) {
         let firebaseManager = FirebaseManager()
         firebaseManager.saveTask(task: task, completion: {})
     }

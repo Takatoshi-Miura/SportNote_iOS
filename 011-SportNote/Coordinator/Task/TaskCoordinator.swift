@@ -51,7 +51,7 @@ extension TaskCoordinator: TaskViewControllerDelegate {
     }
     
     // TaskVC → TaskDetailVC
-    func taskVCTaskCellDidTap(task: Task) {
+    func taskVCTaskCellDidTap(task: TaskData) {
         let taskDetailCoordinator = TaskDetailCoordinator()
         taskDetailCoordinator.startFrow(in: navigationController!, withTask: task)
     }

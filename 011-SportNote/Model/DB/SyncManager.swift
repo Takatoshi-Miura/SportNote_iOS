@@ -163,10 +163,10 @@ class SyncManager {
         print("Task同期開始")
         
         // RealmのTaskを全取得
-        let realmTaskArray: [Task] = realmManager.getAllTask()
+        let realmTaskArray: [TaskData] = realmManager.getAllTask()
         
         // FirebaseのTaskを全取得(取得完了を待つ)
-        let firebaseTaskArray: [Task] = await firebaseManager.getAllTask()
+        let firebaseTaskArray: [TaskData] = await firebaseManager.getAllTask()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseTaskIDArray = firebaseTaskArray.map { $0.taskID }
@@ -485,7 +485,7 @@ class SyncManager {
     ///   - completion: 完了処理
     private func syncTask(completion: @escaping () -> ()) {
         // Realmの課題を全取得
-        let realmTaskArray: [Task] = realmManager.getAllTask()
+        let realmTaskArray: [TaskData] = realmManager.getAllTask()
         
         // Firebaseの課題を全取得
         firebaseManager.getAllTask(completion: {
@@ -533,7 +533,7 @@ class SyncManager {
         - array: Task配列
      - Returns: taskID配列
      */
-    private func getTaskIDArray(array: [Task]) -> [String] {
+    private func getTaskIDArray(array: [TaskData]) -> [String] {
         var taskIDArray: [String] = []
         for task in array {
             taskIDArray.append(task.taskID)
@@ -548,7 +548,7 @@ class SyncManager {
         - taskID: 取得したいTaskのID
      - Returns: Taskデータ
     */
-    private func getTaskWithID(array :[Task], ID: String) -> Task {
+    private func getTaskWithID(array :[TaskData], ID: String) -> TaskData {
         return array.filter{ $0.taskID.contains(ID) }.first!
     }
     

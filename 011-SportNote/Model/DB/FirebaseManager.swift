@@ -20,7 +20,7 @@ class FirebaseManager {
     
     // 新データ
     var groupArray = [Group]()
-    var taskArray = [Task]()
+    var taskArray = [TaskData]()
     var measuresArray = [Measures]()
     var memoArray = [Memo]()
     var targetArray = [Target]()
@@ -50,8 +50,8 @@ class FirebaseManager {
     }
     
     /// FirebaseにTaskを保存
-    /// - Parameter task: Task
-    func saveTask(task: Task) async {
+    /// - Parameter task: TaskData
+    func saveTask(task: TaskData) async {
         let db = Firestore.firestore()
         
         do {
@@ -200,7 +200,7 @@ class FirebaseManager {
     /// - Parameters:
     ///   - task: 課題データ
     ///   - completion: 完了処理
-    func saveTask(task: Task, completion: @escaping () -> ()) {
+    func saveTask(task: TaskData, completion: @escaping () -> ()) {
         let db = Firestore.firestore()
         db.collection("Task").document("\(task.userID)_\(task.taskID)").setData([
             "userID"        : task.userID,
@@ -364,9 +364,9 @@ class FirebaseManager {
     }
     
     /// FirebaseからTaskを全取得
-    /// - Returns: [Task]
-    func getAllTask() async -> [Task] {
-        var taskArray: [Task] = []
+    /// - Returns: [TaskData]
+    func getAllTask() async -> [TaskData] {
+        var taskArray: [TaskData] = []
         let db = Firestore.firestore()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
@@ -377,7 +377,7 @@ class FirebaseManager {
             
             for document in querySnapshot.documents {
                 let collection = document.data()
-                let task = Task()
+                let task = TaskData()
                 task.userID = collection["userID"] as! String
                 task.taskID = collection["taskID"] as! String
                 task.groupID = collection["groupID"] as! String
@@ -747,7 +747,7 @@ class FirebaseManager {
                     self.taskArray = []
                     for document in querySnapshot!.documents {
                         let collection = document.data()
-                        let task = Task()
+                        let task = TaskData()
                         task.userID = collection["userID"] as! String
                         task.taskID = collection["taskID"] as! String
                         task.groupID = collection["groupID"] as! String
@@ -1081,7 +1081,7 @@ class FirebaseManager {
     /// 課題を更新
     /// - Parameters:
     ///   - task: 課題データ
-    func updateTask(task: Task) {
+    func updateTask(task: TaskData) {
         let db = Firestore.firestore()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         let database = db.collection("Task").document("\(userID)_\(task.taskID)")

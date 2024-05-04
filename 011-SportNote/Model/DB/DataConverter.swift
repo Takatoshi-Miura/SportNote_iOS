@@ -15,7 +15,7 @@ class DataConverter {
     private let realmManager = RealmManager()
     
     private var groupArray: [Group] = []
-    private var taskArray: [Task] = []
+    private var taskArray: [TaskData] = []
     private var measuresArray: [Measures] = []
     private var memoArray: [Memo] = []
     private var targetArray: [Target] = []
@@ -75,7 +75,7 @@ class DataConverter {
         
         for oldTask in oldTaskArray {
             let dic = self.convertToTaskMeasuresMemo(oldTask: oldTask)
-            self.taskArray.append(contentsOf: dic["task"]!.first as! [Task])
+            self.taskArray.append(contentsOf: dic["task"]!.first as! [TaskData])
             self.measuresArray.append(contentsOf: dic["measures"]!.first as! [Measures])
             self.memoArray.append(contentsOf: dic["memo"]!.first as! [Memo])
             self.firebaseManager.deleteOldTask(oldTask: oldTask, completion: {})
@@ -217,7 +217,7 @@ class DataConverter {
             let oldTaskArray = self.firebaseManager.oldTaskArray
             for oldTask in oldTaskArray {
                 let dic = self.convertToTaskMeasuresMemo(oldTask: oldTask)
-                self.taskArray.append(contentsOf: dic["task"]!.first as! [Task])
+                self.taskArray.append(contentsOf: dic["task"]!.first as! [TaskData])
                 self.measuresArray.append(contentsOf: dic["measures"]!.first as! [Measures])
                 self.memoArray.append(contentsOf: dic["memo"]!.first as! [Memo])
                 self.firebaseManager.deleteOldTask(oldTask: oldTask, completion: {})
@@ -310,13 +310,13 @@ class DataConverter {
     /// - Returns: ["task": 新課題1つ,  "measures": 対策群,  "memo": メモ群]
     private func convertToTaskMeasuresMemo(oldTask: Task_old) -> [String: [Any]] {
         // 課題データ作成
-        let task = Task()
+        let task = TaskData()
         task.title = oldTask.getTitle()
         task.cause = oldTask.getCause()
         task.order = oldTask.getOrder()
         task.isComplete = oldTask.getAchievement()
         task.isDeleted = oldTask.getIsDeleted()
-        var taskArray: [Task] = []
+        var taskArray: [TaskData] = []
         taskArray.append(task)
         
         var measuresArray: [Measures] = []

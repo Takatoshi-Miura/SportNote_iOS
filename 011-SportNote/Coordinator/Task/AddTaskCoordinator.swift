@@ -39,7 +39,7 @@ extension AddTaskCoordinator: AddTaskViewControllerDelegate {
     }
     
     // TaskVC ← AddTaskVC
-    func addTaskVCAddTask(_ viewController: UIViewController, task: Task) {
+    func addTaskVCAddTask(_ viewController: UIViewController, task: TaskData) {
         viewController.dismiss(animated: true, completion: nil)
         (previousViewController! as! TaskViewController).insertTask(task: task)
     }

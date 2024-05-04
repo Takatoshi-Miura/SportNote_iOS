@@ -1,5 +1,5 @@
 //
-//  Task.swift
+//  TaskData.swift
 //  011-SportNote
 //
 //  Created by Takatoshi Miura on 2022/04/02.
@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-class Task: Object {
+class TaskData: Object {
     
     @objc dynamic var taskID: String = NSUUID().uuidString
     @objc dynamic var userID: String = UserDefaults.standard.object(forKey: "userID") as! String
@@ -43,7 +43,7 @@ struct FilteredTask {
     let updated_at: Date
     var isFilter: Bool
     
-    init(task: Task) {
+    init(task: TaskData) {
         self.taskID = task.taskID
         self.userID = task.userID
         self.groupID = task.groupID
@@ -73,7 +73,7 @@ struct TaskForAddNote {
     let updated_at: Date
     var isDisplay: Bool // ノート追加画面に表示されているか否か
     
-    init(task: Task) {
+    init(task: TaskData) {
         self.taskID = task.taskID
         self.userID = task.userID
         self.groupID = task.groupID

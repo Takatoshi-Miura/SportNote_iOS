@@ -14,7 +14,7 @@ protocol AddTaskViewControllerDelegate: AnyObject {
     // モーダルを閉じる時の処理
     func addTaskVCDismiss(_ viewController: UIViewController)
     // 課題追加時の処理
-    func addTaskVCAddTask(_ viewController: UIViewController, task: Task)
+    func addTaskVCAddTask(_ viewController: UIViewController, task: TaskData)
 }
 
 class AddTaskViewController: UIViewController {

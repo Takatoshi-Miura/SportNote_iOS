@@ -17,8 +17,8 @@ class TaskViewModel {
     let isComplete: Bool
     let groupID: String
     var groupArray: BehaviorRelay<[Group]>
-    var taskArray: BehaviorRelay<[[Task]]>
-    var completedTaskArray: BehaviorRelay<[Task]>
+    var taskArray: BehaviorRelay<[[TaskData]]>
+    var completedTaskArray: BehaviorRelay<[TaskData]>
     private let realmManager = RealmManager()
     private let disposeBag = DisposeBag()
     
@@ -208,7 +208,7 @@ class TaskViewModel {
     /// 課題を挿入
     /// - Parameter task: 課題
     /// - Returns: 挿入するIndexPath
-    func insertTask(task: Task) -> IndexPath {
+    func insertTask(task: TaskData) -> IndexPath {
         var index: IndexPath = [0, 0]
         for group in groupArray.value {
             if task.groupID == group.groupID {
