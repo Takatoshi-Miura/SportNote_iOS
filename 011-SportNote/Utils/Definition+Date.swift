@@ -97,3 +97,16 @@ func formatDate(date: Date, format: String) -> String {
     dateFormatter.dateFormat = format
     return dateFormatter.string(from: date)
 }
+
+/// 年月日文字列からDate型に変換
+/// - Parameters:
+///   - year: 年
+///   - month: 月
+///   - date: 日
+/// - Returns: Date型の日付
+func convertToDate(year: Int, month: Int, date: Int) -> Date {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy'年'M'月'd'日"
+    dateFormatter.locale = Locale(identifier: "ja_JP")
+    return dateFormatter.date(from: "\(year)年\(month)月\(date)日")!
+}
