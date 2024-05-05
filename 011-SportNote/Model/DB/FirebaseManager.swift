@@ -611,7 +611,7 @@ class FirebaseManager {
     /// Firebaseから旧FreeNoteを取得
     /// - Returns: FreeNote_old?
     func getOldFreeNote() async -> FreeNote_old? {
-        var oldFreeNote = FreeNote_old()
+        let oldFreeNote = FreeNote_old()
         let db = Firestore.firestore()
         let userID = UserDefaults.standard.object(forKey: "userID") as! String
         
