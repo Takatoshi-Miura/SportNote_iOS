@@ -55,9 +55,11 @@ class NoteViewModel {
     
     /// ノート再取得
     func refreshData() {
-        var newNoteArray = realmManager.getPracticeTournamentNote()
-        newNoteArray.insert(realmManager.getFreeNote(), at: 0)
-        noteArray.accept(newNoteArray)
+        DispatchQueue.main.async {
+            var newNoteArray = self.realmManager.getPracticeTournamentNote()
+            newNoteArray.insert(self.realmManager.getFreeNote(), at: 0)
+            self.noteArray.accept(newNoteArray)
+        }
     }
     
     /// ノート検索

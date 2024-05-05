@@ -175,11 +175,13 @@ class TaskViewModel {
     
     /// データ再取得
     func refreshData() {
-        if isComplete {
-            completedTaskArray.accept(realmManager.getTasksInGroup(ID: groupID, isCompleted: isComplete))
-        } else {
-            groupArray.accept(realmManager.getGroupArrayForTaskView())
-            taskArray.accept(realmManager.getTaskArrayForTaskView())
+        DispatchQueue.main.async {
+            if self.isComplete {
+                self.completedTaskArray.accept(self.realmManager.getTasksInGroup(ID: self.groupID, isCompleted: self.isComplete))
+            } else {
+                self.groupArray.accept(self.realmManager.getGroupArrayForTaskView())
+                self.taskArray.accept(self.realmManager.getTaskArrayForTaskView())
+            }
         }
     }
     
