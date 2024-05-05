@@ -36,11 +36,11 @@ class SyncManager {
     private func syncGroup() async {
         print("Group同期開始")
         
-        // Realmのグループを全取得
-        let realmGroupArray: [Group] = realmManager.getAllGroup()
-        
         // Firebaseのグループを全取得(取得完了を待つ)
         let firebaseGroupArray: [Group] = await firebaseManager.getAllGroup()
+        
+        // Realmのグループを全取得
+        let realmGroupArray: [Group] = realmManager.getAllGroup()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseGroupIDArray = firebaseGroupArray.map { $0.groupID }
@@ -88,11 +88,11 @@ class SyncManager {
     private func syncTask() async {
         print("Task同期開始")
         
-        // RealmのTaskを全取得
-        let realmTaskArray: [TaskData] = realmManager.getAllTask()
-        
         // FirebaseのTaskを全取得(取得完了を待つ)
         let firebaseTaskArray: [TaskData] = await firebaseManager.getAllTask()
+        
+        // RealmのTaskを全取得
+        let realmTaskArray: [TaskData] = realmManager.getAllTask()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseTaskIDArray = firebaseTaskArray.map { $0.taskID }
@@ -140,11 +140,11 @@ class SyncManager {
     private func syncMeasures() async {
         print("Measures同期開始")
         
-        // RealmのMeasuresを全取得
-        let realmMeasuresArray: [Measures] = realmManager.getAllMeasures()
-        
         // FirebaseのMeasuresを全取得(取得完了を待つ)
         let firebaseMeasuresArray: [Measures] = await firebaseManager.getAllMeasures()
+        
+        // RealmのMeasuresを全取得
+        let realmMeasuresArray: [Measures] = realmManager.getAllMeasures()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseMeasuresIDArray = firebaseMeasuresArray.map { $0.measuresID }
@@ -192,11 +192,11 @@ class SyncManager {
     private func syncMemo() async {
         print("Memo同期開始")
         
-        // RealmのMemoを全取得
-        let realmMemoArray: [Memo] = realmManager.getAllMemo()
-        
         // FirebaseのMemoを全取得(取得完了を待つ)
         let firebaseMemoArray: [Memo] = await firebaseManager.getAllMemo()
+        
+        // RealmのMemoを全取得
+        let realmMemoArray: [Memo] = realmManager.getAllMemo()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseMemoIDArray = firebaseMemoArray.map { $0.memoID }
@@ -244,11 +244,11 @@ class SyncManager {
     private func syncTarget() async {
         print("Target同期開始")
         
-        // RealmのTargetを全取得
-        let realmTargetArray: [Target] = realmManager.getAllTarget()
-        
         // FirebaseのTargetを全取得(取得完了を待つ)
         let firebaseTargetArray: [Target] = await firebaseManager.getAllTarget()
+        
+        // RealmのTargetを全取得
+        let realmTargetArray: [Target] = realmManager.getAllTarget()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseTargetIDArray = firebaseTargetArray.map { $0.targetID }
@@ -296,11 +296,11 @@ class SyncManager {
     private func syncNote() async {
         print("Note同期開始")
         
-        // RealmのNoteを全取得
-        let realmNoteArray: [Note] = realmManager.getAllNote()
-        
         // FirebaseのNoteを全取得(取得完了を待つ)
         let firebaseNoteArray: [Note] = await firebaseManager.getAllNote()
+        
+        // RealmのNoteを全取得
+        let realmNoteArray: [Note] = realmManager.getAllNote()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseNoteIDArray = firebaseNoteArray.map { $0.noteID }
