@@ -48,14 +48,11 @@ class SyncManager {
         let onlyFirebaseID = firebaseGroupIDArray.subtracting(realmGroupIDArray)
         let onlyRealmID = realmGroupIDArray.subtracting(firebaseGroupIDArray)
         
-        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
-        await withTaskGroup(of: Void.self) { taskGroup in
-            for groupID in onlyRealmID {
-                taskGroup.addTask {
-                    if let group = realmGroupArray.first(where: { $0.groupID == groupID }) {
-                        await self.firebaseManager.saveGroup(group: group)
-                    }
-                }
+        // Realmにしか存在しないデータをFirebaseに保存
+        // 並列処理でやりたいがRealmはスレッドセーフではないためawaitは使用不可
+        for groupID in onlyRealmID {
+            if let group = realmGroupArray.first(where: { $0.groupID == groupID }) {
+                self.firebaseManager.saveGroup(group: group, completion: {})
             }
         }
         
@@ -100,14 +97,11 @@ class SyncManager {
         let onlyFirebaseID = firebaseTaskIDArray.subtracting(realmTaskIDArray)
         let onlyRealmID = realmTaskIDArray.subtracting(firebaseTaskIDArray)
         
-        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
-        await withTaskGroup(of: Void.self) { taskGroup in
-            for taskID in onlyRealmID {
-                taskGroup.addTask {
-                    if let task = realmTaskArray.first(where: { $0.taskID == taskID }) {
-                        await self.firebaseManager.saveTask(task: task)
-                    }
-                }
+        // Realmにしか存在しないデータをFirebaseに保存
+        // 並列処理でやりたいがRealmはスレッドセーフではないためawaitは使用不可
+        for taskID in onlyRealmID {
+            if let task = realmTaskArray.first(where: { $0.taskID == taskID }) {
+                self.firebaseManager.saveTask(task: task, completion: {})
             }
         }
         
@@ -152,14 +146,11 @@ class SyncManager {
         let onlyFirebaseID = firebaseMeasuresIDArray.subtracting(realmMeasuresIDArray)
         let onlyRealmID = realmMeasuresIDArray.subtracting(firebaseMeasuresIDArray)
         
-        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
-        await withTaskGroup(of: Void.self) { taskGroup in
-            for measuresID in onlyRealmID {
-                taskGroup.addTask {
-                    if let measures = realmMeasuresArray.first(where: { $0.measuresID == measuresID }) {
-                        await self.firebaseManager.saveMeasures(measures: measures)
-                    }
-                }
+        // Realmにしか存在しないデータをFirebaseに保存
+        // 並列処理でやりたいがRealmはスレッドセーフではないためawaitは使用不可
+        for measuresID in onlyRealmID {
+            if let measures = realmMeasuresArray.first(where: { $0.measuresID == measuresID }) {
+                self.firebaseManager.saveMeasures(measures: measures, completion: {})
             }
         }
         
@@ -204,14 +195,11 @@ class SyncManager {
         let onlyFirebaseID = firebaseMemoIDArray.subtracting(realmMemoIDArray)
         let onlyRealmID = realmMemoIDArray.subtracting(firebaseMemoIDArray)
         
-        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
-        await withTaskGroup(of: Void.self) { taskGroup in
-            for memoID in onlyRealmID {
-                taskGroup.addTask {
-                    if let memo = realmMemoArray.first(where: { $0.memoID == memoID }) {
-                        await self.firebaseManager.saveMemo(memo: memo)
-                    }
-                }
+        // Realmにしか存在しないデータをFirebaseに保存
+        // 並列処理でやりたいがRealmはスレッドセーフではないためawaitは使用不可
+        for memoID in onlyRealmID {
+            if let memo = realmMemoArray.first(where: { $0.memoID == memoID }) {
+                self.firebaseManager.saveMemo(memo: memo, completion: {})
             }
         }
         
@@ -256,14 +244,11 @@ class SyncManager {
         let onlyFirebaseID = firebaseTargetIDArray.subtracting(realmTargetIDArray)
         let onlyRealmID = realmTargetIDArray.subtracting(firebaseTargetIDArray)
         
-        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
-        await withTaskGroup(of: Void.self) { taskGroup in
-            for targetID in onlyRealmID {
-                taskGroup.addTask {
-                    if let target = realmTargetArray.first(where: { $0.targetID == targetID }) {
-                        await self.firebaseManager.saveTarget(target: target)
-                    }
-                }
+        // Realmにしか存在しないデータをFirebaseに保存
+        // 並列処理でやりたいがRealmはスレッドセーフではないためawaitは使用不可
+        for targetID in onlyRealmID {
+            if let target = realmTargetArray.first(where: { $0.targetID == targetID }) {
+                self.firebaseManager.saveTarget(target: target, completion: {})
             }
         }
         
@@ -308,14 +293,11 @@ class SyncManager {
         let onlyFirebaseID = firebaseNoteIDArray.subtracting(realmNoteIDArray)
         let onlyRealmID = realmNoteIDArray.subtracting(firebaseNoteIDArray)
         
-        // Realmにしか存在しないデータをFirebaseに保存(並列処理)
-        await withTaskGroup(of: Void.self) { taskGroup in
-            for noteID in onlyRealmID {
-                taskGroup.addTask {
-                    if let note = realmNoteArray.first(where: { $0.noteID == noteID }) {
-                        await self.firebaseManager.saveNote(note: note)
-                    }
-                }
+        // Realmにしか存在しないデータをFirebaseに保存
+        // 並列処理でやりたいがRealmはスレッドセーフではないためawaitは使用不可
+        for noteID in onlyRealmID {
+            if let note = realmNoteArray.first(where: { $0.noteID == noteID }) {
+                self.firebaseManager.saveNote(note: note, completion: {})
             }
         }
         
