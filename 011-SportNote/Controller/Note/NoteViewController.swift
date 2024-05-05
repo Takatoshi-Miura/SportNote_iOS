@@ -202,19 +202,23 @@ class NoteViewController: UIViewController {
     /// 旧データ変換後に同期処理
     private func syncDataWithConvert() {
         HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-        viewModel.syncDataWithConvert()
-        tableView.refreshControl?.endRefreshing()
-        tableView.reloadData()
-        HUD.hide()
+        Task {
+            await viewModel.syncDataWithConvert()
+            tableView.refreshControl?.endRefreshing()
+            tableView.reloadData()
+            HUD.hide()
+        }
     }
     
     /// データの同期処理
     @objc func syncData() {
         HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-        viewModel.syncData()
-        tableView.refreshControl?.endRefreshing()
-        tableView.reloadData()
-        HUD.hide()
+        Task {
+            await viewModel.syncData()
+            tableView.refreshControl?.endRefreshing()
+            tableView.reloadData()
+            HUD.hide()
+        }
     }
     
     /// データの同期処理

@@ -28,26 +28,22 @@ class NoteViewModel {
     
     /// データ変換＆同期処理
     /// ログアウト後は未分類グループなどを自動生成する必要がある
-    func syncDataWithConvert() {
+    func syncDataWithConvert() async {
         if Network.isOnline() {
-            Task {
-                let dataConverter = DataConverter()
-                await dataConverter.convertOldToRealm()
-                syncData()
-            }
+            let dataConverter = DataConverter()
+            await dataConverter.convertOldToRealm()
+            await syncData()
         } else {
-            syncData()
+            await syncData()
         }
     }
     
     /// 同期処理
-    func syncData() {
+    func syncData() async {
         if Network.isOnline() {
-            Task {
-                let syncManager = SyncManager()
-                await syncManager.syncDatabase()
-                self.refreshData()
-            }
+            let syncManager = SyncManager()
+            await syncManager.syncDatabase()
+            self.refreshData()
         } else {
             self.refreshData()
         }
