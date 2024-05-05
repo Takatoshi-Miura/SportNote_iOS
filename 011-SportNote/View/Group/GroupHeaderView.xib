@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,14 +15,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qPh-DB-du9">
-                    <rect key="frame" x="0.0" y="0.0" width="25" height="40"/>
+                    <rect key="frame" x="0.0" y="20" width="25" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="vx7-kF-MAh"/>
                         <constraint firstAttribute="height" constant="40" id="y1n-9I-tah"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hiq-wF-Tip">
-                    <rect key="frame" x="30" y="0.0" width="334" height="40"/>
+                    <rect key="frame" x="30" y="20" width="334" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="Rze-HS-HOM"/>
                     </constraints>
@@ -32,7 +31,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="plb-2f-AUf">
-                    <rect key="frame" x="369" y="0.0" width="45" height="40"/>
+                    <rect key="frame" x="369" y="20" width="45" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="45" id="0Z6-YI-t9I"/>
                         <constraint firstAttribute="height" constant="40" id="NW5-JO-caz"/>
@@ -44,16 +43,13 @@
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="hiq-wF-Tip" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="5Sk-WS-w4V"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="plb-2f-AUf" secondAttribute="bottom" id="8rY-85-8YY"/>
                 <constraint firstItem="qPh-DB-du9" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="HX9-zc-3Sb"/>
                 <constraint firstItem="plb-2f-AUf" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="J7q-ak-ILo"/>
                 <constraint firstItem="plb-2f-AUf" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Utb-jJ-Kvf"/>
                 <constraint firstItem="qPh-DB-du9" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="VEf-aj-Fhq"/>
                 <constraint firstItem="hiq-wF-Tip" firstAttribute="leading" secondItem="qPh-DB-du9" secondAttribute="trailing" constant="5" id="efB-5n-7Bt"/>
-                <constraint firstItem="qPh-DB-du9" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="k4o-Ht-7tq"/>
                 <constraint firstItem="hiq-wF-Tip" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="lSq-ZW-Kjx"/>
                 <constraint firstItem="plb-2f-AUf" firstAttribute="leading" secondItem="hiq-wF-Tip" secondAttribute="trailing" constant="5" id="oL0-n3-K5n"/>
             </constraints>
@@ -66,9 +62,4 @@
             <point key="canvasLocation" x="-212" y="137"/>
         </view>
     </objects>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

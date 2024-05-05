@@ -27,7 +27,9 @@ class GroupHeaderView: UITableViewHeaderFooterView {
     // MARK: LifeCycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.tintColor = .systemGray6
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .systemGray6
+        self.backgroundView = backgroundView
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(headerViewDidTap(sender:))))
     }
     
