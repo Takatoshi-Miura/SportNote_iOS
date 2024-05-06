@@ -53,6 +53,7 @@ class CalendarViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         handleSelectedCell()
+        refreshData()
     }
     
     // MARK: - Other Methods
@@ -84,11 +85,11 @@ class CalendarViewController: UIViewController {
     }
     
     /// データの同期処理
-    private func syncData() {
+    @objc func syncData() {
         if Network.isOnline() {
             HUD.show(.labeledProgress(title: "", subtitle: MESSAGE_SERVER_COMMUNICATION))
-            let syncManager = SyncManager()
             Task {
+                let syncManager = SyncManager()
                 await syncManager.syncDatabase()
                 self.refreshData()
                 HUD.hide()
@@ -99,11 +100,13 @@ class CalendarViewController: UIViewController {
     }
     
     /// データを取得
-    private func refreshData() {
-        let realmManager = RealmManager()
-        noteArray = realmManager.getPracticeTournamentNote()
-        calendar.reloadData()
-        tableView.reloadData()
+    @objc func refreshData() {
+        DispatchQueue.main.async {
+            let realmManager = RealmManager()
+            self.noteArray = realmManager.getPracticeTournamentNote()
+            self.calendar.reloadData()
+            self.tableView.reloadData()
+        }
     }
     
     // MARK: - Action

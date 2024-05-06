@@ -224,6 +224,8 @@ class NoteViewController: UIViewController {
     /// データの同期処理
     @objc func refreshData() {
         viewModel.refreshData()
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
     
     /// バナー広告を表示
