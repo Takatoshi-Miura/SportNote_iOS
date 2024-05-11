@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		43C4AC795EC0DEA2B00F96F5 /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49617546BDC5E936638183E7 /* Pods_011_SportNote.framework */; };
+		8D00EC332BEF9FD400257BAC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */; };
 		8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12B0C727F7D01E0040AF3D /* Definition+String.swift */; };
 		8D1522C02AD758B0002D1018 /* AddGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */; };
 		8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */; };
@@ -125,6 +126,7 @@
 		435FAFF78187002CEEED137F /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
 		49617546BDC5E936638183E7 /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EAD49BA192DB70D3B11E4AD /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
+		8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8D12B0C727F7D01E0040AF3D /* Definition+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+String.swift"; sourceTree = "<group>"; };
 		8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewModel.swift; sourceTree = "<group>"; };
 		8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresViewModel.swift; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 				8D665D2F24A17CD400441B32 /* Assets.xcassets */,
 				8D57AFD424A44F5A007450BF /* GoogleService-Info.plist */,
 				8D665D3424A17CD400441B32 /* Info.plist */,
+				8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -762,6 +765,7 @@
 				8DC294862AD3B017009B8AF2 /* GroupViewController.xib in Resources */,
 				8D5CFC0928024CA4008DF02E /* GroupHeaderView.xib in Resources */,
 				8D91CE8A280CC80C000D3B1F /* AddTournamentNoteViewController.xib in Resources */,
+				8D00EC332BEF9FD400257BAC /* PrivacyInfo.xcprivacy in Resources */,
 				8D5CFBFE27FBA36A008DF02E /* AddGroupViewController.xib in Resources */,
 				8D69FC9924B7085900DFECB3 /* TaskCellForAddNote.xib in Resources */,
 				8D91CE96281896E6000D3B1F /* AddPracticeNoteViewController.xib in Resources */,
