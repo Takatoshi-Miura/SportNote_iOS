@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		43C4AC795EC0DEA2B00F96F5 /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49617546BDC5E936638183E7 /* Pods_011_SportNote.framework */; };
 		8D00EC332BEF9FD400257BAC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */; };
+		8D00EC352BF0426700257BAC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00EC342BF0426700257BAC /* AppInfo.swift */; };
 		8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12B0C727F7D01E0040AF3D /* Definition+String.swift */; };
 		8D1522C02AD758B0002D1018 /* AddGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */; };
 		8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */; };
@@ -127,6 +128,7 @@
 		49617546BDC5E936638183E7 /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EAD49BA192DB70D3B11E4AD /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 		8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		8D00EC342BF0426700257BAC /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		8D12B0C727F7D01E0040AF3D /* Definition+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+String.swift"; sourceTree = "<group>"; };
 		8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewModel.swift; sourceTree = "<group>"; };
 		8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresViewModel.swift; sourceTree = "<group>"; };
@@ -358,6 +360,7 @@
 		8D18E81A27F65B3B00035E99 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8D00EC342BF0426700257BAC /* AppInfo.swift */,
 				8D481D6A27F98BF60082D956 /* Network.swift */,
 				8D481D4C27F7D9030082D956 /* Definition.swift */,
 				8D790DB52883CF1D0062838C /* Definition+Group.swift */,
@@ -900,6 +903,7 @@
 				8D481D4D27F7D9040082D956 /* Definition.swift in Sources */,
 				8D5CFC0127FBAD1B008DF02E /* AddGroupCoordinator.swift in Sources */,
 				8D91CE7A2808D9CC000D3B1F /* AddTaskCoordinator.swift in Sources */,
+				8D00EC352BF0426700257BAC /* AppInfo.swift in Sources */,
 				8DEF8AA12AEC70300018AF57 /* FreeNoteViewModel.swift in Sources */,
 				8D27704B2B2FB09C006608E0 /* NotePageCoordinator.swift in Sources */,
 				8D91CE74280777E8000D3B1F /* TaskDetailCoordinator.swift in Sources */,
