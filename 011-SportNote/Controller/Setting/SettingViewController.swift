@@ -105,10 +105,19 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        cell.imageView?.image = viewModel.cells[indexPath.section][indexPath.row].image
-        cell.textLabel?.text = viewModel.cells[indexPath.section][indexPath.row].title
-        cell.accessoryType = .disclosureIndicator
+        var cell: UITableViewCell
+        if (indexPath.section == SettingViewModel.Section.systemInfo.rawValue) {
+            cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
+            cell.detailTextLabel?.text = "\(AppInfo.getAppVersion())(\(AppInfo.getBuildNo()))"
+        } else {
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+            cell.accessoryType = .disclosureIndicator
+        }
+        
+        let viewModelCell = viewModel.cells[indexPath.section][indexPath.row]
+        cell.imageView?.image = viewModelCell.image
+        cell.textLabel?.text = viewModelCell.title
+        
         return cell
     }
     
@@ -123,6 +132,8 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
             break
         case .inquiry:
             startMailer()
+            break
+        case .appVersion:
             break
         }
     }

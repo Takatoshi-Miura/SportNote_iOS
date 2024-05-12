@@ -11,6 +11,7 @@
 "Save" = "保存";
 "Error" = "エラー";
 "Delete" = "削除";
+"AppVersion" = "アプリバージョン";
 "DeleteInput" = "入力した内容が削除されます。\nよろしいですか？";
 "ServerCommunicationMessage" = "通信中";
 
@@ -145,6 +146,7 @@
 "Data" = "データ";
 "Help" = "ヘルプ";
 "Theme" = "テーマ";
+"SystemInfo" = "システム情報";
 "Notification" = "通知";
 "Data transfer" = "データの引継ぎ";
 "How to use this App?" = "アプリの使い方";

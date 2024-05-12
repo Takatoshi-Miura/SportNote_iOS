@@ -11,6 +11,7 @@
 "Save" = "Save";
 "Error" = "Error";
 "Delete" = "Delete";
+"AppVersion" = "AppVersion";
 "DeleteInput" = "The entered content will be deleted.\nAre you sure?";
 "ServerCommunicationMessage" = "During server communication...";
 
@@ -144,6 +145,7 @@
 "Data" = "Data";
 "Help" = "Help";
 "Theme" = "Theme";
+"SystemInfo" = "System Info";
 "Notification" = "Notification";
 "Data transfer" = "Data transfer";
 "How to use this App?" = "How to use this App?";
