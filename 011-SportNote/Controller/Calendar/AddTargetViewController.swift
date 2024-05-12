@@ -29,7 +29,7 @@ class AddTargetViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var yearlyTargetSwitch: UISwitch!
     @IBOutlet weak var pickerView: UIPickerView!
-    private let years  = (1950...2200).map { $0 }
+    private let years  = Year.years.map { $0 }
     private let months = Month.allCases.map { $0 }
     private var viewModel: AddTargetViewModel
     private let disposeBag = DisposeBag()
@@ -150,13 +150,19 @@ class AddTargetViewController: UIViewController {
         titleLabel.text = TITLE_TITLE
         targetLabel.text = TITLE_YEARLY_TARGET
         initTextField(textField: titleTextField, placeholder: MESSAGE_TARGET_EXAMPLE)
-        pickerView.backgroundColor = UIColor.systemGray6
-        pickerView.selectRow(72, inComponent: 0, animated: false)
+        initPickerView()
     }
     
 }
 
 extension AddTargetViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    /// PickerView初期化
+    private func initPickerView() {
+        pickerView.backgroundColor = UIColor.systemGray6
+        pickerView.selectRow(Year.getCurrentYearIndex(), inComponent: 0, animated: false)
+        pickerView.selectRow(Month.getCurrentMonthIndex(), inComponent: 1, animated: false)
+    }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if yearlyTargetSwitch.isOn {

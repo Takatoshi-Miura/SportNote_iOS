@@ -8,8 +8,30 @@
 
 import UIKit
 
+/// 年
+enum Year {
+    
+    /// 1950~今年の10年後まで
+    static var years: [Int] {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        return Array(1950...currentYear + 10)
+    }
+    
+    /// 今年の年のインデックスを取得
+    /// - Returns: 今年の年のインデックス
+    static func getCurrentYearIndex() -> Int {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        guard let index = years.firstIndex(of: currentYear) else {
+            fatalError("Current year not found in the 'years' array.")
+        }
+        return index
+    }
+    
+}
+
 /// 月
 enum Month: Int, CaseIterable {
+    
     case January = 1
     case February
     case March
@@ -39,6 +61,21 @@ enum Month: Int, CaseIterable {
         case .December: return TITLE_DECEMBER
         }
     }
+    
+    /// 今月のMonthを取得
+    /// - Returns: 今月のMonthの値
+    static func getCurrentMonth() -> Month {
+        let calendar = Calendar.current
+        let currentMonth = calendar.component(.month, from: Date())
+        return Month(rawValue: currentMonth) ?? .January
+    }
+    
+    /// 今月のMonthのインデックスを取得
+    /// - Returns: 今月のMonthのインデックス
+    static func getCurrentMonthIndex() -> Int {
+        return Month.getCurrentMonth().rawValue - 1
+    }
+    
 }
 
 /// 曜日
