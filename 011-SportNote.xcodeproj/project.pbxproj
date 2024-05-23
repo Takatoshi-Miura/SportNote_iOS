@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		81F9AB846F625E85F7E7F82F /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58BA5C55260444BE8C4F2D72 /* Pods_011_SportNote.framework */; };
+		30273E34BD83F3AA381B0985 /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA261F78691EA8E50FB447F /* Pods_011_SportNote.framework */; };
 		8D00EC332BEF9FD400257BAC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */; };
 		8D00EC352BF0426700257BAC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00EC342BF0426700257BAC /* AppInfo.swift */; };
 		8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12B0C727F7D01E0040AF3D /* Definition+String.swift */; };
@@ -124,8 +124,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		58BA5C55260444BE8C4F2D72 /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		660B26DBE835B8F53FBAE410 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
+		071E6B678ABDFD4A674414D2 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
 		8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8D00EC342BF0426700257BAC /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		8D12B0C727F7D01E0040AF3D /* Definition+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+String.swift"; sourceTree = "<group>"; };
@@ -245,7 +244,8 @@
 		8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNoteViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA52AF47DEE0018AF57 /* AddTargetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTargetViewModel.swift; sourceTree = "<group>"; };
-		DB55B73ED9E829EB57F1B916 /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
+		BDA261F78691EA8E50FB447F /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9D475FB0524BAB6B9DEC843 /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,7 +255,7 @@
 			files = (
 				8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */,
 				8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */,
-				81F9AB846F625E85F7E7F82F /* Pods_011_SportNote.framework in Frameworks */,
+				30273E34BD83F3AA381B0985 /* Pods_011_SportNote.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,8 +265,8 @@
 		4BC4D980DECE5E34BDB96AE6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DB55B73ED9E829EB57F1B916 /* Pods-011-SportNote.debug.xcconfig */,
-				660B26DBE835B8F53FBAE410 /* Pods-011-SportNote.release.xcconfig */,
+				E9D475FB0524BAB6B9DEC843 /* Pods-011-SportNote.debug.xcconfig */,
+				071E6B678ABDFD4A674414D2 /* Pods-011-SportNote.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -678,7 +678,7 @@
 			children = (
 				8DCC058924F8E40300744A61 /* MessageUI.framework */,
 				8D57AFDC24A47FAB007450BF /* QuartzCore.framework */,
-				58BA5C55260444BE8C4F2D72 /* Pods_011_SportNote.framework */,
+				BDA261F78691EA8E50FB447F /* Pods_011_SportNote.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -690,12 +690,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8D665D3724A17CD400441B32 /* Build configuration list for PBXNativeTarget "011-SportNote" */;
 			buildPhases = (
-				40AFF5151444D5CC982B7613 /* [CP] Check Pods Manifest.lock */,
+				51CB6D2787A5E34A155250A6 /* [CP] Check Pods Manifest.lock */,
 				8D665D1F24A17CD300441B32 /* Sources */,
 				8D665D2024A17CD300441B32 /* Frameworks */,
 				8D665D2124A17CD300441B32 /* Resources */,
-				783FE0D77E7130DB5B4CDF89 /* [CP] Embed Pods Frameworks */,
-				E3BAFA831D26B261667AD274 /* [CP] Copy Pods Resources */,
+				4C915E70B688D14840AF22BB /* [CP] Embed Pods Frameworks */,
+				05EBACAEC061E1AA3F94514A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -780,7 +780,41 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		40AFF5151444D5CC982B7613 /* [CP] Check Pods Manifest.lock */ = {
+		05EBACAEC061E1AA3F94514A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4C915E70B688D14840AF22BB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		51CB6D2787A5E34A155250A6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -800,40 +834,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		783FE0D77E7130DB5B4CDF89 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E3BAFA831D26B261667AD274 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1082,7 +1082,7 @@
 		};
 		8D665D3824A17CD400441B32 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB55B73ED9E829EB57F1B916 /* Pods-011-SportNote.debug.xcconfig */;
+			baseConfigurationReference = E9D475FB0524BAB6B9DEC843 /* Pods-011-SportNote.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1111,7 +1111,7 @@
 		};
 		8D665D3924A17CD400441B32 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 660B26DBE835B8F53FBAE410 /* Pods-011-SportNote.release.xcconfig */;
+			baseConfigurationReference = 071E6B678ABDFD4A674414D2 /* Pods-011-SportNote.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
