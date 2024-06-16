@@ -759,6 +759,7 @@ extension RealmManager {
         var resultArray = [Memo]()
         for note in noteArray {
             if let memo = getMemo(noteID: note.noteID, measuresID: measuresID) {
+                memo.noteDate = note.date
                 resultArray.append(memo)
             }
         }

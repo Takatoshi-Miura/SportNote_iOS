@@ -127,7 +127,7 @@ func getCurrentTime() -> String {
 /// - Parameters:
 ///    - date: 変換したいDate
 ///    - format: 変換後の形式
-/// - Returns: 現在時刻（yyyy/MM/dd）
+/// - Returns: 変換後の時刻文字列
 func formatDate(date: Date, format: String) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale(identifier: "ja_JP")

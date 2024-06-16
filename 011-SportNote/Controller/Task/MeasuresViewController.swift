@@ -92,7 +92,7 @@ class MeasuresViewController: UIViewController {
     private func bindTableView() {
         viewModel.memoArray.asDriver()
             .drive(tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)) { _, memo, cell in
-                cell.textLabel?.text = memo.detail
+                cell.textLabel?.text = "\(formatDate(date: memo.noteDate, format: "yyyy/MM/dd"))\n\n" + memo.detail
                 cell.backgroundColor = UIColor.systemGray6
                 cell.textLabel?.numberOfLines = 0
             }
