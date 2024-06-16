@@ -45,3 +45,28 @@ enum Color: Int, CaseIterable {
         }
     }
 }
+
+
+/// ColorPickerの項目を取得
+/// - Parameter element: Color
+/// - Returns: 項目
+func getColorPickerItems(element: Color) -> NSMutableAttributedString {
+    // カラーイメージ
+    let imageAttachment = NSTextAttachment()
+    imageAttachment.image = UIImage(systemName: "circle.fill")?.withTintColor(element.color)
+    imageAttachment.bounds = CGRect(x: 0, y: -5, width: 25, height: 25)
+    let imageString = NSAttributedString(attachment: imageAttachment)
+    // タイトル文字列
+    let titleString = NSAttributedString(string: " \(element.title)", attributes: [
+        .font: UIFont(name: "HiraKakuProN-W3", size: 18) ?? UIFont.systemFont(ofSize: 18)
+    ])
+    // 合体
+    let fullString = NSMutableAttributedString()
+    fullString.append(imageString)
+    fullString.append(titleString)
+    // 位置調整
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.alignment = .center
+    fullString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: fullString.length))
+    return fullString
+}

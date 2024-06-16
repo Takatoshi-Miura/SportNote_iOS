@@ -140,11 +140,10 @@ class AddGroupViewController: UIViewController {
     
     /// Picker項目のバインド
     private func bindPicker() {
-        Observable.just(Color.allCases)
-            .bind(to: colorPicker.rx.itemTitles) { _, color in
-                return color.title
-            }
-            .disposed(by: disposeBag)
+        Observable.just(Color.allCases).bind(to: colorPicker.rx.itemAttributedTitles) { (row, element) in
+            return getColorPickerItems(element: element)
+        }
+        .disposed(by: disposeBag)
     }
     
     /// Pickerツールバーのバインド
