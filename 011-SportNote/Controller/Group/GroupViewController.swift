@@ -116,7 +116,7 @@ class GroupViewController: UIViewController {
     /// Picker項目のバインド
     private func bindPicker() {
         Observable.just(Color.allCases).bind(to: colorPicker.rx.itemAttributedTitles) { (row, element) in
-            return getColorPickerItems(element: element)
+            return getColorPickerItems(color: element.color, title: element.title)
         }
         .disposed(by: disposeBag)
     }
