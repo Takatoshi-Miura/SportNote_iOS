@@ -10,6 +10,7 @@
 		30273E34BD83F3AA381B0985 /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA261F78691EA8E50FB447F /* Pods_011_SportNote.framework */; };
 		8D00EC332BEF9FD400257BAC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */; };
 		8D00EC352BF0426700257BAC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00EC342BF0426700257BAC /* AppInfo.swift */; };
+		8D072BA52C223E320046767D /* SportsNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D072BA42C223E320046767D /* SportsNoteTests.swift */; };
 		8D12B0C827F7D01E0040AF3D /* Definition+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12B0C727F7D01E0040AF3D /* Definition+String.swift */; };
 		8D1522C02AD758B0002D1018 /* AddGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */; };
 		8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */; };
@@ -123,10 +124,22 @@
 		8DEF8AA62AF47DEE0018AF57 /* AddTargetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA52AF47DEE0018AF57 /* AddTargetViewModel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8D072BA62C223E320046767D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8D665D1B24A17CD300441B32 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D665D2224A17CD300441B32;
+			remoteInfo = "011-SportNote";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		071E6B678ABDFD4A674414D2 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
 		8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8D00EC342BF0426700257BAC /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		8D072BA22C223E320046767D /* SportsNoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportsNoteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D072BA42C223E320046767D /* SportsNoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsNoteTests.swift; sourceTree = "<group>"; };
 		8D12B0C727F7D01E0040AF3D /* Definition+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Definition+String.swift"; sourceTree = "<group>"; };
 		8D1522BF2AD758B0002D1018 /* AddGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewModel.swift; sourceTree = "<group>"; };
 		8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresViewModel.swift; sourceTree = "<group>"; };
@@ -249,6 +262,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8D072B9F2C223E320046767D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D665D2024A17CD300441B32 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -269,6 +289,14 @@
 				071E6B678ABDFD4A674414D2 /* Pods-011-SportNote.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		8D072BA32C223E320046767D /* SportsNoteTests */ = {
+			isa = PBXGroup;
+			children = (
+				8D072BA42C223E320046767D /* SportsNoteTests.swift */,
+			);
+			path = SportsNoteTests;
 			sourceTree = "<group>";
 		};
 		8D1522C12ADA1CEC002D1018 /* Task */ = {
@@ -558,6 +586,7 @@
 			isa = PBXGroup;
 			children = (
 				8D665D2524A17CD300441B32 /* 011-SportNote */,
+				8D072BA32C223E320046767D /* SportsNoteTests */,
 				8D665D2424A17CD300441B32 /* Products */,
 				4BC4D980DECE5E34BDB96AE6 /* Pods */,
 				C286C2B0EED91BEBB760A936 /* Frameworks */,
@@ -568,6 +597,7 @@
 			isa = PBXGroup;
 			children = (
 				8D665D2324A17CD300441B32 /* 011-SportNote.app */,
+				8D072BA22C223E320046767D /* SportsNoteTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -686,6 +716,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8D072BA12C223E320046767D /* SportsNoteTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8D072BAA2C223E320046767D /* Build configuration list for PBXNativeTarget "SportsNoteTests" */;
+			buildPhases = (
+				8D072B9E2C223E320046767D /* Sources */,
+				8D072B9F2C223E320046767D /* Frameworks */,
+				8D072BA02C223E320046767D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8D072BA72C223E320046767D /* PBXTargetDependency */,
+			);
+			name = SportsNoteTests;
+			productName = SportsNoteTests;
+			productReference = 8D072BA22C223E320046767D /* SportsNoteTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		8D665D2224A17CD300441B32 /* 011-SportNote */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8D665D3724A17CD400441B32 /* Build configuration list for PBXNativeTarget "011-SportNote" */;
@@ -712,10 +760,14 @@
 		8D665D1B24A17CD300441B32 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = "Takatoshi Miura";
 				TargetAttributes = {
+					8D072BA12C223E320046767D = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 8D665D2224A17CD300441B32;
+					};
 					8D665D2224A17CD300441B32 = {
 						CreatedOnToolsVersion = 11.5;
 						LastSwiftMigration = 1150;
@@ -737,11 +789,19 @@
 			projectRoot = "";
 			targets = (
 				8D665D2224A17CD300441B32 /* 011-SportNote */,
+				8D072BA12C223E320046767D /* SportsNoteTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8D072BA02C223E320046767D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D665D2124A17CD300441B32 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -839,6 +899,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8D072B9E2C223E320046767D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D072BA52C223E320046767D /* SportsNoteTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D665D1F24A17CD300441B32 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -931,6 +999,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8D072BA72C223E320046767D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8D665D2224A17CD300441B32 /* 011-SportNote */;
+			targetProxy = 8D072BA62C223E320046767D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		8D481D4A27F7D2870082D956 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -962,6 +1038,55 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8D072BA82C223E320046767D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9YB68MR5FL;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.Takatoshi.Miura.SwiftPlayGround.SportsNoteTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/011-SportNote.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/011-SportNote";
+			};
+			name = Debug;
+		};
+		8D072BA92C223E320046767D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9YB68MR5FL;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.it6210.Takatoshi.Miura.SwiftPlayGround.SportsNoteTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/011-SportNote.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/011-SportNote";
+			};
+			name = Release;
+		};
 		8D665D3524A17CD400441B32 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1140,6 +1265,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8D072BAA2C223E320046767D /* Build configuration list for PBXNativeTarget "SportsNoteTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8D072BA82C223E320046767D /* Debug */,
+				8D072BA92C223E320046767D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8D665D1E24A17CD300441B32 /* Build configuration list for PBXProject "011-SportNote" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
