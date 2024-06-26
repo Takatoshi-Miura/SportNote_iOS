@@ -16,6 +16,7 @@
 		8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */; };
 		8D1522C52ADB6E5F002D1018 /* TaskDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */; };
 		8D1522C72ADC9E23002D1018 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */; };
+		8D20B2C22C2CCFD60054FF79 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D20B2C12C2CCFD60054FF79 /* RealmActor.swift */; };
 		8D2770482B2FAF58006608E0 /* NotePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2770462B2FAF58006608E0 /* NotePageViewController.swift */; };
 		8D2770492B2FAF58006608E0 /* NotePageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2770472B2FAF58006608E0 /* NotePageViewController.xib */; };
 		8D27704B2B2FB09C006608E0 /* NotePageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27704A2B2FB09C006608E0 /* NotePageCoordinator.swift */; };
@@ -148,6 +149,7 @@
 		8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresViewModel.swift; sourceTree = "<group>"; };
 		8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewModel.swift; sourceTree = "<group>"; };
 		8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
+		8D20B2C12C2CCFD60054FF79 /* RealmActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmActor.swift; sourceTree = "<group>"; };
 		8D2770462B2FAF58006608E0 /* NotePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePageViewController.swift; sourceTree = "<group>"; };
 		8D2770472B2FAF58006608E0 /* NotePageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotePageViewController.xib; sourceTree = "<group>"; };
 		8D27704A2B2FB09C006608E0 /* NotePageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePageCoordinator.swift; sourceTree = "<group>"; };
@@ -510,6 +512,7 @@
 				8D481D5627F80EB50082D956 /* DataConverter.swift */,
 				8D481D5427F808090082D956 /* FirebaseManager.swift */,
 				8D481D7527F9C52A0082D956 /* RealmManager.swift */,
+				8D20B2C12C2CCFD60054FF79 /* RealmActor.swift */,
 			);
 			path = DB;
 			sourceTree = "<group>";
@@ -1015,6 +1018,7 @@
 				8D790DB82883CF8E0062838C /* Definition+Date.swift in Sources */,
 				8D5CFC0C2802D925008DF02E /* GroupViewController.swift in Sources */,
 				8DC294852AD35F6B009B8AF2 /* GroupViewModel.swift in Sources */,
+				8D20B2C22C2CCFD60054FF79 /* RealmActor.swift in Sources */,
 				8D481D5B27F8256E0082D956 /* SyncManager.swift in Sources */,
 				8D91CE712806295C000D3B1F /* TaskDetailViewController.swift in Sources */,
 				8D481D7627F9C52A0082D956 /* RealmManager.swift in Sources */,

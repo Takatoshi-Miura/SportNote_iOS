@@ -6,6 +6,9 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      if target.name == 'BoringSSL-GRPC'
+        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'NO'
+      end
     end
   end
 end
