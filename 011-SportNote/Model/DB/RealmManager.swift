@@ -1464,7 +1464,6 @@ extension RealmManager {
                 dbGroup.order = group.order
                 dbGroup.isDeleted = group.isDeleted
                 dbGroup.updated_at = Date()
-                // 他に更新する必要があるプロパティがあればここに追加します。
             }
         }
     }
@@ -1489,6 +1488,481 @@ extension RealmManager {
     /// RealmのGroupを全削除
     private func deleteAllGroup() async {
         await realmActor.deleteAll(ofType: Group.self)
+    }
+
+}
+
+// MARK: - TaskData RealmActor
+
+extension RealmManager {
+    
+    /// RealmのTaskDataを全取得
+    /// - Returns: 全TaskData
+    func getAllTask() async -> [TaskData] {
+        var taskArray: [TaskData] = []
+        let results = await realmActor.find(TaskData.self)
+        for result in results {
+            taskArray.append(result)
+        }
+        return taskArray
+    }
+    
+    /// RealmのTaskDataを取得
+    /// - Parameters:
+    ///   - taskID: TaskID
+    /// - Returns: TaskData
+    func getTask(taskID: String) async -> TaskData {
+        let filter = "taskID == '\(taskID)' AND (isDeleted == false)"
+        let result = await realmActor.findOne(TaskData.self, filter: filter)
+        return result ?? TaskData()
+    }
+    
+    // TODO: 要実装
+    /// Realmの課題を取得
+    /// - Parameters:
+    ///   - noteID: ノートID
+    /// - Returns: 課題データ
+    func getTask(noteID: String) -> [TaskData] {
+        var taskArray = [TaskData]()
+        
+        let memoArray = getMemo(noteID: noteID)
+        var measuresArray = [Measures]()
+        for memo in memoArray {
+            let measures = getMeasures(measuresID: memo.measuresID)
+            measuresArray.append(measures)
+        }
+        for measures in measuresArray {
+            let task = getTask(taskID: measures.taskID)
+            taskArray.append(task)
+        }
+        
+        return taskArray
+    }
+    
+    // TODO: 要実装
+    /// RealmのTaskDataを取得(ノートViewer用)
+    /// - Parameters:
+    ///   - noteID: noteID
+    /// - Returns: [TaskForAddNote]
+    func getTaskArrayForAddNoteView(noteID: String) -> [TaskForAddNote] {
+        var taskForAddNoteArray = [TaskForAddNote]()
+        
+        let taskArray = getTask(noteID: noteID)
+        for task in taskArray {
+            let taskForAddNote = TaskForAddNote(task: task)
+            taskForAddNoteArray.append(taskForAddNote)
+        }
+        
+        return taskForAddNoteArray
+    }
+    
+    // TODO: 要実装
+    /// TaskViewController用task配列を返却
+    /// - Returns: Task配列[[task][task, task]…]の形
+    func getTaskArrayForTaskView() -> [[TaskData]] {
+        var taskArray: [[TaskData]] = [[TaskData]]()
+        let groupArray: [Group] = getGroupArrayForTaskView()
+        for group in groupArray {
+            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+            taskArray.append(tasks)
+        }
+        return taskArray
+    }
+    
+    // TODO: 要実装
+    /// AddPracticeNoteViewController用task配列を返却(未解決の課題をグループ関係なく取得)
+    /// - Returns: Task配列[task, task…]の形
+    func getTaskArrayForAddNoteView() -> [TaskForAddNote] {
+        var taskArray = [TaskForAddNote]()
+        let groupArray: [Group] = getGroupArrayForTaskView()
+        for group in groupArray {
+            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+            for task in tasks {
+                let taskForAddNote = TaskForAddNote(task: task)
+                // 対策未設定の課題は表示しない
+                if getPriorityMeasuresInTask(taskID: task.taskID) != nil {
+                    taskArray.append(taskForAddNote)
+                }
+            }
+        }
+        return taskArray
+    }
+    
+    // TODO: 要実装
+    /// NoteFilterViewController用FilteredTask配列を返却
+    /// - Parameters:
+    ///   - isFilter: チェックの保存状態を反映するか否か
+    /// - Returns: Task配列[[FilteredTask][FilteredTask, FilteredTask]…]の形
+    func getTaskArrayForNoteFilterView(isFilter: Bool) -> [[FilteredTask]] {
+        var filteredTaskArray: [[FilteredTask]] = [[FilteredTask]]()
+        let userDefaults = UserDefaults.standard
+        var filterTaskIDArray = [String]()
+        if let idArray = userDefaults.array(forKey: "filterTaskID") {
+            filterTaskIDArray = idArray as! [String]
+        }
+        let groupArray: [Group] = getGroupArrayForTaskView()
+        
+        for group in groupArray {
+            var array = [FilteredTask]()
+            let tasks = getTasksInGroup(ID: group.groupID)
+            for task in tasks {
+                var filteredTask = FilteredTask(task: task)
+                // チェックの保存状態を反映
+                if isFilter && !filterTaskIDArray.contains(filteredTask.taskID) {
+                    filteredTask.isFilter = false
+                }
+                array.append(filteredTask)
+            }
+            filteredTaskArray.append(array)
+        }
+        
+        return filteredTaskArray
+    }
+    
+    /// Groupに含まれるTaskDataを取得
+    /// - Parameters:
+    ///   - groupID: グループID
+    ///   - isCompleted: 完了or未完了
+    /// - Returns: グループに含まれる課題
+    func getTasksInGroup(ID groupID: String, isCompleted: Bool) async -> [TaskData] {
+        var taskArray: [TaskData] = []
+        let filter = "(groupID == '\(groupID)') && (isDeleted == false) && (isComplete == \(String(isCompleted)))"
+        let results = await realmActor.find(TaskData.self, filter: filter, sortKey: "order", ascending: true)
+        for task in results {
+            taskArray.append(task)
+        }
+        return taskArray
+    }
+    
+    /// Groupに含まれるTaskDataを取得
+    /// - Parameters:
+    ///   - groupID: グループID
+    /// - Returns: グループに含まれる課題
+    func getTasksInGroup(ID groupID: String) async -> [TaskData] {
+        var taskArray: [TaskData] = []
+        let filter = "(groupID == '\(groupID)') && (isDeleted == false))"
+        let results = await realmActor.find(TaskData.self, filter: filter, sortKey: "order", ascending: true)
+        for task in results {
+            taskArray.append(task)
+        }
+        return taskArray
+    }
+    
+    /// RealmのTaskDataを更新
+    /// - Parameters:
+    ///    - task: TaskData
+    func updateTask(task: TaskData) async {
+        let filter = "groupID == '\(task.taskID)'"
+        let dbTask = await realmActor.findOne(TaskData.self, filter: filter)
+        if let dbTask {
+            let realm = try! await Realm()
+            try! realm.write {
+                dbTask.userID = task.userID
+                dbTask.groupID = task.groupID
+                dbTask.title = task.title
+                dbTask.cause = task.cause
+                dbTask.order = task.order
+                dbTask.isComplete = task.isComplete
+                dbTask.isDeleted = task.isDeleted
+                dbTask.updated_at = Date()
+            }
+        }
+    }
+    
+    /// RealmのTaskDataの並び順を更新
+    /// - Parameters:
+    ///   - taskArray: [[TaskData]]
+    func updateTaskOrder(taskArray: [[TaskData]]) async {
+        let realm = try! await Realm()
+        var index = 0
+        for tasks in taskArray {
+            for task in tasks {
+                let filter = "taskID == '\(task.taskID)'"
+                let result = await realmActor.findOne(TaskData.self, filter: filter)
+                try! realm.write {
+                    result?.order = index
+                    result?.updated_at = Date()
+                }
+                index += 1
+                if index > tasks.count - 1 {
+                    index = 0
+                    continue
+                }
+            }
+        }
+    }
+    
+    /// RealmのTaskDataを全削除
+    private func deleteAllTask() async {
+        await realmActor.deleteAll(ofType: TaskData.self)
+    }
+    
+}
+
+// MARK: - Measures RealmActor
+
+extension RealmManager {
+    
+    /// Realmの対策を全取得
+    /// - Returns: 全対策データ
+    func getAllMeasures() async -> [Measures] {
+        var measuresArray: [Measures] = []
+        let results = await realmActor.find(Measures.self)
+        for result in results {
+            measuresArray.append(result)
+        }
+        return measuresArray
+    }
+    
+    /// Realmの対策を取得
+    /// - Parameters:
+    ///   - measuresID: 対策ID
+    /// - Returns: 対策データ
+    func getMeasures(measuresID: String) async -> Measures {
+        let filter = "measuresID == '\(measuresID)' AND (isDeleted == false)"
+        let result = await realmActor.findOne(Measures.self, filter: filter)
+        return result ?? Measures()
+    }
+    
+    /// 課題に含まれる最優先の対策名を取得
+    /// - Parameters:
+    ///   - taskID: 課題ID
+    /// - Returns: 対策名
+    func getMeasuresTitleInTask(taskID: String) async -> String {
+        let measuresArray = await getMeasuresInTask(ID: taskID)
+        return measuresArray.first?.title ?? ""
+    }
+    
+    /// 課題に含まれる最優先の対策を取得
+    /// - Parameters:
+    ///   - taskID: 課題ID
+    /// - Returns: 対策
+    func getPriorityMeasuresInTask(taskID: String) async -> Measures? {
+        let measuresArray = await getMeasuresInTask(ID: taskID)
+        return measuresArray.first
+    }
+    
+    /// 課題に含まれる対策を取得
+    /// - Parameters:
+    ///   - taskID: 課題ID
+    /// - Returns: 課題に含まれる対策
+    func getMeasuresInTask(ID taskID: String) async -> [Measures] {
+        var measuresArray: [Measures] = []
+        let filter = "(taskID == '\(taskID)' && (isDeleted == false))"
+        let results = await realmActor.find(Measures.self, filter: filter, sortKey: "order", ascending: true)
+        for measures in results {
+            measuresArray.append(measures)
+        }
+        return measuresArray
+    }
+    
+    /// Realmの対策を更新
+    /// - Parameters:
+    ///    - measures: Realmオブジェクト
+    func updateMeasures(measures: Measures) async {
+        let filter = "measuresID == '\(measures.measuresID)'"
+        let result = await realmActor.findOne(Measures.self, filter: filter)
+        if let result {
+            let realm = try! await Realm()
+            try! realm.write {
+                result.userID = measures.userID
+                result.title = measures.title
+                result.order = measures.order
+                result.isDeleted = measures.isDeleted
+                result.updated_at = Date()
+            }
+        }
+    }
+    
+    /// 対策の並び順を更新
+    /// - Parameters:
+    ///    - measuresArray: 対策配列
+    func updateMeasuresOrder(measuresArray: [Measures]) async {
+        let realm = try! await Realm()
+        var index = 0
+        for measures in measuresArray {
+            let filter = "measuresID == '\(measures.measuresID)'"
+            let result = await realmActor.findOne(Measures.self, filter: filter)
+            try! realm.write {
+                result?.order = index
+                result?.updated_at = Date()
+            }
+            index += 1
+        }
+    }
+    
+    /// Realmの対策を全削除
+    private func deleteAllMeasures() async {
+        await realmActor.deleteAll(ofType: Measures.self)
+    }
+    
+}
+
+// MARK: - Memo RealmActor
+
+extension RealmManager {
+    
+    /// Realmのメモを全取得
+    /// - Returns: 全メモデータ
+    func getAllMemo() async -> [Memo] {
+        var memoArray: [Memo] = []
+        let results = await realmActor.find(Memo.self)
+        for result in results {
+            memoArray.append(result)
+        }
+        return memoArray
+    }
+    
+    /// 対策に含まれるメモを取得
+    /// - Parameters:
+    ///   - measuresID: 対策ID
+    /// - Returns: 対策に含まれるメモ
+    func getMemo(measuresID: String) async -> [Memo] {
+        // 対策に含まれるメモを取得
+        var memoArray: [Memo] = []
+        let filter = "measuresID == '\(measuresID)' AND (isDeleted == false)"
+        let results = await realmActor.find(Memo.self, filter: filter, sortKey: "created_at", ascending: false)
+        for memo in results {
+            memoArray.append(memo)
+        }
+        
+        // TODO: 要実装
+        // ノートの日付順に並び替える
+        var resultArray: [Memo] = []
+        var noteArray = getNote(memoArray: memoArray)
+        noteArray.sort(by: {$0.date > $1.date})
+        
+        for note in noteArray {
+            if let memo = await getMemo(noteID: note.noteID, measuresID: measuresID) {
+                memo.noteDate = note.date
+                resultArray.append(memo)
+            }
+        }
+        return resultArray
+    }
+    
+    /// 対策に含まれるメモを取得
+    /// - Parameters:
+    ///   - measuresID: 対策ID
+    /// - Returns: 対策に含まれるメモ
+    func getMemo(searchWord: String) async -> [Memo] {
+        var memoArray: [Memo] = []
+        let filter = "(detail CONTAINS '\(searchWord)') AND (isDeleted == false)"
+        let results = await realmActor.find(Memo.self, filter: filter, sortKey: "created_at", ascending: false)
+        for memo in results {
+            memoArray.append(memo)
+        }
+        return memoArray
+    }
+    
+    /// ノートに含まれるメモを取得
+    /// - Parameters:
+    ///   - noteID: ノートID
+    /// - Returns: ノートに含まれるメモ
+    func getMemo(noteID: String) async -> [Memo] {
+        var memoArray: [Memo] = []
+        let filter = "(noteID == '\(noteID)') AND (isDeleted == false)"
+        let results = await realmActor.find(Memo.self, filter: filter, sortKey: "created_at", ascending: false)
+        for memo in results {
+            memoArray.append(memo)
+        }
+        return memoArray
+    }
+    
+    /// ノートに含まれるメモを取得
+    /// - Parameters:
+    ///   - noteID: ノートID
+    ///   - measuresID: 対策ID
+    /// - Returns: ノートに含まれるメモ
+    func getMemo(noteID: String, measuresID: String) async -> Memo? {
+        let filter = "(noteID == '\(noteID)') AND (measuresID == '\(measuresID)') AND (isDeleted == false)"
+        let result = await realmActor.findOne(Memo.self, filter: filter)
+        return result
+    }
+    
+    /// Realmのメモを更新
+    /// - Parameters:
+    ///    - memo: Realmオブジェクト
+    func updateMemo(memo: Memo) async {
+        let filter = "memoID == '\(memo.memoID)'"
+        let result = await realmActor.findOne(Memo.self, filter: filter)
+        if let result {
+            let realm = try! await Realm()
+            try! realm.write {
+                result.userID = memo.userID
+                result.detail = memo.detail
+                result.isDeleted = memo.isDeleted
+                result.updated_at = Date()
+            }
+        }
+    }
+    
+    /// Realmのメモを全削除
+    private func deleteAllMemo() async {
+        await realmActor.deleteAll(ofType: Memo.self)
+    }
+    
+}
+
+// MARK: - Target RealmActor
+
+extension RealmManager {
+    
+    /// Realmの目標を全取得
+    /// - Returns: 全目標データ
+    func getAllTarget() async -> [Target] {
+        var targetArray: [Target] = []
+        let results = await realmActor.find(Target.self)
+        for result in results {
+            targetArray.append(result)
+        }
+        return targetArray
+    }
+    
+    /// 目標を取得(年指定)
+    /// - Parameters:
+    ///    - year: 年
+    /// - Returns: 目標データ
+    func getTarget(year: Int) async -> Target? {
+        let filter = "(year == \(year)) AND (isYearlyTarget == true) AND (isDeleted == false)"
+        let result = await realmActor.findOne(Target.self, filter: filter)
+        return result
+    }
+    
+    /// 目標を取得(年月指定)
+    /// - Parameters:
+    ///    - year: 年
+    ///    - month: 月
+    ///    - isYearlyTarget: 年間目標フラグ
+    /// - Returns: 目標データ
+    func getTarget(year: Int, month: Int, isYearlyTarget: Bool) async -> Target? {
+        let filter = "(year == \(year)) AND (month == \(month)) AND (isYearlyTarget == \(isYearlyTarget)) AND (isDeleted == false)"
+        let result = await realmActor.findOne(Target.self, filter: filter)
+        return result
+    }
+    
+    /// Realmの目標を更新
+    /// - Parameters:
+    ///    - target: Realmオブジェクト
+    func updateTarget(target: Target) async {
+        let filter = "targetID == '\(target.targetID)'"
+        let result = await realmActor.findOne(Target.self, filter: filter)
+        if let result {
+            let realm = try! await Realm()
+            try! realm.write {
+                result.title = target.title
+                result.year = target.year
+                result.month = target.month
+                result.isYearlyTarget = target.isYearlyTarget
+                result.isDeleted = target.isDeleted
+                result.updated_at = Date()
+            }
+        }
+    }
+    
+    /// Realmの目標を全削除
+    private func deleteAllTarget() async {
+        await realmActor.deleteAll(ofType: Target.self)
     }
 
 }
