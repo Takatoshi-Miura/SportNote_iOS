@@ -11,6 +11,8 @@ import Foundation
 
 class RealmManager {
     
+    let realmActor = RealmActor()
+    
     /// Realmにデータを作成
     /// - Parameters:
     ///    - object: Realmオブジェクト
@@ -1388,4 +1390,105 @@ extension RealmManager {
         }
     }
     
+}
+
+// MARK: - Group RealmActor
+
+extension RealmManager {
+    
+    /// Realmのグループを全取得
+    /// - Returns: Group配列
+    func getAllGroup() async -> [Group] {
+        var groupArray: [Group] = []
+        let results = await realmActor.find(Group.self)
+        for result in results {
+            groupArray.append(result)
+        }
+        return groupArray
+    }
+    
+    /// Realmのグループを取得
+    /// - Parameters:
+    ///  - groupID: groupID
+    /// - Returns: Group
+    func getGroup(groupID: String) async -> Group {
+        let filter = "groupID == '\(groupID)' AND (isDeleted == false)"
+        let result = await realmActor.findOne(Group.self, filter: filter)
+        return result ?? Group()
+    }
+    
+    /// TaskViewController用Group配列を取得
+    /// - Returns: Group配列
+    func getGroupArrayForTaskView() async -> [Group] {
+        var groupArray: [Group] = []
+        let filter = "isDeleted == false"
+        let results = await realmActor.find(Group.self, filter: filter, sortKey: "order", ascending: true)
+        for group in results {
+            groupArray.append(group)
+        }
+        return groupArray
+    }
+    
+    // TODO: 要実装
+    /// Noteに含まれるGroupカラーを取得
+    /// - Returns: Groupカラー
+    func getGroupColor(noteID: String) -> UIColor {
+        let taskArray = getTask(noteID: noteID)
+        if !taskArray.isEmpty {
+            let task = taskArray.first!
+            let group = getGroup(groupID: task.groupID)
+            return Color.allCases[group.color].color
+        } else {
+            return UIColor.white
+        }
+    }
+    
+    /// TaskViewControllerに表示するGroupの個数を取得
+    /// - Returns: Group数
+    func getGroupCount() -> Int {
+        let groupArray = getGroupArrayForTaskView()
+        return groupArray.count
+    }
+    
+    /// RealmのGroupを更新
+    /// - Parameter group: Group
+    func updateGroup(group: Group) async {
+        let filter = "groupID == '\(group.groupID)'"
+        let dbGroup = await realmActor.findOne(Group.self, filter: filter)
+        if let dbGroup {
+            let realm = try! await Realm()
+            try! realm.write {
+                dbGroup.userID = group.userID
+                dbGroup.title = group.title
+                dbGroup.color = group.color
+                dbGroup.order = group.order
+                dbGroup.isDeleted = group.isDeleted
+                dbGroup.updated_at = Date()
+                // 他に更新する必要があるプロパティがあればここに追加します。
+            }
+        }
+    }
+    
+    /// Groupの並び順を更新
+    /// - Parameters:
+    ///  - groupArray: グループ配列
+    func updateGroupOrder(groupArray: [Group]) async {
+        let realm = try! await Realm()
+        var index = 0
+        for group in groupArray {
+            let filter = "groupID == '\(group.groupID)'"
+            let result = await realmActor.findOne(Group.self, filter: filter)
+            try! realm.write {
+                result?.order = index
+                result?.updated_at = Date()
+            }
+            index += 1
+        }
+    }
+    
+    /// RealmのGroupを全削除
+    private func deleteAllGroup() async {
+        await realmActor.deleteAll(ofType: Group.self)
+    }
+
 }

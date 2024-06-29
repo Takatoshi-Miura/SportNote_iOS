@@ -74,5 +74,18 @@ actor RealmActor {
             print("Error deleting object from Realm: \(error.localizedDescription)")
         }
     }
+    
+    /// データを全削除
+    /// - Parameter type: データ型
+    func deleteAll<T: Object>(ofType type: T.Type) {
+        let objects = find(type)
+        do {
+            try realm.write {
+                realm.delete(objects)
+            }
+        } catch {
+            print("Error deleting all objects of type \(type): \(error.localizedDescription)")
+        }
+    }
 
 }
