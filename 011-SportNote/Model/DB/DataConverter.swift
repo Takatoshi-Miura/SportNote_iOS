@@ -26,7 +26,8 @@ class DataConverter {
         // 旧データを新データに変換
         await convertOldDataToNewData()
         
-        if self.realmManager.getAllGroup().count == 0 {
+        let realmGroupArray: [Group] = await realmManager.getAllGroup()
+        if realmGroupArray.isEmpty {
             // 未分類グループを自動生成
             let defaultGroup = Group(title: TITLE_UNCATEGORIZED, color: Color.gray, order: 0)
             self.groupArray = [defaultGroup]
@@ -35,12 +36,15 @@ class DataConverter {
                 task.groupID = defaultGroup.groupID
             }
         }
-        if self.realmManager.getNote(noteType: NoteType.free.rawValue).count == 0 {
-            // 新規ユーザの場合、フリーノートを自動作成
+        
+        // 新規ユーザの場合、フリーノートを自動作成
+        if let _ = await realmManager.getFreeNote() {
+        } else {
             let freeNote = Note(freeWithTitle: TITLE_FREE_NOTE)
             freeNote.detail = MESSAGE_FREE_NOTE
             self.noteArray.append(freeNote)
         }
+        
         createAndUpdateRealm()
     }
     

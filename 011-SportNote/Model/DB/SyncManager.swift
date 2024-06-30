@@ -39,8 +39,8 @@ class SyncManager {
         // Firebaseのグループを全取得(取得完了を待つ)
         let firebaseGroupArray: [Group] = await firebaseManager.getAllGroup()
         
-        // Realmのグループを全取得
-        let realmGroupArray: [Group] = realmManager.getAllGroup()
+        // Realmのグループを全取得(取得完了を待つ)
+        let realmGroupArray: [Group] = await realmManager.getAllGroup()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseGroupIDArray = firebaseGroupArray.map { $0.groupID }

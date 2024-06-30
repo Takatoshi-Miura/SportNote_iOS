@@ -75,15 +75,15 @@ extension RealmManager {
     
     /// Realmのグループを全取得
     /// - Returns: 全グループデータ
-    func getAllGroup() -> [Group] {
-        var groupArray: [Group] = []
-        let realm = try! Realm()
-        let realmArray = realm.objects(Group.self)
-        for group in realmArray {
-            groupArray.append(group)
-        }
-        return groupArray
-    }
+//    func getAllGroup() -> [Group] {
+//        var groupArray: [Group] = []
+//        let realm = try! Realm()
+//        let realmArray = realm.objects(Group.self)
+//        for group in realmArray {
+//            groupArray.append(group)
+//        }
+//        return groupArray
+//    }
     
     /// Realmのグループを取得
     /// - Parameters:
@@ -1396,7 +1396,7 @@ extension RealmManager {
 
 extension RealmManager {
     
-    /// Realmのグループを全取得
+    /// RealmのGroupを全取得
     /// - Returns: Group配列
     func getAllGroup() async -> [Group] {
         var groupArray: [Group] = []
@@ -2010,10 +2010,10 @@ extension RealmManager {
     
     /// Realmのフリーノートを取得
     /// - Returns: フリーノートデータ
-    func getFreeNote() async -> Note {
+    func getFreeNote() async -> Note? {
         let filter = "noteType == \(NoteType.free.rawValue)"
         let result = await realmActor.findOne(Note.self, filter: filter)
-        return result ?? Note()
+        return result
     }
     
     /// Realmのノート(練習、大会)を取得
