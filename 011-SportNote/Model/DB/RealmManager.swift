@@ -1411,10 +1411,10 @@ extension RealmManager {
     /// - Parameters:
     ///  - groupID: groupID
     /// - Returns: Group
-    func getGroup(groupID: String) async -> Group {
+    func getGroup(groupID: String) async -> Group? {
         let filter = "groupID == '\(groupID)' AND (isDeleted == false)"
         let result = await realmActor.findOne(Group.self, filter: filter)
-        return result ?? Group()
+        return result
     }
     
     /// TaskViewController用Group配列を取得
@@ -1429,18 +1429,17 @@ extension RealmManager {
         return groupArray
     }
     
-    // TODO: 要実装
     /// Noteに含まれるGroupカラーを取得
     /// - Returns: Groupカラー
-    func getGroupColor(noteID: String) -> UIColor {
-        let taskArray = getTask(noteID: noteID)
+    func getGroupColor(noteID: String) async -> UIColor {
+        let taskArray = await getTask(noteID: noteID)
         if !taskArray.isEmpty {
             let task = taskArray.first!
-            let group = getGroup(groupID: task.groupID)
-            return Color.allCases[group.color].color
-        } else {
-            return UIColor.white
+            if let group = await getGroup(groupID: task.groupID) {
+                return Color.allCases[group.color].color
+            }
         }
+        return UIColor.white
     }
     
     /// TaskViewControllerに表示するGroupの個数を取得
@@ -1511,76 +1510,70 @@ extension RealmManager {
     /// - Parameters:
     ///   - taskID: TaskID
     /// - Returns: TaskData
-    func getTask(taskID: String) async -> TaskData {
+    func getTask(taskID: String) async -> TaskData? {
         let filter = "taskID == '\(taskID)' AND (isDeleted == false)"
         let result = await realmActor.findOne(TaskData.self, filter: filter)
-        return result ?? TaskData()
+        return result
     }
     
-    // TODO: 要実装
     /// Realmの課題を取得
     /// - Parameters:
     ///   - noteID: ノートID
     /// - Returns: 課題データ
-    func getTask(noteID: String) -> [TaskData] {
+    func getTask(noteID: String) async -> [TaskData] {
         var taskArray = [TaskData]()
-        
-        let memoArray = getMemo(noteID: noteID)
+        let memoArray = await getMemo(noteID: noteID)
         var measuresArray = [Measures]()
         for memo in memoArray {
-            let measures = getMeasures(measuresID: memo.measuresID)
-            measuresArray.append(measures)
+            if let measures = await getMeasures(measuresID: memo.measuresID) {
+                measuresArray.append(measures)
+            }
         }
         for measures in measuresArray {
-            let task = getTask(taskID: measures.taskID)
-            taskArray.append(task)
+            if let task = await getTask(taskID: measures.taskID) {
+                taskArray.append(task)
+            }
         }
-        
         return taskArray
     }
     
-    // TODO: 要実装
     /// RealmのTaskDataを取得(ノートViewer用)
     /// - Parameters:
     ///   - noteID: noteID
     /// - Returns: [TaskForAddNote]
-    func getTaskArrayForAddNoteView(noteID: String) -> [TaskForAddNote] {
+    func getTaskArrayForAddNoteView(noteID: String) async -> [TaskForAddNote] {
         var taskForAddNoteArray = [TaskForAddNote]()
-        
-        let taskArray = getTask(noteID: noteID)
+        let taskArray = await getTask(noteID: noteID)
         for task in taskArray {
             let taskForAddNote = TaskForAddNote(task: task)
             taskForAddNoteArray.append(taskForAddNote)
         }
-        
         return taskForAddNoteArray
     }
     
-    // TODO: 要実装
     /// TaskViewController用task配列を返却
     /// - Returns: Task配列[[task][task, task]…]の形
-    func getTaskArrayForTaskView() -> [[TaskData]] {
+    func getTaskArrayForTaskView() async -> [[TaskData]] {
         var taskArray: [[TaskData]] = [[TaskData]]()
-        let groupArray: [Group] = getGroupArrayForTaskView()
+        let groupArray: [Group] = await getGroupArrayForTaskView()
         for group in groupArray {
-            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+            let tasks = await getTasksInGroup(ID: group.groupID, isCompleted: false)
             taskArray.append(tasks)
         }
         return taskArray
     }
     
-    // TODO: 要実装
     /// AddPracticeNoteViewController用task配列を返却(未解決の課題をグループ関係なく取得)
     /// - Returns: Task配列[task, task…]の形
-    func getTaskArrayForAddNoteView() -> [TaskForAddNote] {
+    func getTaskArrayForAddNoteView() async -> [TaskForAddNote] {
         var taskArray = [TaskForAddNote]()
-        let groupArray: [Group] = getGroupArrayForTaskView()
+        let groupArray: [Group] = await getGroupArrayForTaskView()
         for group in groupArray {
-            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+            let tasks = await getTasksInGroup(ID: group.groupID, isCompleted: false)
             for task in tasks {
                 let taskForAddNote = TaskForAddNote(task: task)
                 // 対策未設定の課題は表示しない
-                if getPriorityMeasuresInTask(taskID: task.taskID) != nil {
+                if let _ = await getPriorityMeasuresInTask(taskID: task.taskID) {
                     taskArray.append(taskForAddNote)
                 }
             }
@@ -1588,23 +1581,21 @@ extension RealmManager {
         return taskArray
     }
     
-    // TODO: 要実装
     /// NoteFilterViewController用FilteredTask配列を返却
     /// - Parameters:
     ///   - isFilter: チェックの保存状態を反映するか否か
     /// - Returns: Task配列[[FilteredTask][FilteredTask, FilteredTask]…]の形
-    func getTaskArrayForNoteFilterView(isFilter: Bool) -> [[FilteredTask]] {
+    func getTaskArrayForNoteFilterView(isFilter: Bool) async -> [[FilteredTask]] {
         var filteredTaskArray: [[FilteredTask]] = [[FilteredTask]]()
-        let userDefaults = UserDefaults.standard
         var filterTaskIDArray = [String]()
-        if let idArray = userDefaults.array(forKey: "filterTaskID") {
+        if let idArray = UserDefaults.standard.array(forKey: "filterTaskID") {
             filterTaskIDArray = idArray as! [String]
         }
-        let groupArray: [Group] = getGroupArrayForTaskView()
+        let groupArray: [Group] = await getGroupArrayForTaskView()
         
         for group in groupArray {
             var array = [FilteredTask]()
-            let tasks = getTasksInGroup(ID: group.groupID)
+            let tasks = await getTasksInGroup(ID: group.groupID)
             for task in tasks {
                 var filteredTask = FilteredTask(task: task)
                 // チェックの保存状態を反映
@@ -1718,10 +1709,10 @@ extension RealmManager {
     /// - Parameters:
     ///   - measuresID: 対策ID
     /// - Returns: 対策データ
-    func getMeasures(measuresID: String) async -> Measures {
+    func getMeasures(measuresID: String) async -> Measures? {
         let filter = "measuresID == '\(measuresID)' AND (isDeleted == false)"
         let result = await realmActor.findOne(Measures.self, filter: filter)
-        return result ?? Measures()
+        return result
     }
     
     /// 課題に含まれる最優先の対策名を取得
@@ -1826,10 +1817,9 @@ extension RealmManager {
             memoArray.append(memo)
         }
         
-        // TODO: 要実装
         // ノートの日付順に並び替える
         var resultArray: [Memo] = []
-        var noteArray = getNote(memoArray: memoArray)
+        var noteArray = await getNote(memoArray: memoArray)
         noteArray.sort(by: {$0.date > $1.date})
         
         for note in noteArray {
@@ -1965,4 +1955,198 @@ extension RealmManager {
         await realmActor.deleteAll(ofType: Target.self)
     }
 
+}
+
+// MARK: - Note RealmActor
+
+extension RealmManager {
+    
+    /// Realmのノートを取得
+    /// - Returns: ノートデータ
+    func getAllNote() async -> [Note] {
+        var noteArray: [Note] = []
+        let results = await realmActor.find(Note.self)
+        for note in results {
+            noteArray.append(note)
+        }
+        return noteArray
+    }
+    
+    /// Realmのノートを取得
+    /// - Returns: ノートデータ
+    func getNote(ID: String) async -> Note? {
+        let filter = "(noteID == '\(ID)') AND (isDeleted == false)"
+        let result = await realmActor.findOne(Note.self, filter: filter)
+        return result
+    }
+    
+    /// Realmのノートを取得
+    /// - Parameters:
+    ///    - noteType: メモ配列
+    /// - Returns: ノートデータ
+    func getNote(noteType: Int) async -> [Note] {
+        var noteArray: [Note] = []
+        let filter = "(noteType == \(noteType)) AND (isDeleted == false)"
+        let results = await realmActor.find(Note.self, filter: filter, sortKey: "created_at", ascending: false)
+        for note in results {
+            noteArray.append(note)
+        }
+        return noteArray
+    }
+    
+    /// Realmのノートを取得
+    /// - Parameters:
+    ///    - memoArray: メモ配列
+    /// - Returns: メモが含まれるノート
+    func getNote(memoArray: [Memo]) async -> [Note] {
+        var noteArray: [Note] = []
+        for memo in memoArray {
+            if let note = await getNote(ID: memo.noteID) {
+                noteArray.append(note)
+            }
+        }
+        return noteArray
+    }
+    
+    /// Realmのフリーノートを取得
+    /// - Returns: フリーノートデータ
+    func getFreeNote() async -> Note {
+        let filter = "noteType == \(NoteType.free.rawValue)"
+        let result = await realmActor.findOne(Note.self, filter: filter)
+        return result ?? Note()
+    }
+    
+    /// Realmのノート(練習、大会)を取得
+    /// - Returns: ノートデータ
+    func getPracticeTournamentNote() async -> [Note] {
+        var noteArray: [Note] = []
+        let filter = "((noteType == \(NoteType.practice.rawValue)) || (noteType == \(NoteType.tournament.rawValue))) AND (isDeleted == false)"
+        let results = await realmActor.find(Note.self, filter: filter, sortKey: "date", ascending: false)
+        for note in results {
+            noteArray.append(note)
+        }
+        return noteArray
+    }
+    
+    /// Realmのノート(練習、大会)を取得
+    /// - Parameters:
+    ///    - searchWord: 検索ワード
+    /// - Returns: ノートデータ
+    func getPracticeTournamentNote(searchWord: String) async -> [Note] {
+        // メモ以外を検索
+        var noteArray: [Note] = []
+        var filter = "((noteType == \(NoteType.practice.rawValue)) || (noteType == \(NoteType.tournament.rawValue)))"
+        filter += "AND ((condition CONTAINS \(searchWord) || (reflection CONTAINS \(searchWord)) || (purpose CONTAINS \(searchWord)) || (detail CONTAINS \(searchWord)) || (target CONTAINS \(searchWord)) || (consciousness CONTAINS \(searchWord)) || (result CONTAINS \(searchWord)))"
+        filter += "AND (isDeleted == false)"
+        let results = await realmActor.find(Note.self, filter: filter, sortKey: "date", ascending: false)
+        for note in results {
+            noteArray.append(note)
+        }
+        
+        // メモを検索
+        let memoArray = await getMemo(searchWord: searchWord)
+        let memoNoteArray = await getNote(memoArray: memoArray)
+        noteArray.append(contentsOf: memoNoteArray)
+        
+        // 重複を削除&新しい順にソート
+        var resultArray = Array(Set(noteArray))
+        resultArray.sort(by: {$0.date > $1.date})
+        return resultArray
+    }
+    
+    /// Realmのノート(練習、大会)を取得
+    /// - Parameters:
+    ///    - taskIDs: ノートに含まれる課題
+    /// - Returns: ノートデータ
+    func getPracticeTournamentNote(taskIDs: [String]) async -> [Note] {
+        var noteArray: [Note] = []
+        
+        // 課題に含まれる対策IDを取得
+        var measuresIDArray = [String]()
+        for taskID in taskIDs {
+            let measuresArray = await getMeasuresInTask(ID: taskID)
+            for measures in measuresArray {
+                measuresIDArray.append(measures.measuresID)
+            }
+        }
+        
+        // 対策を含むメモを取得
+        var memoArray = [Memo]()
+        for measuresID in measuresIDArray {
+            let memos = await getMemo(measuresID: measuresID)
+            memoArray.append(contentsOf: memos)
+        }
+        
+        // メモを含むノートIDを取得(重複削除)
+        var noteIDArray = [String]()
+        for memo in memoArray {
+            noteIDArray.append(memo.noteID)
+        }
+        noteIDArray = Array(Set(noteIDArray))
+        
+        // ノートを取得
+        for noteID in noteIDArray {
+            if let note = await getNote(ID: noteID) {
+                noteArray.append(note)
+            }
+        }
+        
+        // 日付の新しい順に並び替え
+        noteArray.sort(by: {$0.date > $1.date})
+        
+        return noteArray
+    }
+    
+    /// Realmのノートを取得(日付指定)
+    /// - Parameters:
+    ///    - date: 取得したいノートの日付
+    /// - Returns: ノートデータ
+    func getNote(date: Date) async -> [Note] {
+        var noteArray: [Note] = []
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/M/d (E)"
+        let da = formatter.string(from: date)
+        
+        let notes = await getPracticeTournamentNote()
+        for note in notes {
+            if da == formatDate(date: note.date, format: "yyyy/M/d (E)") {
+                noteArray.append(note)
+            }
+        }
+        
+        return noteArray
+    }
+    
+    /// Realmのノートを更新(同期用)
+    /// - Parameters:
+    ///    - note: Realmオブジェクト
+    func updateNote(note: Note) async {
+        let filter = "noteID == '\(note.noteID)'"
+        let result = await realmActor.findOne(Note.self, filter: filter)
+        if let result {
+            let realm = try! await Realm()
+            try! realm.write {
+                result.isDeleted = note.isDeleted
+                result.updated_at = Date()
+                result.title = note.title
+                result.date = note.date
+                result.weather = note.weather
+                result.temperature = note.temperature
+                result.condition = note.condition
+                result.reflection = note.reflection
+                result.purpose = note.purpose
+                result.detail = note.detail
+                result.target = note.target
+                result.consciousness = note.consciousness
+                result.result = note.result
+            }
+        }
+    }
+    
+    /// Realmのノートを全削除
+    private func deleteAllNote() async {
+        await realmActor.deleteAll(ofType: Note.self)
+    }
+    
 }
