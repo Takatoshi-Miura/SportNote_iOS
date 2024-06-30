@@ -27,18 +27,26 @@ class TaskCellForNoteDetailView: UITableViewCell {
     }
     
     /// 課題データを表示
+    /// - Parameter task: TaskForAddNote
     func printInfo(task: TaskForAddNote) {
         let realmManager = RealmManager()
-        let group = realmManager.getGroup(groupID: task.groupID)
         
-        self.task = task
-        if let measures = realmManager.getPriorityMeasuresInTask(taskID: task.taskID) {
-            self.measures = measures
+        Task {
+            if let group = await realmManager.getGroup(groupID: task.groupID) {
+                DispatchQueue.main.async {
+                    self.task = task
+                    self.taskTitleLabel.text = task.title
+                    self.colorImageView.backgroundColor = Color.allCases[group.color].color
+                }
+            }
+            
+            if let measures = await realmManager.getPriorityMeasuresInTask(taskID: task.taskID) {
+                DispatchQueue.main.async {
+                    self.measures = measures
+                    self.taskMeasuresTitleLabel.text = "\(TITLE_MEASURES):\(measures.title)"
+                }
+            }
         }
-        
-        taskTitleLabel.text = task.title
-        taskMeasuresTitleLabel.text = "\(TITLE_MEASURES):\(measures.title)"
-        colorImageView.backgroundColor = Color.allCases[group.color].color
     }
     
     /// メモを入力

@@ -89,14 +89,14 @@ extension RealmManager {
     /// - Parameters:
     ///   - groupID: 課題ID
     /// - Returns: グループデータ
-    func getGroup(groupID: String) -> Group {
-        let realm = try! Realm()
-        let result = realm.objects(Group.self)
-            .filter("groupID == '\(groupID)'")
-            .filter("(isDeleted == false)")
-            .first
-        return result ?? Group()
-    }
+//    func getGroup(groupID: String) -> Group {
+//        let realm = try! Realm()
+//        let result = realm.objects(Group.self)
+//            .filter("groupID == '\(groupID)'")
+//            .filter("(isDeleted == false)")
+//            .first
+//        return result ?? Group()
+//    }
     
     /// TaskViewController用Group配列を取得
     /// - Returns: Group配列
@@ -117,16 +117,16 @@ extension RealmManager {
     
     /// Noteに含まれるGroupカラーを取得
     /// - Returns: Groupカラー
-    func getGroupColor(noteID: String) -> UIColor {
-        let taskArray = getTask(noteID: noteID)
-        if !taskArray.isEmpty {
-            let task = taskArray.first!
-            let group = getGroup(groupID: task.groupID)
-            return Color.allCases[group.color].color
-        } else {
-            return UIColor.white
-        }
-    }
+//    func getGroupColor(noteID: String) -> UIColor {
+//        let taskArray = getTask(noteID: noteID)
+//        if !taskArray.isEmpty {
+//            let task = taskArray.first!
+//            let group = getGroup(groupID: task.groupID)
+//            return Color.allCases[group.color].color
+//        } else {
+//            return UIColor.white
+//        }
+//    }
     
     /// TaskViewControllerに表示するGroupの個数を取得
     /// - Returns: Group数
@@ -1407,7 +1407,7 @@ extension RealmManager {
         return groupArray
     }
     
-    /// Realmのグループを取得
+    /// RealmのGroupを取得
     /// - Parameters:
     ///  - groupID: groupID
     /// - Returns: Group

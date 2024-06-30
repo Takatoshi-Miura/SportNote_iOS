@@ -22,37 +22,49 @@ class NoteCell: UITableViewCell {
     }
 
     /// ノート内容を表示
+    /// - Parameter note: Note
     func printInfo(note: Note) {
         switch NoteType.allCases[note.noteType] {
         case .free:
-            colorImageView.image = UIImage(systemName: "pin")!
-            colorImageView.backgroundColor = UIColor.systemBackground
-            colorImageView.layer.borderWidth = 0
+            self.setColorImageView(image: UIImage(systemName: "pin")!, backgroundColor: UIColor.systemBackground)
             titleLabel.text = note.title
             dateLabel.text = ""
             titleLabelTop.constant = CGFloat(16)
         case .practice:
             let realmManager = RealmManager()
-            colorImageView.image = nil
-            colorImageView.backgroundColor = realmManager.getGroupColor(noteID: note.noteID)
-            if colorImageView.backgroundColor == UIColor.white {
-                colorImageView.layer.borderColor = UIColor.systemGray.cgColor
-                colorImageView.layer.borderWidth = 0.5
+            Task {
+                let groupColor = await realmManager.getGroupColor(noteID: note.noteID)
+                DispatchQueue.main.async {
+                    self.setColorImageView(image: nil, backgroundColor: groupColor)
+                    self.titleLabel.text = note.detail
+                    self.dateLabel.text = formatDate(date: note.date, format: "yyyy/M/d (E)")
+                    self.titleLabelTop.constant = CGFloat(8)
+                }
             }
-            titleLabel.text = note.detail
-            dateLabel.text = formatDate(date: note.date, format: "yyyy/M/d (E)")
-            titleLabelTop.constant = CGFloat(8)
         case .tournament:
             let realmManager = RealmManager()
-            colorImageView.image = nil
-            colorImageView.backgroundColor = realmManager.getGroupColor(noteID: note.noteID)
-            if colorImageView.backgroundColor == UIColor.white {
-                colorImageView.layer.borderColor = UIColor.systemGray.cgColor
-                colorImageView.layer.borderWidth = 0.5
+            Task {
+                let groupColor = await realmManager.getGroupColor(noteID: note.noteID)
+                DispatchQueue.main.async {
+                    self.setColorImageView(image: nil, backgroundColor: groupColor)
+                    self.titleLabel.text = note.result
+                    self.dateLabel.text = formatDate(date: note.date, format: "yyyy/M/d (E)")
+                    self.titleLabelTop.constant = CGFloat(8)
+                }
             }
-            titleLabel.text = note.result
-            dateLabel.text = formatDate(date: note.date, format: "yyyy/M/d (E)")
-            titleLabelTop.constant = CGFloat(8)
+        }
+    }
+    
+    /// ColorImageViewの設定
+    /// - Parameter image: アイコン画像
+    /// - Parameter backgroundColor: UIColor
+    private func setColorImageView(image: UIImage?, backgroundColor: UIColor) {
+        colorImageView.image = image
+        colorImageView.backgroundColor = backgroundColor
+        // 白色の場合は枠線をつける
+        if backgroundColor == UIColor.white {
+            colorImageView.layer.borderColor = UIColor.systemGray.cgColor
+            colorImageView.layer.borderWidth = 0.5
         }
     }
     
