@@ -57,8 +57,10 @@ class TaskViewModel {
         groupArray
             .subscribe(onNext: { [weak self] newArray in
                 guard let self = self else { return }
-                // Realm更新
-                realmManager.updateGroupOrder(groupArray: newArray)
+                Task {
+                    // Realm更新
+                    await self.realmManager.updateGroupOrder(groupArray: newArray)
+                }
             })
             .disposed(by: disposeBag)
     }

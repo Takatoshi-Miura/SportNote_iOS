@@ -52,6 +52,7 @@ class GroupViewModel {
                 
                 // Realm更新
                 let realmManager = RealmManager()
+                // TODO: updateGroupに修正
                 realmManager.updateGroupTitle(groupID: group.value.groupID, title: newTitle)
             })
             .disposed(by: disposeBag)
@@ -70,6 +71,7 @@ class GroupViewModel {
                 
                 // Realm更新
                 let realmManager = RealmManager()
+                // TODO: updateGroupに修正
                 realmManager.updateGroupColor(groupID: group.value.groupID, color: newIndex)
             })
             .disposed(by: disposeBag)
@@ -80,9 +82,11 @@ class GroupViewModel {
         groupArray
             .subscribe(onNext: { [weak self] newArray in
                 guard self != nil else { return }
-                // Realm更新
-                let realmManager = RealmManager()
-                realmManager.updateGroupOrder(groupArray: newArray)
+                Task {
+                    // Realm更新
+                    let realmManager = RealmManager()
+                    await realmManager.updateGroupOrder(groupArray: newArray)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -105,6 +109,7 @@ class GroupViewModel {
     /// グループ削除
     func deleteGroup() {
         let realmManager = RealmManager()
+        // TODO: updateGroupに修正
         realmManager.updateGroupIsDeleted(group: group.value)
     }
     

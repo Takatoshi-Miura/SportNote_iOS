@@ -59,7 +59,9 @@ class RealmManager {
     
     /// Realmのデータを全削除
     func deleteAllRealmData() {
-        deleteAllGroup()
+        Task {
+            await deleteAllGroup()
+        }
         deleteAllTask()
         deleteAllMeasures()
         deleteAllMemo()
@@ -130,80 +132,80 @@ extension RealmManager {
     
     /// TaskViewControllerに表示するGroupの個数を取得
     /// - Returns: Group数
-    func getNumberOfGroups() -> Int {
-        let groupArray = getGroupArrayForTaskView()
-        return groupArray.count
-    }
+//    func getNumberOfGroups() -> Int {
+//        let groupArray = getGroupArrayForTaskView()
+//        return groupArray.count
+//    }
     
     /// Realmのグループを更新
     /// - Parameters:
     ///    - group: Realmオブジェクト
-    func updateGroup(group: Group) {
-        let realm = try! Realm()
-        let result = realm.objects(Group.self)
-            .filter("groupID == '\(group.groupID)'").first
-        try! realm.write {
-            result?.title = group.title
-            result?.color = group.color
-            result?.order = group.order
-            result?.isDeleted = group.isDeleted
-            result?.updated_at = group.updated_at
-        }
-    }
+//    func updateGroup(group: Group) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Group.self)
+//            .filter("groupID == '\(group.groupID)'").first
+//        try! realm.write {
+//            result?.title = group.title
+//            result?.color = group.color
+//            result?.order = group.order
+//            result?.isDeleted = group.isDeleted
+//            result?.updated_at = group.updated_at
+//        }
+//    }
     
     /// グループのタイトルを更新
     /// - Parameters:
     ///   - groupID: 更新したいグループのID
     ///   - title: 新しいタイトル文字列
-    func updateGroupTitle(groupID: String, title: String) {
-        let realm = try! Realm()
-        let result = realm.objects(Group.self).filter("groupID == '\(groupID)'").first
-        try! realm.write {
-            result?.title = title
-            result?.updated_at = Date()
-        }
-    }
+//    func updateGroupTitle(groupID: String, title: String) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Group.self).filter("groupID == '\(groupID)'").first
+//        try! realm.write {
+//            result?.title = title
+//            result?.updated_at = Date()
+//        }
+//    }
 
     /// グループの色を更新
     /// - Parameters:
     ///   - groupID: 更新したいグループのID
     ///   - color: 新しい色番号
-    func updateGroupColor(groupID: String, color: Int) {
-        let realm = try! Realm()
-        let result = realm.objects(Group.self).filter("groupID == '\(groupID)'").first
-        try! realm.write {
-            result?.color = color
-            result?.updated_at = Date()
-        }
-    }
+//    func updateGroupColor(groupID: String, color: Int) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Group.self).filter("groupID == '\(groupID)'").first
+//        try! realm.write {
+//            result?.color = color
+//            result?.updated_at = Date()
+//        }
+//    }
 
     /// グループの並び順を更新
     /// - Parameters:
     ///   - groupArray: グループ配列
-    func updateGroupOrder(groupArray: [Group]) {
-        let realm = try! Realm()
-        var index = 0
-        for group in groupArray {
-            let result = realm.objects(Group.self).filter("groupID == '\(group.groupID)'").first
-            try! realm.write {
-                result?.order = index
-                result?.updated_at = Date()
-            }
-            index += 1
-        }
-    }
+//    func updateGroupOrder(groupArray: [Group]) {
+//        let realm = try! Realm()
+//        var index = 0
+//        for group in groupArray {
+//            let result = realm.objects(Group.self).filter("groupID == '\(group.groupID)'").first
+//            try! realm.write {
+//                result?.order = index
+//                result?.updated_at = Date()
+//            }
+//            index += 1
+//        }
+//    }
 
     /// グループの削除フラグを更新
     /// - Parameters:
     ///   - group: グループ
-    func updateGroupIsDeleted(group: Group) {
-        let realm = try! Realm()
-        let result = realm.objects(Group.self).filter("groupID == '\(group.groupID)'").first
-        try! realm.write {
-            result?.isDeleted = true
-            result?.updated_at = Date()
-        }
-    }
+//    func updateGroupIsDeleted(group: Group) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Group.self).filter("groupID == '\(group.groupID)'").first
+//        try! realm.write {
+//            result?.isDeleted = true
+//            result?.updated_at = Date()
+//        }
+//    }
 
     /// ユーザーIDを更新
     /// - Parameters:
@@ -219,17 +221,17 @@ extension RealmManager {
     }
     
     /// Realmのグループを全削除
-    private func deleteAllGroup() {
-        let realm = try! Realm()
-        let groups = realm.objects(Group.self)
-        do{
-          try realm.write{
-            realm.delete(groups)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
+//    private func deleteAllGroup() {
+//        let realm = try! Realm()
+//        let groups = realm.objects(Group.self)
+//        do{
+//          try realm.write{
+//            realm.delete(groups)
+//          }
+//        }catch {
+//          print("Error \(error)")
+//        }
+//    }
     
 }
 

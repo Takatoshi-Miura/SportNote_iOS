@@ -75,7 +75,7 @@ class SyncManager {
             if realmGroup.updated_at > firebaseGroup.updated_at {
                 self.firebaseManager.updateGroup(group: realmGroup)
             } else if firebaseGroup.updated_at > realmGroup.updated_at {
-                self.realmManager.updateGroup(group: firebaseGroup)
+                await self.realmManager.updateGroup(group: firebaseGroup)
             }
         }
         print("Group同期終了")
