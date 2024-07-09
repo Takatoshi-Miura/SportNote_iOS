@@ -240,7 +240,7 @@ class SyncManager {
         let firebaseTargetArray: [Target] = await firebaseManager.getAllTarget()
         
         // RealmのTargetを全取得
-        let realmTargetArray: [Target] = realmManager.getAllTarget()
+        let realmTargetArray: [Target] = await realmManager.getAllTarget()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseTargetIDArray = firebaseTargetArray.map { $0.targetID }
@@ -275,7 +275,7 @@ class SyncManager {
             if realmTarget.updated_at > firebaseTarget.updated_at {
                 self.firebaseManager.updateTarget(target: realmTarget)
             } else if firebaseTarget.updated_at > realmTarget.updated_at {
-                self.realmManager.updateTarget(target: firebaseTarget)
+                await self.realmManager.updateTarget(target: firebaseTarget)
             }
         }
         print("Target同期終了")

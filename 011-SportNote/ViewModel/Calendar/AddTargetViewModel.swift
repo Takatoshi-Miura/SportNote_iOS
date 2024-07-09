@@ -44,13 +44,13 @@ class AddTargetViewModel {
     /// 目標年月の重複チェック
     /// - Parameter target: 目標
     /// - Returns: 重複している目標のID
-    func doubleCheck(target: Target) -> String? {
+    func doubleCheck(target: Target) async -> String? {
         if target.isYearlyTarget {
-            if let realmTarget = realmManager.getTarget(year: target.year) {
+            if let realmTarget = await realmManager.getTarget(year: target.year) {
                 return realmTarget.targetID
             }
         } else {
-            if let realmTarget = realmManager.getTarget(year: target.year, month: target.month, isYearlyTarget: target.isYearlyTarget) {
+            if let realmTarget = await realmManager.getTarget(year: target.year, month: target.month, isYearlyTarget: false) {
                 return realmTarget.targetID
             }
         }
@@ -60,6 +60,7 @@ class AddTargetViewModel {
     /// 目標削除
     /// - Parameter targetID: 目標ID
     func deleteTarget(targetID: String) {
+        // TODO: updateTargetに更新
         realmManager.updateTargetIsDeleted(targetID: targetID)
     }
     

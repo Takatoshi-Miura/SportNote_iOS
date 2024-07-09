@@ -906,29 +906,29 @@ extension RealmManager {
     
     /// Realmの目標を全取得
     /// - Returns: 全目標データ
-    func getAllTarget() -> [Target] {
-        var targetArray: [Target] = []
-        let realm = try! Realm()
-        let realmArray = realm.objects(Target.self)
-        for target in realmArray {
-            targetArray.append(target)
-        }
-        return targetArray
-    }
+//    func getAllTarget() -> [Target] {
+//        var targetArray: [Target] = []
+//        let realm = try! Realm()
+//        let realmArray = realm.objects(Target.self)
+//        for target in realmArray {
+//            targetArray.append(target)
+//        }
+//        return targetArray
+//    }
     
     /// 目標を取得(年指定)
     /// - Parameters:
     ///    - year: 年
     /// - Returns: 目標データ
-    func getTarget(year: Int) -> Target? {
-        let realm = try! Realm()
-        let result = realm.objects(Target.self)
-            .filter("(year == \(year))")
-            .filter("(isYearlyTarget == true)")
-            .filter("(isDeleted == false)")
-            .first
-        return result
-    }
+//    func getTarget(year: Int) -> Target? {
+//        let realm = try! Realm()
+//        let result = realm.objects(Target.self)
+//            .filter("(year == \(year))")
+//            .filter("(isYearlyTarget == true)")
+//            .filter("(isDeleted == false)")
+//            .first
+//        return result
+//    }
     
     /// 目標を取得(年月指定)
     /// - Parameters:
@@ -936,42 +936,42 @@ extension RealmManager {
     ///    - month: 月
     ///    - isYearlyTarget: 年間目標フラグ
     /// - Returns: 目標データ
-    func getTarget(year: Int, month: Int, isYearlyTarget: Bool) -> Target? {
-        let realm = try! Realm()
-        let result = realm.objects(Target.self)
-            .filter("(year == \(year)) && (month == \(month)) && (isYearlyTarget == \(isYearlyTarget)) && (isDeleted == false)").first
-        return result
-    }
+//    func getTarget(year: Int, month: Int, isYearlyTarget: Bool) -> Target? {
+//        let realm = try! Realm()
+//        let result = realm.objects(Target.self)
+//            .filter("(year == \(year)) && (month == \(month)) && (isYearlyTarget == \(isYearlyTarget)) && (isDeleted == false)").first
+//        return result
+//    }
     
     /// Realmの目標を更新
     /// - Parameters:
     ///    - target: Realmオブジェクト
-    func updateTarget(target: Target) {
-        let realm = try! Realm()
-        let result = realm.objects(Target.self)
-            .filter("targetID == '\(target.targetID)'").first
-        try! realm.write {
-            result?.title = target.title
-            result?.year = target.year
-            result?.month = target.month
-            result?.isYearlyTarget = target.isYearlyTarget
-            result?.isDeleted = target.isDeleted
-            result?.updated_at = target.updated_at
-        }
-    }
+//    func updateTarget(target: Target) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Target.self)
+//            .filter("targetID == '\(target.targetID)'").first
+//        try! realm.write {
+//            result?.title = target.title
+//            result?.year = target.year
+//            result?.month = target.month
+//            result?.isYearlyTarget = target.isYearlyTarget
+//            result?.isDeleted = target.isDeleted
+//            result?.updated_at = target.updated_at
+//        }
+//    }
     
     /// 目標の削除フラグを更新
     /// - Parameters:
     ///    - target: Realmオブジェクト
-    func updateTargetIsDeleted(targetID: String) {
-        let realm = try! Realm()
-        let result = realm.objects(Target.self)
-                           .filter("targetID == '\(targetID)'").first
-        try! realm.write {
-            result?.isDeleted = true
-            result?.updated_at = Date()
-        }
-    }
+//    func updateTargetIsDeleted(targetID: String) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Target.self)
+//                           .filter("targetID == '\(targetID)'").first
+//        try! realm.write {
+//            result?.isDeleted = true
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// ユーザーIDを更新
     /// - Parameters:
@@ -987,17 +987,17 @@ extension RealmManager {
     }
     
     /// Realmの目標を全削除
-    private func deleteAllTarget() {
-        let realm = try! Realm()
-        let targets = realm.objects(Target.self)
-        do{
-          try realm.write{
-            realm.delete(targets)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
+//    private func deleteAllTarget() {
+//        let realm = try! Realm()
+//        let targets = realm.objects(Target.self)
+//        do{
+//          try realm.write{
+//            realm.delete(targets)
+//          }
+//        }catch {
+//          print("Error \(error)")
+//        }
+//    }
 }
 
 // MARK: - Note

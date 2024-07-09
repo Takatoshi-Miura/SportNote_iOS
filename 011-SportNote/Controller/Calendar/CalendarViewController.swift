@@ -176,18 +176,27 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
         monthFormatter.dateFormat = "M"
         let month = Int(monthFormatter.string(from: calendar.currentPage))!
         
-        let realmManager = RealmManager()
-        
-        if let yearlyTarget = realmManager.getTarget(year: year) {
-            yearlyTargetLabel.text = "\(TITLE_YEARLY)\(yearlyTarget.title)"
-        } else {
-            yearlyTargetLabel.text = "\(TITLE_YEARLY)\(MESSAGE_TARGET_EMPTY)"
-        }
-        
-        if let monthlyTarget = realmManager.getTarget(year: year, month: month, isYearlyTarget: false) {
-            monthlyTargetLabel.text = "\(TITLE_MONTHLY)\(monthlyTarget.title)"
-        } else {
-            monthlyTargetLabel.text = "\(TITLE_MONTHLY)\(MESSAGE_TARGET_EMPTY)"
+        Task {
+            let realmManager = RealmManager()
+            if let yearlyTarget = await realmManager.getTarget(year: year) {
+                DispatchQueue.main.async {
+                    self.yearlyTargetLabel.text = "\(TITLE_YEARLY)\(yearlyTarget.title)"
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.yearlyTargetLabel.text = "\(TITLE_YEARLY)\(MESSAGE_TARGET_EMPTY)"
+                }
+            }
+            
+            if let monthlyTarget = await realmManager.getTarget(year: year, month: month, isYearlyTarget: false) {
+                DispatchQueue.main.async {
+                    self.monthlyTargetLabel.text = "\(TITLE_MONTHLY)\(monthlyTarget.title)"
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.monthlyTargetLabel.text = "\(TITLE_MONTHLY)\(MESSAGE_TARGET_EMPTY)"
+                }
+            }
         }
     }
     
