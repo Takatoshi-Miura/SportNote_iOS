@@ -292,8 +292,13 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
             let task = viewModel.completedTaskArray.value[indexPath.row]
             let realmManager = RealmManager()
             cell.textLabel?.text = task.title
-            cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
-            cell.detailTextLabel?.textColor = UIColor.lightGray
+            Task {
+                let measuresTitle = await realmManager.getMeasuresTitleInTask(taskID: task.taskID)
+                DispatchQueue.main.async {
+                    cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(measuresTitle)"
+                    cell.detailTextLabel?.textColor = UIColor.lightGray
+                }
+            }
         } else {
             if indexPath.row >= viewModel.taskArray.value[indexPath.section].count {
                 // 完了済み課題セル
@@ -304,8 +309,13 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
                 let task = viewModel.taskArray.value[indexPath.section][indexPath.row]
                 let realmManager = RealmManager()
                 cell.textLabel?.text = task.title
-                cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(realmManager.getMeasuresTitleInTask(taskID: task.taskID))"
-                cell.detailTextLabel?.textColor = UIColor.lightGray
+                Task {
+                    let measuresTitle = await realmManager.getMeasuresTitleInTask(taskID: task.taskID)
+                    DispatchQueue.main.async {
+                        cell.detailTextLabel?.text = "\(TITLE_MEASURES)：\(measuresTitle)"
+                        cell.detailTextLabel?.textColor = UIColor.lightGray
+                    }
+                }
             }
         }
         cell.accessoryType = .disclosureIndicator

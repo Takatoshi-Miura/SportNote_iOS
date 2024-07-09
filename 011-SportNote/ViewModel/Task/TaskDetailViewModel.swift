@@ -27,7 +27,9 @@ class TaskDetailViewModel {
         self.task = task
         self.title = BehaviorRelay(value: task.title)
         self.cause = BehaviorRelay(value: task.cause)
-        self.measuresArray = BehaviorRelay(value: realmManager.getMeasuresInTask(ID: task.taskID))
+        Task {
+            self.measuresArray = BehaviorRelay(value: await realmManager.getMeasuresInTask(ID: task.taskID))
+        }
         initBind()
     }
     
@@ -71,9 +73,10 @@ class TaskDetailViewModel {
         measuresArray
             .subscribe(onNext: { [weak self] newArray in
                 guard let self = self else { return }
-                // TODO: updateTaskに修正
-                // Realm更新
-                realmManager.updateMeasuresOrder(measuresArray: newArray)
+                Task {
+                    // Realm更新
+                    await self.realmManager.updateMeasuresOrder(measuresArray: newArray)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -123,7 +126,9 @@ class TaskDetailViewModel {
         let measures = Measures()
         measures.taskID = task.taskID
         measures.title = title
-        measures.order = realmManager.getMeasuresInTask(ID: task.taskID).count
+        Task {
+            measures.order = await realmManager.getMeasuresInTask(ID: task.taskID).count
+        }
         return measures
     }
     
@@ -155,6 +160,7 @@ class TaskDetailViewModel {
         // TODO: updateTaskに修正
         realmManager.updateTaskIsDeleted(task: task)
         for measures in measuresArray.value {
+            // TODO: updateMeasuresに修正
             realmManager.updateMeasuresIsDeleted(measures: measures)
         }
     }

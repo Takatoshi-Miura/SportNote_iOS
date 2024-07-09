@@ -138,7 +138,7 @@ class SyncManager {
         let firebaseMeasuresArray: [Measures] = await firebaseManager.getAllMeasures()
         
         // RealmのMeasuresを全取得
-        let realmMeasuresArray: [Measures] = realmManager.getAllMeasures()
+        let realmMeasuresArray: [Measures] = await realmManager.getAllMeasures()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseMeasuresIDArray = firebaseMeasuresArray.map { $0.measuresID }
@@ -173,7 +173,9 @@ class SyncManager {
             if realmMeasures.updated_at > firebaseMeasures.updated_at {
                 self.firebaseManager.updateMeasures(measures: realmMeasures)
             } else if firebaseMeasures.updated_at > realmMeasures.updated_at {
-                self.realmManager.updateMeasures(measures: firebaseMeasures)
+                Task {
+                    await self.realmManager.updateMeasures(measures: firebaseMeasures)
+                }
             }
         }
         print("Measures同期終了")

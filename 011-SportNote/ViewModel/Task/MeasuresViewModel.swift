@@ -41,8 +41,11 @@ class MeasuresViewModel {
         title
             .subscribe(onNext: { [weak self] newTitle in
                 guard let self = self else { return }
-                // Realm更新
-                realmManager.updateMeasuresTitle(measuresID: measures.measuresID, title: newTitle)
+                Task {
+                    // TODO: updateMeasuresに更新
+                    // Realm更新
+                    await realmManager.updateMeasuresTitle(measuresID: measures.measuresID, title: newTitle)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -71,6 +74,7 @@ class MeasuresViewModel {
     
     /// 対策とそれに含まれるメモを削除
     func deleteMeasures() {
+        // TODO: updateMeasuresに修正
         realmManager.updateMeasuresIsDeleted(measures: measures)
         for memo in memoArray.value {
             realmManager.updateMemoIsDeleted(memoID: memo.memoID)
