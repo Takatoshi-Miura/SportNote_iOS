@@ -102,20 +102,20 @@ extension RealmManager {
     
     /// TaskViewController用Group配列を取得
     /// - Returns: Group配列
-    func getGroupArrayForTaskView() -> [Group] {
-        var groupArray: [Group] = []
-        let realm = try! Realm()
-        let sortProperties = [
-            SortDescriptor(keyPath: "order", ascending: true),
-        ]
-        let results = realm.objects(Group.self)
-                            .filter("(isDeleted == false)")
-                            .sorted(by: sortProperties)
-        for group in results {
-            groupArray.append(group)
-        }
-        return groupArray
-    }
+//    func getGroupArrayForTaskView() -> [Group] {
+//        var groupArray: [Group] = []
+//        let realm = try! Realm()
+//        let sortProperties = [
+//            SortDescriptor(keyPath: "order", ascending: true),
+//        ]
+//        let results = realm.objects(Group.self)
+//                            .filter("(isDeleted == false)")
+//                            .sorted(by: sortProperties)
+//        for group in results {
+//            groupArray.append(group)
+//        }
+//        return groupArray
+//    }
     
     /// Noteに含まれるGroupカラーを取得
     /// - Returns: Groupカラー
@@ -1430,8 +1430,8 @@ extension RealmManager {
     
     /// TaskViewControllerに表示するGroupの個数を取得
     /// - Returns: Group数
-    func getGroupCount() -> Int {
-        let groupArray = getGroupArrayForTaskView()
+    func getGroupCount() async -> Int {
+        let groupArray = await getGroupArrayForTaskView()
         return groupArray.count
     }
     

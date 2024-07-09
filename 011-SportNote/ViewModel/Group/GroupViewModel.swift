@@ -31,8 +31,10 @@ class GroupViewModel {
         self.buttonTitle = BehaviorRelay(value: Color.allCases[group.color].title)
         self.buttonBackgroundColor = BehaviorRelay(value: Color.allCases[group.color].color)
         self.groupArray = BehaviorRelay(value: [])
-        groupArray.accept(selectGroupArray())
-        initBind()
+        Task {
+            await self.groupArray.accept(selectGroupArray())
+            initBind()
+        }
     }
     
     // MARK: - Bind
@@ -95,9 +97,9 @@ class GroupViewModel {
     
     /// グループ取得
     /// - Returns: グループ配列
-    private func selectGroupArray() -> [Group] {
+    private func selectGroupArray() async -> [Group] {
         let realmManager = RealmManager()
-        return realmManager.getGroupArrayForTaskView()
+        return await realmManager.getGroupArrayForTaskView()
     }
     
     /// グループ更新

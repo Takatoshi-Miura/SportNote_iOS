@@ -150,17 +150,24 @@ class GroupViewController: UIViewController {
     private func bindDeleteButton(deleteButton: UIBarButtonItem) {
         deleteButton.rx.tap
             .subscribe(onNext: { [unowned self] in
-                // グループ数がゼロになる場合は削除不可
-                let realmManager = RealmManager()
-                if realmManager.getGroupArrayForTaskView().count == 1 {
-                    showErrorAlert(message: MESSAGE_EMPTY_GROUP)
-                    return
+                Task {
+                    // グループ数がゼロになる場合は削除不可
+                    let realmManager = RealmManager()
+                    if await realmManager.getGroupArrayForTaskView().count == 1 {
+                        DispatchQueue.main.async {
+                            self.showErrorAlert(message: MESSAGE_EMPTY_GROUP)
+                        }
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        // グループ削除
+                        self.showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
+                            self.viewModel.deleteGroup()
+                            self.delegate?.groupVCDeleteGroup()
+                        })
+                    }
                 }
-                // グループ削除
-                showDeleteAlert(title: TITLE_DELETE_GROUP, message: MESSAGE_DELETE_GROUP, OKAction: {
-                    self.viewModel.deleteGroup()
-                    self.delegate?.groupVCDeleteGroup()
-                })
+                
             })
             .disposed(by: disposeBag)
     }

@@ -43,11 +43,11 @@ class NoteFilterViewController: UIViewController {
     private func initData() {
         Task {
             let realmManager = RealmManager()
-            groupArray = realmManager.getGroupArrayForTaskView()
+            groupArray = await realmManager.getGroupArrayForTaskView()
             taskArray = await realmManager.getTaskArrayForNoteFilterView(isFilter: true)
-        }
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     

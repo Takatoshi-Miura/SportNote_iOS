@@ -25,12 +25,14 @@ class AddTaskViewModel {
     
     init() {
         self.groupArray = BehaviorRelay(value: [])
-        self.groupArray.accept(realmManager.getGroupArrayForTaskView())
         self.colorIndex = BehaviorRelay(value: Color.allCases.first!.rawValue)
         self.buttonTitle = BehaviorRelay(value: Color.allCases.first!.title)
         self.buttonBackgroundColor = BehaviorRelay(value: Color.allCases.first!.color)
-        initBind()
-        colorIndex.accept(0)
+        Task {
+            self.groupArray.accept(await realmManager.getGroupArrayForTaskView())
+            initBind()
+            colorIndex.accept(0)
+        }
     }
     
     // MARK: - Bind

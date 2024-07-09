@@ -58,7 +58,9 @@ class AddGroupViewModel {
         let group = Group()
         group.title = title
         group.color = colorIndex.value
-        group.order = realmManager.getGroupArrayForTaskView().count
+        Task {
+            group.order = await realmManager.getGroupArrayForTaskView().count
+        }
         let result = realmManager.createRealm(object: group)
         return result ? group : nil
     }

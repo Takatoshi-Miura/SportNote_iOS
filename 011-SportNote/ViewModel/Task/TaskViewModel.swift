@@ -180,7 +180,7 @@ class TaskViewModel {
             if self.isComplete {
                 self.completedTaskArray.accept(await self.realmManager.getTasksInGroup(ID: self.groupID, isCompleted: self.isComplete))
             } else {
-                self.groupArray.accept(self.realmManager.getGroupArrayForTaskView())
+                self.groupArray.accept(await self.realmManager.getGroupArrayForTaskView())
                 self.taskArray.accept(await self.realmManager.getTaskArrayForTaskView())
             }
         }
