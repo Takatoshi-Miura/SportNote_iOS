@@ -65,7 +65,9 @@ class AddTaskViewModel {
         task.groupID = groupArray.value[colorIndex.value].groupID
         task.title = title
         task.cause = cause
-        task.order = realmManager.getTasksInGroup(ID: task.groupID, isCompleted: false).count
+        Task {
+            task.order = await realmManager.getTasksInGroup(ID: task.groupID, isCompleted: false).count
+        }
         return realmManager.createRealm(object: task) ? task : nil
     }
     

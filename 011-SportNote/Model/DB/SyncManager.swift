@@ -89,7 +89,7 @@ class SyncManager {
         let firebaseTaskArray: [TaskData] = await firebaseManager.getAllTask()
         
         // RealmのTaskを全取得
-        let realmTaskArray: [TaskData] = realmManager.getAllTask()
+        let realmTaskArray: [TaskData] = await realmManager.getAllTask()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseTaskIDArray = firebaseTaskArray.map { $0.taskID }

@@ -41,10 +41,14 @@ class NoteFilterViewController: UIViewController {
     }
     
     private func initData() {
-        let realmManager = RealmManager()
-        groupArray = realmManager.getGroupArrayForTaskView()
-        taskArray = realmManager.getTaskArrayForNoteFilterView(isFilter: true)
-        tableView.reloadData()
+        Task {
+            let realmManager = RealmManager()
+            groupArray = realmManager.getGroupArrayForTaskView()
+            taskArray = await realmManager.getTaskArrayForNoteFilterView(isFilter: true)
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     
@@ -57,9 +61,13 @@ class NoteFilterViewController: UIViewController {
     
     /// クリア
     @IBAction func tapClearButton(_ sender: Any) {
-        let realmManager = RealmManager()
-        taskArray = realmManager.getTaskArrayForNoteFilterView(isFilter: false)
-        tableView.reloadData()
+        Task {
+            let realmManager = RealmManager()
+            self.taskArray = await realmManager.getTaskArrayForNoteFilterView(isFilter: false)
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     /// 適用

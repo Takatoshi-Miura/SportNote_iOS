@@ -46,8 +46,10 @@ class TaskViewModel {
         taskArray
             .subscribe(onNext: { [weak self] newArray in
                 guard let self = self else { return }
-                // Realm更新
-                realmManager.updateTaskOrder(taskArray: newArray)
+                Task {
+                    // Realm更新
+                    await self.realmManager.updateTaskOrder(taskArray: newArray)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -142,6 +144,7 @@ class TaskViewModel {
         // グループが変わる場合はグループも更新
         if sourceIndexPath.section != destinationIndex.section {
             let groupId = groupArray.value[destinationIndex.section].groupID
+            // TODO: updateTaskに修正
             realmManager.updateTaskGroupId(task: task, groupID: groupId)
         }
     }
@@ -173,12 +176,12 @@ class TaskViewModel {
     
     /// データ再取得
     func refreshData() {
-        DispatchQueue.main.async {
+        Task {
             if self.isComplete {
-                self.completedTaskArray.accept(self.realmManager.getTasksInGroup(ID: self.groupID, isCompleted: self.isComplete))
+                self.completedTaskArray.accept(await self.realmManager.getTasksInGroup(ID: self.groupID, isCompleted: self.isComplete))
             } else {
                 self.groupArray.accept(self.realmManager.getGroupArrayForTaskView())
-                self.taskArray.accept(self.realmManager.getTaskArrayForTaskView())
+                self.taskArray.accept(await self.realmManager.getTaskArrayForTaskView())
             }
         }
     }

@@ -250,8 +250,10 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             // グループから戻る場合はリロード
             viewModel.refreshData()
-            tableView.refreshControl?.endRefreshing()
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+            }
         }
     }
     

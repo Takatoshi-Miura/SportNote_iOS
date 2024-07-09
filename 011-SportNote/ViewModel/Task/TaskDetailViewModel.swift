@@ -45,8 +45,11 @@ class TaskDetailViewModel {
         title
             .subscribe(onNext: { [weak self] newTitle in
                 guard let self = self else { return }
-                // Realm更新
-                realmManager.updateTaskTitle(taskID: task.taskID, title: newTitle)
+                Task {
+                    // TODO: updateTaskに修正
+                    // Realm更新
+                    realmManager.updateTaskTitle(taskID: task.taskID, title: newTitle)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -56,6 +59,7 @@ class TaskDetailViewModel {
         cause
             .subscribe(onNext: { [weak self] newText in
                 guard let self = self else { return }
+                // TODO: updateTaskに修正
                 // Realm更新
                 realmManager.updateTaskCause(taskID: task.taskID, cause: newText)
             })
@@ -67,6 +71,7 @@ class TaskDetailViewModel {
         measuresArray
             .subscribe(onNext: { [weak self] newArray in
                 guard let self = self else { return }
+                // TODO: updateTaskに修正
                 // Realm更新
                 realmManager.updateMeasuresOrder(measuresArray: newArray)
             })
@@ -141,11 +146,13 @@ class TaskDetailViewModel {
     /// 課題の完了状態を更新
     /// - Parameter isCompleted: 完了状態
     func completeTask(isCompleted: Bool) {
+        // TODO: updateTaskに修正
         realmManager.updateTaskIsCompleted(task: task, isCompleted: isCompleted)
     }
     
     /// 課題とそれに含まれる対策を削除
     func deleteTask() {
+        // TODO: updateTaskに修正
         realmManager.updateTaskIsDeleted(task: task)
         for measures in measuresArray.value {
             realmManager.updateMeasuresIsDeleted(measures: measures)

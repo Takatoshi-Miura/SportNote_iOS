@@ -61,8 +61,8 @@ class RealmManager {
     func deleteAllRealmData() {
         Task {
             await deleteAllGroup()
+            await deleteAllTask()
         }
-        deleteAllTask()
         deleteAllMeasures()
         deleteAllMemo()
         deleteAllTarget()
@@ -241,289 +241,289 @@ extension RealmManager {
     
     /// Realmの課題を全取得
     /// - Returns: 全課題データ
-    func getAllTask() -> [TaskData] {
-        var taskArray: [TaskData] = []
-        let realm = try! Realm()
-        let realmArray = realm.objects(TaskData.self)
-        for task in realmArray {
-            taskArray.append(task)
-        }
-        return taskArray
-    }
+//    func getAllTask() -> [TaskData] {
+//        var taskArray: [TaskData] = []
+//        let realm = try! Realm()
+//        let realmArray = realm.objects(TaskData.self)
+//        for task in realmArray {
+//            taskArray.append(task)
+//        }
+//        return taskArray
+//    }
     
     /// Realmの課題を取得
     /// - Parameters:
     ///   - taskID: 課題ID
     /// - Returns: 課題データ
-    func getTask(taskID: String) -> TaskData {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-            .filter("taskID == '\(taskID)'")
-            .filter("(isDeleted == false)")
-            .first
-        return result ?? TaskData()
-    }
+//    func getTask(taskID: String) -> TaskData {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//            .filter("taskID == '\(taskID)'")
+//            .filter("(isDeleted == false)")
+//            .first
+//        return result ?? TaskData()
+//    }
     
     /// Realmの課題を取得
     /// - Parameters:
     ///   - noteID: ノートID
     /// - Returns: 課題データ
-    func getTask(noteID: String) -> [TaskData] {
-        var taskArray = [TaskData]()
-        
-        let memoArray = getMemo(noteID: noteID)
-        var measuresArray = [Measures]()
-        for memo in memoArray {
-            let measures = getMeasures(measuresID: memo.measuresID)
-            measuresArray.append(measures)
-        }
-        for measures in measuresArray {
-            let task = getTask(taskID: measures.taskID)
-            taskArray.append(task)
-        }
-        
-        return taskArray
-    }
+//    func getTask(noteID: String) -> [TaskData] {
+//        var taskArray = [TaskData]()
+//        
+//        let memoArray = getMemo(noteID: noteID)
+//        var measuresArray = [Measures]()
+//        for memo in memoArray {
+//            let measures = getMeasures(measuresID: memo.measuresID)
+//            measuresArray.append(measures)
+//        }
+//        for measures in measuresArray {
+//            let task = getTask(taskID: measures.taskID)
+//            taskArray.append(task)
+//        }
+//        
+//        return taskArray
+//    }
     
     /// Realmの課題を取得(ノートViewer用)
     /// - Parameters:
     ///   - noteID: ノートID
     /// - Returns: 課題データ
-    func getTaskArrayForAddNoteView(noteID: String) -> [TaskForAddNote] {
-        var taskForAddNoteArray = [TaskForAddNote]()
-        
-        let taskArray = getTask(noteID: noteID)
-        for task in taskArray {
-            let taskForAddNote = TaskForAddNote(task: task)
-            taskForAddNoteArray.append(taskForAddNote)
-        }
-        
-        return taskForAddNoteArray
-    }
+//    func getTaskArrayForAddNoteView(noteID: String) -> [TaskForAddNote] {
+//        var taskForAddNoteArray = [TaskForAddNote]()
+//        
+//        let taskArray = getTask(noteID: noteID)
+//        for task in taskArray {
+//            let taskForAddNote = TaskForAddNote(task: task)
+//            taskForAddNoteArray.append(taskForAddNote)
+//        }
+//        
+//        return taskForAddNoteArray
+//    }
     
     /// TaskViewController用task配列を返却
     /// - Returns: Task配列[[task][task, task]…]の形
-    func getTaskArrayForTaskView() -> [[TaskData]] {
-        var taskArray: [[TaskData]] = [[TaskData]]()
-        let groupArray: [Group] = getGroupArrayForTaskView()
-        for group in groupArray {
-            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
-            taskArray.append(tasks)
-        }
-        return taskArray
-    }
+//    func getTaskArrayForTaskView() -> [[TaskData]] {
+//        var taskArray: [[TaskData]] = [[TaskData]]()
+//        let groupArray: [Group] = getGroupArrayForTaskView()
+//        for group in groupArray {
+//            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+//            taskArray.append(tasks)
+//        }
+//        return taskArray
+//    }
     
     /// AddPracticeNoteViewController用task配列を返却(未解決の課題をグループ関係なく取得)
     /// - Returns: Task配列[task, task…]の形
-    func getTaskArrayForAddNoteView() -> [TaskForAddNote] {
-        var taskArray = [TaskForAddNote]()
-        let groupArray: [Group] = getGroupArrayForTaskView()
-        for group in groupArray {
-            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
-            for task in tasks {
-                let taskForAddNote = TaskForAddNote(task: task)
-                // 対策未設定の課題は表示しない
-                if getPriorityMeasuresInTask(taskID: task.taskID) != nil {
-                    taskArray.append(taskForAddNote)
-                }
-            }
-        }
-        return taskArray
-    }
+//    func getTaskArrayForAddNoteView() -> [TaskForAddNote] {
+//        var taskArray = [TaskForAddNote]()
+//        let groupArray: [Group] = getGroupArrayForTaskView()
+//        for group in groupArray {
+//            let tasks = getTasksInGroup(ID: group.groupID, isCompleted: false)
+//            for task in tasks {
+//                let taskForAddNote = TaskForAddNote(task: task)
+//                // 対策未設定の課題は表示しない
+//                if getPriorityMeasuresInTask(taskID: task.taskID) != nil {
+//                    taskArray.append(taskForAddNote)
+//                }
+//            }
+//        }
+//        return taskArray
+//    }
     
     /// NoteFilterViewController用FilteredTask配列を返却
     /// - Parameters:
     ///   - isFilter: チェックの保存状態を反映するか否か
     /// - Returns: Task配列[[FilteredTask][FilteredTask, FilteredTask]…]の形
-    func getTaskArrayForNoteFilterView(isFilter: Bool) -> [[FilteredTask]] {
-        var filteredTaskArray: [[FilteredTask]] = [[FilteredTask]]()
-        let userDefaults = UserDefaults.standard
-        var filterTaskIDArray = [String]()
-        if let idArray = userDefaults.array(forKey: "filterTaskID") {
-            filterTaskIDArray = idArray as! [String]
-        }
-        let groupArray: [Group] = getGroupArrayForTaskView()
-        
-        for group in groupArray {
-            var array = [FilteredTask]()
-            let tasks = getTasksInGroup(ID: group.groupID)
-            for task in tasks {
-                var filteredTask = FilteredTask(task: task)
-                // チェックの保存状態を反映
-                if isFilter && !filterTaskIDArray.contains(filteredTask.taskID) {
-                    filteredTask.isFilter = false
-                }
-                array.append(filteredTask)
-            }
-            filteredTaskArray.append(array)
-        }
-        
-        return filteredTaskArray
-    }
+//    func getTaskArrayForNoteFilterView(isFilter: Bool) -> [[FilteredTask]] {
+//        var filteredTaskArray: [[FilteredTask]] = [[FilteredTask]]()
+//        let userDefaults = UserDefaults.standard
+//        var filterTaskIDArray = [String]()
+//        if let idArray = userDefaults.array(forKey: "filterTaskID") {
+//            filterTaskIDArray = idArray as! [String]
+//        }
+//        let groupArray: [Group] = getGroupArrayForTaskView()
+//        
+//        for group in groupArray {
+//            var array = [FilteredTask]()
+//            let tasks = getTasksInGroup(ID: group.groupID)
+//            for task in tasks {
+//                var filteredTask = FilteredTask(task: task)
+//                // チェックの保存状態を反映
+//                if isFilter && !filterTaskIDArray.contains(filteredTask.taskID) {
+//                    filteredTask.isFilter = false
+//                }
+//                array.append(filteredTask)
+//            }
+//            filteredTaskArray.append(array)
+//        }
+//        
+//        return filteredTaskArray
+//    }
     
     /// グループに含まれる課題を取得
     /// - Parameters:
     ///   - groupID: グループID
     ///   - isCompleted: 完了or未完了
     /// - Returns: グループに含まれる課題
-    func getTasksInGroup(ID groupID: String, isCompleted: Bool) -> [TaskData] {
-        var taskArray: [TaskData] = []
-        let realm = try! Realm()
-        let sortProperties = [
-            SortDescriptor(keyPath: "order", ascending: true),
-        ]
-        let results = realm.objects(TaskData.self)
-                            .filter("(groupID == '\(groupID)') && (isDeleted == false) && (isComplete == \(String(isCompleted)))")
-                            .sorted(by: sortProperties)
-        for task in results {
-            taskArray.append(task)
-        }
-        return taskArray
-    }
+//    func getTasksInGroup(ID groupID: String, isCompleted: Bool) -> [TaskData] {
+//        var taskArray: [TaskData] = []
+//        let realm = try! Realm()
+//        let sortProperties = [
+//            SortDescriptor(keyPath: "order", ascending: true),
+//        ]
+//        let results = realm.objects(TaskData.self)
+//                            .filter("(groupID == '\(groupID)') && (isDeleted == false) && (isComplete == \(String(isCompleted)))")
+//                            .sorted(by: sortProperties)
+//        for task in results {
+//            taskArray.append(task)
+//        }
+//        return taskArray
+//    }
     
     /// グループに含まれる課題を取得
     /// - Parameters:
     ///   - groupID: グループID
     /// - Returns: グループに含まれる課題
-    func getTasksInGroup(ID groupID: String) -> [TaskData] {
-        var taskArray: [TaskData] = []
-        let realm = try! Realm()
-        let sortProperties = [
-            SortDescriptor(keyPath: "order", ascending: true),
-        ]
-        let results = realm.objects(TaskData.self)
-                            .filter("(groupID == '\(groupID)') && (isDeleted == false)")
-                            .sorted(by: sortProperties)
-        for task in results {
-            taskArray.append(task)
-        }
-        return taskArray
-    }
+//    func getTasksInGroup(ID groupID: String) -> [TaskData] {
+//        var taskArray: [TaskData] = []
+//        let realm = try! Realm()
+//        let sortProperties = [
+//            SortDescriptor(keyPath: "order", ascending: true),
+//        ]
+//        let results = realm.objects(TaskData.self)
+//                            .filter("(groupID == '\(groupID)') && (isDeleted == false)")
+//                            .sorted(by: sortProperties)
+//        for task in results {
+//            taskArray.append(task)
+//        }
+//        return taskArray
+//    }
     
     /// Realmの課題を更新
     /// - Parameters:
     ///    - task: Realmオブジェクト
-    func updateTask(task: TaskData) {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-            .filter("taskID == '\(task.taskID)'").first
-        try! realm.write {
-            result?.groupID = task.groupID
-            result?.title = task.title
-            result?.cause = task.cause
-            result?.order = task.order
-            result?.isComplete = task.isComplete
-            result?.isDeleted = task.isDeleted
-            result?.updated_at = task.updated_at
-        }
-    }
+//    func updateTask(task: TaskData) {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//            .filter("taskID == '\(task.taskID)'").first
+//        try! realm.write {
+//            result?.groupID = task.groupID
+//            result?.title = task.title
+//            result?.cause = task.cause
+//            result?.order = task.order
+//            result?.isComplete = task.isComplete
+//            result?.isDeleted = task.isDeleted
+//            result?.updated_at = task.updated_at
+//        }
+//    }
     
     /// 課題のタイトルを更新
     /// - Parameters:
     ///    - taskID: 更新したい課題のID
     ///    - title: 新しいタイトル文字列
-    func updateTaskTitle(taskID: String, title: String) {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-                           .filter("taskID == '\(taskID)'").first
-        try! realm.write {
-            result?.title = title
-            result?.updated_at = Date()
-        }
-    }
+//    func updateTaskTitle(taskID: String, title: String) {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//                           .filter("taskID == '\(taskID)'").first
+//        try! realm.write {
+//            result?.title = title
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// 課題の原因を更新
     /// - Parameters:
     ///    - taskID: 更新したい課題のID
     ///    - cause: 新しい原因の文字列
-    func updateTaskCause(taskID: String, cause: String) {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-                           .filter("taskID == '\(taskID)'").first
-        try! realm.write {
-            result?.cause = cause
-            result?.updated_at = Date()
-        }
-    }
+//    func updateTaskCause(taskID: String, cause: String) {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//                           .filter("taskID == '\(taskID)'").first
+//        try! realm.write {
+//            result?.cause = cause
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// 課題の並び順を更新
     /// - Parameters:
     ///   - task: 課題
     ///   - order: 並び順
-    func updateTaskOrder(task: TaskData, order: Int) {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-                           .filter("taskID == '\(task.taskID)'").first
-        try! realm.write {
-            result?.order = order
-            result?.updated_at = Date()
-        }
-    }
+//    func updateTaskOrder(task: TaskData, order: Int) {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//                           .filter("taskID == '\(task.taskID)'").first
+//        try! realm.write {
+//            result?.order = order
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// 課題の並び順を更新
     /// - Parameters:
     ///   - taskArray: 課題配列
-    func updateTaskOrder(taskArray: [[TaskData]]) {
-        let realm = try! Realm()
-        
-        var index = 0
-        for tasks in taskArray {
-            for task in tasks {
-                let result = realm.objects(TaskData.self)
-                                    .filter("taskID == '\(task.taskID)'").first
-                try! realm.write {
-                    result?.order = index
-                    result?.updated_at = Date()
-                }
-                index += 1
-                if index > tasks.count - 1 {
-                    index = 0
-                    continue
-                }
-            }
-        }
-    }
+//    func updateTaskOrder(taskArray: [[TaskData]]) {
+//        let realm = try! Realm()
+//        
+//        var index = 0
+//        for tasks in taskArray {
+//            for task in tasks {
+//                let result = realm.objects(TaskData.self)
+//                                    .filter("taskID == '\(task.taskID)'").first
+//                try! realm.write {
+//                    result?.order = index
+//                    result?.updated_at = Date()
+//                }
+//                index += 1
+//                if index > tasks.count - 1 {
+//                    index = 0
+//                    continue
+//                }
+//            }
+//        }
+//    }
     
     /// 課題の属するグループを更新
     /// - Parameters:
     ///    - task: 課題
     ///    - groupId: 更新後のgroupId
-    func updateTaskGroupId(task: TaskData, groupID: String) {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-                            .filter("taskID == '\(task.taskID)'").first
-        try! realm.write {
-            result?.groupID = groupID
-            result?.updated_at = Date()
-        }
-    }
+//    func updateTaskGroupId(task: TaskData, groupID: String) {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//                            .filter("taskID == '\(task.taskID)'").first
+//        try! realm.write {
+//            result?.groupID = groupID
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// 課題の完了フラグを更新
     /// - Parameters:
     ///   - task: 課題
     ///   - isCompleted: 完了or未完了
-    func updateTaskIsCompleted(task: TaskData, isCompleted: Bool) {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-                           .filter("taskID == '\(task.taskID)'").first
-        try! realm.write {
-            result?.isComplete = isCompleted
-            result?.updated_at = Date()
-        }
-    }
+//    func updateTaskIsCompleted(task: TaskData, isCompleted: Bool) {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//                           .filter("taskID == '\(task.taskID)'").first
+//        try! realm.write {
+//            result?.isComplete = isCompleted
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// 課題の削除フラグを更新
     /// - Parameters:
     ///   - task: 課題
-    func updateTaskIsDeleted(task: TaskData) {
-        let realm = try! Realm()
-        let result = realm.objects(TaskData.self)
-                           .filter("taskID == '\(task.taskID)'").first
-        try! realm.write {
-            result?.isDeleted = true
-            result?.updated_at = Date()
-        }
-    }
+//    func updateTaskIsDeleted(task: TaskData) {
+//        let realm = try! Realm()
+//        let result = realm.objects(TaskData.self)
+//                           .filter("taskID == '\(task.taskID)'").first
+//        try! realm.write {
+//            result?.isDeleted = true
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// ユーザーIDを更新
     /// - Parameters:
@@ -539,17 +539,17 @@ extension RealmManager {
     }
     
     /// Realmの課題を全削除
-    private func deleteAllTask() {
-        let realm = try! Realm()
-        let tasks = realm.objects(TaskData.self)
-        do{
-          try realm.write{
-            realm.delete(tasks)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
+//    private func deleteAllTask() {
+//        let realm = try! Realm()
+//        let tasks = realm.objects(TaskData.self)
+//        do{
+//          try realm.write{
+//            realm.delete(tasks)
+//          }
+//        }catch {
+//          print("Error \(error)")
+//        }
+//    }
     
 }
 

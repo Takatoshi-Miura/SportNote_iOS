@@ -197,18 +197,26 @@ class AddPracticeNoteViewController: UIViewController {
     /// 課題データの取得
     private func initTaskData() {
         let realmManager = RealmManager()
-        taskArray = realmManager.getTaskArrayForAddNoteView()
+        Task {
+            taskArray = await realmManager.getTaskArrayForAddNoteView()
+        }
         
         if isViewer {
-            // ノートと連動している課題を取得
-            displayTaskArray = realmManager.getTaskArrayForAddNoteView(noteID: note.noteID)
-            realmMemoArray = realmManager.getMemo(noteID: note.noteID)
-            if displayTaskArray.isEmpty {
-                taskTableView.separatorStyle = .none
+            Task {
+                // ノートと連動している課題を取得
+                displayTaskArray = await realmManager.getTaskArrayForAddNoteView(noteID: note.noteID)
+                realmMemoArray = realmManager.getMemo(noteID: note.noteID)
+                if displayTaskArray.isEmpty {
+                    DispatchQueue.main.async {
+                        self.taskTableView.separatorStyle = .none
+                    }
+                }
             }
         } else {
-            // 未解決の課題を取得
-            displayTaskArray = realmManager.getTaskArrayForAddNoteView()
+            Task {
+                // 未解決の課題を取得
+                displayTaskArray = await realmManager.getTaskArrayForAddNoteView()
+            }
         }
     }
     

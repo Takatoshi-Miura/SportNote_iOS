@@ -32,8 +32,10 @@ class NoteDetailViewModel {
     /// ノートに紐づく課題・メモデータを取得
     /// - Parameter noteID: ノートID
     private func getLinkedTask(noteID: String) {
-        taskArray = realmManager.getTaskArrayForAddNoteView(noteID: noteID)
-        memoArray = realmManager.getMemo(noteID: noteID)
+        Task {
+            taskArray = await realmManager.getTaskArrayForAddNoteView(noteID: noteID)
+            memoArray = realmManager.getMemo(noteID: noteID)
+        }
     }
     
 }
