@@ -63,10 +63,10 @@ class RealmManager {
             await deleteAllGroup()
             await deleteAllTask()
             await deleteAllMeasures()
+            await deleteAllMemo()
+            await deleteAllTarget()
+            await deleteAllNote()
         }
-        deleteAllMemo()
-        deleteAllTarget()
-        deleteAllNote()
     }
     
 }
@@ -733,144 +733,144 @@ extension RealmManager {
     
     /// Realmのメモを全取得
     /// - Returns: 全メモデータ
-    func getAllMemo() -> [Memo] {
-        var memoArray: [Memo] = []
-        let realm = try! Realm()
-        let realmArray = realm.objects(Memo.self)
-        for memo in realmArray {
-            memoArray.append(memo)
-        }
-        return memoArray
-    }
+//    func getAllMemo() -> [Memo] {
+//        var memoArray: [Memo] = []
+//        let realm = try! Realm()
+//        let realmArray = realm.objects(Memo.self)
+//        for memo in realmArray {
+//            memoArray.append(memo)
+//        }
+//        return memoArray
+//    }
     
     /// 対策に含まれるメモを取得
     /// - Parameters:
     ///   - measuresID: 対策ID
     /// - Returns: 対策に含まれるメモ
-    func getMemo(measuresID: String) -> [Memo] {
-        // 対策に含まれるメモを取得
-        var memoArray: [Memo] = []
-        let realm = try! Realm()
-        let results = realm.objects(Memo.self)
-                            .filter("(measuresID == '\(measuresID)') && (isDeleted == false)")
-        for memo in results {
-            memoArray.append(memo)
-        }
-        
-        // ノートの日付順に並び替える
-        var noteArray = getNote(memoArray: memoArray)
-        noteArray.sort(by: {$0.date > $1.date})
-        var resultArray = [Memo]()
-        for note in noteArray {
-            if let memo = getMemo(noteID: note.noteID, measuresID: measuresID) {
-                memo.noteDate = note.date
-                resultArray.append(memo)
-            }
-        }
-        
-        return resultArray
-    }
+//    func getMemo(measuresID: String) -> [Memo] {
+//        // 対策に含まれるメモを取得
+//        var memoArray: [Memo] = []
+//        let realm = try! Realm()
+//        let results = realm.objects(Memo.self)
+//                            .filter("(measuresID == '\(measuresID)') && (isDeleted == false)")
+//        for memo in results {
+//            memoArray.append(memo)
+//        }
+//        
+//        // ノートの日付順に並び替える
+//        var noteArray = getNote(memoArray: memoArray)
+//        noteArray.sort(by: {$0.date > $1.date})
+//        var resultArray = [Memo]()
+//        for note in noteArray {
+//            if let memo = getMemo(noteID: note.noteID, measuresID: measuresID) {
+//                memo.noteDate = note.date
+//                resultArray.append(memo)
+//            }
+//        }
+//        
+//        return resultArray
+//    }
     
     /// 対策に含まれるメモを取得
     /// - Parameters:
     ///   - measuresID: 対策ID
     /// - Returns: 対策に含まれるメモ
-    func getMemo(searchWord: String) -> [Memo] {
-        var memoArray: [Memo] = []
-        let realm = try! Realm()
-        let sortProperties = [
-            SortDescriptor(keyPath: "created_at", ascending: false),
-        ]
-        let results = realm.objects(Memo.self)
-                            .filter("(detail CONTAINS %@)", searchWord)
-                            .filter("(isDeleted == false)")
-                            .sorted(by: sortProperties)
-        for memo in results {
-            memoArray.append(memo)
-        }
-        return memoArray
-    }
+//    func getMemo(searchWord: String) -> [Memo] {
+//        var memoArray: [Memo] = []
+//        let realm = try! Realm()
+//        let sortProperties = [
+//            SortDescriptor(keyPath: "created_at", ascending: false),
+//        ]
+//        let results = realm.objects(Memo.self)
+//                            .filter("(detail CONTAINS %@)", searchWord)
+//                            .filter("(isDeleted == false)")
+//                            .sorted(by: sortProperties)
+//        for memo in results {
+//            memoArray.append(memo)
+//        }
+//        return memoArray
+//    }
     
     /// ノートに含まれるメモを取得
     /// - Parameters:
     ///   - noteID: ノートID
     /// - Returns: ノートに含まれるメモ
-    func getMemo(noteID: String) -> [Memo] {
-        var memoArray: [Memo] = []
-        let realm = try! Realm()
-        let results = realm.objects(Memo.self)
-                            .filter("(noteID == '\(noteID)')")
-                            .filter("(isDeleted == false)")
-        for memo in results {
-            memoArray.append(memo)
-        }
-        return memoArray
-    }
+//    func getMemo(noteID: String) -> [Memo] {
+//        var memoArray: [Memo] = []
+//        let realm = try! Realm()
+//        let results = realm.objects(Memo.self)
+//                            .filter("(noteID == '\(noteID)')")
+//                            .filter("(isDeleted == false)")
+//        for memo in results {
+//            memoArray.append(memo)
+//        }
+//        return memoArray
+//    }
     
     /// ノートに含まれるメモを取得
     /// - Parameters:
     ///   - noteID: ノートID
     ///   - measuresID: 対策ID
     /// - Returns: ノートに含まれるメモ
-    func getMemo(noteID: String, measuresID: String) -> Memo? {
-        let realm = try! Realm()
-        let result = realm.objects(Memo.self)
-            .filter("(noteID == '\(noteID)')")
-            .filter("(measuresID == '\(measuresID)')")
-            .filter("(isDeleted == false)")
-            .first
-        return result
-    }
+//    func getMemo(noteID: String, measuresID: String) -> Memo? {
+//        let realm = try! Realm()
+//        let result = realm.objects(Memo.self)
+//            .filter("(noteID == '\(noteID)')")
+//            .filter("(measuresID == '\(measuresID)')")
+//            .filter("(isDeleted == false)")
+//            .first
+//        return result
+//    }
     
     /// Realmのメモを更新
     /// - Parameters:
     ///    - memo: Realmオブジェクト
-    func updateMemo(memo: Memo) {
-        let realm = try! Realm()
-        let result = realm.objects(Memo.self)
-            .filter("memoID == '\(memo.memoID)'").first
-        try! realm.write {
-            result?.detail = memo.detail
-            result?.isDeleted = memo.isDeleted
-            result?.updated_at = memo.updated_at
-        }
-    }
+//    func updateMemo(memo: Memo) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Memo.self)
+//            .filter("memoID == '\(memo.memoID)'").first
+//        try! realm.write {
+//            result?.detail = memo.detail
+//            result?.isDeleted = memo.isDeleted
+//            result?.updated_at = memo.updated_at
+//        }
+//    }
     
     /// メモの内容を更新
     /// - Parameters:
     ///   - memo: メモ
-    func updateMemoDetail(memoID: String, detail: String) {
-        let realm = try! Realm()
-        let result = realm.objects(Memo.self)
-                           .filter("memoID == '\(memoID)'").first
-        try! realm.write {
-            result?.detail = detail
-            result?.updated_at = Date()
-        }
-    }
+//    func updateMemoDetail(memoID: String, detail: String) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Memo.self)
+//                           .filter("memoID == '\(memoID)'").first
+//        try! realm.write {
+//            result?.detail = detail
+//            result?.updated_at = Date()
+//        }
+//    }
 
     /// メモの削除フラグを更新
     /// - Parameters:
     ///   - memo: メモ
-    func updateMemoIsDeleted(memoID: String) {
-        let realm = try! Realm()
-        let result = realm.objects(Memo.self)
-                           .filter("memoID == '\(memoID)'").first
-        try! realm.write {
-            result?.isDeleted = true
-            result?.updated_at = Date()
-        }
-    }
+//    func updateMemoIsDeleted(memoID: String) {
+//        let realm = try! Realm()
+//        let result = realm.objects(Memo.self)
+//                           .filter("memoID == '\(memoID)'").first
+//        try! realm.write {
+//            result?.isDeleted = true
+//            result?.updated_at = Date()
+//        }
+//    }
     
     /// メモの削除フラグを更新
     /// - Parameters:
     ///   - noteID: メモ
-    func updateMemoIsDeleted(noteID: String) {
-        let memoArray = getMemo(noteID: noteID)
-        for memo in memoArray {
-            updateMemoIsDeleted(memoID: memo.memoID)
-        }
-    }
+//    func updateMemoIsDeleted(noteID: String) {
+//        let memoArray = getMemo(noteID: noteID)
+//        for memo in memoArray {
+//            updateMemoIsDeleted(memoID: memo.memoID)
+//        }
+//    }
     
     /// ユーザーIDを更新
     /// - Parameters:
@@ -886,17 +886,17 @@ extension RealmManager {
     }
     
     /// Realmのメモを全削除
-    private func deleteAllMemo() {
-        let realm = try! Realm()
-        let memos = realm.objects(Memo.self)
-        do{
-          try realm.write{
-            realm.delete(memos)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
+//    private func deleteAllMemo() {
+//        let realm = try! Realm()
+//        let memos = realm.objects(Memo.self)
+//        do{
+//          try realm.write{
+//            realm.delete(memos)
+//          }
+//        }catch {
+//          print("Error \(error)")
+//        }
+//    }
     
 }
 

@@ -111,6 +111,7 @@ class AddPracticeNoteViewController: UIViewController {
                 if cell.effectivenessTextView.text.isEmpty {
                     continue
                 } else {
+                    // TODO: updateMemoに修正
                     let realmManager = RealmManager()
                     realmManager.updateMemoDetail(memoID: memo.memoID, detail: cell.effectivenessTextView.text!)
                     // Firebaseに送信
@@ -205,7 +206,7 @@ class AddPracticeNoteViewController: UIViewController {
             Task {
                 // ノートと連動している課題を取得
                 displayTaskArray = await realmManager.getTaskArrayForAddNoteView(noteID: note.noteID)
-                realmMemoArray = realmManager.getMemo(noteID: note.noteID)
+                realmMemoArray = await realmManager.getMemo(noteID: note.noteID)
                 if displayTaskArray.isEmpty {
                     DispatchQueue.main.async {
                         self.taskTableView.separatorStyle = .none
@@ -240,6 +241,7 @@ class AddPracticeNoteViewController: UIViewController {
         showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
             let realmManager = RealmManager()
             realmManager.updateNoteIsDeleted(noteID: self.note.noteID)
+            // TODO: updateMemoに修正
             realmManager.updateMemoIsDeleted(noteID: self.note.noteID)
             self.delegate?.addPracticeNoteVCDeleteNote()
         })

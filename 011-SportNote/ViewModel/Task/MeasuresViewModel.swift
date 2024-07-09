@@ -25,7 +25,10 @@ class MeasuresViewModel {
     init(measures: Measures) {
         self.measures = measures
         self.title = BehaviorRelay(value: measures.title)
-        self.memoArray = BehaviorRelay(value: realmManager.getMemo(measuresID: measures.measuresID))
+        Task {
+            let memo = await realmManager.getMemo(measuresID: measures.measuresID)
+            self.memoArray = BehaviorRelay(value: memo)
+        }
         initBind()
     }
     
@@ -77,6 +80,7 @@ class MeasuresViewModel {
         // TODO: updateMeasuresに修正
         realmManager.updateMeasuresIsDeleted(measures: measures)
         for memo in memoArray.value {
+            // TODO: updateMemoに修正
             realmManager.updateMemoIsDeleted(memoID: memo.memoID)
         }
     }

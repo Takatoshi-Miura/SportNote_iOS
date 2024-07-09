@@ -189,7 +189,7 @@ class SyncManager {
         let firebaseMemoArray: [Memo] = await firebaseManager.getAllMemo()
         
         // RealmのMemoを全取得
-        let realmMemoArray: [Memo] = realmManager.getAllMemo()
+        let realmMemoArray: [Memo] = await realmManager.getAllMemo()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseMemoIDArray = firebaseMemoArray.map { $0.memoID }
@@ -224,7 +224,9 @@ class SyncManager {
             if realmMemo.updated_at > firebaseMemo.updated_at {
                 self.firebaseManager.updateMemo(memo: realmMemo)
             } else if firebaseMemo.updated_at > realmMemo.updated_at {
-                self.realmManager.updateMemo(memo: firebaseMemo)
+                Task {
+                    await self.realmManager.updateMemo(memo: firebaseMemo)
+                }
             }
         }
         print("Memo同期終了")

@@ -34,7 +34,7 @@ class NoteDetailViewModel {
     private func getLinkedTask(noteID: String) {
         Task {
             taskArray = await realmManager.getTaskArrayForAddNoteView(noteID: noteID)
-            memoArray = realmManager.getMemo(noteID: noteID)
+            memoArray = await realmManager.getMemo(noteID: noteID)
         }
     }
     
