@@ -20,13 +20,31 @@ actor RealmActor {
     
     /// データの追加
     /// - Parameter object: RealmObject
-    func add<T: Object>(_ object: T) {
+    /// - Returns: 成功失敗
+    func insert<T: Object>(_ object: T) -> Bool {
         do {
             try realm.write {
                 realm.add(object)
             }
+            return true
         } catch {
             print("Error adding object to Realm: \(error.localizedDescription)")
+            return false
+        }
+    }
+    
+    /// データリストの追加
+    /// - Parameter objects: RealmObjects
+    /// - Returns: 成功失敗
+    func insertList<T: Object>(_ objects: [T]) -> Bool {
+        do {
+            try realm.write {
+                realm.add(objects, update: .modified)
+            }
+            return true
+        } catch {
+            print("Error adding object to Realm: \(error.localizedDescription)")
+            return false
         }
     }
     

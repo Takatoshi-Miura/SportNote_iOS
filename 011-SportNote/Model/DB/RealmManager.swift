@@ -17,32 +17,16 @@ class RealmManager {
     /// - Parameters:
     ///    - object: Realmオブジェクト
     /// - Returns: 成功失敗
-    func createRealm(object: Object) -> Bool {
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(object)
-            }
-        } catch {
-            return false
-        }
-        return true
+    func createRealm(object: Object) async -> Bool {
+        return await realmActor.insert(object)
     }
     
     /// Realmにデータを作成(既に存在するオブジェクトはUpdate)
     /// - Parameters:
     ///    - object: Realmオブジェクト
     /// - Returns: 成功失敗
-    func createRealmWithUpdate(objects: [Object]) -> Bool {
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(objects, update: .modified)
-            }
-        } catch {
-            return false
-        }
-        return true
+    func createRealmWithUpdate(objects: [Object]) async -> Bool {
+        return await realmActor.insertList(objects)
     }
     
     /// RealmのデータのUserIDを一括変更
