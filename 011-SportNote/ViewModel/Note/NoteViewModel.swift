@@ -51,10 +51,12 @@ class NoteViewModel {
     
     /// ノート再取得
     func refreshData() {
-        DispatchQueue.main.async {
-            var newNoteArray = self.realmManager.getPracticeTournamentNote()
-            newNoteArray.insert(self.realmManager.getFreeNote(), at: 0)
-            self.noteArray.accept(newNoteArray)
+        Task {
+            var newNoteArray = await self.realmManager.getPracticeTournamentNote()
+            if let freeNote = await self.realmManager.getFreeNote() {
+                newNoteArray.insert(freeNote, at: 0)
+                self.noteArray.accept(newNoteArray)
+            }
         }
     }
     
@@ -65,9 +67,13 @@ class NoteViewModel {
             refreshData()
             return
         }
-        var newNoteArray = realmManager.getPracticeTournamentNote(searchWord: searchText)
-        newNoteArray.insert(realmManager.getFreeNote(), at: 0)
-        noteArray.accept(newNoteArray)
+        Task {
+            var newNoteArray = await self.realmManager.getPracticeTournamentNote(searchWord: searchText)
+            if let freeNote = await self.realmManager.getFreeNote() {
+                newNoteArray.insert(freeNote, at: 0)
+                self.noteArray.accept(newNoteArray)
+            }
+        }
     }
     
     /// ノートを配列から削除

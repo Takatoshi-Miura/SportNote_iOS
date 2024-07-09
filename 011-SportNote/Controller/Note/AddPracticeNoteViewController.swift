@@ -240,6 +240,7 @@ class AddPracticeNoteViewController: UIViewController {
     @objc func deleteNote() {
         showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
             let realmManager = RealmManager()
+            // TODO: updateNoteに更新
             realmManager.updateNoteIsDeleted(noteID: self.note.noteID)
             // TODO: updateMemoに修正
             realmManager.updateMemoIsDeleted(noteID: self.note.noteID)
@@ -515,6 +516,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         dateTableView.reloadData()
         
         if isViewer {
+            // TODO: updateNoteに更新
             // 日付を更新
             let realmManager = RealmManager()
             realmManager.updateNoteDate(noteID: note.noteID, date: selectedDate)
@@ -554,6 +556,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         dateTableView.reloadData()
         
         if isViewer {
+            // TODO: updateNoteに更新
             // 天気と気温を更新
             let realmManager = RealmManager()
             realmManager.updateNoteWeather(noteID: note.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
@@ -607,6 +610,7 @@ extension AddPracticeNoteViewController: UITextViewDelegate {
             return
         }
         
+        // TODO: updateNoteに更新
         // 差分がなければ何もしない
         let realmManager = RealmManager()
         switch TextViewType.allCases[textView.tag] {

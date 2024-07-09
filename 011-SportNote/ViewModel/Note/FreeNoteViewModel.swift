@@ -42,8 +42,11 @@ class FreeNoteViewModel {
         title
             .subscribe(onNext: { [weak self] newTitle in
                 guard let self = self else { return }
-                // Realm更新
-                realmManager.updateNoteTitle(noteID: freeNote.value.noteID, title: newTitle)
+                Task {
+                    // TODO: updateNoteに更新
+                    // Realm更新
+                    self.realmManager.updateNoteTitle(noteID: freeNote.value.noteID, title: newTitle)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -53,8 +56,11 @@ class FreeNoteViewModel {
         detail
             .subscribe(onNext: { [weak self] newTitle in
                 guard let self = self else { return }
-                // Realm更新
-                realmManager.updateNoteDetail(noteID: freeNote.value.noteID, detail: newTitle)
+                Task {
+                    // TODO: updateNoteに更新
+                    // Realm更新
+                    self.realmManager.updateNoteDetail(noteID: freeNote.value.noteID, detail: newTitle)
+                }
             })
             .disposed(by: disposeBag)
     }

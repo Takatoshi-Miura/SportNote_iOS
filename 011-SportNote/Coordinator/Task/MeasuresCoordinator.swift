@@ -39,10 +39,13 @@ extension MeasuresCoordinator: MeasuresViewControllerDelegate {
     
     // MeasuresVC → PracticeNoteVC
     func measuresVCMemoDidTap(memo: Memo) {
-        let realmManager = RealmManager()
-        let practiceNote = realmManager.getNote(ID: memo.noteID)
-        let addPracticeNoteCoordinator = AddPracticeNoteCoordinator()
-        addPracticeNoteCoordinator.startFrow(in: navigationController!, withNote: practiceNote)
+        Task {
+            let realmManager = RealmManager()
+            if let practiceNote = await realmManager.getNote(ID: memo.noteID) {
+                let addPracticeNoteCoordinator = AddPracticeNoteCoordinator()
+                addPracticeNoteCoordinator.startFrow(in: navigationController!, withNote: practiceNote)
+            }
+        }
     }
     
 }

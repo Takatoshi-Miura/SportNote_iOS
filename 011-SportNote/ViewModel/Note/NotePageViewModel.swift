@@ -29,7 +29,9 @@ class NotePageViewModel {
     
     /// ノート取得
     func refreshData() {
-        let newNoteArray = realmManager.getPracticeTournamentNote()
-        noteArray.accept(newNoteArray)
+        Task {
+            let newNoteArray = await self.realmManager.getPracticeTournamentNote()
+            self.noteArray.accept(newNoteArray)
+        }
     }
 }

@@ -289,7 +289,7 @@ class SyncManager {
         let firebaseNoteArray: [Note] = await firebaseManager.getAllNote()
         
         // RealmのNoteを全取得
-        let realmNoteArray: [Note] = realmManager.getAllNote()
+        let realmNoteArray: [Note] = await realmManager.getAllNote()
         
         // FirebaseもしくはRealmにしか存在しないデータを抽出
         let firebaseNoteIDArray = firebaseNoteArray.map { $0.noteID }
@@ -324,7 +324,9 @@ class SyncManager {
             if realmNote.updated_at > firebaseNote.updated_at {
                 self.firebaseManager.updateNote(note: realmNote)
             } else if firebaseNote.updated_at > realmNote.updated_at {
-                self.realmManager.updateNote(note: firebaseNote)
+                Task {
+                    await self.realmManager.updateNote(note: firebaseNote)
+                }
             }
         }
         print("Note同期終了")

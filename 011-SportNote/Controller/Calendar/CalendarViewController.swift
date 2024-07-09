@@ -101,11 +101,13 @@ class CalendarViewController: UIViewController {
     
     /// データを取得
     @objc func refreshData() {
-        DispatchQueue.main.async {
+        Task {
             let realmManager = RealmManager()
-            self.noteArray = realmManager.getPracticeTournamentNote()
-            self.calendar.reloadData()
-            self.tableView.reloadData()
+            self.noteArray = await realmManager.getPracticeTournamentNote()
+            DispatchQueue.main.async {
+                self.calendar.reloadData()
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -124,10 +126,14 @@ class CalendarViewController: UIViewController {
     /// 「今日」ボタンの処理
     @objc func tapTodayButton(_ sender: UIBarButtonItem) {
         calendar.select(Date())
-        // 選択された日付のノートを取得
-        let realmManager = RealmManager()
-        selectedNoteArray = realmManager.getNote(date: Date())
-        tableView.reloadData()
+        Task {
+            // 選択された日付のノートを取得
+            let realmManager = RealmManager()
+            selectedNoteArray = await realmManager.getNote(date: Date())
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
 }
@@ -136,10 +142,14 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     
     /// 日付がタップされた時の処理
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        // 選択された日付のノートを取得
-        let realmManager = RealmManager()
-        selectedNoteArray = realmManager.getNote(date: date)
-        tableView.reloadData()
+        Task {
+            // 選択された日付のノートを取得
+            let realmManager = RealmManager()
+            selectedNoteArray = await realmManager.getNote(date: Date())
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     /// ノートが存在する日付のセルを色付ける

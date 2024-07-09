@@ -155,6 +155,7 @@ class AddTournamentNoteViewController: UIViewController {
     @objc func deleteNote() {
         showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
             let realmManager = RealmManager()
+            // TODO: updateNoteに更新
             realmManager.updateNoteIsDeleted(noteID: self.realmNote.noteID)
             self.delegate?.addTournamentNoteVCDeleteNote()
         })
@@ -296,6 +297,7 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         tableView.reloadData()
         
         if isViewer {
+            // TODO: updateNoteに更新
             // 日付を更新
             let realmManager = RealmManager()
             realmManager.updateNoteDate(noteID: realmNote.noteID, date: selectedDate)
@@ -334,6 +336,7 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         tableView.reloadData()
         
         if isViewer {
+            // TODO: updateNoteに更新
             // 天気と気温を更新
             let realmManager = RealmManager()
             realmManager.updateNoteWeather(noteID: realmNote.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
@@ -358,6 +361,7 @@ extension AddTournamentNoteViewController: UITextViewDelegate {
             return
         }
         
+        // TODO: updateNoteに更新
         // 差分がなければ何もしない
         let realmManager = RealmManager()
         switch TextViewType.allCases[textView.tag] {
