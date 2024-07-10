@@ -10,10 +10,11 @@ import RealmSwift
 
 actor RealmActor {
     
-    private let realm: Realm
-    
-    init() {
-        realm = try! Realm()
+    /// スレッドごとにRealmインスタンスを作成
+    /// RealmSwiftはスレッドセーフではないため
+    /// - Returns: Realm
+    private func createRealm() -> Realm {
+        return try! Realm()
     }
     
     // MARK: - INSERT
@@ -22,6 +23,7 @@ actor RealmActor {
     /// - Parameter object: RealmObject
     /// - Returns: 成功失敗
     func insert<T: Object>(_ object: T) -> Bool {
+        let realm = createRealm()
         do {
             try realm.write {
                 realm.add(object)
@@ -37,6 +39,7 @@ actor RealmActor {
     /// - Parameter objects: RealmObjects
     /// - Returns: 成功失敗
     func insertList<T: Object>(_ objects: [T]) -> Bool {
+        let realm = createRealm()
         do {
             try realm.write {
                 realm.add(objects, update: .modified)
@@ -54,6 +57,7 @@ actor RealmActor {
     /// - Parameter type: データ型
     /// - Returns: 取得データリスト
     func find<T: Object>(_ type: T.Type) -> Results<T> {
+        let realm = createRealm()
         return realm.objects(type)
     }
     
@@ -65,6 +69,7 @@ actor RealmActor {
     ///  - ascending: 昇順 or 降順
     /// - Returns: 取得データリスト
     func find<T: Object>(_ type: T.Type, filter: String, sortKey: String?, ascending: Bool) -> Results<T> {
+        let realm = createRealm()
         var results = realm.objects(type).filter(filter)
         if let sortKey = sortKey {
             results = results.sorted(byKeyPath: sortKey, ascending: ascending)
@@ -76,6 +81,7 @@ actor RealmActor {
     /// - Parameter type: データ型
     /// - Returns: 取得データ
     func findOne<T: Object>(_ type: T.Type, filter: String) -> T? {
+        let realm = createRealm()
         return realm.objects(type).filter(filter).first
     }
     
@@ -84,6 +90,7 @@ actor RealmActor {
     /// データの削除
     /// - Parameter object: RealmObject
     func delete<T: Object>(_ object: T) {
+        let realm = createRealm()
         do {
             try realm.write {
                 realm.delete(object)
@@ -96,6 +103,7 @@ actor RealmActor {
     /// データを全削除
     /// - Parameter type: データ型
     func deleteAll<T: Object>(ofType type: T.Type) {
+        let realm = createRealm()
         let objects = find(type)
         do {
             try realm.write {
