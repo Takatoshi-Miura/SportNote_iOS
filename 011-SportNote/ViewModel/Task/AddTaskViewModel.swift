@@ -62,15 +62,13 @@ class AddTaskViewModel {
     ///   - title: タイトル
     ///   - cause: 原因
     /// - Returns: Task
-    func insertTask(title: String, cause: String) -> TaskData? {
+    func insertTask(title: String, cause: String) async -> TaskData? {
         let task = TaskData()
         task.groupID = groupArray.value[colorIndex.value].groupID
         task.title = title
         task.cause = cause
-        Task {
-            task.order = await realmManager.getTasksInGroup(ID: task.groupID, isCompleted: false).count
-        }
-        return realmManager.createRealm(object: task) ? task : nil
+        task.order = await realmManager.getTasksInGroup(ID: task.groupID, isCompleted: false).count
+        return await realmManager.createRealm(object: task) ? task : nil
     }
     
     /// 対策を新規登録
@@ -78,11 +76,11 @@ class AddTaskViewModel {
     ///   - title: タイトル
     ///   - taskID: 課題ID
     /// - Returns: Measures
-    func insertMeasures(title: String, taskID: String) -> Measures? {
+    func insertMeasures(title: String, taskID: String) async -> Measures? {
         let measures = Measures()
         measures.taskID = taskID
         measures.title = title
-        return realmManager.createRealm(object: measures) ? measures : nil
+        return await realmManager.createRealm(object: measures) ? measures : nil
     }
     
     /// 課題をFIrebaseに新規登録

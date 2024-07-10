@@ -27,8 +27,9 @@ class TaskDetailViewModel {
         self.task = task
         self.title = BehaviorRelay(value: task.title)
         self.cause = BehaviorRelay(value: task.cause)
+        self.measuresArray = BehaviorRelay<[Measures]>(value: [])
         Task {
-            self.measuresArray = BehaviorRelay(value: await realmManager.getMeasuresInTask(ID: task.taskID))
+            self.measuresArray = BehaviorRelay(value: await self.realmManager.getMeasuresInTask(ID: task.taskID))
         }
         initBind()
     }
@@ -50,7 +51,12 @@ class TaskDetailViewModel {
                 Task {
                     // TODO: updateTaskに修正
                     // Realm更新
-                    realmManager.updateTaskTitle(taskID: task.taskID, title: newTitle)
+//                    realmManager.updateTaskTitle(taskID: task.taskID, title: newTitle)
+                    // Realm更新
+                    if let realmTask = await self.realmManager.getTask(taskID: self.task.taskID) {
+                        realmTask.title = newTitle
+                        await self.realmManager.updateTask(task: realmTask)
+                    }
                 }
             })
             .disposed(by: disposeBag)
@@ -63,7 +69,14 @@ class TaskDetailViewModel {
                 guard let self = self else { return }
                 // TODO: updateTaskに修正
                 // Realm更新
-                realmManager.updateTaskCause(taskID: task.taskID, cause: newText)
+//                realmManager.updateTaskCause(taskID: task.taskID, cause: newText)
+                Task {
+                    // Realm更新
+                    if let realmTask = await self.realmManager.getTask(taskID: self.task.taskID) {
+                        realmTask.cause = newText
+                        await self.realmManager.updateTask(task: realmTask)
+                    }
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -102,9 +115,9 @@ class TaskDetailViewModel {
     /// 対策を新規作成
     /// - Parameter title: タイトル
     /// - Returns: 処理結果
-    func insertMeasures(title: String) -> Bool {
+    func insertMeasures(title: String) async -> Bool {
         let measures = createMeasures(title: title)
-        if !realmManager.createRealm(object: measures) {
+        if await !realmManager.createRealm(object: measures) {
             return false
         }
         
@@ -151,18 +164,38 @@ class TaskDetailViewModel {
     /// 課題の完了状態を更新
     /// - Parameter isCompleted: 完了状態
     func completeTask(isCompleted: Bool) {
-        // TODO: updateTaskに修正
-        realmManager.updateTaskIsCompleted(task: task, isCompleted: isCompleted)
+        Task {
+            // Realm更新
+            if let realmTask = await self.realmManager.getTask(taskID: self.task.taskID) {
+                realmTask.isComplete = isCompleted
+                await self.realmManager.updateTask(task: realmTask)
+            }
+        }
+//        // TODO: updateTaskに修正
+//        realmManager.updateTaskIsCompleted(task: task, isCompleted: isCompleted)
     }
     
     /// 課題とそれに含まれる対策を削除
     func deleteTask() {
-        // TODO: updateTaskに修正
-        realmManager.updateTaskIsDeleted(task: task)
-        for measures in measuresArray.value {
-            // TODO: updateMeasuresに修正
-            realmManager.updateMeasuresIsDeleted(measures: measures)
+        Task {
+            // Realm更新
+            if let realmTask = await self.realmManager.getTask(taskID: self.task.taskID) {
+                realmTask.isDeleted = true
+                await self.realmManager.updateTask(task: realmTask)
+            }
+            for measures in self.measuresArray.value {
+                if let realmMeasures = await self.realmManager.getMeasures(measuresID: measures.measuresID) {
+                    realmMeasures.isDeleted = true
+                    await self.realmManager.updateMeasures(measures: realmMeasures)
+                }
+            }
         }
+//        // TODO: updateTaskに修正
+//        realmManager.updateTaskIsDeleted(task: task)
+//        for measures in measuresArray.value {
+//            // TODO: updateMeasuresに修正
+//            realmManager.updateMeasuresIsDeleted(measures: measures)
+//        }
     }
     
     /// measuresArrayから指定した対策を削除

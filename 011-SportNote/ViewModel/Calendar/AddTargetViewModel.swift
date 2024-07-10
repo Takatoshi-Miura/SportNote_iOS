@@ -60,15 +60,21 @@ class AddTargetViewModel {
     /// 目標削除
     /// - Parameter targetID: 目標ID
     func deleteTarget(targetID: String) {
-        // TODO: updateTargetに更新
-        realmManager.updateTargetIsDeleted(targetID: targetID)
+        Task {
+            if let realmTarget = await self.realmManager.getTarget(targetID: targetID) {
+                realmTarget.isDeleted = true
+                await self.realmManager.updateTarget(target: realmTarget)
+            }
+        }
+//        // TODO: updateTargetに更新
+//        realmManager.updateTargetIsDeleted(targetID: targetID)
     }
     
     /// 目標を保存
     /// - Parameter target: 目標
     /// - Returns: 結果
-    func insertTarget(target: Target) -> Bool {
-        return realmManager.createRealm(object: target)
+    func insertTarget(target: Target) async -> Bool {
+        return await realmManager.createRealm(object: target)
     }
     
     /// 目標をFirebaseに保存

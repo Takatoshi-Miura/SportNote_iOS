@@ -45,16 +45,16 @@ class DataConverter {
             self.noteArray.append(freeNote)
         }
         
-        createAndUpdateRealm()
+        await createAndUpdateRealm()
     }
     
     /// 全ての新データをRealmに保存
-    private func createAndUpdateRealm() {
+    private func createAndUpdateRealm() async {
         let arrays = [groupArray, taskArray, measuresArray, memoArray, targetArray, noteArray] as [Any]
         for array in arrays {
             var success = false
             repeat {
-                success = realmManager.createRealmWithUpdate(objects: array as! [Object])
+                success = await realmManager.createRealmWithUpdate(objects: array as! [Object])
             } while !success // 失敗したらリトライ
         }
     }

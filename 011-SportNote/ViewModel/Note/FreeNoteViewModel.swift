@@ -43,9 +43,13 @@ class FreeNoteViewModel {
             .subscribe(onNext: { [weak self] newTitle in
                 guard let self = self else { return }
                 Task {
-                    // TODO: updateNoteに更新
-                    // Realm更新
-                    self.realmManager.updateNoteTitle(noteID: freeNote.value.noteID, title: newTitle)
+//                    // TODO: updateNoteに更新
+//                    // Realm更新
+//                    self.realmManager.updateNoteTitle(noteID: freeNote.value.noteID, title: newTitle)
+                    if let realmNote = await self.realmManager.getNote(ID: self.freeNote.value.noteID) {
+                        realmNote.title = newTitle
+                        await self.realmManager.updateNote(note: realmNote)
+                    }
                 }
             })
             .disposed(by: disposeBag)
@@ -54,12 +58,16 @@ class FreeNoteViewModel {
     /// 詳細の変更をバインド
     private func bindDetail() {
         detail
-            .subscribe(onNext: { [weak self] newTitle in
+            .subscribe(onNext: { [weak self] newDetail in
                 guard let self = self else { return }
                 Task {
-                    // TODO: updateNoteに更新
-                    // Realm更新
-                    self.realmManager.updateNoteDetail(noteID: freeNote.value.noteID, detail: newTitle)
+//                    // TODO: updateNoteに更新
+//                    // Realm更新
+//                    self.realmManager.updateNoteDetail(noteID: freeNote.value.noteID, detail: newTitle)
+                    if let realmNote = await self.realmManager.getNote(ID: self.freeNote.value.noteID) {
+                        realmNote.detail = newDetail
+                        await self.realmManager.updateNote(note: realmNote)
+                    }
                 }
             })
             .disposed(by: disposeBag)

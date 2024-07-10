@@ -1774,6 +1774,16 @@ extension RealmManager {
         return memoArray
     }
     
+    /// Realmのメモを取得
+    /// - Parameters:
+    ///   - memoID: メモID
+    /// - Returns: メモデータ
+    func getMemo(memoID: String) async -> Memo? {
+        let filter = "memoID == '\(memoID)' AND (isDeleted == false)"
+        let result = await realmActor.findOne(Memo.self, filter: filter)
+        return result
+    }
+    
     /// 対策に含まれるメモを取得
     /// - Parameters:
     ///   - measuresID: 対策ID
@@ -1877,6 +1887,16 @@ extension RealmManager {
             targetArray.append(result)
         }
         return targetArray
+    }
+    
+    /// Realmの目標を取得
+    /// - Parameters:
+    ///   - targetID: 目標ID
+    /// - Returns: 目標データ
+    func getTarget(targetID: String) async -> Target? {
+        let filter = "targetID == '\(targetID)' AND (isDeleted == false)"
+        let result = await realmActor.findOne(Target.self, filter: filter)
+        return result
     }
     
     /// 目標を取得(年指定)

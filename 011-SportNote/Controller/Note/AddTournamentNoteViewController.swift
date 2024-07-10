@@ -154,17 +154,44 @@ class AddTournamentNoteViewController: UIViewController {
     /// ノートを削除
     @objc func deleteNote() {
         showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
-            let realmManager = RealmManager()
-            // TODO: updateNoteに更新
-            realmManager.updateNoteIsDeleted(noteID: self.realmNote.noteID)
-            self.delegate?.addTournamentNoteVCDeleteNote()
+            Task {
+                let realmManager = RealmManager()
+                if let note = await realmManager.getNote(ID: self.realmNote.noteID) {
+                    note.isDeleted = true
+                    await realmManager.updateNote(note: note)
+                }
+                self.delegate?.addTournamentNoteVCDeleteNote()
+            }
+//            // TODO: updateNoteに更新
+//            let realmManager = RealmManager()
+//            realmManager.updateNoteIsDeleted(noteID: self.realmNote.noteID)
         })
     }
     
     /// 保存ボタンタップ時の処理
     @IBAction func tapSaveButton(_ sender: Any) {
-        // 大会ノートデータを作成＆保存
-        let realmManager = RealmManager()
+        Task {
+            // 大会ノートデータを作成＆保存
+            let realmManager = RealmManager()
+            let tournamentNote = createTournamentNote()
+            if await !realmManager.createRealm(object: tournamentNote) {
+                showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
+                return
+            }
+            
+            // Firebaseに送信
+            if Network.isOnline() {
+                let firebaseManager = FirebaseManager()
+                firebaseManager.saveNote(note: tournamentNote, completion: {})
+            }
+            
+            self.delegate?.addTournamentNoteVCAddNote(self)
+        }
+    }
+    
+    /// 入力内容から大会ノートを作成
+    /// - Returns: Note
+    private func createTournamentNote() -> Note {
         let tournamentNote = Note()
         tournamentNote.noteType = NoteType.tournament.rawValue
         tournamentNote.date = selectedDate
@@ -175,19 +202,7 @@ class AddTournamentNoteViewController: UIViewController {
         tournamentNote.consciousness = consciousnessTextView.text
         tournamentNote.result = resultTextView.text
         tournamentNote.reflection = reflectionTextView.text
-        
-        if !realmManager.createRealm(object: tournamentNote) {
-            showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
-            return
-        }
-        
-        // Firebaseに送信
-        if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.saveNote(note: tournamentNote, completion: {})
-        }
-        
-        self.delegate?.addTournamentNoteVCAddNote(self)
+        return tournamentNote
     }
     
     /// キャンセルボタンタップ時の処理
@@ -297,10 +312,18 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         tableView.reloadData()
         
         if isViewer {
-            // TODO: updateNoteに更新
-            // 日付を更新
-            let realmManager = RealmManager()
-            realmManager.updateNoteDate(noteID: realmNote.noteID, date: selectedDate)
+            Task {
+                // 日付を更新
+                let realmManager = RealmManager()
+                if let note = await realmManager.getNote(ID: realmNote.noteID) {
+                    note.date = selectedDate
+                    await realmManager.updateNote(note: note)
+                }
+            }
+//            // TODO: updateNoteに更新
+//            // 日付を更新
+//            let realmManager = RealmManager()
+//            realmManager.updateNoteDate(noteID: realmNote.noteID, date: selectedDate)
         }
     }
     
@@ -336,11 +359,20 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         tableView.reloadData()
         
         if isViewer {
-            // TODO: updateNoteに更新
-            // 天気と気温を更新
-            let realmManager = RealmManager()
-            realmManager.updateNoteWeather(noteID: realmNote.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
-            realmManager.updateNoteTemperature(noteID: realmNote.noteID, temperature: temperature[selectedWeather[TITLE_TEMPERATURE]!])
+            Task {
+                // 天気と気温を更新
+                let realmManager = RealmManager()
+                if let note = await realmManager.getNote(ID: self.realmNote.noteID) {
+                    note.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
+                    note.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
+                    await realmManager.updateNote(note: note)
+                }
+            }
+//            // TODO: updateNoteに更新
+//            // 天気と気温を更新
+//            let realmManager = RealmManager()
+//            realmManager.updateNoteWeather(noteID: realmNote.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
+//            realmManager.updateNoteTemperature(noteID: realmNote.noteID, temperature: temperature[selectedWeather[TITLE_TEMPERATURE]!])
         }
     }
     
@@ -360,32 +392,66 @@ extension AddTournamentNoteViewController: UITextViewDelegate {
         if !isViewer {
             return
         }
-        
-        // TODO: updateNoteに更新
         // 差分がなければ何もしない
-        let realmManager = RealmManager()
-        switch TextViewType.allCases[textView.tag] {
-        case .condition:
-            if textView.text! != realmNote.condition {
-                realmManager.updateNoteCondition(noteID: realmNote.noteID, condition: textView.text!)
-            }
-        case .target:
-            if textView.text! != realmNote.target {
-                realmManager.updateNoteTarget(noteID: realmNote.noteID, target: textView.text!)
-            }
-        case .consciousness:
-            if textView.text! != realmNote.consciousness {
-                realmManager.updateNoteConsciousness(noteID: realmNote.noteID, consciousness: textView.text!)
-            }
-        case .result:
-            if textView.text! != realmNote.result {
-                realmManager.updateNoteResult(noteID: realmNote.noteID, result: textView.text!)
-            }
-        case .reflection:
-            if textView.text! != realmNote.reflection {
-                realmManager.updateNoteReflection(noteID: realmNote.noteID, reflection: textView.text!)
+        Task {
+            let realmManager = RealmManager()
+            if let note = await realmManager.getNote(ID: self.realmNote.noteID) {
+                switch TextViewType.allCases[textView.tag] {
+                case .condition:
+                    if textView.text! == note.condition {
+                        return
+                    }
+                    realmNote.condition = textView.text!
+                case .target:
+                    if textView.text! == note.target {
+                        return
+                    }
+                    realmNote.target = textView.text!
+                case .consciousness:
+                    if textView.text! == note.consciousness {
+                        return
+                    }
+                    realmNote.consciousness = textView.text!
+                case .result:
+                    if textView.text! == note.result {
+                        return
+                    }
+                    realmNote.result = textView.text!
+                case .reflection:
+                    if textView.text! == note.reflection {
+                        return
+                    }
+                    realmNote.reflection = textView.text!
+                }
+                await realmManager.updateNote(note: realmNote)
             }
         }
+        
+//        // TODO: updateNoteに更新
+//        // 差分がなければ何もしない
+//        let realmManager = RealmManager()
+//        switch TextViewType.allCases[textView.tag] {
+//        case .condition:
+//            if textView.text! != realmNote.condition {
+//                realmManager.updateNoteCondition(noteID: realmNote.noteID, condition: textView.text!)
+//            }
+//        case .target:
+//            if textView.text! != realmNote.target {
+//                realmManager.updateNoteTarget(noteID: realmNote.noteID, target: textView.text!)
+//            }
+//        case .consciousness:
+//            if textView.text! != realmNote.consciousness {
+//                realmManager.updateNoteConsciousness(noteID: realmNote.noteID, consciousness: textView.text!)
+//            }
+//        case .result:
+//            if textView.text! != realmNote.result {
+//                realmManager.updateNoteResult(noteID: realmNote.noteID, result: textView.text!)
+//            }
+//        case .reflection:
+//            if textView.text! != realmNote.reflection {
+//                realmManager.updateNoteReflection(noteID: realmNote.noteID, reflection: textView.text!)
+//            }
+//        }
     }
     
 }

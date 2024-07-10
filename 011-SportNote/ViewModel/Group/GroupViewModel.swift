@@ -20,6 +20,7 @@ class GroupViewModel {
     let buttonTitle: BehaviorRelay<String>
     let buttonBackgroundColor: BehaviorRelay<UIColor>
     let groupArray: BehaviorRelay<[Group]>
+    private let realmManager = RealmManager()
     private let disposeBag = DisposeBag()
     
     // MARK: - Initializer
@@ -51,11 +52,15 @@ class GroupViewModel {
         title
             .subscribe(onNext: { [weak self] newTitle in
                 guard let self = self else { return }
-                
-                // Realm更新
-                let realmManager = RealmManager()
+                Task {
+                    // Realm更新
+                    if let groupRealm = await self.realmManager.getGroup(groupID: self.group.value.groupID) {
+                        groupRealm.title = newTitle
+                        await self.realmManager.updateGroup(group: groupRealm)
+                    }
+                }
                 // TODO: updateGroupに修正
-                realmManager.updateGroupTitle(groupID: group.value.groupID, title: newTitle)
+//                realmManager.updateGroupTitle(groupID: group.value.groupID, title: newTitle)
             })
             .disposed(by: disposeBag)
     }
@@ -71,10 +76,17 @@ class GroupViewModel {
                 self.buttonTitle.accept(newColor.title)
                 self.buttonBackgroundColor.accept(newColor.color)
                 
-                // Realm更新
-                let realmManager = RealmManager()
-                // TODO: updateGroupに修正
-                realmManager.updateGroupColor(groupID: group.value.groupID, color: newIndex)
+//                // Realm更新
+//                let realmManager = RealmManager()
+//                // TODO: updateGroupに修正
+//                realmManager.updateGroupColor(groupID: group.value.groupID, color: newIndex)
+                Task {
+                    // Realm更新
+                    if let groupRealm = await self.realmManager.getGroup(groupID: self.group.value.groupID) {
+                        groupRealm.color = newIndex
+                        await self.realmManager.updateGroup(group: groupRealm)
+                    }
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -98,7 +110,6 @@ class GroupViewModel {
     /// グループ取得
     /// - Returns: グループ配列
     private func selectGroupArray() async -> [Group] {
-        let realmManager = RealmManager()
         return await realmManager.getGroupArrayForTaskView()
     }
     
@@ -110,9 +121,16 @@ class GroupViewModel {
     
     /// グループ削除
     func deleteGroup() {
-        let realmManager = RealmManager()
-        // TODO: updateGroupに修正
-        realmManager.updateGroupIsDeleted(group: group.value)
+        Task {
+            // Realm更新
+            if let groupRealm = await self.realmManager.getGroup(groupID: self.group.value.groupID) {
+                groupRealm.isDeleted = true
+                await realmManager.updateGroup(group: groupRealm)
+            }
+        }
+//        let realmManager = RealmManager()
+//        // TODO: updateGroupに修正
+//        realmManager.updateGroupIsDeleted(group: group.value)
     }
     
     // MARK: - TableView

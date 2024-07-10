@@ -111,13 +111,19 @@ class AddPracticeNoteViewController: UIViewController {
                 if cell.effectivenessTextView.text.isEmpty {
                     continue
                 } else {
-                    // TODO: updateMemoに修正
-                    let realmManager = RealmManager()
-                    realmManager.updateMemoDetail(memoID: memo.memoID, detail: cell.effectivenessTextView.text!)
-                    // Firebaseに送信
-                    if Network.isOnline() {
-                        let firebaseManager = FirebaseManager()
-                        firebaseManager.updateMemo(memo: memo)
+                    Task {
+                        let realmManager = RealmManager()
+                        if let realmMemo = await realmManager.getMemo(memoID: memo.memoID) {
+                            realmMemo.detail = cell.effectivenessTextView.text!
+                            await realmManager.updateMemo(memo: realmMemo)
+                        }
+//                         TODO: updateMemoに修正
+//                        realmManager.updateMemoDetail(memoID: memo.memoID, detail: cell.effectivenessTextView.text!)
+                        // Firebaseに送信
+                        if Network.isOnline() {
+                            let firebaseManager = FirebaseManager()
+                            firebaseManager.updateMemo(memo: memo)
+                        }
                     }
                 }
             }
@@ -239,12 +245,26 @@ class AddPracticeNoteViewController: UIViewController {
     /// ノートを削除
     @objc func deleteNote() {
         showDeleteAlert(title: TITLE_DELETE_NOTE, message: MESSAGE_DELETE_NOTE, OKAction: {
-            let realmManager = RealmManager()
-            // TODO: updateNoteに更新
-            realmManager.updateNoteIsDeleted(noteID: self.note.noteID)
-            // TODO: updateMemoに修正
-            realmManager.updateMemoIsDeleted(noteID: self.note.noteID)
-            self.delegate?.addPracticeNoteVCDeleteNote()
+            Task {
+                // ノートを削除
+                let realmManager = RealmManager()
+                if let realmNote = await realmManager.getNote(ID: self.note.noteID) {
+                    realmNote.isDeleted = true
+                    await realmManager.updateNote(note: realmNote)
+                }
+                // メモを削除
+                let memoArray = await realmManager.getMemo(noteID: self.note.noteID)
+                for realmMemo in memoArray {
+                    realmMemo.isDeleted = true
+                    await realmManager.updateMemo(memo: realmMemo)
+                }
+                self.delegate?.addPracticeNoteVCDeleteNote()
+            }
+//            let realmManager = RealmManager()
+//            // TODO: updateNoteに更新
+//            realmManager.updateNoteIsDeleted(noteID: self.note.noteID)
+//            // TODO: updateMemoに修正
+//            realmManager.updateMemoIsDeleted(noteID: self.note.noteID)
         })
     }
     
@@ -281,8 +301,52 @@ class AddPracticeNoteViewController: UIViewController {
     
     /// 保存ボタン
     @IBAction func tapSaveButton(_ sender: Any) {
-        // 練習ノートデータを作成＆保存
-        let realmManager = RealmManager()
+        Task {
+            // 練習ノートデータを作成＆保存
+            let practiceNote = createPracticeNote()
+            let realmManager = RealmManager()
+            if await !realmManager.createRealm(object: practiceNote) {
+                showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
+                return
+            }
+            if Network.isOnline() {
+                let firebaseManager = FirebaseManager()
+                firebaseManager.saveNote(note: practiceNote, completion: {})
+            }
+            
+            if displayTaskArray.isEmpty {
+                self.delegate?.addPracticeNoteVCAddNote(self)
+                return
+            }
+            
+            // メモを作成＆保存
+            for (index, _) in displayTaskArray.enumerated() {
+                // 入力されている場合のみ作成
+                let cell = taskTableView.cellForRow(at: [0, index]) as! TaskCellForAddNote
+                if cell.effectivenessTextView.text.isEmpty {
+                    continue
+                }
+                // メモ作成
+                let memo = Memo()
+                memo.measuresID = cell.measures.measuresID
+                memo.noteID = practiceNote.noteID
+                memo.detail = cell.effectivenessTextView.text
+                if await !realmManager.createRealm(object: memo) {
+                    showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
+                    return
+                }
+                if Network.isOnline() {
+                    let firebaseManager = FirebaseManager()
+                    firebaseManager.saveMemo(memo: memo, completion: {})
+                }
+            }
+            self.delegate?.addPracticeNoteVCAddNote(self)
+        }
+    }
+    
+    /// 入力内容から練習ノートデータを作成
+    /// - Returns: Note
+    private func createPracticeNote() -> Note {
         let practiceNote = Note()
         practiceNote.noteType = NoteType.practice.rawValue
         practiceNote.date = selectedDate
@@ -292,41 +356,7 @@ class AddPracticeNoteViewController: UIViewController {
         practiceNote.purpose = purposeTextView.text
         practiceNote.detail = detailTextView.text
         practiceNote.reflection = reflectionTextView.text
-        if !realmManager.createRealm(object: practiceNote) {
-            showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
-            return
-        }
-        
-        if Network.isOnline() {
-            let firebaseManager = FirebaseManager()
-            firebaseManager.saveNote(note: practiceNote, completion: {})
-        }
-        
-        // メモを作成＆保存
-        if !displayTaskArray.isEmpty {
-            for (index, _) in displayTaskArray.enumerated() {
-                // 入力されている場合のみ作成
-                let cell = taskTableView.cellForRow(at: [0, index]) as! TaskCellForAddNote
-                if cell.effectivenessTextView.text.isEmpty {
-                    continue
-                } else {
-                    let memo = Memo()
-                    memo.measuresID = cell.measures.measuresID
-                    memo.noteID = practiceNote.noteID
-                    memo.detail = cell.effectivenessTextView.text
-                    
-                    if !realmManager.createRealm(object: memo) {
-                        showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
-                        return
-                    }
-                    if Network.isOnline() {
-                        let firebaseManager = FirebaseManager()
-                        firebaseManager.saveMemo(memo: memo, completion: {})
-                    }
-                }
-            }
-        }
-        self.delegate?.addPracticeNoteVCAddNote(self)
+        return practiceNote
     }
     
 }
@@ -516,10 +546,18 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         dateTableView.reloadData()
         
         if isViewer {
-            // TODO: updateNoteに更新
-            // 日付を更新
-            let realmManager = RealmManager()
-            realmManager.updateNoteDate(noteID: note.noteID, date: selectedDate)
+            Task {
+                // 日付を更新
+                let realmManager = RealmManager()
+                if let realmNote = await realmManager.getNote(ID: self.note.noteID) {
+                    realmNote.date = selectedDate
+                    await realmManager.updateNote(note: realmNote)
+                }
+            }
+//            // TODO: updateNoteに更新
+//            // 日付を更新
+//            let realmManager = RealmManager()
+//            realmManager.updateNoteDate(noteID: note.noteID, date: selectedDate)
         }
     }
     
@@ -556,11 +594,20 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
         dateTableView.reloadData()
         
         if isViewer {
-            // TODO: updateNoteに更新
-            // 天気と気温を更新
-            let realmManager = RealmManager()
-            realmManager.updateNoteWeather(noteID: note.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
-            realmManager.updateNoteTemperature(noteID: note.noteID, temperature:  temperature[selectedWeather[TITLE_TEMPERATURE]!])
+            Task {
+                // 天気と気温を更新
+                let realmManager = RealmManager()
+                if let realmNote = await realmManager.getNote(ID: self.note.noteID) {
+                    realmNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
+                    realmNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
+                    await realmManager.updateNote(note: realmNote)
+                }
+            }
+//            // TODO: updateNoteに更新
+//            // 天気と気温を更新
+//            let realmManager = RealmManager()
+//            realmManager.updateNoteWeather(noteID: note.noteID, weather: Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue)
+//            realmManager.updateNoteTemperature(noteID: note.noteID, temperature:  temperature[selectedWeather[TITLE_TEMPERATURE]!])
         }
     }
     
@@ -609,28 +656,55 @@ extension AddPracticeNoteViewController: UITextViewDelegate {
         if !isViewer {
             return
         }
-        
-        // TODO: updateNoteに更新
         // 差分がなければ何もしない
-        let realmManager = RealmManager()
-        switch TextViewType.allCases[textView.tag] {
-        case .condition:
-            if textView.text! != note.condition {
-                realmManager.updateNoteCondition(noteID: note.noteID, condition: textView.text!)
-            }
-        case .purpose:
-            if textView.text! != note.purpose {
-                realmManager.updateNotePurpose(noteID: note.noteID, purpose: textView.text!)
-            }
-        case .detail:
-            if textView.text! != note.detail {
-                realmManager.updateNoteDetail(noteID: note.noteID, detail: textView.text!)
-            }
-        case .reflection:
-            if textView.text! != note.reflection {
-                realmManager.updateNoteReflection(noteID: note.noteID, reflection: textView.text!)
+        Task {
+            let realmManager = RealmManager()
+            if let realmNote = await realmManager.getNote(ID: self.note.noteID) {
+                switch TextViewType.allCases[textView.tag] {
+                case .condition:
+                    if textView.text! == note.condition {
+                        return
+                    }
+                    realmNote.condition = textView.text!
+                case .purpose:
+                    if textView.text! == note.purpose {
+                        return
+                    }
+                    realmNote.purpose = textView.text!
+                case .detail:
+                    if textView.text! == note.detail {
+                        return
+                    }
+                    realmNote.detail = textView.text!
+                case .reflection:
+                    if textView.text! == note.reflection {
+                        return
+                    }
+                    realmNote.reflection = textView.text!
+                }
+                await realmManager.updateNote(note: realmNote)
             }
         }
+        
+//        // TODO: updateNoteに更新
+//        switch TextViewType.allCases[textView.tag] {
+//        case .condition:
+//            if textView.text! != note.condition {
+//                realmManager.updateNoteCondition(noteID: note.noteID, condition: textView.text!)
+//            }
+//        case .purpose:
+//            if textView.text! != note.purpose {
+//                realmManager.updateNotePurpose(noteID: note.noteID, purpose: textView.text!)
+//            }
+//        case .detail:
+//            if textView.text! != note.detail {
+//                realmManager.updateNoteDetail(noteID: note.noteID, detail: textView.text!)
+//            }
+//        case .reflection:
+//            if textView.text! != note.reflection {
+//                realmManager.updateNoteReflection(noteID: note.noteID, reflection: textView.text!)
+//            }
+//        }
     }
     
 }

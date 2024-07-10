@@ -105,29 +105,33 @@ class AddTargetViewController: UIViewController {
                                                         isYearly: false)
                 }
                 
-                // 目標の重複チェック
-                if let targetID = viewModel.doubleCheck(target: target) {
-                    showOKCancelAlert(title: "", message: ERROR_MESSAGE_TARGET_EXIST, OKAction: {
-                        self.viewModel.deleteTarget(targetID: targetID)
-                        if !self.viewModel.insertTarget(target: target) {
-                            self.showErrorAlert(message: ERROR_MESSAGE_TARGET_CREATE_FAILED)
-                            return
-                        }
-                        self.viewModel.insertFirebase(target: target, completion: {
-                            self.delegate?.addTargetVCDismissWithReload(self)
+                Task {
+                    // 目標の重複チェック
+                    if let targetID = await viewModel.doubleCheck(target: target) {
+                        showOKCancelAlert(title: "", message: ERROR_MESSAGE_TARGET_EXIST, OKAction: {
+                            Task {
+                                self.viewModel.deleteTarget(targetID: targetID)
+                                if await !self.viewModel.insertTarget(target: target) {
+                                    self.showErrorAlert(message: ERROR_MESSAGE_TARGET_CREATE_FAILED)
+                                    return
+                                }
+                                self.viewModel.insertFirebase(target: target, completion: {
+                                    self.delegate?.addTargetVCDismissWithReload(self)
+                                })
+                            }
                         })
+                        return
+                    }
+                    
+                    // 保存
+                    if await !viewModel.insertTarget(target: target) {
+                        showErrorAlert(message: ERROR_MESSAGE_TARGET_CREATE_FAILED)
+                        return
+                    }
+                    viewModel.insertFirebase(target: target, completion: {
+                        self.delegate?.addTargetVCDismissWithReload(self)
                     })
-                    return
                 }
-                
-                // 保存
-                if !viewModel.insertTarget(target: target) {
-                    showErrorAlert(message: ERROR_MESSAGE_TARGET_CREATE_FAILED)
-                    return
-                }
-                viewModel.insertFirebase(target: target, completion: {
-                    self.delegate?.addTargetVCDismissWithReload(self)
-                })
             })
             .disposed(by: disposeBag)
     }

@@ -147,15 +147,19 @@ class TaskDetailViewController: UIViewController {
                     if (alertTextField?.text == nil || alertTextField?.text == "") {
                         self.showErrorAlert(message: ERROR_MESSAGE_EMPTY_TITLE)
                     } else {
-                        // 対策データ作成
-                        let result = self.viewModel.insertMeasures(title: alertTextField!.text!)
-                        if (!result) {
-                            self.showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
-                            return
+                        Task {
+                            // 対策データ作成
+                            let result = await self.viewModel.insertMeasures(title: alertTextField!.text!)
+                            if (!result) {
+                                self.showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
+                                return
+                            }
+                            DispatchQueue.main.async {
+                                // tableView更新
+                                let index: IndexPath = [0, self.viewModel.measuresArray.value.count - 1]
+                                self.tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
+                            }
                         }
-                        // tableView更新
-                        let index: IndexPath = [0, self.viewModel.measuresArray.value.count - 1]
-                        self.tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
                     }
                 })
                 

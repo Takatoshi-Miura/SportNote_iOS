@@ -144,8 +144,14 @@ class TaskViewModel {
         // グループが変わる場合はグループも更新
         if sourceIndexPath.section != destinationIndex.section {
             let groupId = groupArray.value[destinationIndex.section].groupID
-            // TODO: updateTaskに修正
-            realmManager.updateTaskGroupId(task: task, groupID: groupId)
+            Task {
+                if let realmTask = await self.realmManager.getTask(taskID: task.taskID) {
+                    realmTask.groupID = groupId
+                    await self.realmManager.updateTask(task: realmTask)
+                }
+            }
+//            // TODO: updateTaskに修正
+//            realmManager.updateTaskGroupId(task: task, groupID: groupId)
         }
     }
     
@@ -204,13 +210,17 @@ class TaskViewModel {
     /// 課題を挿入
     /// - Parameter task: 課題
     /// - Returns: 挿入するIndexPath
-    func insertTask(task: TaskData) -> IndexPath {
+    func insertTask(task: TaskData) async -> IndexPath {
         var index: IndexPath = [0, 0]
         for group in groupArray.value {
             if task.groupID == group.groupID {
                 // グループに含まれる課題数を並び順にセットする
-                let tasks = realmManager.getTasksInGroup(ID: group.groupID, isCompleted: false)
-                realmManager.updateTaskOrder(task: task, order: tasks.count - 1)
+                let tasks = await realmManager.getTasksInGroup(ID: group.groupID, isCompleted: false)
+                if let realmTask = await realmManager.getTask(taskID: task.taskID) {
+                    realmTask.order = tasks.count - 1
+                    await realmManager.updateTask(task: realmTask)
+                }
+//                realmManager.updateTaskOrder(task: task, order: tasks.count - 1)
                 // tableViewに課題を追加
                 index = [index.section, tasks.count - 1]
                 var newTaskArray = taskArray.value

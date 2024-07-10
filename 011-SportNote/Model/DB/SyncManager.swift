@@ -58,10 +58,12 @@ class SyncManager {
         
         // Firebaseにしか存在しないデータをRealmに保存
         onlyFirebaseID.forEach { groupID in
-            guard let group = firebaseGroupArray.first(where: { $0.groupID == groupID }) else {
-                return
+            Task {
+                guard let group = firebaseGroupArray.first(where: { $0.groupID == groupID }) else {
+                    return
+                }
+                _ = await self.realmManager.createRealm(object: group)
             }
-            _ = self.realmManager.createRealm(object: group)
         }
         
         // どちらにも存在するデータの更新日時を比較し新しい方に更新する
@@ -107,10 +109,12 @@ class SyncManager {
         
         // Firebaseにしか存在しないデータをRealmに保存
         onlyFirebaseID.forEach { taskID in
-            guard let task = firebaseTaskArray.first(where: { $0.taskID == taskID }) else {
-                return
+            Task {
+                guard let task = firebaseTaskArray.first(where: { $0.taskID == taskID }) else {
+                    return
+                }
+                _ = await self.realmManager.createRealm(object: task)
             }
-            _ = self.realmManager.createRealm(object: task)
         }
         
         // どちらにも存在するデータの更新日時を比較し新しい方に更新する
@@ -124,7 +128,7 @@ class SyncManager {
             if realmTask.updated_at > firebaseTask.updated_at {
                 self.firebaseManager.updateTask(task: realmTask)
             } else if firebaseTask.updated_at > realmTask.updated_at {
-                self.realmManager.updateTask(task: firebaseTask)
+                await self.realmManager.updateTask(task: firebaseTask)
             }
         }
         print("Task同期終了")
@@ -156,10 +160,12 @@ class SyncManager {
         
         // Firebaseにしか存在しないデータをRealmに保存
         onlyFirebaseID.forEach { measuresID in
-            guard let measures = firebaseMeasuresArray.first(where: { $0.measuresID == measuresID }) else {
-                return
+            Task {
+                guard let measures = firebaseMeasuresArray.first(where: { $0.measuresID == measuresID }) else {
+                    return
+                }
+                _ = await self.realmManager.createRealm(object: measures)
             }
-            _ = self.realmManager.createRealm(object: measures)
         }
         
         // どちらにも存在するデータの更新日時を比較し新しい方に更新する
@@ -173,9 +179,7 @@ class SyncManager {
             if realmMeasures.updated_at > firebaseMeasures.updated_at {
                 self.firebaseManager.updateMeasures(measures: realmMeasures)
             } else if firebaseMeasures.updated_at > realmMeasures.updated_at {
-                Task {
-                    await self.realmManager.updateMeasures(measures: firebaseMeasures)
-                }
+                await self.realmManager.updateMeasures(measures: firebaseMeasures)
             }
         }
         print("Measures同期終了")
@@ -207,10 +211,12 @@ class SyncManager {
         
         // Firebaseにしか存在しないデータをRealmに保存
         onlyFirebaseID.forEach { memoID in
-            guard let memo = firebaseMemoArray.first(where: { $0.memoID == memoID }) else {
-                return
+            Task {
+                guard let memo = firebaseMemoArray.first(where: { $0.memoID == memoID }) else {
+                    return
+                }
+                _ = await self.realmManager.createRealm(object: memo)
             }
-            _ = self.realmManager.createRealm(object: memo)
         }
         
         // どちらにも存在するデータの更新日時を比較し新しい方に更新する
@@ -224,9 +230,7 @@ class SyncManager {
             if realmMemo.updated_at > firebaseMemo.updated_at {
                 self.firebaseManager.updateMemo(memo: realmMemo)
             } else if firebaseMemo.updated_at > realmMemo.updated_at {
-                Task {
-                    await self.realmManager.updateMemo(memo: firebaseMemo)
-                }
+                await self.realmManager.updateMemo(memo: firebaseMemo)
             }
         }
         print("Memo同期終了")
@@ -258,10 +262,12 @@ class SyncManager {
         
         // Firebaseにしか存在しないデータをRealmに保存
         onlyFirebaseID.forEach { targetID in
-            guard let target = firebaseTargetArray.first(where: { $0.targetID == targetID }) else {
-                return
+            Task {
+                guard let target = firebaseTargetArray.first(where: { $0.targetID == targetID }) else {
+                    return
+                }
+                _ = await self.realmManager.createRealm(object: target)
             }
-            _ = self.realmManager.createRealm(object: target)
         }
         
         // どちらにも存在するデータの更新日時を比較し新しい方に更新する
@@ -307,10 +313,12 @@ class SyncManager {
         
         // Firebaseにしか存在しないデータをRealmに保存
         onlyFirebaseID.forEach { noteID in
-            guard let note = firebaseNoteArray.first(where: { $0.noteID == noteID }) else {
-                return
+            Task {
+                guard let note = firebaseNoteArray.first(where: { $0.noteID == noteID }) else {
+                    return
+                }
+                _ = await self.realmManager.createRealm(object: note)
             }
-            _ = self.realmManager.createRealm(object: note)
         }
         
         // どちらにも存在するデータの更新日時を比較し新しい方に更新する
@@ -324,9 +332,7 @@ class SyncManager {
             if realmNote.updated_at > firebaseNote.updated_at {
                 self.firebaseManager.updateNote(note: realmNote)
             } else if firebaseNote.updated_at > realmNote.updated_at {
-                Task {
-                    await self.realmManager.updateNote(note: firebaseNote)
-                }
+                await self.realmManager.updateNote(note: firebaseNote)
             }
         }
         print("Note同期終了")

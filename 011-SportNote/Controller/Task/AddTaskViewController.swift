@@ -104,28 +104,27 @@ class AddTaskViewController: UIViewController {
                     })
                     return
                 }
-                
-                // 課題データを作成
-                guard let task = viewModel.insertTask(title: titleTextField.text!, cause: causeTextView.text!) else {
-                    showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
-                    return
-                }
-                if Network.isOnline() {
-                    viewModel.insertFirebase(task: task)
-                }
-                
-                // 対策データを作成
-                if !measuresTextField.text!.isEmpty {
-                    guard let measures = viewModel.insertMeasures(title: measuresTextField.text!, taskID: task.taskID) else {
+                Task {
+                    // 課題データを作成
+                    guard let task = await viewModel.insertTask(title: titleTextField.text!, cause: causeTextView.text!) else {
                         showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
                         return
                     }
                     if Network.isOnline() {
-                        viewModel.insertFirebase(measures: measures)
+                        viewModel.insertFirebase(task: task)
                     }
+                    // 対策データを作成
+                    if !measuresTextField.text!.isEmpty {
+                        guard let measures = await viewModel.insertMeasures(title: measuresTextField.text!, taskID: task.taskID) else {
+                            showErrorAlert(message: ERROR_MESSAGE_TASK_CREATE_FAILED)
+                            return
+                        }
+                        if Network.isOnline() {
+                            viewModel.insertFirebase(measures: measures)
+                        }
+                    }
+                    delegate?.addTaskVCAddTask(self, task: task)
                 }
-                
-                delegate?.addTaskVCAddTask(self, task: task)
             })
             .disposed(by: disposeBag)
     }

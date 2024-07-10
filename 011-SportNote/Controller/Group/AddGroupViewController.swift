@@ -98,21 +98,23 @@ class AddGroupViewController: UIViewController {
                     return
                 }
                 
-                // グループ作成
-                let group = viewModel.insertGroup(title: titleTextField.text!)
-                guard let group else {
-                    showErrorAlert(message: ERROR_MESSAGE_GROUP_CREATE_FAILED)
-                    return
-                }
-                
-                // Firebaseに送信
-                if Network.isOnline() {
-                    let firebaseManager = FirebaseManager()
-                    firebaseManager.saveGroup(group: group, completion: {
+                Task {
+                    // グループ作成
+                    let group = await self.viewModel.insertGroup(title: titleTextField.text!)
+                    guard let group else {
+                        showErrorAlert(message: ERROR_MESSAGE_GROUP_CREATE_FAILED)
+                        return
+                    }
+                    
+                    // Firebaseに送信
+                    if Network.isOnline() {
+                        let firebaseManager = FirebaseManager()
+                        firebaseManager.saveGroup(group: group, completion: {
+                            self.delegate?.addGroupVCAddGroup(self, group: group)
+                        })
+                    } else {
                         self.delegate?.addGroupVCAddGroup(self, group: group)
-                    })
-                } else {
-                    self.delegate?.addGroupVCAddGroup(self, group: group)
+                    }
                 }
             })
             .disposed(by: disposeBag)

@@ -53,15 +53,13 @@ class AddGroupViewModel {
     /// グループを新規作成
     /// - Parameter title: タイトル
     /// - Returns: 実行結果
-    func insertGroup(title: String) -> Group? {
+    func insertGroup(title: String) async -> Group? {
         let realmManager = RealmManager()
         let group = Group()
         group.title = title
         group.color = colorIndex.value
-        Task {
-            group.order = await realmManager.getGroupArrayForTaskView().count
-        }
-        let result = realmManager.createRealm(object: group)
+        group.order = await realmManager.getGroupArrayForTaskView().count
+        let result = await realmManager.createRealm(object: group)
         return result ? group : nil
     }
     

@@ -25,6 +25,7 @@ class MeasuresViewModel {
     init(measures: Measures) {
         self.measures = measures
         self.title = BehaviorRelay(value: measures.title)
+        self.memoArray = BehaviorRelay<[Memo]>(value: [])
         Task {
             let memo = await realmManager.getMemo(measuresID: measures.measuresID)
             self.memoArray = BehaviorRelay(value: memo)
@@ -47,7 +48,11 @@ class MeasuresViewModel {
                 Task {
                     // TODO: updateMeasuresに更新
                     // Realm更新
-                    await realmManager.updateMeasuresTitle(measuresID: measures.measuresID, title: newTitle)
+//                    await realmManager.updateMeasuresTitle(measuresID: measures.measuresID, title: newTitle)
+                    if let realmMeasures = await self.realmManager.getMeasures(measuresID: self.measures.measuresID) {
+                        realmMeasures.title = newTitle
+                        await self.realmManager.updateMeasures(measures: realmMeasures)
+                    }
                 }
             })
             .disposed(by: disposeBag)
@@ -77,12 +82,26 @@ class MeasuresViewModel {
     
     /// 対策とそれに含まれるメモを削除
     func deleteMeasures() {
-        // TODO: updateMeasuresに修正
-        realmManager.updateMeasuresIsDeleted(measures: measures)
-        for memo in memoArray.value {
-            // TODO: updateMemoに修正
-            realmManager.updateMemoIsDeleted(memoID: memo.memoID)
+        Task {
+            // 対策削除
+            if let realmMeasures = await self.realmManager.getMeasures(measuresID: self.measures.measuresID) {
+                realmMeasures.isDeleted = true
+                await self.realmManager.updateMeasures(measures: realmMeasures)
+            }
+            // メモ削除
+            for memo in self.memoArray.value {
+                if let realmMemo = await self.realmManager.getMemo(memoID: memo.memoID) {
+                    realmMemo.isDeleted = true
+                    await self.realmManager.updateMemo(memo: realmMemo)
+                }
+            }
         }
+//        // TODO: updateMeasuresに修正
+//        realmManager.updateMeasuresIsDeleted(measures: measures)
+//        for memo in memoArray.value {
+//            // TODO: updateMemoに修正
+//            realmManager.updateMemoIsDeleted(memoID: memo.memoID)
+//        }
     }
     
     /// memoArrayから指定したメモを削除
