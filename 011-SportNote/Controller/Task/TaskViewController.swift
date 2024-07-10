@@ -214,8 +214,12 @@ class TaskViewController: UIViewController {
     /// - Parameters:
     ///   - task: 挿入する課題
     func insertTask(task: TaskData) {
-        let index = viewModel.insertTask(task: task)
-        tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
+        Task {
+            let index = await viewModel.insertTask(task: task)
+            DispatchQueue.main.async {
+                self.tableView.insertRows(at: [index], with: UITableView.RowAnimation.right)
+            }
+        }
     }
     
 }
