@@ -34,6 +34,11 @@ class AddTournamentNoteViewController: UIViewController {
     @IBOutlet weak var resultTextView: UITextView!
     @IBOutlet weak var reflectionTextView: UITextView!
     @IBOutlet weak var scrollViewTop: NSLayoutConstraint!
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    private var editingTextView: UITextView?
+    private var lastOffsetY: CGFloat = 0.0
+    
     var delegate: AddTournamentNoteViewControllerDelegate?
     var isViewer = false
     var realmNote = Note()
@@ -64,8 +69,8 @@ class AddTournamentNoteViewController: UIViewController {
         initView()
         initNavigationBar()
         initTableView()
-        initDatePicker()
-        initWeatherPicker()
+        initPicker()
+        initNotification()
     }
     
     override func viewDidLayoutSubviews() {
@@ -279,6 +284,12 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
         }
     }
     
+    /// Picker初期化
+    private func initPicker() {
+        initDatePicker()
+        initWeatherPicker()
+    }
+    
     /// DatePicker初期化
     private func initDatePicker() {
         datePicker = UIDatePicker()
@@ -358,7 +369,65 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
     
 }
 
+extension AddTournamentNoteViewController {
+    
+    /// Notification初期化
+    private func initNotification() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(keyboardChangeFrame(_:)), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    /// キーボードのサイズ変化時のイベントハンドラー
+    /// テキストフィールドが隠れた場合は自動スクロール
+    /// - Parameter notification: Notification
+    @objc private func keyboardChangeFrame(_ notification: Notification) {
+        // キーボード退場でも同じイベントが発生するため、編集中のTextViewがnilの時は処理を中断
+        guard let textView = editingTextView else {
+            return
+        }
+        
+        // 重なり具合の比較を容易にするため、TextViewのframeをキーボードと同じウィンドウの座標系にする
+        guard let textViewFrame = view.window?.convert(textView.frame, from: textView.superview) else {
+            return
+        }
+        
+        // 編集中のTextViewがキーボードと重なっている場合、重なっている分だけスクロール
+        // 重なり = (テキストフィールドの下端 + 余白) - キーボードの上端
+        let userInfo = notification.userInfo
+        let keyboardFrame = (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let spaceBetweenTextFieldAndKeyboard: CGFloat = 8
+        var overlap = (textViewFrame.maxY + spaceBetweenTextFieldAndKeyboard) - keyboardFrame.minY
+        if overlap > 0 {
+            overlap = overlap + scrollView.contentOffset.y
+            scrollView.setContentOffset(CGPoint(x: 0, y: overlap), animated: true)
+        }
+    }
+    
+    /// キーボード登場時のイベントハンドラー
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        lastOffsetY = scrollView.contentOffset.y
+    }
+    
+    /// キーボード退場時のイベントハンドラー
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        scrollView.setContentOffset(CGPoint(x: 0, y: lastOffsetY), animated: true)
+    }
+    
+}
+
 extension AddTournamentNoteViewController: UITextViewDelegate {
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        // 編集中のTextViewに設定
+        editingTextView = textView
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        // 編集中のTextViewをクリア
+        editingTextView = nil
+    }
     
     func textViewDidChange(_ textView: UITextView) {
         if !isViewer {
