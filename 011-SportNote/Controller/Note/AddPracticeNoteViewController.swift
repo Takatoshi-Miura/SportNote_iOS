@@ -272,15 +272,7 @@ class AddPracticeNoteViewController: UIViewController {
     @IBAction func tapSaveButton(_ sender: Any) {
         // 練習ノートデータを作成＆保存
         let realmManager = RealmManager()
-        let practiceNote = Note()
-        practiceNote.noteType = NoteType.practice.rawValue
-        practiceNote.date = selectedDate
-        practiceNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
-        practiceNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
-        practiceNote.condition = conditionTextView.text
-        practiceNote.purpose = purposeTextView.text
-        practiceNote.detail = detailTextView.text
-        practiceNote.reflection = reflectionTextView.text
+        let practiceNote = createPracticeNote()
         if !realmManager.createRealm(object: practiceNote) {
             showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
             return
@@ -316,6 +308,21 @@ class AddPracticeNoteViewController: UIViewController {
             }
         }
         self.delegate?.addPracticeNoteVCAddNote(self)
+    }
+    
+    /// 入力内容からNoteデータを作成
+    /// - Returns: Note
+    private func createPracticeNote() -> Note {
+        let practiceNote = Note()
+        practiceNote.noteType = NoteType.practice.rawValue
+        practiceNote.date = selectedDate
+        practiceNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
+        practiceNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
+        practiceNote.condition = conditionTextView.text
+        practiceNote.purpose = purposeTextView.text
+        practiceNote.detail = detailTextView.text
+        practiceNote.reflection = reflectionTextView.text
+        return practiceNote
     }
     
 }

@@ -100,6 +100,7 @@ class AddTournamentNoteViewController: UIViewController {
         initTextView(textView: consciousnessTextView, doneAction: #selector(tapOkButton(_:)))
         initTextView(textView: resultTextView, doneAction: #selector(tapOkButton(_:)))
         initTextView(textView: reflectionTextView, doneAction: #selector(tapOkButton(_:)))
+        
         conditionTextView.tag = TextViewType.condition.rawValue
         targetTextView.tag = TextViewType.target.rawValue
         consciousnessTextView.tag = TextViewType.consciousness.rawValue
@@ -164,17 +165,7 @@ class AddTournamentNoteViewController: UIViewController {
     @IBAction func tapSaveButton(_ sender: Any) {
         // 大会ノートデータを作成＆保存
         let realmManager = RealmManager()
-        let tournamentNote = Note()
-        tournamentNote.noteType = NoteType.tournament.rawValue
-        tournamentNote.date = selectedDate
-        tournamentNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
-        tournamentNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
-        tournamentNote.condition = conditionTextView.text
-        tournamentNote.target = targetTextView.text
-        tournamentNote.consciousness = consciousnessTextView.text
-        tournamentNote.result = resultTextView.text
-        tournamentNote.reflection = reflectionTextView.text
-        
+        let tournamentNote = createTournamentNote()
         if !realmManager.createRealm(object: tournamentNote) {
             showErrorAlert(message: ERROR_MESSAGE_NOTE_CREATE_FAILED)
             return
@@ -187,6 +178,22 @@ class AddTournamentNoteViewController: UIViewController {
         }
         
         self.delegate?.addTournamentNoteVCAddNote(self)
+    }
+    
+    /// 入力内容からNoteデータを作成
+    /// - Returns: Note
+    private func createTournamentNote() -> Note {
+        let tournamentNote = Note()
+        tournamentNote.noteType = NoteType.tournament.rawValue
+        tournamentNote.date = selectedDate
+        tournamentNote.weather = Weather.allCases[selectedWeather[TITLE_WEATHER]!].rawValue
+        tournamentNote.temperature = temperature[selectedWeather[TITLE_TEMPERATURE]!]
+        tournamentNote.condition = conditionTextView.text
+        tournamentNote.target = targetTextView.text
+        tournamentNote.consciousness = consciousnessTextView.text
+        tournamentNote.result = resultTextView.text
+        tournamentNote.reflection = reflectionTextView.text
+        return tournamentNote
     }
     
     /// キャンセルボタンタップ時の処理
