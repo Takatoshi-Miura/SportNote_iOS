@@ -14,7 +14,6 @@ import Foundation
 struct AppInfoTests {
     
     @Test("アプリバージョン確認")
-    @available(iOS 15, *)
     func appVersion() async throws {
         let appVersion = AppInfo.getAppVersion()
         let appVersionStr = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
@@ -28,4 +27,26 @@ struct AppInfoTests {
         #expect(buildNo == buildNoStr)
     }
 
+}
+
+@Suite(.tags(.date))
+struct DateTests {
+    
+    @Test("年月日文字列からDate型に変換")
+    func testConvertToDate() {
+        let year = 2024
+        let month = 1
+        let day = 20
+        
+        let convertedDate = convertToDate(year: year, month: month, date: day)
+        
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = month
+        dateComponents.day = day
+        let expectedDate = Calendar(identifier: .gregorian).date(from: dateComponents)
+        
+        #expect(convertedDate == expectedDate)
+    }
+    
 }
