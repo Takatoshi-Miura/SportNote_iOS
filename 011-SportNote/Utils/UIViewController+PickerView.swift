@@ -118,11 +118,7 @@ public extension UIViewController {
     ///   - format: 文字列フォーマット yyyy/M/d (E)等
     /// - Returns: フォーマットに変換された日付文字列
     func getDatePickerDate(datePicker: UIDatePicker, format: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = format
-        let returnText = dateFormatter.string(from: datePicker.date)
-        return returnText
+        return formatDate(date: datePicker.date, format: format)
     }
 
 }
