@@ -116,11 +116,7 @@ enum WeekDay: Int, CaseIterable {
 /// 現在時刻を取得
 /// - Returns: 現在時刻（yyyy-MM-dd HH:mm:ss）
 func getCurrentTime() -> String {
-    let now = Date()
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale(identifier: "ja_JP")
-    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    return dateFormatter.string(from: now)
+    return formatDate(date: Date(), format: "yyyy-MM-dd HH:mm:ss")
 }
 
 /// 時刻を変換
