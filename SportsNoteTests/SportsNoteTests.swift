@@ -14,6 +14,7 @@ extension Tag {
     @Tag static var utils: Self
     @Tag static var date: Self
     @Tag static var realm: Self
+    @Tag static var group: Self
 }
 
 struct SportsNoteTests {
