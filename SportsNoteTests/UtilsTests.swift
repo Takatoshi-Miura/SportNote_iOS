@@ -13,18 +13,18 @@ import Foundation
 @Suite(.tags(.utils))
 struct AppInfoTests {
     
-    @Test("アプリバージョン確認")
+    @Test("アプリバージョン取得")
     func appVersion() async throws {
         let appVersion = AppInfo.getAppVersion()
-        let appVersionStr = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        #expect(appVersion == appVersionStr)
+        let expectedAppVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        #expect(appVersion == expectedAppVersion)
     }
     
-    @Test("ビルド番号確認")
+    @Test("ビルド番号取得")
     func buildNo() async throws {
         let buildNo = AppInfo.getBuildNo()
-        let buildNoStr = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
-        #expect(buildNo == buildNoStr)
+        let expectedBuildNo = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
+        #expect(buildNo == expectedBuildNo)
     }
 
 }
@@ -42,7 +42,7 @@ struct DateTests {
         day = 20
     }
     
-    @Test("時刻文字列に変換")
+    @Test("Date型をyyyy-MM-dd HH:mm:ssの文字列に変換")
     func testFormatDate() {
         let calendar = Calendar(identifier: .gregorian)
         let dateComponents = DateComponents(year: year, month: month, day: day)
