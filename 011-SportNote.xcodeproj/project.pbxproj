@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22ED517CE7A54D1D457A3CAE /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C3B2C83380FE84E72E6A3B1 /* Pods_011_SportNote.framework */; };
+		63084A49939C874DF3ADCD88 /* Pods_SportsNoteTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC85D2B365F6FF7BDD782272 /* Pods_SportsNoteTests.framework */; };
 		8D00EC332BEF9FD400257BAC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */; };
 		8D00EC352BF0426700257BAC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00EC342BF0426700257BAC /* AppInfo.swift */; };
 		8D072BA52C223E320046767D /* SportsNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D072BA42C223E320046767D /* SportsNoteTests.swift */; };
@@ -15,6 +17,7 @@
 		8D1522C32ADA1D56002D1018 /* MeasuresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */; };
 		8D1522C52ADB6E5F002D1018 /* TaskDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */; };
 		8D1522C72ADC9E23002D1018 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */; };
+		8D1E65152C8446CA00BD90CC /* RealmManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E65142C8446BF00BD90CC /* RealmManagerTests.swift */; };
 		8D2770482B2FAF58006608E0 /* NotePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2770462B2FAF58006608E0 /* NotePageViewController.swift */; };
 		8D2770492B2FAF58006608E0 /* NotePageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2770472B2FAF58006608E0 /* NotePageViewController.xib */; };
 		8D27704B2B2FB09C006608E0 /* NotePageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27704A2B2FB09C006608E0 /* NotePageCoordinator.swift */; };
@@ -122,8 +125,6 @@
 		8DEF8AA12AEC70300018AF57 /* FreeNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */; };
 		8DEF8AA32AED28080018AF57 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */; };
 		8DEF8AA62AF47DEE0018AF57 /* AddTargetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEF8AA52AF47DEE0018AF57 /* AddTargetViewModel.swift */; };
-		ABBDC4D805E9837CEC26083A /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 172899E631F710396736C48D /* Pods_011_SportNote.framework */; };
-		FEBA937E673F43A7394AC17C /* Pods_SportsNoteTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 159F3DDF473F3DDAF93A9AB7 /* Pods_SportsNoteTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,9 +138,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		159F3DDF473F3DDAF93A9AB7 /* Pods_SportsNoteTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportsNoteTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		172899E631F710396736C48D /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		358658117323B341F13DAA31 /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
+		2C3B2C83380FE84E72E6A3B1 /* Pods_011_SportNote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_011_SportNote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		35B8B29245BA8E0830030171 /* Pods-SportsNoteTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportsNoteTests.debug.xcconfig"; path = "Target Support Files/Pods-SportsNoteTests/Pods-SportsNoteTests.debug.xcconfig"; sourceTree = "<group>"; };
+		70D6A702D5FFB2BC57A6E9D9 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
 		8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8D00EC342BF0426700257BAC /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		8D072BA22C223E320046767D /* SportsNoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportsNoteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +150,7 @@
 		8D1522C22ADA1D56002D1018 /* MeasuresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuresViewModel.swift; sourceTree = "<group>"; };
 		8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewModel.swift; sourceTree = "<group>"; };
 		8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
+		8D1E65142C8446BF00BD90CC /* RealmManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManagerTests.swift; sourceTree = "<group>"; };
 		8D2770462B2FAF58006608E0 /* NotePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePageViewController.swift; sourceTree = "<group>"; };
 		8D2770472B2FAF58006608E0 /* NotePageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotePageViewController.xib; sourceTree = "<group>"; };
 		8D27704A2B2FB09C006608E0 /* NotePageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePageCoordinator.swift; sourceTree = "<group>"; };
@@ -262,9 +264,9 @@
 		8DEF8AA02AEC70300018AF57 /* FreeNoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeNoteViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA22AED28080018AF57 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
 		8DEF8AA52AF47DEE0018AF57 /* AddTargetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTargetViewModel.swift; sourceTree = "<group>"; };
-		BB149CF52E1D03B8DCFDA1D0 /* Pods-011-SportNote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.release.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.release.xcconfig"; sourceTree = "<group>"; };
-		BBF506A2B485DF7B64ADD8B9 /* Pods-SportsNoteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportsNoteTests.release.xcconfig"; path = "Target Support Files/Pods-SportsNoteTests/Pods-SportsNoteTests.release.xcconfig"; sourceTree = "<group>"; };
-		D73F6A7A4AE22B8C537384EE /* Pods-SportsNoteTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportsNoteTests.debug.xcconfig"; path = "Target Support Files/Pods-SportsNoteTests/Pods-SportsNoteTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AC50AF8A74DC1DA02A5D447C /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
+		AC85D2B365F6FF7BDD782272 /* Pods_SportsNoteTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportsNoteTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D44DE43EDB752F4422DC26C0 /* Pods-SportsNoteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportsNoteTests.release.xcconfig"; path = "Target Support Files/Pods-SportsNoteTests/Pods-SportsNoteTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,7 +274,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEBA937E673F43A7394AC17C /* Pods_SportsNoteTests.framework in Frameworks */,
+				63084A49939C874DF3ADCD88 /* Pods_SportsNoteTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +284,7 @@
 			files = (
 				8DCC058A24F8E40300744A61 /* MessageUI.framework in Frameworks */,
 				8D57AFDD24A47FAB007450BF /* QuartzCore.framework in Frameworks */,
-				ABBDC4D805E9837CEC26083A /* Pods_011_SportNote.framework in Frameworks */,
+				22ED517CE7A54D1D457A3CAE /* Pods_011_SportNote.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,10 +294,10 @@
 		4BC4D980DECE5E34BDB96AE6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				358658117323B341F13DAA31 /* Pods-011-SportNote.debug.xcconfig */,
-				BB149CF52E1D03B8DCFDA1D0 /* Pods-011-SportNote.release.xcconfig */,
-				D73F6A7A4AE22B8C537384EE /* Pods-SportsNoteTests.debug.xcconfig */,
-				BBF506A2B485DF7B64ADD8B9 /* Pods-SportsNoteTests.release.xcconfig */,
+				AC50AF8A74DC1DA02A5D447C /* Pods-011-SportNote.debug.xcconfig */,
+				70D6A702D5FFB2BC57A6E9D9 /* Pods-011-SportNote.release.xcconfig */,
+				35B8B29245BA8E0830030171 /* Pods-SportsNoteTests.debug.xcconfig */,
+				D44DE43EDB752F4422DC26C0 /* Pods-SportsNoteTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -305,6 +307,7 @@
 			children = (
 				8D072BA42C223E320046767D /* SportsNoteTests.swift */,
 				8D8A09F52C62D73E005C4B24 /* UtilsTests.swift */,
+				8D1E65142C8446BF00BD90CC /* RealmManagerTests.swift */,
 			);
 			path = SportsNoteTests;
 			sourceTree = "<group>";
@@ -718,8 +721,8 @@
 			children = (
 				8DCC058924F8E40300744A61 /* MessageUI.framework */,
 				8D57AFDC24A47FAB007450BF /* QuartzCore.framework */,
-				172899E631F710396736C48D /* Pods_011_SportNote.framework */,
-				159F3DDF473F3DDAF93A9AB7 /* Pods_SportsNoteTests.framework */,
+				2C3B2C83380FE84E72E6A3B1 /* Pods_011_SportNote.framework */,
+				AC85D2B365F6FF7BDD782272 /* Pods_SportsNoteTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -731,7 +734,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8D072BAA2C223E320046767D /* Build configuration list for PBXNativeTarget "SportsNoteTests" */;
 			buildPhases = (
-				1294A62DDBC0F170389AF33B /* [CP] Check Pods Manifest.lock */,
+				FF7563CFF862628F1738991C /* [CP] Check Pods Manifest.lock */,
 				8D072B9E2C223E320046767D /* Sources */,
 				8D072B9F2C223E320046767D /* Frameworks */,
 				8D072BA02C223E320046767D /* Resources */,
@@ -750,12 +753,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8D665D3724A17CD400441B32 /* Build configuration list for PBXNativeTarget "011-SportNote" */;
 			buildPhases = (
-				2258757BDAC574ED0FF6EF6B /* [CP] Check Pods Manifest.lock */,
+				7CBDD0A4784B25A1C6782848 /* [CP] Check Pods Manifest.lock */,
 				8D665D1F24A17CD300441B32 /* Sources */,
 				8D665D2024A17CD300441B32 /* Frameworks */,
 				8D665D2124A17CD300441B32 /* Resources */,
-				0768D11A74C30674ED0AD0E1 /* [CP] Embed Pods Frameworks */,
-				0C302584E21013FD3B6D20B0 /* [CP] Copy Pods Resources */,
+				894326EBEA024F537654628F /* [CP] Embed Pods Frameworks */,
+				E922EB2C38D814ABE6968589 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -852,63 +855,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0768D11A74C30674ED0AD0E1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		0C302584E21013FD3B6D20B0 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		1294A62DDBC0F170389AF33B /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SportsNoteTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2258757BDAC574ED0FF6EF6B /* [CP] Check Pods Manifest.lock */ = {
+		7CBDD0A4784B25A1C6782848 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -930,6 +877,62 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		894326EBEA024F537654628F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E922EB2C38D814ABE6968589 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF7563CFF862628F1738991C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SportsNoteTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -939,6 +942,7 @@
 			files = (
 				8D072BA52C223E320046767D /* SportsNoteTests.swift in Sources */,
 				8D8A09F62C62D74B005C4B24 /* UtilsTests.swift in Sources */,
+				8D1E65152C8446CA00BD90CC /* RealmManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1075,7 +1079,7 @@
 /* Begin XCBuildConfiguration section */
 		8D072BA82C223E320046767D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D73F6A7A4AE22B8C537384EE /* Pods-SportsNoteTests.debug.xcconfig */;
+			baseConfigurationReference = 35B8B29245BA8E0830030171 /* Pods-SportsNoteTests.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1101,7 +1105,7 @@
 		};
 		8D072BA92C223E320046767D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BBF506A2B485DF7B64ADD8B9 /* Pods-SportsNoteTests.release.xcconfig */;
+			baseConfigurationReference = D44DE43EDB752F4422DC26C0 /* Pods-SportsNoteTests.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1244,7 +1248,7 @@
 		};
 		8D665D3824A17CD400441B32 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 358658117323B341F13DAA31 /* Pods-011-SportNote.debug.xcconfig */;
+			baseConfigurationReference = AC50AF8A74DC1DA02A5D447C /* Pods-011-SportNote.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1273,7 +1277,7 @@
 		};
 		8D665D3924A17CD400441B32 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BB149CF52E1D03B8DCFDA1D0 /* Pods-011-SportNote.release.xcconfig */;
+			baseConfigurationReference = 70D6A702D5FFB2BC57A6E9D9 /* Pods-011-SportNote.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
