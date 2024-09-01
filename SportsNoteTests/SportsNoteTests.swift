@@ -13,6 +13,7 @@ import Foundation
 extension Tag {
     @Tag static var utils: Self
     @Tag static var date: Self
+    @Tag static var realm: Self
 }
 
 struct SportsNoteTests {
