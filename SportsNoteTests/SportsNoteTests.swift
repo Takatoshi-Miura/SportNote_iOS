@@ -16,6 +16,7 @@ extension Tag {
     @Tag static var realm: Self
     @Tag static var group: Self
     @Tag static var taskData: Self
+    @Tag static var measures: Self
 }
 
 struct SportsNoteTests {

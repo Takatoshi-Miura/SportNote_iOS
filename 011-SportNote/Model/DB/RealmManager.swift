@@ -583,18 +583,7 @@ extension RealmManager {
     ///   - taskID: 課題ID
     /// - Returns: 対策名
     func getMeasuresTitleInTask(taskID: String) -> String {
-        var measuresArray: [Measures] = []
-        let realm = try! Realm()
-        let sortProperties = [
-            SortDescriptor(keyPath: "order", ascending: true),
-        ]
-        let results = realm.objects(Measures.self)
-                            .filter("taskID == '\(taskID)' && (isDeleted == false)")
-                            .sorted(by: sortProperties)
-        for measures in results {
-            measuresArray.append(measures)
-        }
-        return measuresArray.first?.title ?? ""
+        return getPriorityMeasuresInTask(taskID: taskID)?.title ?? ""
     }
     
     /// 課題に含まれる最優先の対策を取得

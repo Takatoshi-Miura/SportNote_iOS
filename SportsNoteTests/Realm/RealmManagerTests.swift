@@ -47,6 +47,7 @@ final class RealmManagerTests {
     private func createTestData() {
         createTestGroups()
         createTestTaskDatas()
+        createTestMeasures()
     }
     
     /// テスト用のGroupデータを作成
@@ -121,6 +122,46 @@ final class RealmManagerTests {
         
         try! realm.write {
             realm.add(tasks)
+        }
+    }
+    
+    /// テスト用のMeasuresを作成
+    private func createTestMeasures() {
+        let measures = [
+            {
+                let measures = Measures();
+                measures.taskID = "課題ID";
+                measures.title = "対策タイトル1";
+                measures.order = 1;
+                return measures
+            }(),
+            {
+                let measures = Measures();
+                measures.taskID = "課題ID2";
+                measures.title = "対策タイトル2";
+                measures.order = 2;
+                return measures
+            }(),
+            {
+                let measures = Measures();
+                measures.taskID = "課題ID";
+                measures.title = "削除された対策";
+                measures.order = 3;
+                measures.isDeleted = true;
+                return measures
+            }(),
+            {
+                let measures = Measures();
+                measures.measuresID = "対策ID"
+                measures.taskID = "課題ID";
+                measures.title = "IDテスト用対策";
+                measures.order = 4;
+                return measures
+            }()
+        ] as [Measures]
+        
+        try! realm.write {
+            realm.add(measures)
         }
     }
     
