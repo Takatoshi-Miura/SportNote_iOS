@@ -18,6 +18,8 @@
 		8D1522C52ADB6E5F002D1018 /* TaskDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */; };
 		8D1522C72ADC9E23002D1018 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */; };
 		8D1E65152C8446CA00BD90CC /* RealmManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E65142C8446BF00BD90CC /* RealmManagerTests.swift */; };
+		8D1E65182C855C3100BD90CC /* RealmGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E65172C855C2300BD90CC /* RealmGroupTests.swift */; };
+		8D1E651A2C855D0D00BD90CC /* RealmTaskDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E65192C855D0400BD90CC /* RealmTaskDataTests.swift */; };
 		8D2770482B2FAF58006608E0 /* NotePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2770462B2FAF58006608E0 /* NotePageViewController.swift */; };
 		8D2770492B2FAF58006608E0 /* NotePageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2770472B2FAF58006608E0 /* NotePageViewController.xib */; };
 		8D27704B2B2FB09C006608E0 /* NotePageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27704A2B2FB09C006608E0 /* NotePageCoordinator.swift */; };
@@ -151,6 +153,8 @@
 		8D1522C42ADB6E5F002D1018 /* TaskDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewModel.swift; sourceTree = "<group>"; };
 		8D1522C62ADC9E23002D1018 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		8D1E65142C8446BF00BD90CC /* RealmManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManagerTests.swift; sourceTree = "<group>"; };
+		8D1E65172C855C2300BD90CC /* RealmGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmGroupTests.swift; sourceTree = "<group>"; };
+		8D1E65192C855D0400BD90CC /* RealmTaskDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTaskDataTests.swift; sourceTree = "<group>"; };
 		8D2770462B2FAF58006608E0 /* NotePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePageViewController.swift; sourceTree = "<group>"; };
 		8D2770472B2FAF58006608E0 /* NotePageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotePageViewController.xib; sourceTree = "<group>"; };
 		8D27704A2B2FB09C006608E0 /* NotePageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePageCoordinator.swift; sourceTree = "<group>"; };
@@ -307,7 +311,7 @@
 			children = (
 				8D072BA42C223E320046767D /* SportsNoteTests.swift */,
 				8D8A09F52C62D73E005C4B24 /* UtilsTests.swift */,
-				8D1E65142C8446BF00BD90CC /* RealmManagerTests.swift */,
+				8D1E65162C855BCC00BD90CC /* Realm */,
 			);
 			path = SportsNoteTests;
 			sourceTree = "<group>";
@@ -472,6 +476,16 @@
 				8D91CE9B281EC364000D3B1F /* Note.swift */,
 			);
 			path = Note;
+			sourceTree = "<group>";
+		};
+		8D1E65162C855BCC00BD90CC /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				8D1E65142C8446BF00BD90CC /* RealmManagerTests.swift */,
+				8D1E65172C855C2300BD90CC /* RealmGroupTests.swift */,
+				8D1E65192C855D0400BD90CC /* RealmTaskDataTests.swift */,
+			);
+			path = Realm;
 			sourceTree = "<group>";
 		};
 		8D3FFE5B27F665F90021C9FC /* Task */ = {
@@ -941,7 +955,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D072BA52C223E320046767D /* SportsNoteTests.swift in Sources */,
+				8D1E65182C855C3100BD90CC /* RealmGroupTests.swift in Sources */,
 				8D8A09F62C62D74B005C4B24 /* UtilsTests.swift in Sources */,
+				8D1E651A2C855D0D00BD90CC /* RealmTaskDataTests.swift in Sources */,
 				8D1E65152C8446CA00BD90CC /* RealmManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
