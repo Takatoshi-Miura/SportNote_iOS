@@ -105,6 +105,77 @@ extension RealmManagerTests {
         deleteTestMeasuresForUpdate(measures: result)
     }
     
+    @Test("Measuresタイトルを更新", .tags(.realm, .measures))
+    func testUpdateMeasuresTitle() {
+        // 更新テスト用Measuresを追加
+        let measuresID = "更新対策ID"
+        addTestMeasuresForUpdate(measuresID: measuresID)
+        
+        // 更新テスト用Measuresを更新
+        realmManager.updateMeasuresTitle(measuresID: measuresID, title: "更新テスト用対策2")
+        
+        // 更新できているかチェック
+        let result = realm.objects(Measures.self).filter("measuresID == '\(measuresID)'").first
+        #expect(result != nil, "更新後にMeasuresを取得不可")
+        #expect(result!.title == "更新テスト用対策2", "Measuresタイトルを更新できていない")
+        #expect(result!.order == 5, "更新対象外のMeasures並び順が更新されている")
+        #expect(result!.isDeleted == false, "更新対象外のMeasures削除フラグが更新されている")
+        
+        // 更新テスト用Measuresを削除
+        deleteTestMeasuresForUpdate(measures: result)
+    }
     
+    @Test("Measures並び順を更新", .tags(.realm, .measures))
+    func testUpdateMeasuresOrder() {
+        // 更新テスト用Measuresを追加
+        let measuresID = "更新対策ID"
+        addTestMeasuresForUpdate(measuresID: measuresID)
+        
+        // 更新テスト用Measuresを更新
+        var measuresArray: [Measures] = []
+        let realm = try! Realm()
+        let realmArray = realm.objects(Measures.self)
+        for measures in realmArray {
+            measuresArray.append(measures)
+        }
+        realmManager.updateMeasuresOrder(measuresArray: measuresArray)
+        
+        // 更新できているかチェック
+        let result = realm.objects(Measures.self)
+        #expect(result != nil, "更新後にMeasuresを取得不可")
+        #expect(result.count == 5, "更新後にMeasuresを取得不可")
+        #expect(result[0].title == "対策タイトル1", "Measures並び順を更新できていない")
+        #expect(result[0].order == 0, "Measures並び順を更新できていない")
+        #expect(result[4].title == "更新テスト用対策", "Measures並び順を更新できていない")
+        #expect(result[4].order == 4, "Measures並び順を更新できていない")
+        
+        // 更新テスト用Measuresを削除
+        let measures = realm.objects(Measures.self).filter("measuresID == '\(measuresID)'").first
+        deleteTestMeasuresForUpdate(measures: measures)
+    }
+    
+    @Test("Measures削除フラグを更新", .tags(.realm, .measures))
+    func testUpdateMeasuresIsDeleted() {
+        // 更新テスト用Measuresを追加
+        let measuresID = "更新対策ID"
+        addTestMeasuresForUpdate(measuresID: measuresID)
+        
+        // 更新テスト用Measuresを更新
+        let result = realm.objects(Measures.self).filter("measuresID == '\(measuresID)'").first
+        realmManager.updateMeasuresIsDeleted(measures: result!)
+        
+        // 更新できているかチェック
+        let result2 = realm.objects(Measures.self).filter("measuresID == '\(measuresID)'").first
+        #expect(result2 != nil, "更新後にMeasuresを取得不可")
+        #expect(result2!.title == "更新テスト用対策", "更新対象外のMeasuresタイトルが更新されている")
+        #expect(result2!.order == 5, "更新対象外のMeasures並び順が更新されている")
+        #expect(result2!.isDeleted == true, "Measures削除フラグが更新されていない")
+        
+        // 更新テスト用Measuresを削除
+        deleteTestMeasuresForUpdate(measures: result2)
+    }
+    
+    /// updateMeasuresUserIDはprivateであること、ロジックは他のupdateメソッドと同じため、テストコードは書かない
+    /// deleteAllMeasuresはdeleteAllRealmDataのテストで確認する
     
 }
