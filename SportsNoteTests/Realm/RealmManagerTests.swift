@@ -48,6 +48,7 @@ final class RealmManagerTests {
         createTestGroups()
         createTestTaskDatas()
         createTestMeasures()
+        createTestMemo()
     }
     
     /// テスト用のGroupデータを作成
@@ -162,6 +163,46 @@ final class RealmManagerTests {
         
         try! realm.write {
             realm.add(measures)
+        }
+    }
+    
+    /// テスト用のMemoを作成
+    private func createTestMemo() {
+        let memos = [
+            {
+                let memo = Memo();
+                memo.measuresID = "対策ID";
+                memo.noteID = "ノートID";
+                memo.detail = "メモ1";
+                return memo
+            }(),
+            {
+                let memo = Memo();
+                memo.measuresID = "対策ID2";
+                memo.noteID = "ノートID";
+                memo.detail = "メモ2";
+                return memo
+            }(),
+            {
+                let memo = Memo();
+                memo.measuresID = "対策ID";
+                memo.noteID = "ノートID";
+                memo.detail = "削除されたメモ";
+                memo.isDeleted = true;
+                return memo
+            }(),
+            {
+                let memo = Memo();
+                memo.memoID = "メモID";
+                memo.measuresID = "対策ID";
+                memo.noteID = "ノートID2";
+                memo.detail = "IDテスト用メモ";
+                return memo
+            }()
+        ] as [Memo]
+        
+        try! realm.write {
+            realm.add(memos)
         }
     }
     

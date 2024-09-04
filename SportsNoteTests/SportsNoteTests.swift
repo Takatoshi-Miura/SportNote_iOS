@@ -17,6 +17,7 @@ extension Tag {
     @Tag static var group: Self
     @Tag static var taskData: Self
     @Tag static var measures: Self
+    @Tag static var memo: Self
 }
 
 struct SportsNoteTests {
