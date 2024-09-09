@@ -130,6 +130,7 @@
 		8DFC50232C8577B700BE5032 /* RealmMeasuresTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC50222C8577AE00BE5032 /* RealmMeasuresTests.swift */; };
 		8DFC50252C890E1500BE5032 /* RealmMemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC50242C890E0D00BE5032 /* RealmMemoTests.swift */; };
 		8DFC50272C8ED48900BE5032 /* RealmTargetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC50262C8ED48200BE5032 /* RealmTargetTests.swift */; };
+		8DFC50292C8F2BC500BE5032 /* RealmNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC50282C8F2BB700BE5032 /* RealmNoteTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -274,6 +275,7 @@
 		8DFC50222C8577AE00BE5032 /* RealmMeasuresTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMeasuresTests.swift; sourceTree = "<group>"; };
 		8DFC50242C890E0D00BE5032 /* RealmMemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemoTests.swift; sourceTree = "<group>"; };
 		8DFC50262C8ED48200BE5032 /* RealmTargetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTargetTests.swift; sourceTree = "<group>"; };
+		8DFC50282C8F2BB700BE5032 /* RealmNoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmNoteTests.swift; sourceTree = "<group>"; };
 		AC50AF8A74DC1DA02A5D447C /* Pods-011-SportNote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-011-SportNote.debug.xcconfig"; path = "Target Support Files/Pods-011-SportNote/Pods-011-SportNote.debug.xcconfig"; sourceTree = "<group>"; };
 		AC85D2B365F6FF7BDD782272 /* Pods_SportsNoteTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportsNoteTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D44DE43EDB752F4422DC26C0 /* Pods-SportsNoteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportsNoteTests.release.xcconfig"; path = "Target Support Files/Pods-SportsNoteTests/Pods-SportsNoteTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -493,6 +495,7 @@
 				8DFC50222C8577AE00BE5032 /* RealmMeasuresTests.swift */,
 				8DFC50242C890E0D00BE5032 /* RealmMemoTests.swift */,
 				8DFC50262C8ED48200BE5032 /* RealmTargetTests.swift */,
+				8DFC50282C8F2BB700BE5032 /* RealmNoteTests.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -965,6 +968,7 @@
 			files = (
 				8D072BA52C223E320046767D /* SportsNoteTests.swift in Sources */,
 				8D1E65182C855C3100BD90CC /* RealmGroupTests.swift in Sources */,
+				8DFC50292C8F2BC500BE5032 /* RealmNoteTests.swift in Sources */,
 				8D8A09F62C62D74B005C4B24 /* UtilsTests.swift in Sources */,
 				8D1E651A2C855D0D00BD90CC /* RealmTaskDataTests.swift in Sources */,
 				8DFC50272C8ED48900BE5032 /* RealmTargetTests.swift in Sources */,

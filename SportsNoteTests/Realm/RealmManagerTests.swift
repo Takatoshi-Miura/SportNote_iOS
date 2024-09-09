@@ -50,6 +50,7 @@ final class RealmManagerTests {
         createTestMeasures()
         createTestMemo()
         createTestTarget()
+        createTestNote()
     }
     
     /// テスト用のGroupデータを作成
@@ -248,6 +249,48 @@ final class RealmManagerTests {
         
         try! realm.write {
             realm.add(targets)
+        }
+    }
+    
+    /// テスト用のNoteを作成
+    private func createTestNote() {
+        let notes = [
+            {
+                let note = Note(freeWithTitle: "フリーノート");
+                return note
+            }(),
+            {
+                let note = Note(practiceWithPurpose: "目的", detail: "練習ノート");
+                return note
+            }(),
+            {
+                let note = Note(practiceWithPurpose: "目的", detail: "削除された練習ノート");
+                note.isDeleted = true;
+                return note
+            }(),
+            {
+                let note = Note(practiceWithPurpose: "目的", detail: "IDテスト用練習ノート");
+                note.noteID = "練習ノートID";
+                return note
+            }(),
+            {
+                let note = Note(tournamentWithTarget: "目的", consciousness: "意識すること", result: "結果");
+                return note
+            }(),
+            {
+                let note = Note(tournamentWithTarget: "目的2", consciousness: "意識すること2", result: "結果2");
+                note.isDeleted = true;
+                return note
+            }(),
+            {
+                let note = Note(tournamentWithTarget: "目的", consciousness: "意識すること", result: "結果");
+                note.noteID = "大会ノートID";
+                return note
+            }()
+        ] as [Note]
+        
+        try! realm.write {
+            realm.add(notes)
         }
     }
     

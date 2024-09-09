@@ -19,8 +19,5 @@ extension Tag {
     @Tag static var measures: Self
     @Tag static var memo: Self
     @Tag static var target: Self
-}
-
-struct SportsNoteTests {
-
+    @Tag static var note: Self
 }
