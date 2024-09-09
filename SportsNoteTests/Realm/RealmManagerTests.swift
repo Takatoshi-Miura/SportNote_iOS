@@ -49,6 +49,7 @@ final class RealmManagerTests {
         createTestTaskDatas()
         createTestMeasures()
         createTestMemo()
+        createTestTarget()
     }
     
     /// テスト用のGroupデータを作成
@@ -203,6 +204,50 @@ final class RealmManagerTests {
         
         try! realm.write {
             realm.add(memos)
+        }
+    }
+    
+    /// テスト用のTargetを作成
+    private func createTestTarget() {
+        let targets = [
+            {
+                let target = Target();
+                target.title = "月間目標";
+                target.year = 2024;
+                target.month = 1;
+                target.isYearlyTarget = false;
+                return target
+            }(),
+            {
+                let target = Target();
+                target.title = "年間目標";
+                target.year = 2024;
+                target.month = 1;
+                target.isYearlyTarget = true;
+                return target
+            }(),
+            {
+                let target = Target();
+                target.title = "削除された年間目標";
+                target.year = 2024;
+                target.month = 1;
+                target.isYearlyTarget = true;
+                target.isDeleted = true;
+                return target
+            }(),
+            {
+                let target = Target();
+                target.targetID = "目標ID";
+                target.title = "IDテスト用目標";
+                target.year = 2024;
+                target.month = 2;
+                target.isYearlyTarget = false;
+                return target
+            }()
+        ] as [Target]
+        
+        try! realm.write {
+            realm.add(targets)
         }
     }
     

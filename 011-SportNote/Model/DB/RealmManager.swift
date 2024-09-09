@@ -924,7 +924,11 @@ extension RealmManager {
     func getTarget(year: Int, month: Int, isYearlyTarget: Bool) -> Target? {
         let realm = try! Realm()
         let result = realm.objects(Target.self)
-            .filter("(year == \(year)) && (month == \(month)) && (isYearlyTarget == \(isYearlyTarget)) && (isDeleted == false)").first
+            .filter("(year == \(year))")
+            .filter("(month == \(month))")
+            .filter("(isYearlyTarget == \(isYearlyTarget))")
+            .filter("(isDeleted == false)")
+            .first
         return result
     }
     
