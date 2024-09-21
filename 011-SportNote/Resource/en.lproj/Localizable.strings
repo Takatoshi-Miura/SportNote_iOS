@@ -146,6 +146,8 @@
 "Help" = "Help";
 "Theme" = "Theme";
 "SystemInfo" = "System Info";
+"Test" = "Test";
+"CrashlyticsTest" = "Crashlytics Test";
 "Notification" = "Notification";
 "Data transfer" = "Data transfer";
 "How to use this App?" = "How to use this App?";

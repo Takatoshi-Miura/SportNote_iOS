@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseCrashlytics
 import RealmSwift
 import GoogleMobileAds
 
@@ -49,6 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // FirebaseのユーザーIDを使用
                 UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "userID")
             }
+        }
+        
+        // CrashlyticsにuserID情報を付加
+        if let userID = UserDefaults.standard.string(forKey: "userID") {
+            Crashlytics.crashlytics().setUserID(userID)
         }
         
         // 初期画面を表示

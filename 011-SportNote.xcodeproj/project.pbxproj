@@ -785,6 +785,7 @@
 				8D665D2124A17CD300441B32 /* Resources */,
 				894326EBEA024F537654628F /* [CP] Embed Pods Frameworks */,
 				E922EB2C38D814ABE6968589 /* [CP] Copy Pods Resources */,
+				8D2D506B2C9E822400366C49 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -919,6 +920,28 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-011-SportNote/Pods-011-SportNote-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		8D2D506B2C9E822400366C49 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Crashlytics初期化\n${PODS_ROOT}/FirebaseCrashlytics/run\n";
 		};
 		E922EB2C38D814ABE6968589 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1287,6 +1310,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9YB68MR5FL;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 x86_64";

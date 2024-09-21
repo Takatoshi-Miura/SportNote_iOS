@@ -74,6 +74,11 @@ class SettingViewController: UIViewController {
         naviItem.title = TITLE_SETTING
     }
     
+    /// クラッシュログ取得テスト用
+    private func crashlyticsTest() {
+        fatalError("Crashlytics test")
+    }
+    
 }
 
 extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
@@ -93,7 +98,12 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        #if DEBUG
         return SettingViewModel.Section.allCases.count
+        #else
+        // 本番ではクラッシュテストは非表示
+        return SettingViewModel.Section.allCases.count - 1
+        #endif
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -134,6 +144,9 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
             startMailer()
             break
         case .appVersion:
+            break
+        case .crashlyticsTest:
+            crashlyticsTest()
             break
         }
     }

@@ -147,6 +147,8 @@
 "Help" = "ヘルプ";
 "Theme" = "テーマ";
 "SystemInfo" = "システム情報";
+"Test" = "テスト";
+"CrashlyticsTest" = "クラッシュテスト";
 "Notification" = "通知";
 "Data transfer" = "データの引継ぎ";
 "How to use this App?" = "アプリの使い方";
