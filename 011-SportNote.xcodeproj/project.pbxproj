@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		22ED517CE7A54D1D457A3CAE /* Pods_011_SportNote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C3B2C83380FE84E72E6A3B1 /* Pods_011_SportNote.framework */; };
-		63084A49939C874DF3ADCD88 /* Pods_SportsNoteTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC85D2B365F6FF7BDD782272 /* Pods_SportsNoteTests.framework */; };
 		8D00EC332BEF9FD400257BAC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8D00EC322BEF9FD400257BAC /* PrivacyInfo.xcprivacy */; };
 		8D00EC352BF0426700257BAC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00EC342BF0426700257BAC /* AppInfo.swift */; };
 		8D072BA52C223E320046767D /* SportsNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D072BA42C223E320046767D /* SportsNoteTests.swift */; };
@@ -286,7 +285,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63084A49939C874DF3ADCD88 /* Pods_SportsNoteTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

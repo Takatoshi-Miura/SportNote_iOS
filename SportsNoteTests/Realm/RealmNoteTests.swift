@@ -234,7 +234,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteWeather(noteID: noteID, weather: Weather.cloudy.rawValue)
         
         // 更新できているかチェック
@@ -264,7 +263,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteTemperature(noteID: noteID, temperature: 30)
         
         // 更新できているかチェック
@@ -294,7 +292,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteCondition(noteID: noteID, condition: "体調２")
         
         // 更新できているかチェック
@@ -324,7 +321,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNotePurpose(noteID: noteID, purpose: "練習目的２")
         
         // 更新できているかチェック
@@ -354,7 +350,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteTarget(noteID: noteID, target: "目標２")
         
         // 更新できているかチェック
@@ -384,7 +379,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteConsciousness(noteID: noteID, consciousness: "意識すること２")
         
         // 更新できているかチェック
@@ -414,7 +408,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteResult(noteID: noteID, result: "結果２")
         
         // 更新できているかチェック
@@ -444,7 +437,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteReflection(noteID: noteID, reflection: "反省２")
         
         // 更新できているかチェック
@@ -474,7 +466,6 @@ extension RealmManagerTests {
         addTestNoteForUpdate(noteID: noteID)
         
         // 更新テスト用Noteを更新
-        let date = Date()
         realmManager.updateNoteIsDeleted(noteID: noteID)
         
         // 更新できているかチェック
