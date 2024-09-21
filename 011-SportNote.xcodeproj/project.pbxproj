@@ -130,6 +130,7 @@
 		8DFC50252C890E1500BE5032 /* RealmMemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC50242C890E0D00BE5032 /* RealmMemoTests.swift */; };
 		8DFC50272C8ED48900BE5032 /* RealmTargetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC50262C8ED48200BE5032 /* RealmTargetTests.swift */; };
 		8DFC50292C8F2BC500BE5032 /* RealmNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC50282C8F2BB700BE5032 /* RealmNoteTests.swift */; };
+		9F545C76D8E35205A8F8F648 /* Pods_SportsNoteTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC85D2B365F6FF7BDD782272 /* Pods_SportsNoteTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -285,6 +286,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F545C76D8E35205A8F8F648 /* Pods_SportsNoteTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

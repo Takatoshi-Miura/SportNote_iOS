@@ -34,6 +34,7 @@ target '011-SportNote' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'Firebase/Analytics'
+  pod 'Firebase/Crashlytics'
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
