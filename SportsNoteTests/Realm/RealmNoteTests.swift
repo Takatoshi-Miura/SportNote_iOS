@@ -17,6 +17,7 @@ extension RealmManagerTests {
     func testGetAllNote() {
         let result = realmManager.getAllNote()
         #expect(result.count == 7, "削除したNoteも含めて全取得すること")
+        deleteTestData()
     }
     
     @Test("NoteをID指定で取得", .tags(.realm, .note))
@@ -24,6 +25,7 @@ extension RealmManagerTests {
         let result = realmManager.getNote(ID: "練習ノートID")
         #expect(result != nil, "ID指定でNote取得できていない")
         #expect(result.detail == "IDテスト用練習ノート", "ID指定でNote取得できていない")
+        deleteTestData()
     }
     
     @Test("NoteをNoteType指定で取得", .tags(.realm, .note))
@@ -31,6 +33,7 @@ extension RealmManagerTests {
         let result = realmManager.getNote(noteType: NoteType.practice.rawValue)
         #expect(result != nil, "NoteType指定でNote取得できていない")
         #expect(result.count == 2, "削除されたノートは除いて取得")
+        deleteTestData()
     }
     
     /// getNote(memoArray: [Memo])はgetNote(ID: String)に依存するためテストしない
@@ -40,6 +43,7 @@ extension RealmManagerTests {
         let result = realmManager.getFreeNote()
         #expect(result != nil, "フリーノート取得できていない")
         #expect(result.title == "フリーノート", "フリーノート取得できていない")
+        deleteTestData()
     }
     
     @Test("Noteを練習・大会ノート指定で取得", .tags(.realm, .note))
@@ -47,6 +51,7 @@ extension RealmManagerTests {
         let result = realmManager.getPracticeTournamentNote()
         #expect(result != nil, "練習・大会ノート取得できていない")
         #expect(result.count == 4, "削除されたノートは除いて取得")
+        deleteTestData()
     }
     
     /// getPracticeTournamentNote(searchWord: String)はgetNote(memoArray: [Memo])に依存するためテストしない
@@ -57,6 +62,7 @@ extension RealmManagerTests {
         let result = realmManager.getNote(date: Date())
         #expect(result != nil, "日付指定でノート取得できていない")
         #expect(result.count == 4, "日付指定でノート取得できていない")
+        deleteTestData()
     }
     
     /// 更新テスト用Noteを追加
@@ -136,6 +142,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Noteタイトルを更新", .tags(.realm, .note))
@@ -165,6 +172,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note内容を更新", .tags(.realm, .note))
@@ -194,6 +202,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note日付を更新", .tags(.realm, .note))
@@ -225,6 +234,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note天気を更新", .tags(.realm, .note))
@@ -254,6 +264,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note気温を更新", .tags(.realm, .note))
@@ -283,6 +294,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note体調を更新", .tags(.realm, .note))
@@ -312,6 +324,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note練習目的を更新", .tags(.realm, .note))
@@ -341,6 +354,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note目標を更新", .tags(.realm, .note))
@@ -370,6 +384,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note意識することを更新", .tags(.realm, .note))
@@ -399,6 +414,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note結果を更新", .tags(.realm, .note))
@@ -428,6 +444,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note反省を更新", .tags(.realm, .note))
@@ -457,6 +474,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     @Test("Note削除フラグを更新", .tags(.realm, .note))
@@ -486,6 +504,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Noteを削除
         deleteTestNoteForUpdate(note: result)
+        deleteTestData()
     }
     
     /// updateNoteUserIDはprivateであること、ロジックは他のupdateメソッドと同じため、テストコードは書かない

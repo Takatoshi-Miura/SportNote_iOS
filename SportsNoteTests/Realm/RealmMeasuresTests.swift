@@ -17,6 +17,7 @@ extension RealmManagerTests {
     func testGetAllMeasures() {
         let result = realmManager.getAllMeasures()
         #expect(result.count == 4, "削除したMeasuresも含めて全取得すること")
+        deleteTestData()
     }
     
     @Test("MeasuresをmeasuresID指定で取得", .tags(.realm, .measures))
@@ -26,12 +27,14 @@ extension RealmManagerTests {
         #expect(result.taskID == "課題ID", "measuresID指定でMeasures取得できていない")
         #expect(result.title == "IDテスト用対策", "measuresID指定でMeasures取得できていない")
         #expect(result.order == 4, "measuresID指定でMeasures取得できていない")
+        deleteTestData()
     }
     
     @Test("MeasuresをtaskID指定で取得", .tags(.realm, .measures))
     func testGetMeasuresTitleInTask() {
         let result = realmManager.getMeasuresTitleInTask(taskID: "課題ID")
         #expect(result == "対策タイトル1", "taskID指定でMeasures取得できていない")
+        deleteTestData()
     }
     
     @Test("Measures(最優先)をtaskID指定で取得", .tags(.realm, .measures))
@@ -41,6 +44,7 @@ extension RealmManagerTests {
         #expect(result!.taskID == "課題ID", "measuresID指定でMeasures取得できていない")
         #expect(result!.title == "対策タイトル1", "measuresID指定でMeasures取得できていない")
         #expect(result!.order == 1, "measuresID指定でMeasures取得できていない")
+        deleteTestData()
     }
     
     @Test("Measures(最優先)配列をtaskID指定で取得", .tags(.realm, .measures))
@@ -52,6 +56,7 @@ extension RealmManagerTests {
         #expect(result[0].order == 1, "orderの昇順でMeasures取得できていない")
         #expect(result[1].title == "IDテスト用対策", "measuresID指定でMeasures取得できていない")
         #expect(result[1].order == 4, "orderの昇順でMeasures取得できていない")
+        deleteTestData()
     }
     
     /// 更新テスト用Measuresを追加
@@ -103,6 +108,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Measuresを削除
         deleteTestMeasuresForUpdate(measures: result)
+        deleteTestData()
     }
     
     @Test("Measuresタイトルを更新", .tags(.realm, .measures))
@@ -123,6 +129,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Measuresを削除
         deleteTestMeasuresForUpdate(measures: result)
+        deleteTestData()
     }
     
     @Test("Measures並び順を更新", .tags(.realm, .measures))
@@ -152,6 +159,7 @@ extension RealmManagerTests {
         // 更新テスト用Measuresを削除
         let measures = realm.objects(Measures.self).filter("measuresID == '\(measuresID)'").first
         deleteTestMeasuresForUpdate(measures: measures)
+        deleteTestData()
     }
     
     @Test("Measures削除フラグを更新", .tags(.realm, .measures))
@@ -173,6 +181,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Measuresを削除
         deleteTestMeasuresForUpdate(measures: result2)
+        deleteTestData()
     }
     
     /// updateMeasuresUserIDはprivateであること、ロジックは他のupdateメソッドと同じため、テストコードは書かない

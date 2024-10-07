@@ -17,6 +17,7 @@ extension RealmManagerTests {
     func testGetAllGroup() {
         let result = realmManager.getAllGroup()
         #expect(result.count == 4, "削除されたGroupも含めて全取得すること")
+        deleteTestData()
     }
     
     @Test("GroupをID指定で取得", .tags(.realm, .group))
@@ -24,6 +25,7 @@ extension RealmManagerTests {
         let result = realmManager.getGroup(groupID: "グループID")
         #expect(result.title == "IDテスト用グループ")
         #expect(result.color == Color.green.rawValue)
+        deleteTestData()
     }
     
     @Test("Group配列(課題一覧用)を取得", .tags(.realm, .group))
@@ -33,6 +35,7 @@ extension RealmManagerTests {
         #expect(result[0].title == "赤グループ", "orderの昇順でソートされていない")
         #expect(result[1].title == "青グループ", "orderの昇順でソートされていない")
         #expect(result[2].title == "IDテスト用グループ", "orderの昇順でソートされていない")
+        deleteTestData()
     }
     
     /// getGroupColor()はgetTask(noteID: noteID)のテストで担保
@@ -41,6 +44,7 @@ extension RealmManagerTests {
     func testGetNumberOfGroups() {
         let result = realmManager.getNumberOfGroups()
         #expect(result == 3, "削除されたGroupは取得されないこと")
+        deleteTestData()
     }
     
     /// 更新テスト用Groupを追加
@@ -86,6 +90,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestGroupForUpdate(group: result)
+        deleteTestData()
     }
     
     @Test("Groupタイトルを更新", .tags(.realm, .group))
@@ -107,6 +112,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestGroupForUpdate(group: result)
+        deleteTestData()
     }
     
     @Test("Groupカラーを更新", .tags(.realm, .group))
@@ -128,6 +134,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestGroupForUpdate(group: result)
+        deleteTestData()
     }
     
     @Test("Group並び順を更新", .tags(.realm, .group))
@@ -157,6 +164,7 @@ extension RealmManagerTests {
         // 更新テスト用Groupを削除
         let updatedGroup = realm.objects(Group.self).filter("groupID == '\(groupID)'").first
         deleteTestGroupForUpdate(group: updatedGroup)
+        deleteTestData()
     }
     
     @Test("Group削除フラグを更新", .tags(.realm, .group))
@@ -179,9 +187,10 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestGroupForUpdate(group: result)
+        deleteTestData()
     }
     
     /// updateGroupUserIDはprivateであること、ロジックは他のupdateメソッドと同じため、テストコードは書かない
     /// deleteAllGroupはdeleteAllRealmDataのテストで確認する
-    
+
 }

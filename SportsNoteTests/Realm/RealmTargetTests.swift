@@ -17,6 +17,7 @@ extension RealmManagerTests {
     func testGetAllTarget() {
         let result = realmManager.getAllTarget()
         #expect(result.count == 4, "削除したTargetも含めて全取得すること")
+        deleteTestData()
     }
     
     @Test("Target(年間目標)を年指定で取得", .tags(.realm, .target))
@@ -24,6 +25,7 @@ extension RealmManagerTests {
         let result = realmManager.getTarget(year: 2024)
         #expect(result != nil, "年指定でTarget取得できていない")
         #expect(result?.title == "年間目標", "年指定でTarget取得できていない")
+        deleteTestData()
     }
     
     @Test("Targetを年月指定で取得", .tags(.realm, .target))
@@ -35,6 +37,7 @@ extension RealmManagerTests {
         let result2 = realmManager.getTarget(year: 2024, month: 1, isYearlyTarget: true)
         #expect(result2 != nil, "年月指定でTarget取得できていない")
         #expect(result2?.title == "年間目標", "年月指定でTarget取得できていない")
+        deleteTestData()
     }
 
     /// 更新テスト用Targetを追加
@@ -92,6 +95,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Targetを削除
         deleteTestTargetForUpdate(target: result)
+        deleteTestData()
     }
     
     @Test("Targetを更新", .tags(.realm, .target))
@@ -114,6 +118,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Targetを削除
         deleteTestTargetForUpdate(target: result)
+        deleteTestData()
     }
     
     /// updateTargetUserIDはprivateであること、ロジックは他のupdateメソッドと同じため、テストコードは書かない

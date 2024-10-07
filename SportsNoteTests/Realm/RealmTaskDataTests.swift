@@ -17,6 +17,7 @@ extension RealmManagerTests {
     func testGetAllTask() {
         let result = realmManager.getAllTask()
         #expect(result.count == 5, "削除、完了したTaskDataも含めて全取得すること")
+        deleteTestData()
     }
     
     @Test("TaskDataをID指定で取得", .tags(.realm, .taskData))
@@ -27,6 +28,7 @@ extension RealmManagerTests {
         #expect(result.cause == "課題原因5", "taskID指定でTaskData取得できていない")
         #expect(result.order == 5, "taskID指定でTaskData取得できていない")
         #expect(result.taskID == "課題ID", "taskID指定でTaskData取得できていない")
+        deleteTestData()
     }
     
     /// getTask(noteID: String) -> [TaskData] は getMeasures(measuresID: String) で担保
@@ -43,6 +45,7 @@ extension RealmManagerTests {
         #expect(result[0].order == 1, "order順にソートできていない")
         #expect(result[1].title == "IDテスト用課題", "order順にソートできていない")
         #expect(result[1].order == 5, "order順にソートできていない")
+        deleteTestData()
     }
     
     @Test("TaskDataをGroup指定で取得", .tags(.realm, .taskData))
@@ -55,6 +58,7 @@ extension RealmManagerTests {
         #expect(result[1].order == 4, "完了した課題を取得できていない")
         #expect(result[2].title == "IDテスト用課題", "order順にソートできていない")
         #expect(result[2].order == 5, "order順にソートできていない")
+        deleteTestData()
     }
     
     /// 更新テスト用TaskDataを追加
@@ -113,6 +117,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestTaskDataForUpdate(taskData: result)
+        deleteTestData()
     }
     
     @Test("TaskDataのタイトルを更新", .tags(.realm, .taskData))
@@ -136,6 +141,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestTaskDataForUpdate(taskData: result)
+        deleteTestData()
     }
     
     @Test("TaskDataの原因を更新", .tags(.realm, .taskData))
@@ -159,6 +165,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestTaskDataForUpdate(taskData: result)
+        deleteTestData()
     }
     
     @Test("TaskDataの並び順を更新", .tags(.realm, .taskData))
@@ -183,6 +190,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestTaskDataForUpdate(taskData: result)
+        deleteTestData()
     }
     
     /// updateTaskOrder(taskArray: [[TaskData]])は保留
@@ -209,6 +217,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestTaskDataForUpdate(taskData: result)
+        deleteTestData()
     }
     
     @Test("TaskDataの完了フラグを更新", .tags(.realm, .taskData))
@@ -233,6 +242,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestTaskDataForUpdate(taskData: result)
+        deleteTestData()
     }
     
     @Test("TaskDataの削除フラグを更新", .tags(.realm, .taskData))
@@ -257,6 +267,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Groupを削除
         deleteTestTaskDataForUpdate(taskData: result)
+        deleteTestData()
     }
     
     /// updateTaskUserIDはprivateであること、ロジックは他のupdateメソッドと同じため、テストコードは書かない

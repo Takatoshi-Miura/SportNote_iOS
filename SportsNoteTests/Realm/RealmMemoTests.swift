@@ -17,6 +17,7 @@ extension RealmManagerTests {
     func testGetAllMemo() {
         let result = realmManager.getAllMemo()
         #expect(result.count == 4, "削除したMemoも含めて全取得すること")
+        deleteTestData()
     }
     
     /// getMemo(measuresID: String)はgetNote(memoArray: [Memo])に依存するためテストしない
@@ -26,6 +27,7 @@ extension RealmManagerTests {
         let result = realmManager.getMemo(searchWord: "メモ")
         #expect(result.count == 3, "削除したMemoは除いて取得すること")
         #expect(result[0].detail == "IDテスト用メモ", "検索ワードでメモを取得できていない")
+        deleteTestData()
     }
     
     @Test("MemoをNoteID指定で取得", .tags(.realm, .memo))
@@ -33,6 +35,7 @@ extension RealmManagerTests {
         let result = realmManager.getMemo(noteID: "ノートID2")
         #expect(result.count == 1, "NoteID指定でメモを取得できていない")
         #expect(result[0].detail == "IDテスト用メモ", "NoteID指定でメモを取得できていない")
+        deleteTestData()
     }
     
     @Test("MemoをNoteID,MeasuresID指定で取得", .tags(.realm, .memo))
@@ -40,6 +43,7 @@ extension RealmManagerTests {
         let result = realmManager.getMemo(noteID: "ノートID", measuresID: "対策ID")
         #expect(result != nil, "NoteID,MeasuresID指定でメモを取得できていない")
         #expect(result!.detail == "メモ1", "NoteID,MeasuresID指定でメモを取得できていない")
+        deleteTestData()
     }
     
     /// 更新テスト用Memoを追加
@@ -88,6 +92,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Memoを削除
         deleteTestMemoForUpdate(memo: result)
+        deleteTestData()
     }
     
     @Test("Memo内容を更新", .tags(.realm, .memo))
@@ -107,6 +112,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Memoを削除
         deleteTestMemoForUpdate(memo: result)
+        deleteTestData()
     }
     
     @Test("Memo削除フラグをMemoID指定で更新", .tags(.realm, .memo))
@@ -126,6 +132,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Memoを削除
         deleteTestMemoForUpdate(memo: result)
+        deleteTestData()
     }
     
     @Test("Memo削除フラグをNoteID指定で更新", .tags(.realm, .memo))
@@ -145,6 +152,7 @@ extension RealmManagerTests {
         
         // 更新テスト用Memoを削除
         deleteTestMemoForUpdate(memo: result)
+        deleteTestData()
     }
     
     /// updateMemoUserIDはprivateであること、ロジックは他のupdateメソッドと同じため、テストコードは書かない

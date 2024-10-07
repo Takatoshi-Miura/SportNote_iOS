@@ -11,7 +11,8 @@ import Testing
 import Foundation
 import RealmSwift
 
-final class RealmManagerTests {
+@Suite(.serialized)
+struct RealmManagerTests {
     
     var realm: Realm!
     var originalDefaultConfiguration: Realm.Configuration!
@@ -31,7 +32,8 @@ final class RealmManagerTests {
         createTestData()
     }
     
-    deinit {
+    /// テスト用データを削除
+    func deleteTestData() {
         // テスト終了後、デフォルトの設定を元に戻す
         Realm.Configuration.defaultConfiguration = originalDefaultConfiguration
         
@@ -39,12 +41,10 @@ final class RealmManagerTests {
         try! realm.write {
             realm.deleteAll()
         }
-        realm = nil
-        realmManager = nil
     }
     
     /// テスト用データを作成
-    private func createTestData() {
+    func createTestData() {
         createTestGroups()
         createTestTaskDatas()
         createTestMeasures()
