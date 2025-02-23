@@ -118,7 +118,7 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
         var cell: UITableViewCell
         if (indexPath.section == SettingViewModel.Section.systemInfo.rawValue) {
             cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
-            cell.detailTextLabel?.text = "\(AppInfo.getAppVersion())(\(AppInfo.getBuildNo()))"
+            cell.detailTextLabel?.text = "\(AppInfo.getAppVersion())"
         } else {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
             cell.accessoryType = .disclosureIndicator
