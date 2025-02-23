@@ -15,12 +15,13 @@ public extension UIViewController {
      - Parameters:
         - pickerView: PickerVIewを載せたUIView
      */
-    func openPicker(_ pickerView:UIView) {
+    func openPicker(_ pickerView: UIView) {
         tabBarController?.tabBar.isHidden = true
         view.addSubview(pickerView)
         pickerView.frame.origin.y = UIScreen.main.bounds.size.height
+        let safeAreaBottom: CGFloat = view.safeAreaInsets.bottom
         UIView.animate(withDuration: 0.3) {
-            pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height
+            pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height - safeAreaBottom
         }
     }
     

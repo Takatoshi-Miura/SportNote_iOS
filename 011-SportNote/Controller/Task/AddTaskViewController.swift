@@ -205,7 +205,9 @@ class AddTaskViewController: UIViewController {
     
     /// PickerVIewの初期化
     private func initPickerView() {
-        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + 88 + view.safeAreaInsets.bottom))
+        let toolBarHeight: CGFloat = 44
+        let safeAreaBottom: CGFloat = view.safeAreaInsets.bottom
+        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: colorPicker.bounds.size.height + toolBarHeight + safeAreaBottom))
         pickerView.backgroundColor = UIColor.systemGray5
         pickerView.addSubview(colorPicker)
         pickerView.addSubview(createPickerToolBar())

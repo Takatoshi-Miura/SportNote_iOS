@@ -243,17 +243,19 @@ extension AddTournamentNoteViewController: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let toolBarHeight: CGFloat = 44
+        let safeAreaBottom: CGFloat = view.safeAreaInsets.bottom
         self.view.endEditing(true)
         switch CellType.allCases[indexPath.row] {
         case .date:
             closePicker(pickerView)
-            pickerView = UIView(frame: datePicker.bounds)
+            pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + toolBarHeight + safeAreaBottom))
             pickerView.addSubview(datePicker)
             pickerView.addSubview(createToolBar(#selector(datePickerDoneAction), #selector(datePickerCancelAction)))
             openPicker(pickerView)
         case .weather:
             closePicker(pickerView)
-            pickerView = UIView(frame: weatherPicker.bounds)
+            pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height + toolBarHeight + safeAreaBottom))
             pickerView.addSubview(weatherPicker)
             pickerView.addSubview(createToolBar(#selector(weatherPickerDoneAction), #selector(weatherPickerCancelAction)))
             openPicker(pickerView)
@@ -299,7 +301,7 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
             datePicker.preferredDatePickerStyle = .inline
         }
         datePicker.backgroundColor = UIColor.systemGray5
-        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + 44)
+        datePicker.frame = CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         if isViewer {
             datePicker.date = realmNote.date
         } else {
@@ -331,7 +333,7 @@ extension AddTournamentNoteViewController: UIPickerViewDelegate, UIPickerViewDat
     private func initWeatherPicker() {
         weatherPicker.delegate = self
         weatherPicker.dataSource = self
-        weatherPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: weatherPicker.bounds.size.height + 44)
+        weatherPicker.frame = CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height)
         weatherPicker.backgroundColor = UIColor.systemGray5
         
         if isViewer {

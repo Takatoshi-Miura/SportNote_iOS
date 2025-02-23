@@ -249,8 +249,10 @@ class AddPracticeNoteViewController: UIViewController {
         }
         
         // 課題Pickerを開く
+        let toolBarHeight: CGFloat = 44
+        let safeAreaBottom: CGFloat = view.safeAreaInsets.bottom
         closePicker(pickerView)
-        pickerView = UIView(frame: taskPicker.bounds)
+        pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height + toolBarHeight + safeAreaBottom))
         pickerView.addSubview(taskPicker)
         pickerView.addSubview(createToolBar(#selector(taskPickerDoneAction), #selector(taskPickerCancelAction)))
         openPicker(pickerView)
@@ -421,20 +423,22 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let toolBarHeight: CGFloat = 44
+        let safeAreaBottom: CGFloat = view.safeAreaInsets.bottom
         switch TableViewType.allCases[tableView.tag] {
         case .date:
             switch CellType.allCases[indexPath.row] {
             case .date:
                 // datePickerを開く
                 closePicker(pickerView)
-                pickerView = UIView(frame: datePicker.bounds)
+                pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + toolBarHeight + safeAreaBottom))
                 pickerView.addSubview(datePicker)
                 pickerView.addSubview(createToolBar(#selector(datePickerDoneAction), #selector(datePickerCancelAction)))
                 openPicker(pickerView)
             case .weather:
                 // weatherPickerを開く
                 closePicker(pickerView)
-                pickerView = UIView(frame: weatherPicker.bounds)
+                pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height + toolBarHeight + safeAreaBottom))
                 pickerView.addSubview(weatherPicker)
                 pickerView.addSubview(createToolBar(#selector(weatherPickerDoneAction), #selector(weatherPickerCancelAction)))
                 openPicker(pickerView)
@@ -507,7 +511,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
             datePicker.preferredDatePickerStyle = .inline
         }
         datePicker.backgroundColor = UIColor.systemGray5
-        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + 44)
+        datePicker.frame = CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height)
         if isViewer {
             datePicker.date = note.date
         } else {
@@ -539,7 +543,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
     private func initWeatherPicker() {
         weatherPicker.delegate = self
         weatherPicker.dataSource = self
-        weatherPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: weatherPicker.bounds.size.height + 44)
+        weatherPicker.frame = CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: weatherPicker.bounds.size.height)
         weatherPicker.backgroundColor = UIColor.systemGray5
         weatherPicker.tag = PickerType.weather.rawValue
         
@@ -580,7 +584,7 @@ extension AddPracticeNoteViewController: UIPickerViewDelegate, UIPickerViewDataS
     private func initTaskPicker() {
         taskPicker.delegate = self
         taskPicker.dataSource = self
-        taskPicker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: taskPicker.bounds.size.height + 44)
+        taskPicker.frame = CGRect(x: 0, y: 44, width: self.view.bounds.size.width, height: taskPicker.bounds.size.height)
         taskPicker.backgroundColor = UIColor.systemGray5
         taskPicker.tag = PickerType.task.rawValue
     }
