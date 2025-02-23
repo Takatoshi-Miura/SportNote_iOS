@@ -21,6 +21,7 @@ class FreeNoteCoordinator: Coordinator {
     func startFrow(in navigationController: UINavigationController, withFreeNote freeNote: Note) {
         self.navigationController = navigationController
         let freeNoteViewController = FreeNoteViewController(freeNote: freeNote)
+        freeNoteViewController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(freeNoteViewController, animated: true)
     }
     

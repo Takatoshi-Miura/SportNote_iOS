@@ -22,6 +22,7 @@ class TaskDetailCoordinator: Coordinator {
         self.navigationController = navigationController
         let taskDetailViewController = TaskDetailViewController(task: task)
         taskDetailViewController.delegate = self
+        taskDetailViewController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(taskDetailViewController, animated: true)
     }
     

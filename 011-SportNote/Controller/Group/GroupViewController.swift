@@ -100,7 +100,7 @@ class GroupViewController: UIViewController {
                 titleTextField.resignFirstResponder()
                 closePicker(pickerView)
                 initPickerView()
-                openPicker(pickerView)
+                openPicker(pickerView, isModal: false)
             })
             .disposed(by: disposeBag)
         

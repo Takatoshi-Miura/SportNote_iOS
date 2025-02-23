@@ -26,6 +26,7 @@ class AddTournamentNoteCoordinator: Coordinator {
         addTournamentNoteViewController.delegate = self
         addTournamentNoteViewController.realmNote = note
         addTournamentNoteViewController.isViewer = true
+        addTournamentNoteViewController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(addTournamentNoteViewController, animated: true)
     }
     

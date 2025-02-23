@@ -14,14 +14,18 @@ public extension UIViewController {
      PickerViewを画面下から出現
      - Parameters:
         - pickerView: PickerVIewを載せたUIView
+        - isModal: モーダル表示かどうか
      */
-    func openPicker(_ pickerView: UIView) {
-        tabBarController?.tabBar.isHidden = true
+    func openPicker(_ pickerView: UIView, isModal: Bool) {
         view.addSubview(pickerView)
         pickerView.frame.origin.y = UIScreen.main.bounds.size.height
         let safeAreaBottom: CGFloat = view.safeAreaInsets.bottom
         UIView.animate(withDuration: 0.3) {
-            pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height - safeAreaBottom
+            if isModal {
+                pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height - safeAreaBottom
+            } else {
+                pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height
+            }
         }
     }
     
@@ -31,7 +35,6 @@ public extension UIViewController {
         - pickerView: PickerVIewを載せたUIView
      */
     func closePicker(_ pickerView:UIView) {
-        tabBarController?.tabBar.isHidden = false
         UIView.animate(withDuration: 0.3) {
             pickerView.frame.origin.y += pickerView.bounds.size.height
         }

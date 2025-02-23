@@ -255,7 +255,7 @@ class AddPracticeNoteViewController: UIViewController {
         pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: taskPicker.bounds.size.height + toolBarHeight + safeAreaBottom))
         pickerView.addSubview(taskPicker)
         pickerView.addSubview(createToolBar(#selector(taskPickerDoneAction), #selector(taskPickerCancelAction)))
-        openPicker(pickerView)
+        openPicker(pickerView, isModal: !isViewer)
     }
     
     /// キャンセルボタン
@@ -434,14 +434,14 @@ extension AddPracticeNoteViewController: UITableViewDelegate, UITableViewDataSou
                 pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + toolBarHeight + safeAreaBottom))
                 pickerView.addSubview(datePicker)
                 pickerView.addSubview(createToolBar(#selector(datePickerDoneAction), #selector(datePickerCancelAction)))
-                openPicker(pickerView)
+                openPicker(pickerView, isModal: !isViewer)
             case .weather:
                 // weatherPickerを開く
                 closePicker(pickerView)
                 pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height + toolBarHeight + safeAreaBottom))
                 pickerView.addSubview(weatherPicker)
                 pickerView.addSubview(createToolBar(#selector(weatherPickerDoneAction), #selector(weatherPickerCancelAction)))
-                openPicker(pickerView)
+                openPicker(pickerView, isModal: !isViewer)
             }
         case .task:
             tableView.deselectRow(at: indexPath, animated: false)

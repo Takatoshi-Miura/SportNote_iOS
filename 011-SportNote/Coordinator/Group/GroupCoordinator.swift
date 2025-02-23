@@ -22,6 +22,7 @@ class GroupCoordinator: Coordinator {
         self.navigationController = navigationController
         let groupViewController = GroupViewController(group: group)
         groupViewController.delegate = self
+        groupViewController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(groupViewController, animated: true)
     }
     

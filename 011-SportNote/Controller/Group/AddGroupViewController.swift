@@ -125,7 +125,7 @@ class AddGroupViewController: UIViewController {
                 titleTextField.resignFirstResponder()
                 closePicker(pickerView)
                 initPickerView()
-                openPicker(pickerView)
+                openPicker(pickerView, isModal: true)
             })
             .disposed(by: disposeBag)
         

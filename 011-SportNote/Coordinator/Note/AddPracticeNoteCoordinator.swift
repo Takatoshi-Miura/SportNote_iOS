@@ -26,6 +26,7 @@ class AddPracticeNoteCoordinator: Coordinator {
         addPracticeNoteViewController.delegate = self
         addPracticeNoteViewController.note = note
         addPracticeNoteViewController.isViewer = true
+        addPracticeNoteViewController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(addPracticeNoteViewController, animated: true)
     }
     

@@ -22,6 +22,7 @@ class MeasuresCoordinator: Coordinator {
         self.navigationController = navigationController
         let measuresViewController = MeasuresViewController(measures: measures)
         measuresViewController.delegate = self
+        measuresViewController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(measuresViewController, animated: true)
     }
     

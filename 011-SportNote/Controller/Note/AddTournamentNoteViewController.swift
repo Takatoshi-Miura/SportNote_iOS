@@ -252,13 +252,13 @@ extension AddTournamentNoteViewController: UITableViewDataSource, UITableViewDel
             pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: datePicker.bounds.size.height + toolBarHeight + safeAreaBottom))
             pickerView.addSubview(datePicker)
             pickerView.addSubview(createToolBar(#selector(datePickerDoneAction), #selector(datePickerCancelAction)))
-            openPicker(pickerView)
+            openPicker(pickerView, isModal: !isViewer)
         case .weather:
             closePicker(pickerView)
             pickerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: weatherPicker.bounds.size.height + toolBarHeight + safeAreaBottom))
             pickerView.addSubview(weatherPicker)
             pickerView.addSubview(createToolBar(#selector(weatherPickerDoneAction), #selector(weatherPickerCancelAction)))
-            openPicker(pickerView)
+            openPicker(pickerView, isModal: !isViewer)
         }
     }
     
