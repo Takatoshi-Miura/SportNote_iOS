@@ -165,7 +165,10 @@ extension SettingViewController: MFMailComposeViewControllerDelegate {
         mailViewController.mailComposeDelegate = self
         mailViewController.setToRecipients(["SportsNote開発者<it6210ge@gmail.com>"])
         mailViewController.setSubject(TITLE_MAIL_SUBJECT)
-        mailViewController.setMessageBody(TITLE_MAIL_MESSAGE, isHTML: false)
+        let deviceName = AppInfo.getDeviceName()
+        let osVersion = AppInfo.getOSVersion()
+        let message = String(format: TITLE_MAIL_MESSAGE, deviceName, osVersion)
+        mailViewController.setMessageBody(message, isHTML: false)
         self.present(mailViewController, animated: true, completion: nil)
     }
     
