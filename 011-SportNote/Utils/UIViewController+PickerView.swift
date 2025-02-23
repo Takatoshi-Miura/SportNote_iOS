@@ -19,10 +19,10 @@ public extension UIViewController {
     func openPicker(_ pickerView: UIView, isModal: Bool) {
         view.addSubview(pickerView)
         pickerView.frame.origin.y = UIScreen.main.bounds.size.height
-        let safeAreaBottom: CGFloat = view.safeAreaInsets.bottom
+        let bottomPadding: CGFloat = 40
         UIView.animate(withDuration: 0.3) {
             if isModal {
-                pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height - safeAreaBottom
+                pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height - bottomPadding
             } else {
                 pickerView.frame.origin.y = UIScreen.main.bounds.size.height - pickerView.bounds.size.height
             }
