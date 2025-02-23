@@ -157,7 +157,7 @@
 "Internet Error" = "Internet connection is offline.";
 "Mailer Error" = "The email account has not been set.Set up an account with Apple's mail app.";
 "Mail Subject" = "Example: Bug report";
-"Mail Message" = "Please fill in the content of your inquiry.";
+"Mail Message" = "Please enter your inquiry details below.\n\n\nPlease do not delete the following information.\n■Device: %@\n■OS Version: %@\n■App Version: %@";
 "Mail Send Success" = "The email was sent successfully. Please wait for the reply from the developer.";
 "Mail Send Failed" = "The email could not be sent.";
 
